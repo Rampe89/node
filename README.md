@@ -11,6 +11,7 @@ Das **CyberDefense Lab** bietet praxisnahe Einblicke in zentrale IT-Sicherheitsk
 - **Gobuster-Simulation:** Suchen und Aufdecken von Schwachstellen in versteckten Verzeichnissen.
 - **Updates und Patches:** Die Bedeutung regelmäßiger Sicherheitsupdates.
 - **Passwortsicherheit:** Erstellung sicherer Passwörter und Analyse von Passwortmanagern.
+- **geheime Eastereggs:** Kontaktformualar, Cookies, verstecke Directories
 
 ## Voraussetzungen
 Um das Lab lokal auszuführen oder zu hosten, benötigst du:
@@ -80,7 +81,7 @@ Fragen oder Verbesserungsvorschläge? Erstelle gerne ein Issue oder einen Pull-R
 
 ## Haftungsauschluss & Lizenz
 Das CyberDefense Lab wurde sorgfältig entwickelt, um ein sicheres Lernumfeld zu bieten. Dennoch wird keine Haftung für Schäden übernommen, die durch die unsachgemäße Nutzung des Labs oder der erlernten Techniken entstehen könnten. Die Nutzung des Labs erfolgt auf eigene Verantwortung.
-Dieses Projekt steht unter der MIT-Lizenz. Weitere Informationen findest du in der Datei.
+Dieses Projekt steht unter der MIT-Lizenz.
 
 
 
