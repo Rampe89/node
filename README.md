@@ -11,6 +11,7 @@ Das **CyberDefense Lab** bietet praxisnahe Einblicke in zentrale IT-Sicherheitsk
 - **Gobuster-Simulation:** Suchen und Aufdecken von Schwachstellen in versteckten Verzeichnissen.
 - **Updates und Patches:** Die Bedeutung regelmäßiger Sicherheitsupdates.
 - **Passwortsicherheit:** Erstellung sicherer Passwörter und Analyse von Passwortmanagern.
+- **Hashhing Lab**: Das Hashing-Lab bietet die Möglichkeit, Passwörter zu entschlüsseln und den Schutz durch Salt zu erproben.
 - **geheime Eastereggs:** Kontaktformualar, Cookies, verstecke Directories
 
 ## Voraussetzungen
@@ -69,8 +70,6 @@ Render generiert eine öffentliche URL, über die das Lab zugänglich ist.
 - Jede Lab-Aufgabe ist mit einer Flag verknüpft, die korrekt eingegeben werden muss.
 - Erfolgreich abgeschlossene Aufgaben schalten **Achievements** frei, die im Hauptmenü angezeigt werden.
 
-### Hashing Lab
-Das Hashing-Lab bietet die Möglichkeit, Passwörter zu entschlüsseln und den Schutz durch Salt zu erproben. Anleitungen sind in der Aufgabe enthalten.
 
 ---
 
