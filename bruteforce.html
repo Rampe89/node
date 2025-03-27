@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #2c3e50, #4ca1af);;
+      background: linear-gradient(135deg, #2c3e50, #4ca1af);
       margin: 0;
       padding: 20px;
     }
@@ -72,6 +72,21 @@
       border-radius: 5px;
       margin-top: 20px;
     }
+    /* Neuer Button im grünen Stil */
+    .back-button {
+      background-color: #28a745;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+      width: auto;
+    }
+    .back-button:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 <body>
@@ -101,6 +116,11 @@
       <input type="password" id="loginPassword" placeholder="Passwort" required>
       <button type="submit">Einloggen</button>
     </form>
+    <!-- Zurück zur Startseite Button direkt unter dem Einloggen-Button -->
+    <div style="text-align: center;">
+      <button class="back-button" onclick="location.href='https://node-xejd.onrender.com/index.html'">Zurück zur Startseite</button>
+    </div>
+    
     <div id="flag" class="flag"></div>
 
     <div class="learn">
