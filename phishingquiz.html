@@ -12,6 +12,9 @@
       padding: 20px;
       color: #333;
     }
+    .hidden {
+      display: none;
+    }
     .quiz-container {
       max-width: 800px;
       margin: 0 auto 40px auto;
@@ -152,6 +155,23 @@
       display: none;
       text-align: justify;
     }
+    /* Styling für den Home-Button */
+    .home-button {
+      text-align: center;
+      margin-top: 20px;
+      display: none;
+    }
+    .home-button button {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .home-button button:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 <body>
@@ -194,178 +214,187 @@
       von einer vertrauenswürdigen Quelle. Zum Schutz vor Spoofing solltest du niemals direkt auf Links in E-Mails klicken, sondern 
       die offizielle Webseite manuell in deinem Browser eingeben.
     </div>
+    <!-- Der Home-Button, der erst nach Abschluss des Quiz angezeigt wird -->
+    <div id="home-button" class="home-button">
+      <button onclick="location.href='https://node-xejd.onrender.com/index.html'">Zurück zur Startseite</button>
+    </div>
   </div>
 
   <script>
-    const emailPool = [
-      {
-        sender: "support@am4zon-security-alert.de",
-        subject: "Ungewöhnliche Anmeldeaktivität erkannt",
-        body: "Sehr geehrter Amazon-Kunde,<br><br>wir haben ungewöhnliche Anmeldeversuche in Ihrem Konto festgestellt. Um Ihr Konto vor unbefugtem Zugriff zu schützen, bitten wir Sie, Ihre Identität zu überprüfen. Klicken Sie bitte auf den folgenden Link, um Ihr Konto zu sichern: <a href='http://secure-am4zon.com'>Konto überprüfen</a>.<br><br>Vielen Dank für Ihre Kooperation,<br>Ihr Amazon-Sicherheitsteam",
-        isPhishing: true,
-        explanation: "Phishing: Die Domain 'am4zon-security-alert.de' im Absender ähnelt der echten Amazon-Domain, ist aber ein typisches Beispiel für Typosquatting. Der Link verweist auf 'secure-am4zon.com', was keine vertrauenswürdige Amazon-Subdomain ist."
-      },
-      {
-        sender: "info@paypal-verification.com",
-        subject: "Ihr Konto wurde eingeschränkt – Aktion innerhalb 24 Stunden erforderlich",
-        body: "Sehr geehrter PayPal-Nutzer,<br><br>aufgrund ungewöhnlicher Aktivitäten wurde Ihr Konto vorübergehend eingeschränkt. Bitte bestätigen Sie Ihre Identität <strong>innerhalb der nächsten 24 Stunden</strong>, um den uneingeschränkten Zugriff wiederherzustellen. Klicken Sie dazu bitte auf den folgenden Link: <a href='http://paypal-verification.fake'>Hier klicken</a>.<br><br>Falls Sie diese Anfrage nicht veranlasst haben, kontaktieren Sie bitte umgehend unseren Kundensupport.",
-        isPhishing: true,
-        explanation: "Phishing: Die echte PayPal-Domain endet auf 'paypal.com', nicht auf 'paypal-verification.fake'. Außerdem wird hier durch die 24-Stunden-Frist unnötiger Zeitdruck aufgebaut, was eine typische Phishing-Taktik ist."
-      },
-      {
-        sender: "support@amazon.de",
-        subject: "Ungewöhnliche Anmeldeaktivitäten",
-        body: "Lieber Kunde,<br><br>wir haben ungewöhnliche Anmeldeaktivitäten auf Ihrem Konto festgestellt. Bitte überprüfen Sie umgehend Ihr Konto, indem Sie auf den folgenden Link klicken: <a href='https://amazon.de/account-security'>Hier klicken</a>.<br><br>Falls Sie diese Aktivität nicht autorisiert haben, ändern Sie bitte Ihr Passwort und kontaktieren Sie unseren Kundenservice.<br><br>Ihr Amazon-Sicherheitsteam",
-        isPhishing: false,
-        explanation: "Echt: Die E-Mail stammt von der offiziellen Domain 'amazon.de'."
-      },
-      {
-        sender: "security@appleid.com",
-        subject: "Apple ID wurde gesperrt",
-        body: "Sehr geehrte/r Apple-Nutzer/in,<br><br>aus Sicherheitsgründen wurde Ihre Apple ID vorübergehend gesperrt. Um den Zugriff wiederherzustellen, bitten wir Sie, Ihre Identität zu bestätigen. Nutzen Sie dazu bitte folgenden Link: <a href='http://appleid-security.com'>Hier klicken</a>.<br><br>",
-        isPhishing: true,
-        explanation: "Phishing: Obwohl der Absender glaubwürdig wirkt, ist die verlinkte Domain nicht authentisch."
-      },
-      {
-        sender: "kundenservice@telekom.de",
-        subject: "Ihre Rechnung ist verfügbar",
-        body: "Sehr geehrte Kundin, sehr geehrter Kunde,<br><br>Ihre aktuelle Telekom-Rechnung steht jetzt online zur Einsicht bereit. Bitte loggen Sie sich manuell über Ihren Browser in Ihr Kundenkonto ein, indem Sie die offizielle Adresse <strong>www.telekom.de</strong> in die Adresszeile eingeben.<br><br>Bei Fragen steht Ihnen unser Kundenservice gerne zur Verfügung.<br><br>Mit freundlichen Grüßen,<br>Ihr Telekom-Team",
-        isPhishing: false,
-        explanation: "Echt: Seriöse Anbieter versenden in der Regel keine direkten Links, sondern empfehlen, die offizielle Adresse manuell in den Browser einzugeben, um Phishing zu vermeiden."
-      },
-      {
-        sender: "lottery@bigwin.org",
-        subject: "Herzlichen Glückwunsch, Sie haben gewonnen!",
-        body: "Herzlichen Glückwunsch!<br><br>Sie wurden als Gewinner eines exklusiven Preises ausgewählt. Um Ihren Gewinn in Höhe von 10.000 € zu beanspruchen, klicken Sie bitte auf den folgenden Link: <a href='http://bigwin.org'>Jetzt klicken</a>.<br><br>Bitte beachten Sie, dass zur Auszahlung noch weitere Informationen von Ihnen benötigt werden.",
-        isPhishing: true,
-        explanation: "Phishing: Die E-Mail verspricht einen hohen Geldgewinn – ein typisches Merkmal von Phishing."
-      },
-      {
-        sender: "info@dhl.de",
-        subject: "Ihr Paket ist unterwegs",
-        body: "Liebe Kundin, lieber Kunde,<br><br>Ihr Paket befindet sich bereits auf dem Weg zu Ihnen. Sie können den aktuellen Status Ihrer Lieferung jederzeit online verfolgen. Folgen Sie hierzu bitte diesem Link: <a href='https://www.dhl.de/sendungsverfolgung'>hier</a>.<br><br>Wir wünschen Ihnen viel Freude mit Ihrem Einkauf.<br><br>Ihr DHL-Team",
-        isPhishing: false,
-        explanation: "Echt: Die E-Mail stammt von der offiziellen Domain 'dhl.de'."
-      },
-      {
-        sender: "helpdesk@university.edu",
-        subject: "Wichtige Sicherheitsaktualisierung",
-        body: "Sehr geehrte/r Studierende/r,<br><br>Ihr Passwort läuft in Kürze ab. Um den kontinuierlichen Zugriff auf Ihr Universitätskonto zu gewährleisten, bitten wir Sie, Ihr Passwort umgehend zu aktualisieren. Klicken Sie dazu bitte auf folgenden Link: <a href='http://university-support.com'>Hier klicken</a>.<br><br>Bei Fragen wenden Sie sich bitte an unseren Helpdesk.",
-        isPhishing: true,
-        explanation: "Phishing: Der Absender täuscht eine offizielle Universitätsadresse vor, der Link passt jedoch nicht zur echten Domain."
-      },
-      {
-        sender: "info@facebook.com",
-        subject: "Ungewöhnliche Anmeldung erkannt",
-        body: "Hallo,<br><br>wir haben einen neuen Login-Versuch in Ihrem Facebook-Konto festgestellt. Falls Sie diese Anmeldung nicht selbst vorgenommen haben, überprüfen Sie bitte umgehend die Sicherheit Ihres Kontos. Nutzen Sie dazu folgenden Link: <a href='https://facebook.com/security'>Sicherheitsüberprüfung starten</a>.<br><br>Vielen Dank für Ihre Aufmerksamkeit,<br>Ihr Facebook-Sicherheitsteam",
-        isPhishing: false,
-        explanation: "Echt: Die E-Mail stammt von der offiziellen Domain 'facebook.com'."
-      },
-      {
-        sender: "newsletter@zalando.de",
-        subject: "10% Willkommensrabatt",
-        body: "Willkommen bei Zalando!<br><br>Als Dankeschön für Ihre Anmeldung erhalten Sie einen exklusiven 10% Willkommensrabatt auf Ihren nächsten Einkauf. Nutzen Sie diesen Rabatt, indem Sie auf folgenden Link klicken: <a href='https://zalando.de/welcome'>hier</a>.<br><br>Wir wünschen Ihnen viel Freude beim Shoppen!<br><br>Ihr Zalando-Team",
-        isPhishing: false,
-        explanation: "Echt: Die E-Mail stammt von der offiziellen Domain 'zalando.de'."
-      },
-      {
-        sender: "info@banking-alerts.com",
-        subject: "Sicherheitswarnung für Ihr Konto",
-        body: "Sehr geehrte/r Bankkunde/in,<br><br>es wurde eine verdächtige Aktivität in Ihrem Konto festgestellt. Um Ihr Konto zu schützen, fordern wir Sie auf, Ihre Bankdaten zu bestätigen. Bitte klicken Sie hierzu auf folgenden Link: <a href='http://banking-alerts.com'>hier</a>.<br><br>Mit freundlichen Grüßen,<br>Ihr Sicherheitsteam",
-        isPhishing: true,
-        explanation: "Phishing: Die Domain 'banking-alerts.com' wirkt verdächtig."
-      },
-      {
-        sender: "security@microsoft.com",
-        subject: "Anmeldung aus einem neuen Gerät erkannt",
-        body: "Hallo,<br><br>es wurde ein Login von einem neuen Gerät in Ihrem Microsoft-Konto festgestellt – in diesem Fall aus Berlin. Wenn diese Anmeldung von Ihnen autorisiert wurde, ist keine weitere Aktion erforderlich. Falls nicht, überprüfen Sie bitte umgehend Ihr Konto über folgenden Link: <a href='https://microsoft.com/security'>Überprüfung durchführen</a>.<br><br>Vielen Dank,<br>Ihr Microsoft-Sicherheitsteam",
-        isPhishing: false,
-        explanation: "Echt: Die E-Mail stammt von der offiziellen Domain 'microsoft.com'."
-      },
-      {
-        sender: "fraud@bank.de",
-        subject: "Verdächtige Aktivitäten entdeckt",
-        body: "Sehr geehrte/r Kunde/in,<br><br>es wurden verdächtige Aktivitäten in Ihrem Bankkonto festgestellt. Um sicherzustellen, dass Ihr Konto nicht kompromittiert wurde, bitten wir Sie, Ihre Daten umgehend zu überprüfen. Klicken Sie dazu auf folgenden Link: <a href='http://fraud-check.net'>Hier prüfen</a>.<br><br>Wir empfehlen, sich zusätzlich direkt mit Ihrer Bank in Verbindung zu setzen.",
-        isPhishing: true,
-        explanation: "Phishing: Die E-Mail gibt vor, von einer Bank zu stammen, verwendet jedoch die Domain 'fraud-check.net', welche nicht zur offiziellen Bank gehört."
-      }
-    ];
-    
-    let currentEmailIndex = 0;
-    let correctAnswers = 0;
-    
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
-    
-    function setupQuiz() {
-      shuffle(emailPool);
-      loadEmail();
-    }
-    
-    function updateProgressBar() {
-      const progress = ((currentEmailIndex / emailPool.length) * 100).toFixed(0);
-      document.getElementById("progress-bar").style.width = `${progress}%`;
-      document.getElementById("progress-bar").textContent = `${progress}%`;
-    }
-    
-    function loadEmail() {
-      if (currentEmailIndex >= emailPool.length) {
-        endQuiz();
-        return;
-      }
-      const email = emailPool[currentEmailIndex];
-      document.getElementById("email-header").textContent = `Von: ${email.sender} | Betreff: ${email.subject}`;
-      document.getElementById("email-body").innerHTML = email.body;
-      
-      updateProgressBar();
-    }
-    
-    function checkAnswer(isPhishing) {
-      // Deaktivieren der Buttons, um Mehrfachklicks zu verhindern
-      document.getElementById("phishing-btn").disabled = true;
-      document.getElementById("not-phishing-btn").disabled = true;
-      
-      const email = emailPool[currentEmailIndex];
-      const explanationDiv = document.getElementById("explanation");
-      
-      if (email.isPhishing === isPhishing) correctAnswers++;
-      
-      explanationDiv.textContent = email.explanation;
-      explanationDiv.style.display = "block";
-      
-      setTimeout(() => {
-        explanationDiv.style.display = "none";
-        currentEmailIndex++;
-        if (currentEmailIndex < emailPool.length) {
-          loadEmail();
-        } else {
-          endQuiz();
+    document.addEventListener("DOMContentLoaded", function() {
+      const emailPool = [
+        {
+          sender: "support@am4zon-security-alert.de",
+          subject: "Ungewöhnliche Anmeldeaktivität erkannt",
+          body: "Sehr geehrter Amazon-Kunde,<br><br>wir haben ungewöhnliche Anmeldeversuche in Ihrem Konto festgestellt. Um Ihr Konto vor unbefugtem Zugriff zu schützen, bitten wir Sie, Ihre Identität zu überprüfen. Klicken Sie bitte auf den folgenden Link, um Ihr Konto zu sichern: <a href='http://secure-am4zon.com'>Konto überprüfen</a>.<br><br>Vielen Dank für Ihre Kooperation,<br>Ihr Amazon-Sicherheitsteam",
+          isPhishing: true,
+          explanation: "Phishing: Die Domain 'am4zon-security-alert.de' im Absender ähnelt der echten Amazon-Domain, ist aber ein typisches Beispiel für Typosquatting. Der Link verweist auf 'secure-am4zon.com', was keine vertrauenswürdige Amazon-Subdomain ist."
+        },
+        {
+          sender: "info@paypal-verification.com",
+          subject: "Ihr Konto wurde eingeschränkt – Aktion innerhalb 24 Stunden erforderlich",
+          body: "Sehr geehrter PayPal-Nutzer,<br><br>aufgrund ungewöhnlicher Aktivitäten wurde Ihr Konto vorübergehend eingeschränkt. Bitte bestätigen Sie Ihre Identität <strong>innerhalb der nächsten 24 Stunden</strong>, um den uneingeschränkten Zugriff wiederherzustellen. Klicken Sie dazu bitte auf den folgenden Link: <a href='http://paypal-verification.fake'>Hier klicken</a>.<br><br>Falls Sie diese Anfrage nicht veranlasst haben, kontaktieren Sie bitte umgehend unseren Kundensupport.",
+          isPhishing: true,
+          explanation: "Phishing: Die echte PayPal-Domain endet auf 'paypal.com', nicht auf 'paypal-verification.fake'. Außerdem wird hier durch die 24-Stunden-Frist unnötiger Zeitdruck aufgebaut, was eine typische Phishing-Taktik ist."
+        },
+        {
+          sender: "support@amazon.de",
+          subject: "Ungewöhnliche Anmeldeaktivitäten",
+          body: "Lieber Kunde,<br><br>wir haben ungewöhnliche Anmeldeaktivitäten auf Ihrem Konto festgestellt. Bitte überprüfen Sie umgehend Ihr Konto, indem Sie auf den folgenden Link klicken: <a href='https://amazon.de/account-security'>Hier klicken</a>.<br><br>Falls Sie diese Aktivität nicht autorisiert haben, ändern Sie bitte Ihr Passwort und kontaktieren Sie unseren Kundenservice.<br><br>Ihr Amazon-Sicherheitsteam",
+          isPhishing: false,
+          explanation: "Echt: Die E-Mail stammt von der offiziellen Domain 'amazon.de'."
+        },
+        {
+          sender: "security@appleid.com",
+          subject: "Apple ID wurde gesperrt",
+          body: "Sehr geehrte/r Apple-Nutzer/in,<br><br>aus Sicherheitsgründen wurde Ihre Apple ID vorübergehend gesperrt. Um den Zugriff wiederherzustellen, bitten wir Sie, Ihre Identität zu bestätigen. Nutzen Sie dazu bitte folgenden Link: <a href='http://appleid-security.com'>Hier klicken</a>.<br><br>",
+          isPhishing: true,
+          explanation: "Phishing: Obwohl der Absender glaubwürdig wirkt, ist die verlinkte Domain nicht authentisch."
+        },
+        {
+          sender: "kundenservice@telekom.de",
+          subject: "Ihre Rechnung ist verfügbar",
+          body: "Sehr geehrte Kundin, sehr geehrter Kunde,<br><br>Ihre aktuelle Telekom-Rechnung steht jetzt online zur Einsicht bereit. Bitte loggen Sie sich manuell über Ihren Browser in Ihr Kundenkonto ein, indem Sie die offizielle Adresse <strong>www.telekom.de</strong> in die Adresszeile eingeben.<br><br>Bei Fragen steht Ihnen unser Kundenservice gerne zur Verfügung.<br><br>Mit freundlichen Grüßen,<br>Ihr Telekom-Team",
+          isPhishing: false,
+          explanation: "Echt: Seriöse Anbieter versenden in der Regel keine direkten Links, sondern empfehlen, die offizielle Adresse manuell in den Browser einzugeben, um Phishing zu vermeiden."
+        },
+        {
+          sender: "lottery@bigwin.org",
+          subject: "Herzlichen Glückwunsch, Sie haben gewonnen!",
+          body: "Herzlichen Glückwunsch!<br><br>Sie wurden als Gewinner eines exklusiven Preises ausgewählt. Um Ihren Gewinn in Höhe von 10.000 € zu beanspruchen, klicken Sie bitte auf den folgenden Link: <a href='http://bigwin.org'>Jetzt klicken</a>.<br><br>Bitte beachten Sie, dass zur Auszahlung noch weitere Informationen von Ihnen benötigt werden.",
+          isPhishing: true,
+          explanation: "Phishing: Die E-Mail verspricht einen hohen Geldgewinn – ein typisches Merkmal von Phishing."
+        },
+        {
+          sender: "info@dhl.de",
+          subject: "Ihr Paket ist unterwegs",
+          body: "Liebe Kundin, lieber Kunde,<br><br>Ihr Paket befindet sich bereits auf dem Weg zu Ihnen. Sie können den aktuellen Status Ihrer Lieferung jederzeit online verfolgen. Folgen Sie hierzu bitte diesem Link: <a href='https://www.dhl.de/sendungsverfolgung'>hier</a>.<br><br>Wir wünschen Ihnen viel Freude mit Ihrem Einkauf.<br><br>Ihr DHL-Team",
+          isPhishing: false,
+          explanation: "Echt: Die E-Mail stammt von der offiziellen Domain 'dhl.de'."
+        },
+        {
+          sender: "helpdesk@university.edu",
+          subject: "Wichtige Sicherheitsaktualisierung",
+          body: "Sehr geehrte/r Studierende/r,<br><br>Ihr Passwort läuft in Kürze ab. Um den kontinuierlichen Zugriff auf Ihr Universitätskonto zu gewährleisten, bitten wir Sie, Ihr Passwort umgehend zu aktualisieren. Klicken Sie dazu bitte auf folgenden Link: <a href='http://university-support.com'>Hier klicken</a>.<br><br>Bei Fragen wenden Sie sich bitte an unseren Helpdesk.",
+          isPhishing: true,
+          explanation: "Phishing: Der Absender täuscht eine offizielle Universitätsadresse vor, der Link passt jedoch nicht zur echten Domain."
+        },
+        {
+          sender: "info@facebook.com",
+          subject: "Ungewöhnliche Anmeldung erkannt",
+          body: "Hallo,<br><br>wir haben einen neuen Login-Versuch in Ihrem Facebook-Konto festgestellt. Falls Sie diese Anmeldung nicht selbst vorgenommen haben, überprüfen Sie bitte umgehend die Sicherheit Ihres Kontos. Nutzen Sie dazu folgenden Link: <a href='https://facebook.com/security'>Sicherheitsüberprüfung starten</a>.<br><br>Vielen Dank für Ihre Aufmerksamkeit,<br>Ihr Facebook-Sicherheitsteam",
+          isPhishing: false,
+          explanation: "Echt: Die E-Mail stammt von der offiziellen Domain 'facebook.com'."
+        },
+        {
+          sender: "newsletter@zalando.de",
+          subject: "10% Willkommensrabatt",
+          body: "Willkommen bei Zalando!<br><br>Als Dankeschön für Ihre Anmeldung erhalten Sie einen exklusiven 10% Willkommensrabatt auf Ihren nächsten Einkauf. Nutzen Sie diesen Rabatt, indem Sie auf folgenden Link klicken: <a href='https://zalando.de/welcome'>hier</a>.<br><br>Wir wünschen Ihnen viel Freude beim Shoppen!<br><br>Ihr Zalando-Team",
+          isPhishing: false,
+          explanation: "Echt: Die E-Mail stammt von der offiziellen Domain 'zalando.de'."
+        },
+        {
+          sender: "info@banking-alerts.com",
+          subject: "Sicherheitswarnung für Ihr Konto",
+          body: "Sehr geehrte/r Bankkunde/in,<br><br>es wurde eine verdächtige Aktivität in Ihrem Konto festgestellt. Um Ihr Konto zu schützen, fordern wir Sie auf, Ihre Bankdaten zu bestätigen. Bitte klicken Sie hierzu auf folgenden Link: <a href='http://banking-alerts.com'>hier</a>.<br><br>Mit freundlichen Grüßen,<br>Ihr Sicherheitsteam",
+          isPhishing: true,
+          explanation: "Phishing: Die Domain 'banking-alerts.com' wirkt verdächtig."
+        },
+        {
+          sender: "security@microsoft.com",
+          subject: "Anmeldung aus einem neuen Gerät erkannt",
+          body: "Hallo,<br><br>es wurde ein Login von einem neuen Gerät in Ihrem Microsoft-Konto festgestellt – in diesem Fall aus Berlin. Wenn diese Anmeldung von Ihnen autorisiert wurde, ist keine weitere Aktion erforderlich. Falls nicht, überprüfen Sie bitte umgehend Ihr Konto über folgenden Link: <a href='https://microsoft.com/security'>Überprüfung durchführen</a>.<br><br>Vielen Dank,<br>Ihr Microsoft-Sicherheitsteam",
+          isPhishing: false,
+          explanation: "Echt: Die E-Mail stammt von der offiziellen Domain 'microsoft.com'."
+        },
+        {
+          sender: "fraud@bank.de",
+          subject: "Verdächtige Aktivitäten entdeckt",
+          body: "Sehr geehrte/r Kunde/in,<br><br>es wurden verdächtige Aktivitäten in Ihrem Bankkonto festgestellt. Um sicherzustellen, dass Ihr Konto nicht kompromittiert wurde, bitten wir Sie, Ihre Daten umgehend zu überprüfen. Klicken Sie dazu auf folgenden Link: <a href='http://fraud-check.net'>Hier prüfen</a>.<br><br>Wir empfehlen, sich zusätzlich direkt mit Ihrer Bank in Verbindung zu setzen.",
+          isPhishing: true,
+          explanation: "Phishing: Die E-Mail gibt vor, von einer Bank zu stammen, verwendet jedoch die Domain 'fraud-check.net', welche nicht zur offiziellen Bank gehört."
         }
-        // Buttons wieder aktivieren
-        document.getElementById("phishing-btn").disabled = false;
-        document.getElementById("not-phishing-btn").disabled = false;
-      }, 4000);
-    }
-    
-    function endQuiz() {
-      updateProgressBar();
-      document.getElementById("quiz-content").style.display = "none";
-      const result = document.getElementById("result");
-      result.textContent = correctAnswers === emailPool.length 
-        ? "Herzlichen Glückwunsch! Du hast alle richtig beantwortet. 🎉 Flag: {CAUGHT_ALL_THE_PHISH}" 
-        : `Du hast ${correctAnswers} von ${emailPool.length} richtig beantwortet.`;
-      result.classList.remove("hidden");
-      // Infotext anzeigen
-      document.getElementById("info-text").style.display = "block";
-    }
-    
-    setupQuiz();
-    document.getElementById("phishing-btn").addEventListener("click", () => checkAnswer(true));
-    document.getElementById("not-phishing-btn").addEventListener("click", () => checkAnswer(false));
+      ];
+      
+      let currentEmailIndex = 0;
+      let correctAnswers = 0;
+      
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+      }
+      
+      function setupQuiz() {
+        shuffle(emailPool);
+        loadEmail();
+      }
+      
+      function updateProgressBar() {
+        const progress = ((currentEmailIndex / emailPool.length) * 100).toFixed(0);
+        document.getElementById("progress-bar").style.width = `${progress}%`;
+        document.getElementById("progress-bar").textContent = `${progress}%`;
+      }
+      
+      function loadEmail() {
+        if (currentEmailIndex >= emailPool.length) {
+          endQuiz();
+          return;
+        }
+        const email = emailPool[currentEmailIndex];
+        document.getElementById("email-header").textContent = `Von: ${email.sender} | Betreff: ${email.subject}`;
+        document.getElementById("email-body").innerHTML = email.body;
+        
+        updateProgressBar();
+      }
+      
+      function checkAnswer(isPhishing) {
+        // Deaktivieren der Buttons, um Mehrfachklicks zu verhindern
+        document.getElementById("phishing-btn").disabled = true;
+        document.getElementById("not-phishing-btn").disabled = true;
+        
+        const email = emailPool[currentEmailIndex];
+        const explanationDiv = document.getElementById("explanation");
+        
+        if (email.isPhishing === isPhishing) correctAnswers++;
+        
+        explanationDiv.textContent = email.explanation;
+        explanationDiv.style.display = "block";
+        
+        setTimeout(() => {
+          explanationDiv.style.display = "none";
+          currentEmailIndex++;
+          if (currentEmailIndex < emailPool.length) {
+            loadEmail();
+          } else {
+            endQuiz();
+          }
+          // Buttons wieder aktivieren
+          document.getElementById("phishing-btn").disabled = false;
+          document.getElementById("not-phishing-btn").disabled = false;
+        }, 4000);
+      }
+      
+      function endQuiz() {
+        updateProgressBar();
+        document.getElementById("quiz-content").style.display = "none";
+        const result = document.getElementById("result");
+        result.textContent = correctAnswers === emailPool.length 
+          ? "Herzlichen Glückwunsch! Du hast alle richtig beantwortet. 🎉 Flag: {CAUGHT_ALL_THE_PHISH}" 
+          : `Du hast ${correctAnswers} von ${emailPool.length} richtig beantwortet.`;
+        result.classList.remove("hidden");
+        // Infotext anzeigen
+        document.getElementById("info-text").style.display = "block";
+        // Home-Button anzeigen
+        document.getElementById("home-button").style.display = "block";
+      }
+      
+      setupQuiz();
+      
+      document.getElementById("phishing-btn").addEventListener("click", () => checkAnswer(true));
+      document.getElementById("not-phishing-btn").addEventListener("click", () => checkAnswer(false));
+    });
   </script>
 </body>
 </html>
