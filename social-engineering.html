@@ -134,368 +134,387 @@
       background: #007bff;
       border-radius: 10px;
     }
+    /* Zurück zur Startseite Button */
+    .back-button {
+      background-color: #28a745;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    .back-button:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 <body>
-<div class="container">
-  <h1>Social Engineering Lab</h1>
-  <div class="explanation">
-    <p>
-      Social Engineering bezeichnet das Vorgehen, Menschen durch gezielte Manipulation dazu zu bringen, vertrauliche Informationen preiszugeben.
-      In diesem Lab wirst du realistische Chat-Szenarien durchlaufen, in denen Angreifer versuchen, dich unter Druck zu setzen – sei es durch Dringlichkeit, Gruppendruck oder hartnäckiges Nachhaken.
-    </p>
-    <p>
-      Lies die Nachrichten aufmerksam und wähle deine Antworten mit Bedacht. Prüfe stets, ob die Anfrage legitim ist, und verifiziere die Identität deines Gegenübers. Nur so kannst du dich effektiv schützen.
-    </p>
-    <p>
-      Viel Erfolg – und bleib wachsam!
-    </p>
-  </div>
+  <div class="container">
+    <h1>Social Engineering Lab</h1>
+    <div class="explanation">
+      <p>
+        Social Engineering bezeichnet das Vorgehen, Menschen durch gezielte Manipulation dazu zu bringen, vertrauliche Informationen preiszugeben.
+        In diesem Lab wirst du realistische Chat-Szenarien durchlaufen, in denen Angreifer versuchen, dich unter Druck zu setzen – sei es durch Dringlichkeit, Gruppendruck oder hartnäckiges Nachhaken.
+      </p>
+      <p>
+        Lies die Nachrichten aufmerksam und wähle deine Antworten mit Bedacht. Prüfe stets, ob die Anfrage legitim ist, und verifiziere die Identität deines Gegenübers. Nur so kannst du dich effektiv schützen.
+      </p>
+      <p>
+        Viel Erfolg – und bleib wachsam!
+      </p>
+    </div>
 
-  
-  <div class="chat-window" id="chat-window"></div>
-  <div class="choices-container" id="choices-container"></div>
-  <div id="flag-container"></div>
-  
-  <div class="info" id="additional-info" style="display: none;">
-    <h2>Weitere Informationen zu Social Engineering</h2>
-    <p>
-      Neben direkten Angriffen über Anrufe oder gefälschte E-Mails nutzen Social-Engineering-Angreifer auch physische Tricks, um Zugang zu Systemen oder Daten zu erhalten. Ein Beispiel ist das Platzieren von USB-Sticks an öffentlichen Orten wie Parkplätzen oder Büros. Sobald ein solcher Stick in ein Gerät eingesteckt wird, kann Malware auf das System gelangen und Daten kompromittieren. Ähnlich gefährlich sind manipulierte Ladekabel, die ebenfalls Schadsoftware auf Geräten installieren können.
-    </p>
-    <p>
-      Um dich gegen solche Angriffe zu schützen, solltest du keine unbekannten USB-Sticks oder Kabel verwenden und diese auch nicht ausprobieren. Gib solche Gegenstände an deine IT-Abteilung weiter oder entsorge sie sicher.
-    </p>
-    <p>
-      Eine der effektivsten Schutzmaßnahmen ist die Verwendung von Zwei-Faktor-Authentifizierung (2FA). Diese sorgt dafür, dass selbst bei gestohlenen Zugangsdaten kein unberechtigter Zugriff möglich ist, da ein zweiter Verifizierungsschritt wie ein Einmal-Code erforderlich ist. Außerdem solltest du starke, einzigartige Passwörter nutzen und auf Passwortmanager zurückgreifen, um diese sicher zu verwalten.
-    </p>
-    <p>
-      Diese Simulation hat dir gezeigt, wie Angreifer durch Social Engineering vorgehen können. Indem du dir der Gefahren bewusst bist und Sicherheitsmaßnahmen wie 2FA und Vorsicht im Umgang mit physischen Medien anwendest, kannst du dich besser vor diesen Angriffen schützen.
-    </p>
+    <div class="chat-window" id="chat-window"></div>
+    <div class="choices-container" id="choices-container"></div>
+    <div id="flag-container"></div>
+    <div class="info" id="additional-info" style="display: none;">
+      <h2>Weitere Informationen zu Social Engineering</h2>
+      <p>
+        Neben direkten Angriffen über Anrufe oder gefälschte E-Mails nutzen Social-Engineering-Angreifer auch physische Tricks, um Zugang zu Systemen oder Daten zu erhalten. Ein Beispiel ist das Platzieren von USB-Sticks an öffentlichen Orten wie Parkplätzen oder Büros. Sobald ein solcher Stick in ein Gerät eingesteckt wird, kann Malware auf das System gelangen und Daten kompromittieren. Ähnlich gefährlich sind manipulierte Ladekabel, die ebenfalls Schadsoftware auf Geräten installieren können.
+      </p>
+      <p>
+        Um dich gegen solche Angriffe zu schützen, solltest du keine unbekannten USB-Sticks oder Kabel verwenden und diese auch nicht ausprobieren. Gib solche Gegenstände an deine IT-Abteilung weiter oder entsorge sie sicher.
+      </p>
+      <p>
+        Eine der effektivsten Schutzmaßnahmen ist die Verwendung von Zwei-Faktor-Authentifizierung (2FA). Diese sorgt dafür, dass selbst bei gestohlenen Zugangsdaten kein unberechtigter Zugriff möglich ist, da ein zweiter Verifizierungsschritt wie ein Einmal-Code erforderlich ist. Außerdem solltest du starke, einzigartige Passwörter nutzen und auf Passwortmanager zurückgreifen, um diese sicher zu verwalten.
+      </p>
+      <p>
+        Diese Simulation hat dir gezeigt, wie Angreifer durch Social Engineering vorgehen können. Indem du dir der Gefahren bewusst bist und Sicherheitsmaßnahmen wie 2FA und Vorsicht im Umgang mit physischen Medien anwendest, kannst du dich besser vor diesen Angriffen schützen.
+      </p>
+    </div>
+    <!-- Hier wird der Zurück zur Startseite Button eingeblendet, sobald das Lab beendet ist -->
+    <div id="back-button-container" style="text-align:center; margin-top:20px; display:none;">
+      <button class="back-button" onclick="location.href='https://node-xejd.onrender.com/index.html'">Zurück zur Startseite</button>
+    </div>
   </div>
-</div>
-<script>
-  /* Szenarien:
-     1. Bankberater (formell – Sie-Anrede)
-     2. Manipulation im Klassenchat
-     3. Schulleiter-Support
-     4. Iserv Support (überarbeitet)
-     5. Paketbenachrichtigung (neu)
-  */
-  const scenarios = [
-    // 1. Bankberater
-    {
-      name: "Bankberater",
-      conversation: [
-        {
-          type: "message",
-          sender: "Bankberater",
-          text: "Guten Tag, hier ist Herr Müller von der Musterbank. Aufgrund ungewöhnlicher Aktivitäten in Ihrem Konto bitten wir Sie, Ihre Kontodaten zu bestätigen."
-        },
-        {
-          type: "message",
-          sender: "Bankberater",
-          text: "Es ist sehr dringend, da wir Ihr Konto vor möglichen Betrugsversuchen schützen müssen."
-        },
-        {
-          type: "choice",
-          choices: [
-            {
-              text: "Ich werde zuerst meine Kontounterlagen prüfen und Sie zurückrufen.",
-              correct: true,
-              feedback: "Richtig! Du verifizierst die Anfrage, bevor Du sensible Daten preisgibst.",
-              finalMessage: "Bankberater: Vielen Dank. Wir warten auf Ihren Rückruf."
-            },
-            {
-              text: "Hier sind meine Kontodaten: IBAN, BIC und Kontonummer.",
-              correct: false,
-              feedback: "Falsch! Sensible Daten solltest du niemals ohne Überprüfung preisgeben.",
-              finalMessage: "Bankberater: Ihre Daten wurden entgegengenommen – das birgt jedoch ein hohes Sicherheitsrisiko."
-            },
-            {
-              text: "Naja, mit meiner IBAN kann er ja nichts anfangen. Das sollte die Sache vielleicht schon klären?",
-              correct: false,
-              feedback: "Nicht ausreichend! Auch deine IBAN kann missbraucht werden, da sie zur Identifikation dient.",
-              finalMessage: "Bankberater: Ihre Information ist unvollständig und stellt ein Sicherheitsrisiko dar."
-            }
-          ]
-        }
-      ]
-    },
-    // 2. Manipulation im Klassenchat (erweitert)
-    {
-      name: "Manipulation im Klassenchat",
-      conversation: [
-        {
-          type: "message",
-          sender: "IT-Verantwortlicher",
-          text: "Hey Leute, hier ist der IT-Verantwortliche. Unser Netzwerk zeigt massive Störungen – alle Laptops sind betroffen."
-        },
-        {
-          type: "message",
-          sender: "IT-Verantwortlicher",
-          text: "Ich brauche von jedem von euch eure Zugangsdaten, damit ich das System neu konfigurieren kann."
-        },
-        {
-          type: "message",
-          sender: "Max",
-          text: "Moment mal, das klingt ziemlich dubios. Ich bin mir nicht sicher, ob das echt ist."
-        },
-        {
-          type: "message",
-          sender: "Anna",
-          text: "Ich bin mir da sicher, wenn's vom IT-Verantwortlichen kommt, dann stimmt es schon, oder? 😊"
-        },
-        {
-          type: "message",
-          sender: "Tom",
-          text: "Was soll das überhaupt bedeuten? Ich verstehe nicht, warum wir unsere Daten teilen sollen..."
-        },
-        {
-          type: "message",
-          sender: "Lukas",
-          text: "Wer von euch ist am Samstag eigentlich dabei?! 😜"
-        },
-        {
-          type: "message",
-          sender: "Lisa",
-          text: "lisa_h@schule.de passwort: sunshine123"
-        },
-        {
-          type: "choice",
-          choices: [
-            {
-              text: "Ich melde den Vorfall direkt beim offiziellen IT-Support.",
-              correct: true,
-              feedback: "Richtig! Du lässt dich nicht vom Gruppendruck beeinflussen und handelst eigenständig.",
-              finalMessage: "IT-Verantwortlicher: Danke, deine Meldung wurde weitergeleitet und wird geprüft."
-            },
-            {
-              text: "Ich folge Lisa und sende auch meine Zugangsdaten.",
-              correct: false,
-              feedback: "Falsch! Gruppendruck kann dazu verleiten, unüberlegt zu handeln.",
-              finalMessage: "IT-Verantwortlicher: Deine Daten wurden entgegengenommen – das ist jedoch sehr riskant."
-            },
-            {
-              text: "Ich frage Max, was genau los ist.",
-              correct: true,
-              feedback: "Gut! Es ist absolut legitim, nachzufragen, um die Situation besser zu verstehen.",
-              finalMessage: "Max: Ich bin skeptisch, weil ich solche Anfragen noch nie gehört habe. Es ist besser, wenn du dich selbst absicherst."
-            }
-          ]
-        }
-      ]
-    },
-    // 3. Schulleiter-Support
-    {
-      name: "Schulleiter-Support",
-      conversation: [
-        {
-          type: "message",
-          sender: "Schulleiter",
-          text: "Hallo, hier ist der Schulleiter. Es gibt ein Problem im Schulportal. Bitte bestätige deine Zugangsdaten, damit wir den Fehler beheben können."
-        },
-        {
-          type: "message",
-          sender: "Schulleiter",
-          text: "Wir haben Unregelmäßigkeiten festgestellt – es ist wichtig, dass alle Daten korrekt sind."
-        },
-        {
-          type: "choice",
-          choices: [
-            {
-              text: "Ich rufe zuerst das Sekretariat an, um die Anfrage zu verifizieren.",
-              correct: true,
-              feedback: "Richtig! Du überprüfst die Anfrage, bevor du sensible Daten preisgibst.",
-              finalMessage: "Schulleiter: Gut, warte bitte auf die Bestätigung vom Sekretariat und informiere uns dann."
-            },
-            {
-              text: "Ich sende sofort meine Zugangsdaten.",
-              correct: false,
-              feedback: "Falsch! Ohne Verifizierung handelst du zu voreilig.",
-              finalMessage: "Schulleiter: Deine Daten wurden entgegengenommen – das erhöht das Risiko eines Angriffs."
-            },
-            {
-              text: "Ich gebe nur meinen Benutzernamen preis.",
-              correct: false,
-              feedback: "Vorsicht! Selbst ein Benutzername kann sensible Informationen enthalten.",
-              finalMessage: "Schulleiter: Deine Information ist unvollständig und stellt ein Sicherheitsrisiko dar."
-            }
-          ]
-        }
-      ]
-    },
-    // 4. Iserv Support (überarbeitet)
-    {
-      name: "Iserv Support",
-      conversation: [
-        {
-          type: "message",
-          sender: "Iserv-Support",
-          text: "Hallo, hier ist der Iserv-Support. Wir haben ungewöhnliche Aktivitäten in deinem Iserv-Account festgestellt."
-        },
-        {
-          type: "message",
-          sender: "Iserv-Support",
-          text: "Um deinen Account zu schützen, müssen wir deine Daten kurzfristig verifizieren. Bitte bestätige deine Anmeldedaten, damit dein Account wieder freigeschaltet werden kann."
-        },
-        {
-          type: "choice",
-          choices: [
-            {
-              text: "Ich kontaktiere zuerst den offiziellen IT-Support der Schule zur Bestätigung.",
-              correct: true,
-              feedback: "Richtig! Überprüfe immer die Echtheit der Anfrage, bevor du sensible Daten preisgibst.",
-              finalMessage: "Iserv-Support: Danke, wir warten auf deine Rückmeldung vom IT-Support."
-            },
-            {
-              text: "Hier sind meine Iserv-Zugangsdaten.",
-              correct: false,
-              feedback: "Falsch! Ohne vorherige Verifizierung gibst du unnötig sensible Daten preis.",
-              finalMessage: "Iserv-Support: Deine Daten wurden entgegengenommen – das ist jedoch unsicher."
-            },
-            {
-              text: "Ich gebe nur meinen Benutzernamen preis, da das reichen sollte.",
-              correct: false,
-              feedback: "Nicht ausreichend! Auch unvollständige Angaben können missbraucht werden.",
-              finalMessage: "Iserv-Support: Deine Information ist unvollständig und stellt ein Risiko dar."
-            }
-          ]
-        }
-      ]
-    },
-    // 5. Paketbenachrichtigung (neu)
-    {
-      name: "Paketbenachrichtigung",
-      conversation: [
-        {
-          type: "message",
-          sender: "Paketdienst",
-          text: "Hallo, hier ist ein Zusteller von ExpressPaket. Wir haben versucht, ein Paket an Sie zuzustellen, aber niemand war zu Hause."
-        },
-        {
-          type: "message",
-          sender: "Paketdienst",
-          text: "Bitte bestätigen Sie Ihre Lieferadresse und Ihre Telefonnummer, damit wir einen erneuten Zustellversuch vereinbaren können."
-        },
-        {
-          type: "choice",
-          choices: [
-            {
-              text: "Ich rufe direkt bei ExpressPaket unter der offiziellen Nummer an, um die Zustellung zu klären.",
-              correct: true,
-              feedback: "Richtig! Es ist immer sicherer, direkt über offizielle Kanäle zu verifizieren.",
-              finalMessage: "Paketdienst: Danke, Ihre Anfrage wird über die offizielle Hotline geklärt."
-            },
-            {
-              text: "Meine Adresse: Musterstraße 12, 12345 Musterstadt, und meine Telefonnummer: 0123 456789.",
-              correct: false,
-              feedback: "Falsch! Geben Sie Ihre persönlichen Daten nicht unüberlegt preis.",
-              finalMessage: "Paketdienst: Ihre Daten wurden notiert – bitte beachten Sie, dass dies ein hohes Risiko darstellt."
-            },
-            {
-              text: "Ich sende nur meine Telefonnummer, da das genügen sollte.",
-              correct: false,
-              feedback: "Nicht ausreichend! Selbst die Telefonnummer kann für unbefugte Zwecke missbraucht werden.",
-              finalMessage: "Paketdienst: Ihre Information ist unvollständig und birgt ein Sicherheitsrisiko."
-            }
-          ]
-        }
-      ]
-    }
-  ];
-  
-  let currentScenarioIndex = 0;
-  let currentStepIndex = 0;
-  
-  const chatWindow = document.getElementById("chat-window");
-  const choicesContainer = document.getElementById("choices-container");
-  const flagContainer = document.getElementById("flag-container");
-  const additionalInfo = document.getElementById("additional-info");
-  
-  function clearChat() {
-    chatWindow.innerHTML = "";
-    choicesContainer.innerHTML = "";
-  }
-  
-  // Fügt eine Chatnachricht hinzu.
-  function appendMessage(sender, text, className = "message") {
-    const msgDiv = document.createElement("div");
-    msgDiv.className = className;
-    msgDiv.innerHTML = '<span class="sender">' + sender + ':</span> ' + text;
-    chatWindow.appendChild(msgDiv);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-  }
-  
-  // Zeigt Antwortmöglichkeiten an und mischt diese zufällig.
-  function displayChoices(choices) {
-    choicesContainer.innerHTML = "";
-    // Erstelle eine Kopie der Choices und mische sie
-    let shuffledChoices = choices.slice();
-    for (let i = shuffledChoices.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledChoices[i], shuffledChoices[j]] = [shuffledChoices[j], shuffledChoices[i]];
-    }
-    shuffledChoices.forEach(choice => {
-      const btn = document.createElement("button");
-      btn.className = "choice-button";
-      btn.textContent = choice.text;
-      btn.onclick = () => handleChoice(choice);
-      choicesContainer.appendChild(btn);
-    });
-  }
-  
-  // Verarbeitung für Standard-Szenarien.
-  function handleChoice(choice) {
-    appendMessage("Du", choice.text, "message du");
-    choicesContainer.innerHTML = "";
-    appendMessage("System", choice.feedback, "message system-message");
-    setTimeout(() => {
-      const scenario = scenarios[currentScenarioIndex];
-      const sender = scenario.conversation[0].sender;
-      appendMessage(sender, choice.finalMessage, "message other");
-      setTimeout(nextScenario, 5000);
-    }, 3000);
-  }
-  
-  // Verarbeitet die nächsten Schritte im aktuellen Szenario.
-  function processStep() {
-    const scenario = scenarios[currentScenarioIndex];
-    if (currentStepIndex >= scenario.conversation.length) return;
-    const step = scenario.conversation[currentStepIndex];
-    if (step.type === "message") {
-      appendMessage(step.sender, step.text, (step.sender === "Du") ? "message du" : "message other");
-      currentStepIndex++;
-      setTimeout(processStep, 3000);
-    } else if (step.type === "choice") {
-      displayChoices(step.choices);
-      currentStepIndex++;
-    }
-  }
-  
-  // Wechselt zum nächsten Szenario oder zeigt am Ende die Flag.
-  function nextScenario() {
-    currentScenarioIndex++;
-    currentStepIndex = 0;
-    if (currentScenarioIndex < scenarios.length) {
-      clearChat();
-      processStep();
-    } else {
+  <script>
+    /* Szenarien:
+       1. Bankberater (formell – Sie-Anrede)
+       2. Manipulation im Klassenchat
+       3. Schulleiter-Support
+       4. Iserv Support (überarbeitet)
+       5. Paketbenachrichtigung (neu)
+    */
+    const scenarios = [
+      // 1. Bankberater
+      {
+        name: "Bankberater",
+        conversation: [
+          {
+            type: "message",
+            sender: "Bankberater",
+            text: "Guten Tag, hier ist Herr Müller von der Musterbank. Aufgrund ungewöhnlicher Aktivitäten in Ihrem Konto bitten wir Sie, Ihre Kontodaten zu bestätigen."
+          },
+          {
+            type: "message",
+            sender: "Bankberater",
+            text: "Es ist sehr dringend, da wir Ihr Konto vor möglichen Betrugsversuchen schützen müssen."
+          },
+          {
+            type: "choice",
+            choices: [
+              {
+                text: "Ich werde zuerst meine Kontounterlagen prüfen und Sie zurückrufen.",
+                correct: true,
+                feedback: "Richtig! Du verifizierst die Anfrage, bevor du sensible Daten preisgibst.",
+                finalMessage: "Bankberater: Vielen Dank. Wir warten auf Ihren Rückruf."
+              },
+              {
+                text: "Hier sind meine Kontodaten: IBAN, BIC und Kontonummer.",
+                correct: false,
+                feedback: "Falsch! Sensible Daten solltest du niemals ohne Überprüfung preisgeben.",
+                finalMessage: "Bankberater: Ihre Daten wurden entgegengenommen – das birgt jedoch ein hohes Sicherheitsrisiko."
+              },
+              {
+                text: "Naja, mit meiner IBAN kann er ja nichts anfangen. Das sollte die Sache vielleicht schon klären?",
+                correct: false,
+                feedback: "Nicht ausreichend! Auch deine IBAN kann missbraucht werden, da sie zur Identifikation dient.",
+                finalMessage: "Bankberater: Ihre Information ist unvollständig und stellt ein Sicherheitsrisiko dar."
+              }
+            ]
+          }
+        ]
+      },
+      // 2. Manipulation im Klassenchat (erweitert)
+      {
+        name: "Manipulation im Klassenchat",
+        conversation: [
+          {
+            type: "message",
+            sender: "IT-Verantwortlicher",
+            text: "Hey Leute, hier ist der IT-Verantwortliche. Unser Netzwerk zeigt massive Störungen – alle Laptops sind betroffen."
+          },
+          {
+            type: "message",
+            sender: "IT-Verantwortlicher",
+            text: "Ich brauche von jedem von euch eure Zugangsdaten, damit ich das System neu konfigurieren kann."
+          },
+          {
+            type: "message",
+            sender: "Max",
+            text: "Moment mal, das klingt ziemlich dubios. Ich bin mir nicht sicher, ob das echt ist."
+          },
+          {
+            type: "message",
+            sender: "Anna",
+            text: "Ich bin mir da sicher, wenn's vom IT-Verantwortlichen kommt, dann stimmt es schon, oder? 😊"
+          },
+          {
+            type: "message",
+            sender: "Tom",
+            text: "Was soll das überhaupt bedeuten? Ich verstehe nicht, warum wir unsere Daten teilen sollen..."
+          },
+          {
+            type: "message",
+            sender: "Lukas",
+            text: "Wer von euch ist am Samstag eigentlich dabei?! 😜"
+          },
+          {
+            type: "message",
+            sender: "Lisa",
+            text: "lisa_h@schule.de passwort: sunshine123"
+          },
+          {
+            type: "choice",
+            choices: [
+              {
+                text: "Ich melde den Vorfall direkt beim offiziellen IT-Support.",
+                correct: true,
+                feedback: "Richtig! Du lässt dich nicht vom Gruppendruck beeinflussen und handelst eigenständig.",
+                finalMessage: "IT-Verantwortlicher: Danke, deine Meldung wurde weitergeleitet und wird geprüft."
+              },
+              {
+                text: "Ich folge Lisa und sende auch meine Zugangsdaten.",
+                correct: false,
+                feedback: "Falsch! Gruppendruck kann dazu verleiten, unüberlegt zu handeln.",
+                finalMessage: "IT-Verantwortlicher: Deine Daten wurden entgegengenommen – das ist jedoch sehr riskant."
+              },
+              {
+                text: "Ich frage Max, was genau los ist.",
+                correct: true,
+                feedback: "Gut! Es ist absolut legitim, nachzufragen, um die Situation besser zu verstehen.",
+                finalMessage: "Max: Ich bin skeptisch, weil ich solche Anfragen noch nie gehört habe. Es ist besser, wenn du dich selbst absicherst."
+              }
+            ]
+          }
+        ]
+      },
+      // 3. Schulleiter-Support
+      {
+        name: "Schulleiter-Support",
+        conversation: [
+          {
+            type: "message",
+            sender: "Schulleiter",
+            text: "Hallo, hier ist der Schulleiter. Es gibt ein Problem im Schulportal. Bitte bestätige deine Zugangsdaten, damit wir den Fehler beheben können."
+          },
+          {
+            type: "message",
+            sender: "Schulleiter",
+            text: "Wir haben Unregelmäßigkeiten festgestellt – es ist wichtig, dass alle Daten korrekt sind."
+          },
+          {
+            type: "choice",
+            choices: [
+              {
+                text: "Ich rufe zuerst das Sekretariat an, um die Anfrage zu verifizieren.",
+                correct: true,
+                feedback: "Richtig! Du überprüfst die Anfrage, bevor du sensible Daten preisgibst.",
+                finalMessage: "Schulleiter: Gut, warte bitte auf die Bestätigung vom Sekretariat und informiere uns dann."
+              },
+              {
+                text: "Ich sende sofort meine Zugangsdaten.",
+                correct: false,
+                feedback: "Falsch! Ohne Verifizierung handelst du zu voreilig.",
+                finalMessage: "Schulleiter: Deine Daten wurden entgegengenommen – das erhöht das Risiko eines Angriffs."
+              },
+              {
+                text: "Ich gebe nur meinen Benutzernamen preis.",
+                correct: false,
+                feedback: "Vorsicht! Selbst ein Benutzername kann sensible Informationen enthalten.",
+                finalMessage: "Schulleiter: Deine Information ist unvollständig und stellt ein Sicherheitsrisiko dar."
+              }
+            ]
+          }
+        ]
+      },
+      // 4. Iserv Support (überarbeitet)
+      {
+        name: "Iserv Support",
+        conversation: [
+          {
+            type: "message",
+            sender: "Iserv-Support",
+            text: "Hallo, hier ist der Iserv-Support. Wir haben ungewöhnliche Aktivitäten in deinem Iserv-Account festgestellt."
+          },
+          {
+            type: "message",
+            sender: "Iserv-Support",
+            text: "Um deinen Account zu schützen, müssen wir deine Daten kurzfristig verifizieren. Bitte bestätige deine Anmeldedaten, damit dein Account wieder freigeschaltet werden kann."
+          },
+          {
+            type: "choice",
+            choices: [
+              {
+                text: "Ich kontaktiere zuerst den offiziellen IT-Support der Schule zur Bestätigung.",
+                correct: true,
+                feedback: "Richtig! Überprüfe immer die Echtheit der Anfrage, bevor du sensible Daten preisgibst.",
+                finalMessage: "Iserv-Support: Danke, wir warten auf deine Rückmeldung vom IT-Support."
+              },
+              {
+                text: "Hier sind meine Iserv-Zugangsdaten.",
+                correct: false,
+                feedback: "Falsch! Ohne vorherige Verifizierung gibst du unnötig sensible Daten preis.",
+                finalMessage: "Iserv-Support: Deine Daten wurden entgegengenommen – das ist jedoch unsicher."
+              },
+              {
+                text: "Ich gebe nur meinen Benutzernamen preis, da das reichen sollte.",
+                correct: false,
+                feedback: "Nicht ausreichend! Auch unvollständige Angaben können missbraucht werden.",
+                finalMessage: "Iserv-Support: Deine Information ist unvollständig und stellt ein Risiko dar."
+              }
+            ]
+          }
+        ]
+      },
+      // 5. Paketbenachrichtigung (neu)
+      {
+        name: "Paketbenachrichtigung",
+        conversation: [
+          {
+            type: "message",
+            sender: "Paketdienst",
+            text: "Hallo, hier ist ein Zusteller von ExpressPaket. Wir haben versucht, ein Paket an Sie zuzustellen, aber niemand war zu Hause."
+          },
+          {
+            type: "message",
+            sender: "Paketdienst",
+            text: "Bitte bestätigen Sie Ihre Lieferadresse und Ihre Telefonnummer, damit wir einen erneuten Zustellversuch vereinbaren können."
+          },
+          {
+            type: "choice",
+            choices: [
+              {
+                text: "Ich rufe direkt bei ExpressPaket unter der offiziellen Nummer an, um die Zustellung zu klären.",
+                correct: true,
+                feedback: "Richtig! Es ist immer sicherer, direkt über offizielle Kanäle zu verifizieren.",
+                finalMessage: "Paketdienst: Danke, Ihre Anfrage wird über die offizielle Hotline geklärt."
+              },
+              {
+                text: "Meine Adresse: Musterstraße 12, 12345 Musterstadt, und meine Telefonnummer: 0123 456789.",
+                correct: false,
+                feedback: "Falsch! Geben Sie Ihre persönlichen Daten nicht unüberlegt preis.",
+                finalMessage: "Paketdienst: Ihre Daten wurden notiert – bitte beachten Sie, dass dies ein hohes Risiko darstellt."
+              },
+              {
+                text: "Ich sende nur meine Telefonnummer, da das genügen sollte.",
+                correct: false,
+                feedback: "Nicht ausreichend! Selbst die Telefonnummer kann für unbefugte Zwecke missbraucht werden.",
+                finalMessage: "Paketdienst: Ihre Information ist unvollständig und birgt ein Sicherheitsrisiko."
+              }
+            ]
+          }
+        ]
+      }
+    ];
+    
+    let currentScenarioIndex = 0;
+    let currentStepIndex = 0;
+    
+    const chatWindow = document.getElementById("chat-window");
+    const choicesContainer = document.getElementById("choices-container");
+    const flagContainer = document.getElementById("flag-container");
+    const additionalInfo = document.getElementById("additional-info");
+    const backButtonContainer = document.getElementById("back-button-container");
+    
+    function clearChat() {
       chatWindow.innerHTML = "";
-      flagContainer.innerHTML = '<div class="flag">Flag: {DEFENDER_OF_TRUST}</div>';
-      additionalInfo.style.display = "block";
       choicesContainer.innerHTML = "";
     }
-  }
-  
-  function loadScenario() {
-    clearChat();
-    processStep();
-  }
-  
-  window.onload = loadScenario;
-</script>
+    
+    // Fügt eine Chatnachricht hinzu.
+    function appendMessage(sender, text, className = "message") {
+      const msgDiv = document.createElement("div");
+      msgDiv.className = className;
+      msgDiv.innerHTML = '<span class="sender">' + sender + ':</span> ' + text;
+      chatWindow.appendChild(msgDiv);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+    
+    // Zeigt Antwortmöglichkeiten an und mischt diese zufällig.
+    function displayChoices(choices) {
+      choicesContainer.innerHTML = "";
+      let shuffledChoices = choices.slice();
+      for (let i = shuffledChoices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledChoices[i], shuffledChoices[j]] = [shuffledChoices[j], shuffledChoices[i]];
+      }
+      shuffledChoices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.className = "choice-button";
+        btn.textContent = choice.text;
+        btn.onclick = () => handleChoice(choice);
+        choicesContainer.appendChild(btn);
+      });
+    }
+    
+    // Verarbeitung für Standard-Szenarien.
+    function handleChoice(choice) {
+      appendMessage("Du", choice.text, "message du");
+      choicesContainer.innerHTML = "";
+      appendMessage("System", choice.feedback, "message system-message");
+      setTimeout(() => {
+        const scenario = scenarios[currentScenarioIndex];
+        const sender = scenario.conversation[0].sender;
+        appendMessage(sender, choice.finalMessage, "message other");
+        setTimeout(nextScenario, 5000);
+      }, 3000);
+    }
+    
+    // Verarbeitet die nächsten Schritte im aktuellen Szenario.
+    function processStep() {
+      const scenario = scenarios[currentScenarioIndex];
+      if (currentStepIndex >= scenario.conversation.length) return;
+      const step = scenario.conversation[currentStepIndex];
+      if (step.type === "message") {
+        appendMessage(step.sender, step.text, (step.sender === "Du") ? "message du" : "message other");
+        currentStepIndex++;
+        setTimeout(processStep, 3000);
+      } else if (step.type === "choice") {
+        displayChoices(step.choices);
+        currentStepIndex++;
+      }
+    }
+    
+    // Wechselt zum nächsten Szenario oder zeigt am Ende die Flag und den Back-Button.
+    function nextScenario() {
+      currentScenarioIndex++;
+      currentStepIndex = 0;
+      if (currentScenarioIndex < scenarios.length) {
+        clearChat();
+        processStep();
+      } else {
+        chatWindow.innerHTML = "";
+        flagContainer.innerHTML = '<div class="flag">Flag: {DEFENDER_OF_TRUST}</div>';
+        additionalInfo.style.display = "block";
+        choicesContainer.innerHTML = "";
+        // Zeige den "Zurück zur Startseite"-Button
+        backButtonContainer.style.display = "block";
+      }
+    }
+    
+    function loadScenario() {
+      clearChat();
+      processStep();
+    }
+    
+    window.onload = loadScenario;
+  </script>
 </body>
 </html>
+
 
 
 
