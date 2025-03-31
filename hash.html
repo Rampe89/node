@@ -1,129 +1,208 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cookies und Sicherheit</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #2c3e50, #4ca1af);
-            color: #fff;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            color: #333;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        h1, h2 {
-            color: #007bff;
-        }
-
-        ul, ol {
-            padding-left: 20px;
-        }
-
-        .highlight {
-            background: #ffef96;
-            padding: 5px;
-            border-radius: 3px;
-        }
-
-        p, li {
-            line-height: 1.6;
-        }
-        /* Neuer Back-Button im grünen Stil */
-        .back-button {
-            display: inline-block;
-            padding: 10px 20px;
-            background: linear-gradient(45deg, #28a745, #32CD32);
-            color: #fff;
-            text-align: center;
-            border: none;
-            border-radius: 5px;
-            margin-top: 20px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 16px;
-            transition: transform 0.2s, background 0.2s;
-        }
-        .back-button:hover {
-            transform: scale(1.05);
-            background: linear-gradient(45deg, #218838, #1e7e34);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hashing und Rainbow Tables Lab</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #2c3e50, #4ca1af);
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #007bff;
+    }
+    /* Angepasste Info-Box-Styles ohne linken Streifen */
+    .info {
+      background: linear-gradient(135deg, #eef2f3, #f9fafb);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    pre {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      color: #333;
+    }
+    .steps {
+      margin-top: 20px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .btn:hover {
+      background: #0056b3;
+    }
+    .hidden {
+      display: none;
+    }
+    /* Neuer Back-Button im grünen Stil */
+    .back-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background: linear-gradient(45deg, #28a745, #32CD32);
+      color: #fff;
+      text-align: center;
+      border: none;
+      border-radius: 5px;
+      margin-top: 20px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 16px;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .back-button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(45deg, #218838, #1e7e34);
+    }
+  </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>Cookies und ihre Sicherheitsrisiken</h1>
-
-    <div>
-        <h2>Was sind Cookies?</h2>
-        <p>Cookies sind kleine Dateien, die von Websites auf deinem Gerät gespeichert werden. Sie helfen dabei, Benutzerinformationen wie Logins oder Spracheinstellungen zu speichern, damit Websites reibungslos funktionieren und deine Erfahrungen personalisiert werden. Doch Cookies können auch zur Schwachstelle werden, wenn sensible Daten gespeichert oder nicht sicher übertragen werden.</p>
+  <div class="container">
+    <div class="info">
+      <h2>Was sind Hashes und wie funktionieren sie?</h2>
+      <p>
+        Ein <strong>Hash</strong> ist das Ergebnis einer kryptografischen <strong>Hashfunktion</strong>. Diese nimmt eine beliebig große Eingabe 
+        (z. B. eine Datei oder ein Passwort) und berechnet daraus eine <strong>Zeichenkette mit fester Länge</strong>.  
+        Hashfunktionen sind <strong>Einwegfunktionen</strong>, das bedeutet, der ursprüngliche Wert kann nicht aus dem Hash zurückberechnet werden.
+      </p>
+      <p>
+        Zum Beispiel erzeugt der Algorithmus <strong>SHA-256</strong> (Secure Hash Algorithm 256) einen <strong>256-Bit-Hash</strong>, der 
+        als <strong>64 Zeichen lange Hexadezimalzeichenkette</strong> dargestellt wird.
+      </p>
     </div>
 
-    <div>
-        <h2>Welche Gefahren gibt es?</h2>
-        <ul>
-            <li><strong>Session Hijacking:</strong> Ein Angreifer kann ein gestohlenes <span class="highlight">Session-Cookie</span> nutzen, um deine Sitzung zu übernehmen und auf dein Konto zuzugreifen.</li>
-            <li><strong>Third-Party-Tracking:</strong> Externe Dienste speichern Cookies, um dein Surfverhalten über verschiedene Websites hinweg zu verfolgen.</li>
-            <li><strong>Cross-Site Scripting (XSS):</strong> Dabei wird Schadcode eingeschleust, um deine Cookies auszulesen und vertrauliche Daten abzugreifen.</li>
-            <li><strong>Unsichere Übertragung:</strong> Wenn eine Website keine sichere HTTPS-Verbindung nutzt, können Cookies während der Übertragung abgefangen werden.</li>
-        </ul>
+    <div class="info">
+      <h3>Wozu werden Hashes verwendet?</h3>
+      <ul>
+        <li>
+          <strong>Speichern von Passwörtern:</strong>  
+          Statt Passwörter im Klartext zu speichern, wird ihr Hashwert gespeichert.  
+          Beim Anmeldevorgang wird das eingegebene Passwort erneut gehasht und mit dem gespeicherten Wert verglichen.  
+          Dadurch sieht ein Angreifer, der eine Datenbank stiehlt, nur die Hashes – nicht die echten Passwörter.
+        </li>
+        <li>
+          <strong>Integritätsprüfung:</strong>  
+          Bereits eine minimale Änderung der Eingabe führt zu einem völlig anderen Hashwert (<strong>Avalanche-Effekt</strong>).  
+          Dies wird genutzt, um Dateien oder Nachrichten auf Manipulationen zu prüfen.
+        </li>
+        <li>
+          <strong>Digitale Signaturen und Authentifizierung:</strong>  
+          Hashes werden in der Kryptographie verwendet, um Daten sicher zu verifizieren und Identitäten zu bestätigen.
+        </li>
+      </ul>
     </div>
 
-    <div>
-        <h2>Wie kann man Cookies prüfen?</h2>
-        <p>Ihr könnt jederzeit herausfinden, welche Cookies auf einer Website gespeichert sind, indem ihr die <strong>Developer Tools</strong> eures Browsers nutzt:</p>
-        <ol>
-            <li>Öffnet die Developer Tools mit <span class="highlight">F12</span> oder per <strong>Rechtsklick → Untersuchen</strong>.</li>
-            <li>Geht im Menü zum Tab <span class="highlight">„Application“</span> und wählt dort <strong>„Cookies“</strong>.</li>
-            <li>Ihr seht eine Liste mit Cookie-Namen, Werten und Gültigkeitsdaten. Achtet besonders auf Cookies mit sensiblen Inhalten wie <strong>Session-IDs</strong>.</li>
-        </ol>
+    <div class="info">
+      <h3>Schwachstellen: Rainbow Tables und Hash-Kollisionen</h3>
+      <p>
+        Obwohl Hashes ein starkes Sicherheitsmerkmal sind, gibt es Angriffsmethoden wie <strong>Rainbow Tables</strong>.  
+        Dabei handelt es sich um vorberechnete Tabellen mit gängigen Passwörtern und deren Hashes.  
+        Ein Angreifer kann einen gestohlenen Hash mit diesen Tabellen abgleichen, um das ursprüngliche Passwort zu ermitteln.  
+        Besonders <strong>schwache oder häufig verwendete Passwörter</strong> (z. B. "123456") sind leicht zu knacken.
+      </p>
+      <p>
+        Um dies zu verhindern, wird ein <strong>Salt</strong> eingesetzt. Dabei wird vor dem Hashing eine zufällige Zeichenkette an das Passwort angehängt.  
+        Selbst wenn zwei Benutzer dasselbe Passwort haben, ergibt sich durch das Salt ein unterschiedlicher Hashwert.  
+        Dadurch werden Rainbow Tables wirkungslos.
+      </p>
+      <p>
+        Eine weitere potenzielle Schwäche sind <strong>Hash-Kollisionen</strong>.  
+        Dabei erzeugen zwei verschiedene Eingaben denselben Hash.  
+        Moderne Hashfunktionen wie SHA-256 sind so konzipiert, dass solche Kollisionen extrem unwahrscheinlich sind.
+      </p>
     </div>
 
-    <div>
-        <h2>Welche Daten sind besonders gefährdet?</h2>
-        <ul>
-            <li><strong>Session-IDs:</strong> Sie erlauben es einer Website, dich während einer Sitzung zu erkennen. Werden sie gestohlen, kann sich ein Angreifer als du ausgeben.</li>
-            <li><strong>Login-Daten:</strong> Manche unsichere Websites speichern Benutzernamen oder Passwörter direkt in Cookies – das ist ein großes Risiko.</li>
-            <li><strong>Persönliche Daten:</strong> Cookies können Informationen wie deinen Namen, Interessen oder deine Aufenthaltsorte enthalten, die für Werbung genutzt werden könnten.</li>
-        </ul>
+    <div class="steps">
+      <h2>Aufgabe</h2>
+      <p>Finde die ursprünglichen Passwörter der folgenden MD5-Hashes und erhalte die Flag:</p>
+
+      <h3>Schritt 1: Verwende Crackstation</h3>
+      <p>
+        Öffne <a href="https://crackstation.net" target="_blank">Crackstation</a>. Kopiere die folgenden Hashes in das Eingabefeld:
+      </p>
+      <pre>
+1. 5f4dcc3b5aa765d61d8327deb882cf99
+2. 098f6bcd4621d373cade4e832627b4f6
+      </pre>
+      <p>Welches Passwort gehört zu den Hashes? Gib eines der Passwörter als Flag ein:</p>
+      <input type="text" id="flag1" placeholder="Flag eingeben">
+      <button class="btn" onclick="checkFlag('password', '{PANZERKNACKER}')">Prüfen</button>
     </div>
 
-    <div>
-        <h2>Wie könnt ihr euch schützen?</h2>
-        <ul>
-            <li>Verwendet nur Websites mit <span class="highlight">HTTPS</span>, um eine verschlüsselte Verbindung sicherzustellen.</li>
-            <li>Blockiert <strong>Cookies von Drittanbietern</strong> in euren Browsereinstellungen.</li>
-            <li>Löscht Cookies regelmäßig, besonders nach der Nutzung öffentlicher Netzwerke.</li>
-            <li>Nutzt <strong>Scriptblocker</strong> wie NoScript oder uBlock Origin, um bösartige Skripte zu blockieren.</li>
-        </ul>
+    <div class="steps hidden" id="bonus-task">
+      <h2>Bonus: Mit Salt arbeiten</h2>
+      <p>
+        Um Rainbow Tables zu umgehen, wird ein Salt verwendet. Es wird eine zufällige Zeichenkette an das Passwort angehängt, bevor es gehasht wird. Das Ergebnis ist ein einzigartiger Hash, selbst für gleiche Passwörter.
+      </p>
+      <p>Hier ist ein Beispiel:</p>
+      <pre>
+Passwort: password123
+Salt: 2023
+Eingabe in CyberChef: password1232023
+Hashing-Methode: MD5
+      </pre>
+      <p>
+        Finde den MD5-Hash mit 
+        <a href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener noreferrer">CyberChef</a> 
+        und gib ihn ein, um deine Flag zu erhalten:
+        Kannst du auch diesen neuen Hash mit <a href="https://crackstation.net" target="_blank">Crackstation</a> knacken?
+      </p>
+      <input type="text" id="flag2" placeholder="MD5 Hash eingeben">
+      <button class="btn" onclick="checkBonusFlag()">Prüfen</button>
     </div>
+  </div>
 
-    <div>
-        <h2>Fazit</h2>
-        <p>Cookies machen viele Funktionen im Internet erst möglich, aber sie können auch Schwachstellen öffnen. Ihr solltet wissen, welche Daten sie speichern und wie ihr diese Daten schützen könnt. Probiert es selbst aus: Findet die versteckte Flag in den Cookies eurer Developer Tools. Viel Erfolg!</p>
-    </div>
-</div>
-
-<!-- Zurück zur Startseite Button am Ende der Seite -->
-<div style="text-align: center; margin-top: 20px;">
+  <!-- Zurück zur Startseite Button am Ende der Seite -->
+  <div style="text-align: center; margin-top: 20px;">
     <button class="back-button" onclick="location.href='https://node-xejd.onrender.com/index.html'">Zurück zur Startseite</button>
-</div>
+  </div>
 
+  <script>
+    function checkFlag(correctPassword, flag) {
+      const input = document.getElementById('flag1').value.trim();
+      if (input === correctPassword) {
+        alert(`Richtig! Hier ist deine Flag: ${flag}`);
+        document.getElementById('bonus-task').classList.remove('hidden');
+      } else {
+        alert("Falsch! Versuche es erneut.");
+      }
+    }
+
+    function checkBonusFlag() {
+      const input = document.getElementById('flag2').value.trim();
+      const correctHash = "e6f875eb15000fad443f9a207bdebdc1"; // Hash von password1232023
+
+      if (input === correctHash) {
+        alert("Richtig! Du hast das Hashing mit Salt verstanden. Hier ist deine Bonus-Flag: {ADD_A_PINCH_OF_SALT}");
+      } else {
+        alert("Falsch! Überprüfe deine Berechnungen und versuche es erneut.");
+      }
+    }
+  </script>
 </body>
 </html>
-
 
 
 
