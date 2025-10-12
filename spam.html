@@ -5,85 +5,97 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Von der Wenn‑Dann‑Regel zum lernenden System – Spamfilter Demo</title>
   <style>
-  :root{
-    /* Playful Edu – Light Theme */
-    --bg:#f7f9fc;       /* page background */
-    --panel:#ffffff;    /* cards */
-    --ink:#0f172a;      /* primary text */
-    --muted:#64748b;    /* secondary text */
-    --accent:#3b82f6;   /* primary accent (blue) */
-    --ok:#16a34a;       /* success */
-    --warn:#f59e0b;     /* warning */
-    --bad:#ef4444;      /* danger */
-    --border:#e2e8f0;   /* subtle borders */
-    --shadow:0 8px 24px rgba(2,6,23,.06);
-    --radius:16px;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{margin:0;font:17px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial;background:var(--bg);color:var(--ink)}
-  a{color:var(--accent)}
-  .wrap{max-width:1200px;margin:0 auto;padding:28px}
-  header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:20px}
-  h1{font-size:26px;margin:0;font-weight:800;letter-spacing:.2px}
-  .grid{display:grid;grid-template-columns:320px 1fr;gap:18px}
-  .panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);overflow:hidden}
-  .panel h2{margin:0 0 8px 0;font-size:20px}
-  .panel h3{margin:16px 0 8px 0;font-size:16px;color:var(--muted)}
-  .small{font-size:14px;color:var(--muted)}
-  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);padding:8px 12px;border-radius:999px;background:#fff}
-  label{display:flex;align-items:center;gap:8px}
-  input[type="range"]{width:200px}
-  select, input[type="number"], input[type="text"], button{background:#fff;border:1px solid var(--border);color:var(--ink);padding:10px 12px;border-radius:12px;transition:box-shadow .15s, transform .04s}
-  select:focus, input:focus, button:focus{outline:2px solid rgba(59,130,246,.45); outline-offset:2px; box-shadow:none}
-  button{cursor:pointer}
-  button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-  button:hover{transform:translateY(-1px)}
-  table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}
-  th,td{border-bottom:1px solid var(--border);padding:10px;text-align:left}
-  thead th{background:#f1f5f9;font-weight:700;font-size:14px}
-  .tag{font-size:12px;border:1px solid var(--border);padding:4px 10px;border-radius:999px;color:var(--muted);background:#fff}
-  .out{font-weight:800}
-  .ok{color:var(--ok)}
-  .bad{color:var(--bad)}
-  .warn{color:var(--warn)}
-  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
-  .footer{margin-top:18px;color:var(--muted);font-size:13px}
-  details{border:1px dashed var(--border);border-radius:12px;padding:10px;background:#fff}
-  summary{cursor:pointer;color:var(--muted)}
-  .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
-  .kpi .panel{padding:12px;text-align:center}
-  /* Toolbar & Teacher */
-  .toolbar{display:flex;gap:10px;align-items:center}
-  .btn{display:inline-flex;gap:8px;align-items:center}
-  .btn.ghost{background:transparent}
-  .hidden{display:none}
-  .teacher-badge{font-size:12px;border:1px solid var(--border);border-radius:999px;padding:2px 8px}
-</style>
+    :root{
+      /* Playful Edu – Light Theme */
+      --bg:#f7f9fc;       /* page background */
+      --panel:#ffffff;    /* cards */
+      --ink:#0f172a;      /* primary text */
+      --muted:#64748b;    /* secondary text */
+      --accent:#3b82f6;   /* primary accent (blue) */
+      --ok:#16a34a;       /* success */
+      --warn:#f59e0b;     /* warning */
+      --bad:#ef4444;      /* danger */
+      --border:#e2e8f0;   /* subtle borders */
+      --shadow:0 8px 24px rgba(2,6,23,.06);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font:17px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial;background:var(--bg);color:var(--ink)}
+    a{color:var(--accent)}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px}
+    header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:20px}
+    h1{font-size:26px;margin:0;font-weight:800;letter-spacing:.2px}
+    .grid{display:grid;grid-template-columns:320px 1fr;gap:18px}
+    .panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);overflow:hidden}
+    .panel h2{margin:0 0 8px 0;font-size:20px}
+    .panel h3{margin:16px 0 8px 0;font-size:16px;color:var(--muted)}
+    .small{font-size:14px;color:var(--muted)}
+    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);padding:8px 12px;border-radius:999px;background:#fff}
+    label{display:flex;align-items:center;gap:8px}
+    input[type="range"]{width:200px}
+    select, input[type="number"], input[type="text"], button{background:#fff;border:1px solid var(--border);color:var(--ink);padding:10px 12px;border-radius:12px;transition:box-shadow .15s, transform .04s}
+    select:focus, input:focus, button:focus{outline:2px solid rgba(59,130,246,.45); outline-offset:2px; box-shadow:none}
+    button{cursor:pointer}
+    button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+    button:hover{transform:translateY(-1px)}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}
+    th,td{border-bottom:1px solid var(--border);padding:10px;text-align:left}
+    thead th{background:#f1f5f9;font-weight:700;font-size:14px}
+    .tag{font-size:12px;border:1px solid var(--border);padding:4px 10px;border-radius:999px;color:var(--muted);background:#fff}
+    .out{font-weight:800}
+    .ok{color:var(--ok)}
+    .bad{color:var(--bad)}
+    .warn{color:var(--warn)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+    .footer{margin-top:18px;color:var(--muted);font-size:13px}
+    details{border:1px dashed var(--border);border-radius:12px;padding:10px;background:#fff}
+    summary{cursor:pointer;color:var(--muted)}
+    .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+    .kpi .panel{padding:12px;text-align:center}
+    /* Toolbar & Teacher */
+    .toolbar{display:flex;gap:10px;align-items:center}
+    .btn{display:inline-flex;gap:8px;align-items:center}
+    .btn.ghost{background:transparent}
+    .hidden{display:none}
+    .teacher-badge{font-size:12px;border:1px solid var(--border);border-radius:999px;padding:2px 8px}
+    /* Mode switch (Schiebeschalter) */
+    .mode{display:flex;align-items:center;gap:10px}
+    .switch{position:relative;width:72px;height:34px;background:#e5e7eb;border-radius:999px;border:1px solid var(--border);cursor:pointer;transition:background .2s}
+    .switch::after{content:"";position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15);transition:left .2s}
+    .switch.on{background:#bfdbfe;border-color:#93c5fd}
+    .switch.on::after{left:41px}
+    .mode-label{font-size:14px;color:var(--muted)}
+  </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <h1>Von der Wenn‑Dann‑Regel zum lernenden System · Spamfilter (Demo)</h1>
-      <div class="small">Statische Demo: Regelbasierter Filter vs. gewichtetes „Mini‑Neuron“</div>
+      <div>
+        <h1>Von der Wenn‑Dann‑Regel zum lernenden System · Spamfilter (Demo)</h1>
+        <div class="small">Didaktischer Ablauf: erst Regelmodell, dann lernendes System</div>
+      </div>
       <div class="toolbar">
+        <div class="mode" title="Schiebeschalter: Regelbasiert ↔ Lernendes System">
+          <span class="mode-label">Modus:</span>
+          <div id="modeSwitch" class="switch" role="switch" aria-checked="false" tabindex="0"></div>
+          <span id="modeText" class="mode-label">Regelbasiert</span>
+        </div>
         <button id="helpToggle" class="btn">❓ Hilfe & Einführung</button>
         <button id="toggleTeacher" class="btn ghost">🧑‍🏫 <span class="teacher-badge">Lehrer‑Ansicht</span></button>
       </div>
     </header>
 
-    <!-- Inline-Hilfe statt Overlay -->
+    <!-- Inline-Hilfe -->
     <section id="helpPanel" class="panel hidden">
       <h2>Hilfe & Einführung</h2>
       <ol class="small" style="margin-top:8px">
-        <li><strong>Regelbasierter Filter:</strong> Schalte Regeln ein/aus und ändere die Reihenfolge. Achte auf die Begründung.</li>
-        <li><strong>Mini‑Neuron:</strong> Passe Gewichte und Schwelle an. Ausgabe wechselt bei Summe ≥ θ.</li>
-        <li><strong>Training:</strong> 1× oder Auto‑Training führt ein einfaches Perzeptron‑Update aus.</li>
-        <li><strong>Vergleich:</strong> Tabelle zeigt Regel‑, Neuron‑ und Soll‑Wert je Mail.</li>
+        <li><strong>Start im Regelmodus:</strong> Schalte Regeln ein/aus und ändere die Reihenfolge.</li>
+        <li><strong>Zum Lernmodus schalten:</strong> Schiebeschalter oben. Dann erscheinen Gewichte, Training und Vergleich.</li>
+        <li><strong>Training:</strong> 1× oder Auto‑Training (Perzeptron) passt Gewichte an.</li>
         <li><strong>Eigene Daten:</strong> Im Datensatz‑Bereich Beispiele hinzufügen/bearbeiten.</li>
       </ol>
-      <div class="small">Tipp: Für den Unterricht die Lehrer‑Ansicht öffnen und „Schüler‑Modus sperren“ aktivieren.</div>
     </section>
 
     <div class="grid">
@@ -120,7 +132,7 @@
       </aside>
 
       <!-- Main panels -->
-      <main style="display:grid;gap:16px">
+      <main style="display:grid;gap:18px">
         <section class="panel" id="rulePanel">
           <h2>Regelbasierter Filter (Wenn‑Dann)</h2>
           <div class="small">Starre Entscheidungsregeln. Reihenfolge kann Wirkung haben.</div>
@@ -152,7 +164,7 @@
           </div>
         </section>
 
-        <section class="panel" id="neuronPanel">
+        <section class="panel hidden" id="neuronPanel">
           <h2>Gewichtetes „Mini‑Neuron“ (lernend)</h2>
           <div class="small">Eingabe × Gewicht ⇒ Summe ⇒ Schwelle. Optionales Training passt Gewichte an.</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
@@ -179,12 +191,12 @@
                 <button id="fitAuto" class="primary">🤖 Auto‑Training (Perzeptron)</button>
                 <button id="resetW">🔁 Gewichte zurücksetzen</button>
               </div>
-              <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid #2b3039;border-radius:8px;padding:8px"></div>
+              <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px"></div>
             </div>
           </div>
         </section>
 
-        <section class="panel">
+        <section class="panel hidden" id="comparePanel">
           <h2>Direkter Vergleich</h2>
           <table>
             <thead><tr><th>Mail</th><th>Regelbasiert</th><th>Mini‑Neuron</th><th>Soll</th></tr></thead>
@@ -221,7 +233,7 @@
     </div>
 
     <div class="footer">
-      Tipp: Diese Seite ist rein demonstrativ. Für den Unterricht können die Gewichte als Hausaufgabe variiert werden: „Finde eine Einstellung, die alle Beispiele trifft, und erkläre deine Wahl“. | © Demo, frei nutzbar.
+      Tipp: Start im Regelmodus. Schalte später auf „Lernendes System“, um Gewichte und Training zu zeigen. | © Demo, frei nutzbar.
     </div>
   </div>
 
@@ -292,16 +304,20 @@
   const addRowBtn = document.getElementById('addRow');
   const resetDataBtn = document.getElementById('resetData');
 
+  // Mode switch
+  const modeSwitch = document.getElementById('modeSwitch');
+  const modeText = document.getElementById('modeText');
+  let mode = 'rule'; // 'rule' | 'learn'
+
   // ---- Utils ----
   function saveData(){ localStorage.setItem('spamDemoData', JSON.stringify(data)); }
   function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+  function setDisabledGroup(on, root){ root.querySelectorAll('input,button,select,textarea').forEach(el=> el.disabled = on); }
 
   function currentMail(){ return data[emailSelect.selectedIndex || 0]; }
-
   function mailToFeatVec(m){ return [m.g, m.k, m.l, m.c, m.d]; }
 
   function predRule(m){
-    // Reihenfolge steuern
     const order = ruleOrderSel.value;
     const rules = [];
     if(order === 'prioritizeSafe'){
@@ -453,9 +469,28 @@
     Object.values(sliders).forEach(([range, number])=>{ number.value = range.value; });
     renderFeatTable();
     renderRuleOutput();
-    renderNeuronOutput();
-    renderCompare();
+    if(mode==='learn'){
+      renderNeuronOutput();
+      renderCompare();
+    }
     saveData();
+  }
+
+  function applyMode(){
+    const neuronPanel = document.getElementById('neuronPanel');
+    const comparePanel = document.getElementById('comparePanel');
+    if(mode==='rule'){
+      neuronPanel.classList.add('hidden');
+      comparePanel.classList.add('hidden');
+      setDisabledGroup(true, neuronPanel);
+    } else {
+      neuronPanel.classList.remove('hidden');
+      comparePanel.classList.remove('hidden');
+      setDisabledGroup(false, neuronPanel);
+    }
+    modeText.textContent = mode==='rule' ? 'Regelbasiert' : 'Lernendes System';
+    document.getElementById('modeSwitch').classList.toggle('on', mode==='learn');
+    updateAll();
   }
 
   // ---- Events ----
@@ -491,6 +526,10 @@
     renderDataTable(); attachDataInputs(); renderEmailSelect(); updateAll();
   });
 
+  // Mode switch interactions
+  modeSwitch.addEventListener('click', ()=>{ mode = (mode==='rule'?'learn':'rule'); applyMode(); });
+  modeSwitch.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); mode = (mode==='rule'?'learn':'rule'); applyMode(); }});
+
   function attachDataInputs(){
     dataBody.querySelectorAll('input').forEach(inp=>{
       inp.addEventListener('input', e=>{
@@ -517,11 +556,13 @@
 
   // ---- Init ----
   function init(){
-    renderEmailSelect(); renderFeatTable(); renderDataTable(); attachDataInputs(); updateAll();
+    renderEmailSelect(); renderFeatTable(); renderDataTable(); attachDataInputs();
+    applyMode(); // start im Regelmodus
   }
   init();
 })();
 </script>
 </body>
 </html>
+
 
