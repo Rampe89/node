@@ -414,6 +414,22 @@
     const cookieEncoded = "e0NPT0tJRVNfUkVWRUFMX1NFQ1JFVFN9";
     // Konfetti soll nur einmal ausgelöst werden
     let confettiShown = false;
+    // Mapping: Flag-Index (1-12) → Achievement-Titel
+    const ACHIEVEMENTS = {
+      1: '🎣 Phishing-Profi',
+      2: '🔓 Passwortknacker',
+      3: '🧠 Social-Engineer-Scout',
+      4: '🔑 Schlüsselmeister',
+      5: '🛡️ Patch-Pilot',
+      6: '🔍 Directory Detective',
+      7: '🍲 Let Him Cook + Add A Pinch of Salt',
+      8: '🍪 Cookie-Jäger',
+      9: '👑 SysAdmin',
+      10: '🤖 Mr. Robot',
+      11: '🐭 Mäusejäger',
+      12: '💬 Console Leak'
+    };
+    
 
     /****************************
      * Initialisierung bei Laden
@@ -441,7 +457,10 @@
       });
       updateUI();
       updateProgress();
-    };
+    
+      // Rekonstruiere Achievements unten aus localStorage
+      renderAchievementsFromStorage();
+};
 
     /****************************
      * Cookie-Handling Funktionen
@@ -557,6 +576,8 @@
     }
     function saveFlags() {
       localStorage.setItem("collectedFlags", JSON.stringify(collectedFlags));
+    
+      renderAchievementsFromStorage();
     }
     function updateUI() {
       for (let i = 1; i <= 12; i++) {
@@ -566,6 +587,38 @@
         }
       }
     }
+    function renderAchievementsFromStorage() {
+      const wrap = document.getElementById('achievements');
+      if (!wrap) return;
+      // Titel
+      if (!wrap.querySelector('h2')) {
+        const h = document.createElement('h2');
+        h.textContent = 'Erreichte Titel';
+        wrap.prepend(h);
+      }
+      const any = collectedFlags.some(Boolean);
+      if (!any) {
+        wrap.classList.add('hidden');
+        // Liste leeren
+        const listNodes = wrap.querySelectorAll('.achievement');
+        listNodes.forEach(n => n.remove());
+        return;
+      }
+      wrap.classList.remove('hidden');
+      // Liste neu aufbauen
+      const listNodes = wrap.querySelectorAll('.achievement');
+      listNodes.forEach(n => n.remove());
+      collectedFlags.forEach((done, idx) => {
+        if (!done) return;
+        const title = ACHIEVEMENTS[idx + 1];
+        if (!title) return;
+        const div = document.createElement('div');
+        div.className = 'achievement';
+        div.textContent = title;
+        wrap.appendChild(div);
+      });
+    }
+
     function displayAchievement(title) {
       const achievements = document.getElementById("achievements");
       achievements.classList.remove("hidden");
@@ -573,7 +626,11 @@
       div.className = "achievement";
       div.textContent = title;
       achievements.appendChild(div);
+    
+      // Liste konsistent aus Storage neu aufbauen
+      renderAchievementsFromStorage();
     }
   </script>
 </body>
 </html>
+
