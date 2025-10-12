@@ -3,21 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Von der Wenn‑Dann‑Regel zum lernenden System – Spamfilter Demo</title>
+  <title>Von der Wenn-Dann-Regel zum lernenden System – Spamfilter Demo</title>
   <style>
     :root{
-      /* Playful Edu – Light Theme */
-      --bg:#f7f9fc;       /* page background */
-      --panel:#ffffff;    /* cards */
-      --ink:#0f172a;      /* primary text */
-      --muted:#64748b;    /* secondary text */
-      --accent:#3b82f6;   /* primary accent (blue) */
-      --ok:#16a34a;       /* success */
-      --warn:#f59e0b;     /* warning */
-      --bad:#ef4444;      /* danger */
-      --border:#e2e8f0;   /* subtle borders */
-      --shadow:0 8px 24px rgba(2,6,23,.06);
-      --radius:16px;
+      --bg:#f7f9fc;--panel:#fff;--ink:#0f172a;--muted:#64748b;--accent:#3b82f6;
+      --ok:#16a34a;--warn:#f59e0b;--bad:#ef4444;--border:#e2e8f0;
+      --shadow:0 8px 24px rgba(2,6,23,.06);--radius:16px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -35,8 +26,10 @@
     .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);padding:8px 12px;border-radius:999px;background:#fff}
     label{display:flex;align-items:center;gap:8px}
     input[type="range"]{width:200px}
-    select, input[type="number"], input[type="text"], button{background:#fff;border:1px solid var(--border);color:var(--ink);padding:10px 12px;border-radius:12px;transition:box-shadow .15s, transform .04s}
-    select:focus, input:focus, button:focus{outline:2px solid rgba(59,130,246,.45); outline-offset:2px; box-shadow:none}
+    select, input[type="number"], input[type="text"], button, textarea{
+      background:#fff;border:1px solid var(--border);color:var(--ink);padding:10px 12px;border-radius:12px;
+    }
+    select:focus, input:focus, button:focus, textarea:focus{outline:2px solid rgba(59,130,246,.45); outline-offset:2px; box-shadow:none}
     button{cursor:pointer}
     button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
     button:hover{transform:translateY(-1px)}
@@ -45,21 +38,14 @@
     thead th{background:#f1f5f9;font-weight:700;font-size:14px}
     .tag{font-size:12px;border:1px solid var(--border);padding:4px 10px;border-radius:999px;color:var(--muted);background:#fff}
     .out{font-weight:800}
-    .ok{color:var(--ok)}
-    .bad{color:var(--bad)}
-    .warn{color:var(--warn)}
+    .ok{color:var(--ok)} .bad{color:var(--bad)} .warn{color:var(--warn)}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
     .footer{margin-top:18px;color:var(--muted);font-size:13px}
-    details{border:1px dashed var(--border);border-radius:12px;padding:10px;background:#fff}
-    summary{cursor:pointer;color:var(--muted)}
+    details{border:1px dashed var(--border);border-radius:12px;padding:8px;background:#fff;margin-top:10px}
+    summary{cursor:pointer;color:var(--muted);font-weight:600}
     .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
     .kpi .panel{padding:12px;text-align:center}
-    /* Toolbar & Teacher */
-    .toolbar{display:flex;gap:10px;align-items:center}
-    .btn{display:inline-flex;gap:8px;align-items:center}
-    .btn.ghost{background:transparent}
     .hidden{display:none}
-    .teacher-badge{font-size:12px;border:1px solid var(--border);border-radius:999px;padding:2px 8px}
     /* Mode switch (Schiebeschalter) */
     .mode{display:flex;align-items:center;gap:10px}
     .switch{position:relative;width:72px;height:34px;background:#e5e7eb;border-radius:999px;border:1px solid var(--border);cursor:pointer;transition:background .2s}
@@ -67,173 +53,204 @@
     .switch.on{background:#bfdbfe;border-color:#93c5fd}
     .switch.on::after{left:41px}
     .mode-label{font-size:14px;color:var(--muted)}
+    /* Phasen */
+    .phase{margin-bottom:18px}
+    .hero-badge{font-size:12px;background:#e0f2fe;color:#0c4a6e;border-radius:999px;padding:4px 10px;display:inline-block}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
       <div>
-        <h1>Von der Wenn‑Dann‑Regel zum lernenden System · Spamfilter (Demo)</h1>
-        <div class="small">Didaktischer Ablauf: erst Regelmodell, dann lernendes System</div>
-      </div>
-      <div class="toolbar">
-        <div class="mode" title="Schiebeschalter: Regelbasiert ↔ Lernendes System">
-          <span class="mode-label">Modus:</span>
-          <div id="modeSwitch" class="switch" role="switch" aria-checked="false" tabindex="0"></div>
-          <span id="modeText" class="mode-label">Regelbasiert</span>
-        </div>
-        <button id="helpToggle" class="btn">❓ Hilfe & Einführung</button>
-        <button id="toggleTeacher" class="btn ghost">🧑‍🏫 <span class="teacher-badge">Lehrer‑Ansicht</span></button>
+        <h1>Von der Wenn-Dann-Regel zum lernenden System · Spamfilter (Demo)</h1>
+        <div class="small">Ablauf: Ziele → Brainstorming → Regeln → Lernendes System</div>
       </div>
     </header>
 
-    <!-- Inline-Hilfe -->
-    <section id="helpPanel" class="panel hidden">
-      <h2>Hilfe & Einführung</h2>
-      <ol class="small" style="margin-top:8px">
-        <li><strong>Start im Regelmodus:</strong> Schalte Regeln ein/aus und ändere die Reihenfolge.</li>
-        <li><strong>Zum Lernmodus schalten:</strong> Schiebeschalter oben. Dann erscheinen Gewichte, Training und Vergleich.</li>
-        <li><strong>Training:</strong> 1× oder Auto‑Training (Perzeptron) passt Gewichte an.</li>
-        <li><strong>Eigene Daten:</strong> Im Datensatz‑Bereich Beispiele hinzufügen/bearbeiten.</li>
-      </ol>
+    <!-- Phase 0: Start & Ziele -->
+    <section id="phase0" class="panel phase">
+      <span class="hero-badge">Start</span>
+      <h2>Workshop-Ziele</h2>
+      <ul class="small">
+        <li>Unterschied feste Entscheidungsregeln vs. lernende Systeme verstehen</li>
+        <li>Eigenen Kriterienkatalog für Spam entwickeln</li>
+        <li>Vom Regelwerk zum gewichteten Modell wechseln</li>
+      </ul>
+      <div class="row" style="margin-top:8px">
+        <button id="startBrainstorm" class="primary">Los geht’s → Brainstorming</button>
+      </div>
     </section>
 
-    <div class="grid">
-      <!-- Sidebar: Dataset & Mail-Viewer -->
-      <aside class="panel">
-        <h2>Datensatz</h2>
-        <p class="small">Wähle eine Beispiel‑Mail. Features sind binär (0/1). „Soll“ ist die korrekte Klassifikation.</p>
-        <div class="row">
-          <label>Mail:
-            <select id="emailSelect"></select>
-          </label>
-          <span id="goldTag" class="tag">Soll: –</span>
+    <!-- Phase 1: Brainstorming -->
+    <section id="phase1" class="panel phase hidden">
+      <span class="hero-badge">Phase 1</span>
+      <h2>Brainstorming: Kriterien & Beispiele</h2>
+      <div class="small" style="margin-bottom:8px">Nur das erste Feld ist als Orientierung vorausgefüllt. Tragt eure eigenen Merkmale und Beispiele ein.</div>
+
+      <h3>Merkmale</h3>
+      <div class="row" style="flex-wrap:wrap">
+        <label>1 <input id="featName0" type="text" value="Betreff enthält ‚gratis‘" style="width:260px"></label>
+        <label>2 <input id="featName1" type="text" value="" placeholder="Merkmal 2" style="width:260px"></label>
+        <label>3 <input id="featName2" type="text" value="" placeholder="Merkmal 3" style="width:260px"></label>
+        <label>4 <input id="featName3" type="text" value="" placeholder="Merkmal 4" style="width:260px"></label>
+        <label>5 <input id="featName4" type="text" value="" placeholder="Merkmal 5" style="width:260px"></label>
+      </div>
+
+      <h3 style="margin-top:12px">Beispiele erfassen</h3>
+      <table id="bsTable">
+        <thead>
+          <tr>
+            <th>Betreff</th>
+            <th id="bsHead0">Merkmal 1</th>
+            <th id="bsHead1">Merkmal 2</th>
+            <th id="bsHead2">Merkmal 3</th>
+            <th id="bsHead3">Merkmal 4</th>
+            <th id="bsHead4">Merkmal 5</th>
+            <th>Soll (Spam)</th>
+          </tr>
+        </thead>
+        <tbody id="bsBody"></tbody>
+      </table>
+      <div class="row" style="margin-top:8px">
+        <button id="bsAdd">➕ Zeile</button>
+        <button id="bsReset">🗑️ Leeren</button>
+        <button id="bsApply" class="primary">Übernehmen & weiter → Regeln</button>
+      </div>
+    </section>
+
+    <!-- Phase 2/3: Demo -->
+    <section id="phase2" class="phase hidden">
+      <div class="panel" style="margin-bottom:18px">
+        <div class="row" style="justify-content:space-between">
+          <div class="small">Start im Regelmodus. Schiebeschalter für den Lernmodus.</div>
+          <div class="mode" title="Schiebeschalter: Regelbasiert ↔ Lernendes System">
+            <span class="mode-label">Modus:</span>
+            <div id="modeSwitch" class="switch" role="switch" aria-checked="false" tabindex="0"></div>
+            <span id="modeText" class="mode-label">Regelbasiert</span>
+          </div>
         </div>
+      </div>
 
-        <table id="featTable" style="margin-top:10px">
-          <thead><tr><th>Feature</th><th>Wert</th></tr></thead>
-          <tbody></tbody>
-        </table>
-
-        <details style="margin-top:12px">
-          <summary>Datensätze anzeigen/bearbeiten</summary>
-          <div class="small" style="margin:6px 0 8px">Du kannst hier Beispiele hinzufügen. Werte 0/1, „Soll“ als 0/1.</div>
-          <table id="dataTable">
-            <thead><tr>
-              <th>Betreff</th><th>gratis?</th><th>Absender bekannt?</th><th>viele Links?</th><th>ALLES GROSS?</th><th>verdächtige Domain?</th><th>Soll (Spam)</th>
-            </tr></thead>
-            <tbody id="dataBody"></tbody>
-          </table>
-          <div class="row" style="margin-top:8px">
-            <button id="addRow">➕ Beispiel</button>
-            <button id="resetData">🗑️ Zurücksetzen</button>
+      <div class="grid">
+        <!-- Sidebar -->
+        <aside class="panel">
+          <h2>Datensatz</h2>
+          <p class="small">Wähle eine Beispiel-Mail. Features sind binär (0/1). „Soll“ ist die korrekte Klassifikation.</p>
+          <div class="row">
+            <label>Mail:
+              <select id="emailSelect"></select>
+            </label>
+            <span id="goldTag" class="tag">Soll: –</span>
           </div>
-        </details>
-      </aside>
 
-      <!-- Main panels -->
-      <main style="display:grid;gap:18px">
-        <section class="panel" id="rulePanel">
-          <h2>Regelbasierter Filter (Wenn‑Dann)</h2>
-          <div class="small">Starre Entscheidungsregeln. Reihenfolge kann Wirkung haben.</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-            <div>
-              <h3>Regeln</h3>
-              <div class="row"><label><input type="checkbox" class="r" data-key="rGratis" checked> Betreff enthält „gratis“ ⇒ Spam</label></div>
-              <div class="row"><label><input type="checkbox" class="r" data-key="rDomain" checked> Verdächtige Domain ⇒ Spam</label></div>
-              <div class="row"><label><input type="checkbox" class="r" data-key="rKnown" checked> Absender bekannt ⇒ kein Spam</label></div>
-              <div class="row"><label><input type="checkbox" class="r" data-key="rShoutLinks"> ALLES GROSS & viele Links ⇒ Spam</label></div>
-              <div class="row"><label>Reihenfolge:
-                <select id="ruleOrder">
-                  <option value="natural">Natürliche Reihenfolge</option>
-                  <option value="prioritizeSafe">„Kein Spam“ zuerst</option>
-                  <option value="prioritizeSpam">„Spam“ zuerst</option>
-                </select>
-              </label></div>
+          <table id="featTable" style="margin-top:10px">
+            <thead><tr><th>Feature</th><th>Wert</th></tr></thead>
+            <tbody></tbody>
+          </table>
+
+          <details style="margin-top:12px">
+            <summary>Datensätze anzeigen/bearbeiten</summary>
+            <div class="small" style="margin:6px 0 8px">Du kannst hier Beispiele hinzufügen. Werte 0/1, „Soll“ als 0/1.</div>
+            <table id="dataTable">
+              <thead id="dataHead"></thead>
+              <tbody id="dataBody"></tbody>
+            </table>
+            <div class="row" style="margin-top:8px">
+              <button id="addRow">➕ Beispiel</button>
+              <button id="resetData">🗑️ Zurücksetzen</button>
             </div>
-            <div>
-              <h3>Ausgabe</h3>
-              <div id="ruleOut" class="out">–</div>
-              <div id="ruleWhy" class="small mono"></div>
-              <div class="kpi">
-                <div class="panel"><div class="small">Trefferquote</div><div id="ruleAcc" class="out">–</div></div>
-                <div class="panel"><div class="small">TP / TN</div><div id="ruleTP" class="out">–</div></div>
-                <div class="panel"><div class="small">FP / FN</div><div id="ruleFP" class="out">–</div></div>
+          </details>
+        </aside>
+
+        <!-- Main -->
+        <main style="display:grid;gap:18px">
+          <section class="panel" id="rulePanel">
+            <h2>Regelbasierter Filter (Wenn-Dann)</h2>
+            <div class="small">Starre Entscheidungsregeln. Reihenfolge kann Wirkung haben.</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+              <div>
+                <h3>Regeln</h3>
+                <div class="row"><label><input type="checkbox" class="r" data-key="r0" checked> <span id="ruleLbl0">Merkmal 1</span> ⇒ Spam</label></div>
+                <div class="row"><label><input type="checkbox" class="r" data-key="r4" checked> <span id="ruleLbl4">Merkmal 5</span> ⇒ Spam</label></div>
+                <div class="row"><label><input type="checkbox" class="r" data-key="r1" checked> <span id="ruleLbl1">Merkmal 2</span> ⇒ kein Spam</label></div>
+                <div class="row"><label><input type="checkbox" class="r" data-key="r3"> <span id="ruleLbl3">Merkmal 4</span> & <span id="ruleLbl2">Merkmal 3</span> ⇒ Spam</label></div>
+                <div class="row"><label>Reihenfolge:
+                  <select id="ruleOrder">
+                    <option value="natural">Natürliche Reihenfolge</option>
+                    <option value="prioritizeSafe">„Kein Spam“ zuerst</option>
+                    <option value="prioritizeSpam">„Spam“ zuerst</option>
+                  </select>
+                </label></div>
+              </div>
+              <div>
+                <h3>Ausgabe</h3>
+                <div id="ruleOut" class="out">–</div>
+                <div id="ruleWhy" class="small mono"></div>
+                <div class="kpi">
+                  <div class="panel"><div class="small">Trefferquote</div><div id="ruleAcc" class="out">–</div></div>
+                  <div class="panel"><div class="small">TP / TN</div><div id="ruleTP" class="out">–</div></div>
+                  <div class="panel"><div class="small">FP / FN</div><div id="ruleFP" class="out">–</div></div>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section class="panel hidden" id="neuronPanel">
-          <h2>Gewichtetes „Mini‑Neuron“ (lernend)</h2>
-          <div class="small">Eingabe × Gewicht ⇒ Summe ⇒ Schwelle. Optionales Training passt Gewichte an.</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-            <div>
-              <h3>Gewichte & Schwelle</h3>
-              <div class="row"><span class="pill">w<sub>gratis</sub><input type="range" id="wGratis" min="-1.5" max="1.5" step="0.1" value="0.8"><input id="wGratisVal" type="number" step="0.1" style="width:70px" value="0.8"></span></div>
-              <div class="row"><span class="pill">w<sub>bekannt</sub><input type="range" id="wKnown"  min="-1.5" max="1.5" step="0.1" value="-0.5"><input id="wKnownVal" type="number" step="0.1" style="width:70px" value="-0.5"></span></div>
-              <div class="row"><span class="pill">w<sub>links</sub><input type="range" id="wLinks"  min="-1.5" max="1.5" step="0.1" value="0.6"><input id="wLinksVal" type="number" step="0.1" style="width:70px" value="0.6"></span></div>
-              <div class="row"><span class="pill">w<sub>caps</sub><input type="range" id="wCaps"   min="-1.5" max="1.5" step="0.1" value="0.4"><input id="wCapsVal" type="number" step="0.1" style="width:70px" value="0.4"></span></div>
-              <div class="row"><span class="pill">w<sub>domain</sub><input type="range" id="wDomain" min="-1.5" max="1.5" step="0.1" value="0.7"><input id="wDomainVal" type="number" step="0.1" style="width:70px" value="0.7"></span></div>
-              <div class="row"><span class="pill">Schwelle θ<input type="range" id="theta" min="0" max="2.5" step="0.05" value="0.7"><input id="thetaVal" type="number" step="0.05" style="width:70px" value="0.7"></span></div>
-            </div>
-            <div>
-              <h3>Ausgabe</h3>
-              <div id="neuSum" class="small mono">Summe = –</div>
-              <div id="neuOut" class="out">–</div>
-              <div class="kpi">
-                <div class="panel"><div class="small">Trefferquote</div><div id="neuAcc" class="out">–</div></div>
-                <div class="panel"><div class="small">TP / TN</div><div id="neuTP" class="out">–</div></div>
-                <div class="panel"><div class="small">FP / FN</div><div id="neuFP" class="out">–</div></div>
+          <section class="panel hidden" id="neuronPanel">
+            <h2>Gewichtetes „Mini-Neuron“ (lernend)</h2>
+            <div class="small">Eingabe × Gewicht ⇒ Summe ⇒ Schwelle. Optionales Training passt Gewichte an.</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+              <div>
+                <h3>Gewichte & Schwelle</h3>
+                <div class="row"><span class="pill" id="wLbl0">w<sub>1</sub><input type="range" id="w0" min="-1.5" max="1.5" step="0.1" value="0.8"><input id="w0Val" type="number" step="0.1" style="width:70px" value="0.8"></span></div>
+                <div class="row"><span class="pill" id="wLbl1">w<sub>2</sub><input type="range" id="w1"  min="-1.5" max="1.5" step="0.1" value="-0.5"><input id="w1Val" type="number" step="0.1" style="width:70px" value="-0.5"></span></div>
+                <div class="row"><span class="pill" id="wLbl2">w<sub>3</sub><input type="range" id="w2"  min="-1.5" max="1.5" step="0.1" value="0.6"><input id="w2Val" type="number" step="0.1" style="width:70px" value="0.6"></span></div>
+                <div class="row"><span class="pill" id="wLbl3">w<sub>4</sub><input type="range" id="w3"   min="-1.5" max="1.5" step="0.1" value="0.4"><input id="w3Val" type="number" step="0.1" style="width:70px" value="0.4"></span></div>
+                <div class="row"><span class="pill" id="wLbl4">w<sub>5</sub><input type="range" id="w4" min="-1.5" max="1.5" step="0.1" value="0.7"><input id="w4Val" type="number" step="0.1" style="width:70px" value="0.7"></span></div>
+                <div class="row"><span class="pill">Schwelle θ<input type="range" id="theta" min="0" max="2.5" step="0.05" value="0.7"><input id="thetaVal" type="number" step="0.05" style="width:70px" value="0.7"></span></div>
               </div>
-              <div class="row" style="margin-top:8px">
-                <button id="fitOnce">🚀 1× trainieren</button>
-                <button id="fitAuto" class="primary">🤖 Auto‑Training (Perzeptron)</button>
-                <button id="resetW">🔁 Gewichte zurücksetzen</button>
+              <div>
+                <h3>Ausgabe</h3>
+                <div id="neuSum" class="small mono">Summe = –</div>
+                <div id="neuOut" class="out">–</div>
+                <div class="kpi">
+                  <div class="panel"><div class="small">Trefferquote</div><div id="neuAcc" class="out">–</div></div>
+                  <div class="panel"><div class="small">TP / TN</div><div id="neuTP" class="out">–</div></div>
+                  <div class="panel"><div class="small">FP / FN</div><div id="neuFP" class="out">–</div></div>
+                </div>
+                <div class="row" style="margin-top:8px">
+                  <button id="fitOnce">🚀 1× trainieren</button>
+                  <button id="fitAuto" class="primary">🤖 Auto-Training (Perzeptron)</button>
+                  <button id="resetW">🔁 Gewichte zurücksetzen</button>
+                </div>
+                <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px"></div>
+
+                <details style="margin-top:10px">
+                  <summary>💡 Was passiert hier?</summary>
+                  <ul class="small">
+                    <li><strong>1× Trainieren:</strong> passt die Gewichte einmal über alle Beispiele an.</li>
+                    <li><strong>Auto-Training:</strong> wiederholt viele Epochen, stoppt wenn keine Änderungen mehr auftreten.</li>
+                    <li><strong>Gewichte:</strong> Stärke des Beitrags eines Merkmals zur Entscheidung.</li>
+                    <li><strong>Schwelle (θ):</strong> ab dieser Summe ⇒ „Spam“.</li>
+                    <li><strong>Hinweis:</strong> Lernen braucht repräsentative Beispiele.</li>
+                  </ul>
+                </details>
               </div>
-              <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px"></div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section class="panel hidden" id="comparePanel">
-          <h2>Direkter Vergleich</h2>
-          <table>
-            <thead><tr><th>Mail</th><th>Regelbasiert</th><th>Mini‑Neuron</th><th>Soll</th></tr></thead>
-            <tbody id="compareBody"></tbody>
-          </table>
-        </section>
-
-        <section class="panel hidden" id="teacherPanel">
-          <h2>Lehrer‑Ansicht</h2>
-          <div class="small">Werkzeuge für Vorführung und Klassennutzung.</div>
-          <div class="row" style="margin-top:8px;flex-wrap:wrap">
-            <button id="btnResetAll" class="btn">🗑️ Alles zurücksetzen</button>
-            <button id="btnShuffle" class="btn">🎲 Mails mischen</button>
-            <button id="btnLockStudent" class="btn">🔒 Schüler‑Modus sperren</button>
-            <button id="btnUnlockStudent" class="btn hidden">🔓 Schüler‑Modus entsperren</button>
-            <button id="btnExport" class="btn">📤 Datensatz exportieren</button>
-            <label class="btn ghost" for="fileImport">📥 Import <input id="fileImport" type="file" accept="application/json" style="display:none"></label>
-          </div>
-          <h3>Statistik</h3>
-          <div class="kpi">
-            <div class="panel"><div class="small">Regel: Genauigkeit</div><div id="kRuleAcc" class="out">–</div></div>
-            <div class="panel"><div class="small">Neuron: Genauigkeit</div><div id="kNeuAcc" class="out">–</div></div>
-            <div class="panel"><div class="small">Datensätze</div><div id="kCount" class="out">–</div></div>
-          </div>
-          <table style="margin-top:8px">
-            <thead><tr><th>Modell</th><th>TP</th><th>TN</th><th>FP</th><th>FN</th></tr></thead>
-            <tbody>
-              <tr><td>Regel</td><td id="kRuleTP">–</td><td id="kRuleTN">–</td><td id="kRuleFP">–</td><td id="kRuleFN">–</td></tr>
-              <tr><td>Neuron</td><td id="kNeuTP">–</td><td id="kNeuTN">–</td><td id="kNeuFP">–</td><td id="kNeuFN">–</td></tr>
-            </tbody>
-          </table>
-        </section>
-      </main>
-    </div>
+          <section class="panel hidden" id="comparePanel">
+            <h2>Direkter Vergleich</h2>
+            <table>
+              <thead><tr><th>Mail</th><th>Regelbasiert</th><th>Mini-Neuron</th><th>Soll</th></tr></thead>
+              <tbody id="compareBody"></tbody>
+            </table>
+          </section>
+        </main>
+      </div>
+    </section>
 
     <div class="footer">
-      Tipp: Start im Regelmodus. Schalte später auf „Lernendes System“, um Gewichte und Training zu zeigen. | © Demo, frei nutzbar.
+      © Demo, frei nutzbar.
     </div>
   </div>
 
@@ -245,35 +262,66 @@
     { subj:"Elternabend – Raumänderung", g:0, k:1, l:0, c:0, d:0, y:0 },
     { subj:"Ihr Paket konnte nicht zugestellt werden", g:0, k:0, l:1, c:0, d:1, y:1 },
     { subj:"Klausurplan KW 42", g:0, k:1, l:0, c:0, d:0, y:0 },
-    { subj:"gratis Probewoche im Fitnessstudio", g:1, k:0, l:1, c:0, d:0, y:1 },
-    { subj:"Newsletter Oktober", g:0, k:0, l:1, c:0, d:0, y:0 },
-    { subj:"DRINGEND: Konto VERIFIZIEREN", g:0, k:0, l:1, c:1, d:1, y:1 },
-    { subj:"Projektstatus – bitte Rückmeldung", g:0, k:1, l:0, c:0, d:0, y:0 },
   ];
-
   let data = JSON.parse(localStorage.getItem('spamDemoData')||'null') || DEFAULT_DATA.slice();
 
-  const FEATS = [
-    { key:'g', label:'Betreff enthält „gratis“' },
-    { key:'k', label:'Absender bekannt' },
-    { key:'l', label:'viele Links' },
-    { key:'c', label:'ALLES GROSS' },
-    { key:'d', label:'verdächtige Domain' },
+  // Feature-Definition (beschriftbar)
+  let FEATS = [
+    { key:'g', label:'Merkmal 1' },
+    { key:'k', label:'Merkmal 2' },
+    { key:'l', label:'Merkmal 3' },
+    { key:'c', label:'Merkmal 4' },
+    { key:'d', label:'Merkmal 5' },
   ];
 
-  // UI Elemente
+  // ---- Phase-UI ----
+  const phase0 = document.getElementById('phase0');
+  const phase1 = document.getElementById('phase1');
+  const phase2 = document.getElementById('phase2');
+  document.getElementById('startBrainstorm').addEventListener('click', ()=> setPhase(1));
+
+  // Brainstorming-UI
+  const featInputs = [0,1,2,3,4].map(i=> document.getElementById('featName'+i));
+  const bsHeadIds = [0,1,2,3,4].map(i=> document.getElementById('bsHead'+i));
+  const bsBody = document.getElementById('bsBody');
+  document.getElementById('bsAdd').addEventListener('click', addBsRow);
+  document.getElementById('bsReset').addEventListener('click', ()=>{ bsBody.innerHTML=''; addBsRow(); addBsRow(); addBsRow(); });
+  document.getElementById('bsApply').addEventListener('click', applyBrainstorm);
+  featInputs.forEach((inp,i)=> inp.addEventListener('input', ()=>{ bsHeadIds[i].textContent = (inp.value.trim()||('Merkmal '+(i+1))); }));
+
+  function addBsRow(){
+    const r = document.createElement('tr');
+    r.innerHTML = `
+      <td><input type="text" placeholder="Betreff"></td>
+      <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
+      <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
+      <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
+      <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
+      <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
+      <td><input type="number" min="0" max="1" step="1" value="0" style="width:90px"></td>`;
+    bsBody.appendChild(r);
+  }
+  // Seed rows
+  addBsRow(); addBsRow(); addBsRow();
+
+  // ---- Demo-UI Elemente ----
+  const modeSwitch = document.getElementById('modeSwitch');
+  const modeText = document.getElementById('modeText');
+  let mode = 'rule';
+
   const emailSelect = document.getElementById('emailSelect');
   const goldTag = document.getElementById('goldTag');
   const featTableBody = document.querySelector('#featTable tbody');
+  const dataHead = document.getElementById('dataHead');
   const dataBody = document.getElementById('dataBody');
   const compareBody = document.getElementById('compareBody');
 
-  // Regel-UI
+  // Regeln
   const ruleChecks = {
-    rGratis: document.querySelector('input[data-key="rGratis"]'),
-    rDomain: document.querySelector('input[data-key="rDomain"]'),
-    rKnown:  document.querySelector('input[data-key="rKnown"]'),
-    rShoutLinks: document.querySelector('input[data-key="rShoutLinks"]'),
+    r0: document.querySelector('input[data-key="r0"]'),
+    r4: document.querySelector('input[data-key="r4"]'),
+    r1: document.querySelector('input[data-key="r1"]'),
+    r3: document.querySelector('input[data-key="r3"]'),
   };
   const ruleOrderSel = document.getElementById('ruleOrder');
   const ruleOut = document.getElementById('ruleOut');
@@ -282,14 +330,14 @@
   const ruleTP = document.getElementById('ruleTP');
   const ruleFP = document.getElementById('ruleFP');
 
-  // Neuron-UI
+  // Neuron
   const sliders = {
-    wGratis:  [document.getElementById('wGratis'),  document.getElementById('wGratisVal')],
-    wKnown:   [document.getElementById('wKnown'),   document.getElementById('wKnownVal')],
-    wLinks:   [document.getElementById('wLinks'),   document.getElementById('wLinksVal')],
-    wCaps:    [document.getElementById('wCaps'),    document.getElementById('wCapsVal')],
-    wDomain:  [document.getElementById('wDomain'),  document.getElementById('wDomainVal')],
-    theta:    [document.getElementById('theta'),    document.getElementById('thetaVal')],
+    w0:[document.getElementById('w0'),document.getElementById('w0Val')],
+    w1:[document.getElementById('w1'),document.getElementById('w1Val')],
+    w2:[document.getElementById('w2'),document.getElementById('w2Val')],
+    w3:[document.getElementById('w3'),document.getElementById('w3Val')],
+    w4:[document.getElementById('w4'),document.getElementById('w4Val')],
+    theta:[document.getElementById('theta'),document.getElementById('thetaVal')],
   };
   const neuSum = document.getElementById('neuSum');
   const neuOut = document.getElementById('neuOut');
@@ -304,35 +352,46 @@
   const addRowBtn = document.getElementById('addRow');
   const resetDataBtn = document.getElementById('resetData');
 
-  // Mode switch
-  const modeSwitch = document.getElementById('modeSwitch');
-  const modeText = document.getElementById('modeText');
-  let mode = 'rule'; // 'rule' | 'learn'
-
   // ---- Utils ----
   function saveData(){ localStorage.setItem('spamDemoData', JSON.stringify(data)); }
   function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
   function setDisabledGroup(on, root){ root.querySelectorAll('input,button,select,textarea').forEach(el=> el.disabled = on); }
-
   function currentMail(){ return data[emailSelect.selectedIndex || 0]; }
   function mailToFeatVec(m){ return [m.g, m.k, m.l, m.c, m.d]; }
+
+  function renderDynamicLabels(){
+    // Regeln
+    document.getElementById('ruleLbl0').textContent = FEATS[0].label;
+    document.getElementById('ruleLbl1').textContent = FEATS[1].label + ' (⇒ kein Spam)';
+    document.getElementById('ruleLbl2').textContent = FEATS[2].label;
+    document.getElementById('ruleLbl3').textContent = FEATS[3].label;
+    document.getElementById('ruleLbl4').textContent = FEATS[4].label;
+    // Gewichte (prepend Text)
+    document.getElementById('wLbl0').firstChild.textContent = FEATS[0].label + ' · ';
+    document.getElementById('wLbl1').firstChild.textContent = FEATS[1].label + ' · ';
+    document.getElementById('wLbl2').firstChild.textContent = FEATS[2].label + ' · ';
+    document.getElementById('wLbl3').firstChild.textContent = FEATS[3].label + ' · ';
+    document.getElementById('wLbl4').firstChild.textContent = FEATS[4].label + ' · ';
+    // Datentabelle Kopf
+    dataHead.innerHTML = `<tr>
+      <th>Betreff</th>
+      ${FEATS.map(f=>`<th>${f.label}</th>`).join('')}
+      <th>Soll (Spam)</th>
+    </tr>`;
+  }
 
   function predRule(m){
     const order = ruleOrderSel.value;
     const rules = [];
-    if(order === 'prioritizeSafe'){
-      rules.push('known','gratis','domain','shoutlinks');
-    } else if(order === 'prioritizeSpam'){
-      rules.push('gratis','domain','shoutlinks','known');
-    } else {
-      rules.push('gratis','domain','known','shoutlinks');
-    }
+    if(order === 'prioritizeSafe'){ rules.push('safe','f0','f4','f3x2'); }
+    else if(order === 'prioritizeSpam'){ rules.push('f0','f4','f3x2','safe'); }
+    else { rules.push('f0','f4','safe','f3x2'); }
     let why = [];
     for(const r of rules){
-      if(r==='gratis' && ruleChecks.rGratis.checked && m.g===1){ why.push('Regel: gratis ⇒ Spam'); return [1, why.join(' | ')]; }
-      if(r==='domain' && ruleChecks.rDomain.checked && m.d===1){ why.push('Regel: verdächtige Domain ⇒ Spam'); return [1, why.join(' | ')]; }
-      if(r==='known' && ruleChecks.rKnown.checked && m.k===1){ why.push('Regel: bekannt ⇒ kein Spam'); return [0, why.join(' | ')]; }
-      if(r==='shoutlinks' && ruleChecks.rShoutLinks.checked && m.c===1 && m.l===1){ why.push('Regel: CAPS & viele Links ⇒ Spam'); return [1, why.join(' | ')]; }
+      if(r==='f0' && ruleChecks.r0.checked && m.g===1){ why.push(`Regel: ${FEATS[0].label} ⇒ Spam`); return [1, why.join(' | ')]; }
+      if(r==='f4' && ruleChecks.r4.checked && m.d===1){ why.push(`Regel: ${FEATS[4].label} ⇒ Spam`); return [1, why.join(' | ')]; }
+      if(r==='safe' && ruleChecks.r1.checked && m.k===1){ why.push(`Regel: ${FEATS[1].label} ⇒ kein Spam`); return [0, why.join(' | ')]; }
+      if(r==='f3x2' && ruleChecks.r3.checked && m.c===1 && m.l===1){ why.push(`Regel: ${FEATS[3].label} & ${FEATS[2].label} ⇒ Spam`); return [1, why.join(' | ')]; }
     }
     if(why.length===0) why.push('Default ⇒ kein Spam');
     return [0, why.join(' | ')];
@@ -340,15 +399,15 @@
 
   function getWeights(){
     return [
-      parseFloat(sliders.wGratis[0].value),
-      parseFloat(sliders.wKnown[0].value),
-      parseFloat(sliders.wLinks[0].value),
-      parseFloat(sliders.wCaps[0].value),
-      parseFloat(sliders.wDomain[0].value)
+      parseFloat(sliders.w0[0].value),
+      parseFloat(sliders.w1[0].value),
+      parseFloat(sliders.w2[0].value),
+      parseFloat(sliders.w3[0].value),
+      parseFloat(sliders.w4[0].value)
     ];
   }
   function setWeights(ws){
-    const ids=['wGratis','wKnown','wLinks','wCaps','wDomain'];
+    const ids=['w0','w1','w2','w3','w4'];
     ids.forEach((id,i)=>{ sliders[id][0].value=ws[i]; sliders[id][1].value=ws[i]; });
     updateAll();
   }
@@ -367,17 +426,18 @@
     for(const m of data){
       const p = modelFn(m);
       const yhat = Array.isArray(p)? p[0] : p.y;
-      if(yhat===1 && m.y===1) tp++; else
-      if(yhat===0 && m.y===0) tn++; else
-      if(yhat===1 && m.y===0) fp++; else fn++;
+      if(yhat===1 && m.y===1) tp++;
+      else if(yhat===0 && m.y===0) tn++;
+      else if(yhat===1 && m.y===0) fp++;
+      else fn++;
     }
     const acc = data.length ? ((tp+tn)/data.length) : 0;
     return {acc, tp, tn, fp, fn};
   }
 
-  // Perzeptron-Lernen (einfach)
+  // Perzeptron-Lernen
   function trainPerceptron(epochs=50, lr=0.2){
-    const ids=['wGratis','wKnown','wLinks','wCaps','wDomain'];
+    const ids=['w0','w1','w2','w3','w4'];
     let w = getWeights();
     let theta = getTheta();
     let improved=false;
@@ -412,17 +472,25 @@
     const m = currentMail();
     goldTag.textContent = `Soll: ${m.y===1? 'Spam':'kein Spam'}`;
     goldTag.style.color = m.y===1? 'var(--bad)': 'var(--ok)';
-    featTableBody.innerHTML = FEATS.map(f=>{
-      const v = m[f.key];
-      return `<tr><td>${f.label}</td><td class="mono">${v}</td></tr>`;
+    const map = ['g','k','l','c','d'];
+    featTableBody.innerHTML = map.map((k,idx)=>{
+      const v = m[k];
+      return `<tr><td>${FEATS[idx].label}</td><td class="mono">${v}</td></tr>`;
     }).join('');
   }
 
   function renderDataTable(){
+    dataHead.innerHTML = `<tr>
+      <th>Betreff</th>
+      ${FEATS.map(f=>`<th>${f.label}</th>`).join('')}
+      <th>Soll (Spam)</th>
+    </tr>`;
     dataBody.innerHTML = data.map((m,i)=>{
+      const vals = ['g','k','l','c','d'].map(k=>`<td><input data-i="${i}" data-k="${k}" type="number" min="0" max="1" step="1" value="${m[k]}"></td>`).join('');
       return `<tr>
         <td><input data-i="${i}" data-k="subj" type="text" value="${escapeAttr(m.subj)}" style="width:100%"></td>
-        ${['g','k','l','c','d','y'].map(k=>`<td><input data-i="${i}" data-k="${k}" type="number" min="0" max="1" step="1" value="${m[k]}"></td>`).join('')}
+        ${vals}
+        <td><input data-i="${i}" data-k="y" type="number" min="0" max="1" step="1" value="${m.y}"></td>
       </tr>`;
     }).join('');
   }
@@ -466,7 +534,6 @@
   }
 
   function updateAll(){
-    Object.values(sliders).forEach(([range, number])=>{ number.value = range.value; });
     renderFeatTable();
     renderRuleOutput();
     if(mode==='learn'){
@@ -487,27 +554,26 @@
       neuronPanel.classList.remove('hidden');
       comparePanel.classList.remove('hidden');
       setDisabledGroup(false, neuronPanel);
+      renderNeuronOutput();
+      renderCompare();
     }
     modeText.textContent = mode==='rule' ? 'Regelbasiert' : 'Lernendes System';
     document.getElementById('modeSwitch').classList.toggle('on', mode==='learn');
-    updateAll();
+    renderRuleOutput();
   }
 
   // ---- Events ----
-  document.getElementById('helpToggle').addEventListener('click', ()=>{
-    document.getElementById('helpPanel').classList.toggle('hidden');
-  });
+  // Brainstorm-Header live
+  featInputs.forEach((inp,i)=> inp.addEventListener('input', ()=>{ bsHeadIds[i].textContent = (inp.value.trim()||('Merkmal '+(i+1))); }));
 
-  const toggleTeacherBtn = document.getElementById('toggleTeacher');
-  const teacherPanel = document.getElementById('teacherPanel');
-  toggleTeacherBtn.addEventListener('click', ()=>{
-    teacherPanel.classList.toggle('hidden');
-    updateTeacherStats();
-  });
+  // Mode switch
+  modeSwitch.addEventListener('click', ()=>{ mode = (mode==='rule'?'learn':'rule'); applyMode(); });
+  modeSwitch.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); mode = (mode==='rule'?'learn':'rule'); applyMode(); }});
 
   emailSelect.addEventListener('change', updateAll);
   Object.values(ruleChecks).forEach(el=> el.addEventListener('change', updateAll));
-  ruleOrderSel.addEventListener('change', updateAll);
+  document.getElementById('ruleOrder').addEventListener('change', updateAll);
+
   Object.values(sliders).forEach(([range, number])=>{
     range.addEventListener('input', updateAll);
     number.addEventListener('input', ()=>{ range.value = number.value; updateAll(); });
@@ -526,13 +592,9 @@
     renderDataTable(); attachDataInputs(); renderEmailSelect(); updateAll();
   });
 
-  // Mode switch interactions
-  modeSwitch.addEventListener('click', ()=>{ mode = (mode==='rule'?'learn':'rule'); applyMode(); });
-  modeSwitch.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); mode = (mode==='rule'?'learn':'rule'); applyMode(); }});
-
   function attachDataInputs(){
     dataBody.querySelectorAll('input').forEach(inp=>{
-      inp.addEventListener('input', e=>{
+      inp.addEventListener('input', ()=>{
         const i = parseInt(inp.getAttribute('data-i'));
         const k = inp.getAttribute('data-k');
         if(k==='subj'){ data[i].subj = inp.value; }
@@ -542,27 +604,63 @@
     });
   }
 
-  function escapeHtml(s){ return s.replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"})[c]); }
+  function escapeHtml(s){ return s.replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
   function escapeAttr(s){ return s.replace(/"/g,'&quot;'); }
 
-  function updateTeacherStats(){
-    const r = evaluate(predRule); const n = evaluate(predNeuron);
-    document.getElementById('kRuleAcc').textContent = (r.acc*100).toFixed(0)+'%';
-    document.getElementById('kNeuAcc').textContent  = (n.acc*100).toFixed(0)+'%';
-    document.getElementById('kCount').textContent   = data.length;
-    document.getElementById('kRuleTP').textContent = r.tp; document.getElementById('kRuleTN').textContent = r.tn; document.getElementById('kRuleFP').textContent = r.fp; document.getElementById('kRuleFN').textContent = r.fn;
-    document.getElementById('kNeuTP').textContent  = n.tp; document.getElementById('kNeuTN').textContent  = n.tn; document.getElementById('kNeuFP').textContent  = n.fp; document.getElementById('kNeuFN').textContent  = n.fn;
+  // ---- Phasensteuerung ----
+  function setPhase(p){
+    [phase0, phase1, phase2].forEach((el,i)=> el.classList.toggle('hidden', i!==p));
   }
 
-  // ---- Init ----
-  function init(){
-    renderEmailSelect(); renderFeatTable(); renderDataTable(); attachDataInputs();
-    applyMode(); // start im Regelmodus
+  function applyBrainstorm(){
+    // Labels übernehmen
+    FEATS[0].label = featInputs[0].value.trim()||FEATS[0].label;
+    FEATS[1].label = featInputs[1].value.trim()||FEATS[1].label;
+    FEATS[2].label = featInputs[2].value.trim()||FEATS[2].label;
+    FEATS[3].label = featInputs[3].value.trim()||FEATS[3].label;
+    FEATS[4].label = featInputs[4].value.trim()||FEATS[4].label;
+
+    // Beispiele übernehmen
+    const rows = Array.from(bsBody.querySelectorAll('tr'));
+    const newData = [];
+    rows.forEach(tr=>{
+      const tds = tr.querySelectorAll('td');
+      const subj = tds[0].querySelector('input').value.trim();
+      if(!subj) return;
+      const f0 = clamp(parseInt(tds[1].querySelector('input').value)||0,0,1);
+      const f1 = clamp(parseInt(tds[2].querySelector('input').value)||0,0,1);
+      const f2 = clamp(parseInt(tds[3].querySelector('input').value)||0,0,1);
+      const f3 = clamp(parseInt(tds[4].querySelector('input').value)||0,0,1);
+      const f4 = clamp(parseInt(tds[5].querySelector('input').value)||0,0,1);
+      const y  = clamp(parseInt(tds[6].querySelector('input').value)||0,0,1);
+      newData.push({ subj:subj, g:f0, k:f1, l:f2, c:f3, d:f4, y:y });
+    });
+
+    // Speicher sicher überschreiben
+    localStorage.removeItem('spamDemoData');
+    if(newData.length >= 1){ data = newData; }
+    saveData();
+
+    // UI aktualisieren & zu Phase 2 wechseln
+    renderDynamicLabels();
+    renderDataTable(); attachDataInputs(); renderEmailSelect();
+    emailSelect.selectedIndex = 0;
+    mode = 'rule';
+    applyMode();
+    setPhase(2);
+    updateAll();
   }
-  init();
+
+  // Initiale (unsichtbare) Basis vorbereiten
+  renderDynamicLabels();
+  renderDataTable(); attachDataInputs(); renderEmailSelect();
+
+  // Start bei Phase 0
+  setPhase(0);
 })();
 </script>
 </body>
 </html>
+
 
 
