@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Von der Wenn‑Dann‑Regel zum lernenden System – Spamfilter Demo</title>
+  <style>
+    :root { --bg:#0b0c10; --panel:#14161b; --ink:#e7eaf0; --muted:#9aa3b2; --accent:#5cc8ff; --ok:#3bd671; --warn:#ffb650; --bad:#ff6b6b; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial;background:var(--bg);color:var(--ink)}
+    a{color:var(--accent)}
+    .wrap{max-width:1200px;margin:0 auto;padding:24px}
+    header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:20px}
+    h1{font-size:22px;margin:0}
+    .grid{display:grid;grid-template-columns:300px 1fr;gap:16px}
+    .panel{background:var(--panel);border:1px solid #22252d;border-radius:12px;padding:16px}
+    .panel h2{margin:0 0 8px 0;font-size:18px}
+    .panel h3{margin:16px 0 8px 0;font-size:16px;color:var(--muted)}
+    .small{font-size:13px;color:var(--muted)}
+    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid #2b3039;padding:6px 10px;border-radius:999px}
+    label{display:flex;align-items:center;gap:8px}
+    input[type="range"]{width:180px}
+    select, input[type="number"], input[type="text"], button{background:#0f1116;border:1px solid #2b3039;color:var(--ink);padding:8px 10px;border-radius:8px}
+    button{cursor:pointer}
+    button.primary{background:var(--accent);color:#000;border-color:transparent}
+    table{width:100%;border-collapse:collapse}
+    th,td{border-bottom:1px solid #20242c;padding:8px;text-align:left}
+    .tag{font-size:12px;border:1px solid #2b3039;padding:2px 8px;border-radius:999px;color:var(--muted)}
+    .out{font-weight:700}
+    .ok{color:var(--ok)}
+    .bad{color:var(--bad)}
+    .warn{color:var(--warn)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+    .footer{margin-top:18px;color:var(--muted);font-size:13px}
+    details{border:1px dashed #2b3039;border-radius:10px;padding:10px}
+    summary{cursor:pointer;color:var(--muted)}
+    .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+    .kpi .panel{padding:10px;text-align:center}
+    /* ——— Extras: Buttons, Overlay, Lehrkraft ——— */
+  .toolbar{display:flex;gap:8px;align-items:center}
+  .btn{background:#0f1116;border:1px solid #2b3039;color:var(--ink);padding:8px 12px;border-radius:8px;cursor:pointer}
+  .btn.primary{background:var(--accent);color:#000;border-color:transparent}
+  .btn.ghost{background:transparent}
+  .hidden{display:none}
+  /* Walkthrough Overlay */
+  .tour-mask{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:saturate(80%) blur(2px);display:flex;align-items:center;justify-content:center;z-index:1000}
+  .tour-card{background:var(--panel);border:1px solid #2b3039;border-radius:14px;max-width:720px;width:min(92vw,720px);padding:16px}
+  .tour-steps{color:var(--muted);font-size:13px}
+  .tour-actions{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+  .tour-hi{outline:3px solid var(--accent);border-radius:10px;transition:all .2s ease}
+  /* Lehrkraft Panel */
+  .teacher-badge{font-size:12px;border:1px solid #2b3039;border-radius:999px;padding:2px 8px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Von der Wenn‑Dann‑Regel zum lernenden System · Spamfilter (Demo)</h1>
+      <div class="small">Statische Demo: Regelbasierter Filter vs. gewichtetes „Mini‑Neuron“</div>
+      <div class="toolbar">
+        <button id="tourStart" class="btn">Walkthrough starten</button>
+        <button id="toggleTeacher" class="btn ghost"><span class="teacher-badge">Lehrer‑Ansicht</span></button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Sidebar: Dataset & Mail-Viewer -->
+      <aside class="panel">
+        <h2>Datensatz</h2>
+        <p class="small">Wähle eine Beispiel‑Mail. Features sind binär (0/1). „Soll“ ist die korrekte Klassifikation.</p>
+        <div class="row">
+          <label>Mail:
+            <select id="emailSelect"></select>
+          </label>
+          <span id="goldTag" class="tag">Soll: –</span>
+        </div>
+
+        <table id="featTable" style="margin-top:10px">
+          <thead><tr><th>Feature</th><th>Wert</th></tr></thead>
+          <tbody></tbody>
+        </table>
+
+        <details style="margin-top:12px">
+          <summary>Datensätze anzeigen/bearbeiten</summary>
+          <div class="small" style="margin:6px 0 8px">Du kannst hier Beispiele hinzufügen. Werte 0/1, „Soll“ als 0/1.</div>
+          <table id="dataTable">
+            <thead><tr>
+              <th>Betreff</th><th>gratis?</th><th>Absender bekannt?</th><th>viele Links?</th><th>ALLES GROSS?</th><th>verdächtige Domain?</th><th>Soll (Spam)</th>
+            </tr></thead>
+            <tbody id="dataBody"></tbody>
+          </table>
+          <div class="row" style="margin-top:8px">
+            <button id="addRow">+ Beispiel</button>
+            <button id="resetData">Zurücksetzen</button>
+          </div>
+        </details>
+      </aside>
+
+      <!-- Main panels -->
+      <main style="display:grid;gap:16px">
+        <section class="panel" id="rulePanel">
+          <h2>Regelbasierter Filter (Wenn‑Dann)</h2>
+          <div class="small">Starre Entscheidungsregeln. Reihenfolge kann Wirkung haben.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+            <div>
+              <h3>Regeln</h3>
+              <div class="row"><label><input type="checkbox" class="r" data-key="rGratis" checked> Betreff enthält „gratis“ ⇒ Spam</label></div>
+              <div class="row"><label><input type="checkbox" class="r" data-key="rDomain" checked> Verdächtige Domain ⇒ Spam</label></div>
+              <div class="row"><label><input type="checkbox" class="r" data-key="rKnown" checked> Absender bekannt ⇒ kein Spam</label></div>
+              <div class="row"><label><input type="checkbox" class="r" data-key="rShoutLinks"> ALLES GROSS & viele Links ⇒ Spam</label></div>
+              <div class="row"><label>Reihenfolge:
+                <select id="ruleOrder">
+                  <option value="natural">Natürliche Reihenfolge</option>
+                  <option value="prioritizeSafe">„Kein Spam“ zuerst</option>
+                  <option value="prioritizeSpam">„Spam“ zuerst</option>
+                </select>
+              </label></div>
+            </div>
+            <div>
+              <h3>Ausgabe</h3>
+              <div id="ruleOut" class="out">–</div>
+              <div id="ruleWhy" class="small mono"></div>
+              <div class="kpi">
+                <div class="panel"><div class="small">Trefferquote</div><div id="ruleAcc" class="out">–</div></div>
+                <div class="panel"><div class="small">TP / TN</div><div id="ruleTP" class="out">–</div></div>
+                <div class="panel"><div class="small">FP / FN</div><div id="ruleFP" class="out">–</div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="neuronPanel">
+          <h2>Gewichtetes „Mini‑Neuron“ (lernend)</h2>
+          <div class="small">Eingabe × Gewicht ⇒ Summe ⇒ Schwelle. Optionales Training passt Gewichte an.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+            <div>
+              <h3>Gewichte & Schwelle</h3>
+              <div class="row"><span class="pill">w<sub>gratis</sub><input type="range" id="wGratis" min="-1.5" max="1.5" step="0.1" value="0.8"><input id="wGratisVal" type="number" step="0.1" style="width:70px" value="0.8"></span></div>
+              <div class="row"><span class="pill">w<sub>bekannt</sub><input type="range" id="wKnown"  min="-1.5" max="1.5" step="0.1" value="-0.5"><input id="wKnownVal" type="number" step="0.1" style="width:70px" value="-0.5"></span></div>
+              <div class="row"><span class="pill">w<sub>links</sub><input type="range" id="wLinks"  min="-1.5" max="1.5" step="0.1" value="0.6"><input id="wLinksVal" type="number" step="0.1" style="width:70px" value="0.6"></span></div>
+              <div class="row"><span class="pill">w<sub>caps</sub><input type="range" id="wCaps"   min="-1.5" max="1.5" step="0.1" value="0.4"><input id="wCapsVal" type="number" step="0.1" style="width:70px" value="0.4"></span></div>
+              <div class="row"><span class="pill">w<sub>domain</sub><input type="range" id="wDomain" min="-1.5" max="1.5" step="0.1" value="0.7"><input id="wDomainVal" type="number" step="0.1" style="width:70px" value="0.7"></span></div>
+              <div class="row"><span class="pill">Schwelle θ<input type="range" id="theta" min="0" max="2.5" step="0.05" value="0.7"><input id="thetaVal" type="number" step="0.05" style="width:70px" value="0.7"></span></div>
+            </div>
+            <div>
+              <h3>Ausgabe</h3>
+              <div id="neuSum" class="small mono">Summe = –</div>
+              <div id="neuOut" class="out">–</div>
+              <div class="kpi">
+                <div class="panel"><div class="small">Trefferquote</div><div id="neuAcc" class="out">–</div></div>
+                <div class="panel"><div class="small">TP / TN</div><div id="neuTP" class="out">–</div></div>
+                <div class="panel"><div class="small">FP / FN</div><div id="neuFP" class="out">–</div></div>
+              </div>
+              <div class="row" style="margin-top:8px">
+                <button id="fitOnce">1× trainieren</button>
+                <button id="fitAuto" class="primary">Auto‑Training (Perzeptron)</button>
+                <button id="resetW">Gewichte zurücksetzen</button>
+              </div>
+              <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid #2b3039;border-radius:8px;padding:8px"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Direkter Vergleich</h2>
+          <table>
+            <thead><tr><th>Mail</th><th>Regelbasiert</th><th>Mini‑Neuron</th><th>Soll</th></tr></thead>
+            <tbody id="compareBody"></tbody>
+          </table>
+        </section>
+        <section class="panel hidden" id="teacherPanel">
+          <h2>Lehrer‑Ansicht</h2>
+          <div class="small">Werkzeuge für Vorführung und Klassennutzung.</div>
+          <div class="row" style="margin-top:8px;flex-wrap:wrap">
+            <button id="btnResetAll" class="btn">Alles zurücksetzen</button>
+            <button id="btnShuffle" class="btn">Mails mischen</button>
+            <button id="btnLockStudent" class="btn">Schüler‑Modus sperren</button>
+            <button id="btnUnlockStudent" class="btn hidden">Schüler‑Modus entsperren</button>
+            <button id="btnExport" class="btn">Datensatz exportieren</button>
+            <label class="btn ghost" for="fileImport">Import <input id="fileImport" type="file" accept="application/json" style="display:none"></label>
+          </div>
+          <h3>Statistik</h3>
+          <div class="kpi">
+            <div class="panel"><div class="small">Regel: Genauigkeit</div><div id="kRuleAcc" class="out">–</div></div>
+            <div class="panel"><div class="small">Neuron: Genauigkeit</div><div id="kNeuAcc" class="out">–</div></div>
+            <div class="panel"><div class="small">Datensätze</div><div id="kCount" class="out">–</div></div>
+          </div>
+          <table style="margin-top:8px">
+            <thead><tr><th>Modell</th><th>TP</th><th>TN</th><th>FP</th><th>FN</th></tr></thead>
+            <tbody>
+              <tr><td>Regel</td><td id="kRuleTP">–</td><td id="kRuleTN">–</td><td id="kRuleFP">–</td><td id="kRuleFN">–</td></tr>
+              <tr><td>Neuron</td><td id="kNeuTP">–</td><td id="kNeuTN">–</td><td id="kNeuFP">–</td><td id="kNeuFN">–</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+
+    <div class="footer">
+      Tipp: Diese Seite ist rein demonstrativ. Für den Unterricht können die Gewichte als Hausaufgabe variiert werden: „Finde eine Einstellung, die alle Beispiele trifft, und erkläre deine Wahl“. | © Demo, frei nutzbar.
+    </div>
+  </div>
+
+<!-- Walkthrough Overlay -->
+<div id="tour" class="tour-mask hidden" role="dialog" aria-modal="true">
+  <div class="tour-card">
+    <div class="small" style="margin-bottom:6px">Geführte Einführung</div>
+    <div id="tourBody"></div>
+    <div class="tour-actions">
+      <button id="tourPrev" class="btn">Zurück</button>
+      <div class="tour-steps" id="tourStepInfo">Schritt 1/5</div>
+      <div>
+        <button id="tourSkip" class="btn ghost">Überspringen</button>
+        <button id="tourNext" class="btn primary">Weiter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ---- Datenmodell ----
+  const DEFAULT_DATA = [
+    { subj:"GRATIS iPhone jetzt sichern", g:1, k:0, l:1, c:1, d:1, y:1 },
+    { subj:"Elternabend – Raumänderung", g:0, k:1, l:0, c:0, d:0, y:0 },
+    { subj:"Ihr Paket konnte nicht zugestellt werden", g:0, k:0, l:1, c:0, d:1, y:1 },
+    { subj:"Klausurplan KW 42", g:0, k:1, l:0, c:0, d:0, y:0 },
+    { subj:"gratis Probewoche im Fitnessstudio", g:1, k:0, l:1, c:0, d:0, y:1 },
+    { subj:"Newsletter Oktober", g:0, k:0, l:1, c:0, d:0, y:0 },
+    { subj:"DRINGEND: Konto VERIFIZIEREN", g:0, k:0, l:1, c:1, d:1, y:1 },
+    { subj:"Projektstatus – bitte Rückmeldung", g:0, k:1, l:0, c:0, d:0, y:0 },
+  ];
+
+  let data = JSON.parse(localStorage.getItem('spamDemoData')||'null') || DEFAULT_DATA.slice();
+
+  // Feature Bezeichner → Schlüssel
+  const FEATS = [
+    { key:'g', label:'Betreff enthält „gratis“' },
+    { key:'k', label:'Absender bekannt' },
+    { key:'l', label:'viele Links' },
+    { key:'c', label:'ALLES GROSS' },
+    { key:'d', label:'verdächtige Domain' },
+  ];
+
+  // UI Elemente
+  const emailSelect = document.getElementById('emailSelect');
+  const goldTag = document.getElementById('goldTag');
+  const featTableBody = document.querySelector('#featTable tbody');
+  const dataBody = document.getElementById('dataBody');
+  const compareBody = document.getElementById('compareBody');
+
+  // Regel-UI
+  const ruleChecks = {
+    rGratis: document.querySelector('input[data-key="rGratis"]'),
+    rDomain: document.querySelector('input[data-key="rDomain"]'),
+    rKnown:  document.querySelector('input[data-key="rKnown"]'),
+    rShoutLinks: document.querySelector('input[data-key="rShoutLinks"]'),
+  };
+  const ruleOrderSel = document.getElementById('ruleOrder');
+  const ruleOut = document.getElementById('ruleOut');
+  const ruleWhy = document.getElementById('ruleWhy');
+  const ruleAcc = document.getElementById('ruleAcc');
+  const ruleTP = document.getElementById('ruleTP');
+  const ruleFP = document.getElementById('ruleFP');
+
+  // Neuron-UI
+  const sliders = {
+    wGratis:  [document.getElementById('wGratis'),  document.getElementById('wGratisVal')],
+    wKnown:   [document.getElementById('wKnown'),   document.getElementById('wKnownVal')],
+    wLinks:   [document.getElementById('wLinks'),   document.getElementById('wLinksVal')],
+    wCaps:    [document.getElementById('wCaps'),    document.getElementById('wCapsVal')],
+    wDomain:  [document.getElementById('wDomain'),  document.getElementById('wDomainVal')],
+    theta:    [document.getElementById('theta'),    document.getElementById('thetaVal')],
+  };
+  const neuSum = document.getElementById('neuSum');
+  const neuOut = document.getElementById('neuOut');
+  const neuAcc = document.getElementById('neuAcc');
+  const neuTP = document.getElementById('neuTP');
+  const neuFP = document.getElementById('neuFP');
+  const fitOnceBtn = document.getElementById('fitOnce');
+  const fitAutoBtn = document.getElementById('fitAuto');
+  const resetWBtn = document.getElementById('resetW');
+  const trainLog = document.getElementById('trainLog');
+
+  const addRowBtn = document.getElementById('addRow');
+  const resetDataBtn = document.getElementById('resetData');
+
+  // ---- Utils ----
+  function saveData(){ localStorage.setItem('spamDemoData', JSON.stringify(data)); }
+  function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+  function currentMail(){ return data[emailSelect.selectedIndex || 0]; }
+
+  function mailToFeatVec(m){ return [m.g, m.k, m.l, m.c, m.d]; }
+
+  function predRule(m){
+    // Reihenfolge steuern
+    const order = ruleOrderSel.value;
+    const rules = [];
+    // Regeln mit Prioritätenlisten
+    if(order === 'prioritizeSafe'){
+      rules.push('known','gratis','domain','shoutlinks');
+    } else if(order === 'prioritizeSpam'){
+      rules.push('gratis','domain','shoutlinks','known');
+    } else {
+      rules.push('gratis','domain','known','shoutlinks');
+    }
+    let why = [];
+    for(const r of rules){
+      if(r==='gratis' && ruleChecks.rGratis.checked && m.g===1){ why.push('Regel: gratis ⇒ Spam'); return [1, why.join(' | ')]; }
+      if(r==='domain' && ruleChecks.rDomain.checked && m.d===1){ why.push('Regel: verdächtige Domain ⇒ Spam'); return [1, why.join(' | ')]; }
+      if(r==='known' && ruleChecks.rKnown.checked && m.k===1){ why.push('Regel: bekannt ⇒ kein Spam'); return [0, why.join(' | ')]; }
+      if(r==='shoutlinks' && ruleChecks.rShoutLinks.checked && m.c===1 && m.l===1){ why.push('Regel: CAPS & viele Links ⇒ Spam'); return [1, why.join(' | ')]; }
+    }
+    // Default: kein Spam
+    if(why.length===0) why.push('Default ⇒ kein Spam');
+    return [0, why.join(' | ')];
+  }
+
+  function getWeights(){
+    return [
+      parseFloat(sliders.wGratis[0].value),
+      parseFloat(sliders.wKnown[0].value),
+      parseFloat(sliders.wLinks[0].value),
+      parseFloat(sliders.wCaps[0].value),
+      parseFloat(sliders.wDomain[0].value)
+    ];
+  }
+  function setWeights(ws){
+    const ids=['wGratis','wKnown','wLinks','wCaps','wDomain'];
+    ids.forEach((id,i)=>{ sliders[id][0].value=ws[i]; sliders[id][1].value=ws[i]; });
+    updateAll();
+  }
+  function getTheta(){ return parseFloat(sliders.theta[0].value); }
+
+  function predNeuron(m){
+    const x = mailToFeatVec(m);
+    const w = getWeights();
+    const sum = x.reduce((s,xi,i)=> s + xi*w[i], 0);
+    const y = sum >= getTheta() ? 1 : 0;
+    return {sum, y};
+  }
+
+  function evaluate(modelFn){
+    let tp=0, tn=0, fp=0, fn=0;
+    for(const m of data){
+      const p = modelFn(m);
+      const yhat = Array.isArray(p)? p[0] : p.y;
+      if(yhat===1 && m.y===1) tp++; else
+      if(yhat===0 && m.y===0) tn++; else
+      if(yhat===1 && m.y===0) fp++; else fn++;
+    }
+    const acc = data.length ? ((tp+tn)/data.length) : 0;
+    return {acc, tp, tn, fp, fn};
+  }
+
+  // Perzeptron-Lernen (einfach)
+  function trainPerceptron(epochs=50, lr=0.2){
+    const ids=['wGratis','wKnown','wLinks','wCaps','wDomain'];
+    let w = getWeights();
+    let theta = getTheta();
+    let improved=false;
+    for(let e=0;e<epochs;e++){
+      let changed = false;
+      for(const m of data){
+        const x = mailToFeatVec(m);
+        const sum = x.reduce((s,xi,i)=> s + xi*w[i], 0);
+        let yhat = sum >= theta ? 1 : 0;
+        const error = m.y - yhat; // +1, 0, -1
+        if(error!==0){
+          // Update: w_i := w_i + lr * error * x_i ; theta := theta - lr * error
+          for(let i=0;i<w.length;i++) w[i] = clamp(w[i] + lr*error*x[i], -2, 2);
+          theta = clamp(theta - lr*error, 0, 3);
+          changed = true; improved = true;
+        }
+      }
+      trainLog.textContent += `Epoche ${e+1}: ${changed? 'Update durchgeführt':'keine Änderung'}\n`;
+      if(!changed) break; // früh stoppen, wenn keine Fehler mehr
+    }
+    // Write back
+    ids.forEach((id,i)=>{ sliders[id][0].value = w[i].toFixed(2); sliders[id][1].value = w[i].toFixed(2); });
+    sliders.theta[0].value = theta.toFixed(2); sliders.theta[1].value = theta.toFixed(2);
+    updateAll();
+    return improved;
+  }
+
+  // ---- Rendering ----
+  function renderEmailSelect(){
+    emailSelect.innerHTML = data.map((m,i)=>`<option value="${i}">${i+1}. ${escapeHtml(m.subj)}</option>`).join('');
+    emailSelect.selectedIndex = 0;
+  }
+  function renderFeatTable(){
+    const m = currentMail();
+    goldTag.textContent = `Soll: ${m.y===1? 'Spam':'kein Spam'}`;
+    goldTag.style.color = m.y===1? 'var(--bad)': 'var(--ok)';
+    featTableBody.innerHTML = FEATS.map(f=>{
+      const v = m[f.key];
+      return `<tr><td>${f.label}</td><td class="mono">${v}</td></tr>`;
+    }).join('');
+  }
+
+  function renderDataTable(){
+    dataBody.innerHTML = data.map((m,i)=>{
+      return `<tr>
+        <td><input data-i="${i}" data-k="subj" type="text" value="${escapeAttr(m.subj)}" style="width:100%"></td>
+        ${['g','k','l','c','d','y'].map(k=>`<td><input data-i="${i}" data-k="${k}" type="number" min="0" max="1" step="1" value="${m[k]}"></td>`).join('')}
+      </tr>`;
+    }).join('');
+  }
+
+  function renderRuleOutput(){
+    const [y, why] = predRule(currentMail());
+    ruleOut.textContent = y? 'Spam' : 'kein Spam';
+    ruleOut.className = 'out ' + (y? 'bad':'ok');
+    ruleWhy.textContent = why;
+    const s = evaluate(predRule);
+    ruleAcc.textContent = (s.acc*100).toFixed(0)+ '%';
+    ruleTP.textContent = `${s.tp} / ${s.tn}`;
+    ruleFP.textContent = `${s.fp} / ${s.fn}`;
+  }
+
+  function renderNeuronOutput(){
+    const p = predNeuron(currentMail());
+    neuSum.textContent = `Summe = ${p.sum.toFixed(2)}  ${p.sum >= getTheta()? '≥':'<'}  θ=${getTheta().toFixed(2)}`;
+    neuOut.textContent = p.y? 'Spam':'kein Spam';
+    neuOut.className = 'out ' + (p.y? 'bad':'ok');
+    const s = evaluate(predNeuron);
+    neuAcc.textContent = (s.acc*100).toFixed(0)+ '%';
+    neuTP.textContent = `${s.tp} / ${s.tn}`;
+    neuFP.textContent = `${s.fp} / ${s.fn}`;
+  }
+
+  function renderCompare(){
+    compareBody.innerHTML = data.map(m=>{
+      const r = predRule(m)[0];
+      const n = predNeuron(m).y;
+      const c1 = r? 'bad':'ok';
+      const c2 = n? 'bad':'ok';
+      const cg = m.y? 'bad':'ok';
+      return `<tr>
+        <td>${escapeHtml(m.subj)}</td>
+        <td class="${c1}">${r? 'Spam':'kein Spam'}</td>
+        <td class="${c2}">${n? 'Spam':'kein Spam'}</td>
+        <td class="${cg}">${m.y? 'Spam':'kein Spam'}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function updateAll(){
+    // Sync paired inputs
+    Object.values(sliders).forEach(([range, number])=>{
+      number.value = range.value;
+    });
+    renderFeatTable();
+    renderRuleOutput();
+    renderNeuronOutput();
+    renderCompare();
+    saveData();
+  }
+
+  // ---- Events ----
+  emailSelect.addEventListener('change', updateAll);
+  Object.values(ruleChecks).forEach(el=> el.addEventListener('change', updateAll));
+  ruleOrderSel.addEventListener('change', updateAll);
+  Object.values(sliders).forEach(([range, number])=>{
+    range.addEventListener('input', updateAll);
+    number.addEventListener('input', ()=>{ range.value = number.value; updateAll(); });
+  });
+
+  fitOnceBtn.addEventListener('click', ()=>{ trainLog.textContent=''; trainPerceptron(1, 0.2); });
+  fitAutoBtn.addEventListener('click', ()=>{ trainLog.textContent=''; trainPerceptron(50, 0.2); });
+  resetWBtn.addEventListener('click', ()=>{ trainLog.textContent=''; setWeights([0.8,-0.5,0.6,0.4,0.7]); sliders.theta[0].value=0.7; sliders.theta[1].value=0.7; updateAll(); });
+
+  addRowBtn.addEventListener('click', ()=>{
+    data.push({ subj:"Neues Beispiel", g:0,k:0,l:0,c:0,d:0,y:0 });
+    renderDataTable();
+    attachDataInputs();
+    renderEmailSelect();
+    updateAll();
+  });
+  resetDataBtn.addEventListener('click', ()=>{
+    data = DEFAULT_DATA.slice();
+    renderDataTable();
+    attachDataInputs();
+    renderEmailSelect();
+    updateAll();
+  });
+
+  function attachDataInputs(){
+    dataBody.querySelectorAll('input').forEach(inp=>{
+      inp.addEventListener('input', e=>{
+        const i = parseInt(inp.getAttribute('data-i'));
+        const k = inp.getAttribute('data-k');
+        if(k==='subj'){ data[i].subj = inp.value; }
+        else { data[i][k] = clamp(parseInt(inp.value||'0')||0,0,1); inp.value = data[i][k]; }
+        renderEmailSelect();
+        updateAll();
+      });
+    });
+  }
+
+  function escapeHtml(s){ return s.replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"})[c]); }
+  function escapeAttr(s){ return s.replace(/"/g,'&quot;'); }
+
+  // ---- Init ----
+  function init(){
+    renderEmailSelect();
+    renderFeatTable();
+    renderDataTable();
+    attachDataInputs();
+    updateAll();
+  }
+    // —— Walkthrough & Lehrkraft‑Tools ——
+  const tour = (function(){
+    const steps = [
+      { sel:'#rulePanel', title:'Regelbasierter Filter', text:'Hier siehst du starre Wenn‑Dann‑Regeln. Ändere die Reihenfolge und beobachte die Wirkung.' },
+      { sel:'#neuronPanel', title:'Gewichtetes Neuron', text:'Eingabe × Gewicht ⇒ Summe ⇒ Schwelle. Passe Gewichte/θ an und sieh die Ausgabe.' },
+      { sel:'#fitAuto', title:'Training', text:'Mit Auto‑Training passt das Perzeptron die Gewichte an, bis die Beispiele korrekt sind.' },
+      { sel:'#compareBody', title:'Vergleich', text:'Direkter Vergleich von Regel‑ und Neuron‑Vorhersagen mit der Soll‑Spalte.' },
+      { sel:'#dataTable', title:'Eigene Daten', text:'Erweitere den Datensatz und teste Generalisierung. Speichern erfolgt lokal im Browser.' },
+    ];
+    let i=0; const mask = document.getElementById('tour');
+    const body = document.getElementById('tourBody');
+    const info = document.getElementById('tourStepInfo');
+    function show(){ i=0; mask.classList.remove('hidden'); render(); highlight(steps[i].sel,true); }
+    function hide(){ unhighlightAll(); mask.classList.add('hidden'); i=0; }
+    function render(){
+      const s = steps[i];
+      const isLast = (i === steps.length - 1);
+      body.innerHTML = `<h3 style="margin:0 0 6px">${s.title}</h3><p class="small">${s.text}</p>`;
+      info.textContent = `Schritt ${i+1}/${steps.length}`;
+      document.getElementById('tourNext').textContent = isLast ? 'Fertig' : 'Weiter';
+      unhighlightAll(); highlight(s.sel,true);
+    }
+    function next(){ if(i<steps.length-1){ i++; render(); } else { hide(); } }
+    function prev(){ if(i>0){ i--; render(); } }
+    function highlight(sel,on){ const el = document.querySelector(sel); if(!el) return; on? el.classList.add('tour-hi'): el.classList.remove('tour-hi'); }
+    function unhighlightAll(){ document.querySelectorAll('.tour-hi').forEach(e=>e.classList.remove('tour-hi')); }
+    return { show, hide, next, prev };
+  })();
+
+  function updateTeacherStats(){
+    const r = evaluate(predRule); const n = evaluate(predNeuron);
+    document.getElementById('kRuleAcc').textContent = (r.acc*100).toFixed(0)+'%';
+    document.getElementById('kNeuAcc').textContent  = (n.acc*100).toFixed(0)+'%';
+    document.getElementById('kCount').textContent   = data.length;
+    document.getElementById('kRuleTP').textContent = r.tp; document.getElementById('kRuleTN').textContent = r.tn; document.getElementById('kRuleFP').textContent = r.fp; document.getElementById('kRuleFN').textContent = r.fn;
+    document.getElementById('kNeuTP').textContent  = n.tp; document.getElementById('kNeuTN').textContent  = n.tn; document.getElementById('kNeuFP').textContent  = n.fp; document.getElementById('kNeuFN').textContent  = n.fn;
+  }
+
+  // Lehrer‑Schalter & Aktionen
+  const toggleTeacherBtn = document.getElementById('toggleTeacher');
+  const teacherPanel = document.getElementById('teacherPanel');
+  const btnResetAll = document.getElementById('btnResetAll');
+  const btnShuffle  = document.getElementById('btnShuffle');
+  const btnLock     = document.getElementById('btnLockStudent');
+  const btnUnlock   = document.getElementById('btnUnlockStudent');
+  const btnExport   = document.getElementById('btnExport');
+  const fileImport  = document.getElementById('fileImport');
+  const tourStart   = document.getElementById('tourStart');
+  const tourNext    = document.getElementById('tourNext');
+  const tourPrev    = document.getElementById('tourPrev');
+  const tourSkip    = document.getElementById('tourSkip');
+
+  let locked=false; // Schüler‑Modus gesperrt?
+
+  function setLocked(on){
+    locked = on;
+    // disable interactive controls für Schüler:innen
+    [ruleOrderSel, ...Object.values(ruleChecks), ...Object.values(sliders).flat()].forEach(el=>{ el.disabled = on; });
+    fitOnceBtn.disabled = on; fitAutoBtn.disabled = on; resetWBtn.disabled = on; addRowBtn.disabled = on; resetDataBtn.disabled = on;
+  }
+
+  toggleTeacherBtn.addEventListener('click', ()=>{
+    teacherPanel.classList.toggle('hidden');
+    updateTeacherStats();
+  });
+
+  btnResetAll.addEventListener('click', ()=>{
+    // Reset Gewichte, Schwelle, Daten & Storage
+    localStorage.removeItem('spamDemoData');
+    data = DEFAULT_DATA.slice();
+    setWeights([0.8,-0.5,0.6,0.4,0.7]); sliders.theta[0].value=0.7; sliders.theta[1].value=0.7;
+    renderDataTable(); attachDataInputs(); renderEmailSelect(); updateAll(); updateTeacherStats();
+  });
+
+  btnShuffle.addEventListener('click', ()=>{
+    for(let i=data.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [data[i],data[j]]=[data[j],data[i]]; }
+    saveData(); renderEmailSelect(); updateAll(); updateTeacherStats();
+  });
+
+  btnLock.addEventListener('click', ()=>{ setLocked(true); btnLock.classList.add('hidden'); btnUnlock.classList.remove('hidden'); });
+  btnUnlock.addEventListener('click', ()=>{ setLocked(false); btnUnlock.classList.add('hidden'); btnLock.classList.remove('hidden'); });
+
+  btnExport.addEventListener('click', ()=>{
+    const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='spam_dataset.json'; a.click(); URL.revokeObjectURL(a.href);
+  });
+  fileImport.addEventListener('change', async ()=>{
+    const f=fileImport.files[0]; if(!f) return; const txt = await f.text();
+    try{ const arr = JSON.parse(txt); if(Array.isArray(arr)){ data = arr; saveData(); renderDataTable(); attachDataInputs(); renderEmailSelect(); updateAll(); updateTeacherStats(); } }
+    catch(e){ alert('Ungültige JSON‑Datei.'); }
+    fileImport.value='';
+  });
+
+  tourStart.addEventListener('click', ()=> tour.show());
+  tourNext.addEventListener('click', ()=> tour.next());
+  tourPrev.addEventListener('click', ()=> tour.prev());
+  tourSkip.addEventListener('click', ()=> tour.hide());
+  // Overlay per Hintergrundklick oder ESC schließen
+  document.getElementById('tour').addEventListener('click', (e)=>{ if(e.target.id==='tour') tour.hide(); });
+  document.addEventListener('keydown', (e)=>{ const open = !document.getElementById('tour').classList.contains('hidden'); if(open && e.key==='Escape') tour.hide(); });
+
+  // Hook auf bestehende Updates, um Lehrkraft‑Stats aktuell zu halten
+  const _updateAll = updateAll; updateAll = function(){ _updateAll(); updateTeacherStats(); };
+
+  init();
+})();
+</script>
+</body>
+</html>
