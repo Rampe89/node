@@ -35,12 +35,15 @@
     details{border:1px dashed var(--border);border-radius:8px;padding:8px;background:#fff;margin-top:10px}
     summary{cursor:pointer;color:var(--muted);font-weight:600}
     .hidden{display:none}
-    /* Switch */
     .mode{display:flex;align-items:center;gap:10px}
     .switch{position:relative;width:72px;height:34px;background:#e5e7eb;border-radius:999px;border:1px solid var(--border);cursor:pointer;transition:background .2s}
     .switch::after{content:"";position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15);transition:left .2s}
     .switch.on{background:#bfdbfe;border-color:#93c5fd}
     .switch.on::after{left:41px}
+    .copybar{display:flex;gap:8px;align-items:center;margin:6px 0}
+    .copybar input{width:100%}
+    .copybtn{white-space:nowrap}
+    pre.export{white-space:pre-wrap;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px;max-height:220px;overflow:auto}
   </style>
 </head>
 <body>
@@ -174,6 +177,23 @@
                 </div>
               </div>
             </div>
+
+            <!-- Scratch-Export & -Einbettung für Regeln + Datensatz -->
+            <details>
+              <summary>🔁 Scratch-Export (Datensatz & Regeln) / Projekt einbetten</summary>
+              <div class="row">
+                <button id="btnExportDatasetRules">Export: Datensatz & Regeln</button>
+                <button id="btnClearExport1">Leeren</button>
+              </div>
+              <pre id="scratchOut1" class="export mono"></pre>
+
+              <div class="small" style="margin-top:10px">Projekt einbetten (optional):</div>
+              <div class="copybar">
+                <input id="scratchUrl1" type="text" placeholder="https://scratch.mit.edu/projects/PROJEKTNR/embed oder https://turbowarp.org/PROJEKTNR/embed">
+                <button id="btnLoadScratch1" class="copybtn">Projekt laden</button>
+              </div>
+              <iframe id="scratchFrame1" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px" src="" loading="lazy"></iframe>
+            </details>
           </section>
 
           <section class="panel hidden" id="neuronPanel">
@@ -230,7 +250,6 @@
                   <button id="resetW">🔁 Gewichte zurücksetzen</button>
                 </div>
 
-                <!-- Neu: Klarer Trainingslog + zwei Auswertungen -->
                 <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px"></div>
 
                 <details>
@@ -250,6 +269,23 @@
                     </thead>
                     <tbody id="weightTableBody"></tbody>
                   </table>
+                </details>
+
+                <!-- Scratch-Export & -Einbettung für Gewichte -->
+                <details>
+                  <summary>🔁 Scratch-Export (Gewichte & Schwelle) / Projekt einbetten</summary>
+                  <div class="row">
+                    <button id="btnExportWeights">Export: Gewichte & θ</button>
+                    <button id="btnClearExport2">Leeren</button>
+                  </div>
+                  <pre id="scratchOut2" class="export mono"></pre>
+
+                  <div class="small" style="margin-top:10px">Projekt einbetten (optional):</div>
+                  <div class="copybar">
+                    <input id="scratchUrl2" type="text" placeholder="https://scratch.mit.edu/projects/PROJEKTNR/embed oder https://turbowarp.org/PROJEKTNR/embed">
+                    <button id="btnLoadScratch2" class="copybtn">Projekt laden</button>
+                  </div>
+                  <iframe id="scratchFrame2" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px" src="" loading="lazy"></iframe>
                 </details>
 
                 <details style="margin-top:10px">
@@ -419,23 +455,20 @@
       const addRowBtn = $("addRow");
       const resetDataBtn = $("resetData");
 
-      // Neu: Trainings-Historie für Anzeigen
+      // Trainings-Historie
       let trainHistory = []; // [{epoch, updates, w:[...], theta}]
 
       function renderDynamicLabels(){
-        // Regel-Labels
         $("ruleLbl0").textContent = FEATS[0].label;
         $("ruleLbl1").textContent = FEATS[1].label + " (⇒ kein Spam)";
         $("ruleLbl2").textContent = FEATS[2].label;
         $("ruleLbl3").textContent = FEATS[3].label;
         $("ruleLbl4").textContent = FEATS[4].label;
-        // Gewichtslabels separat
         $("wName0").textContent = FEATS[0].label;
         $("wName1").textContent = FEATS[1].label;
         $("wName2").textContent = FEATS[2].label;
         $("wName3").textContent = FEATS[3].label;
         $("wName4").textContent = FEATS[4].label;
-        // Datentabelle Kopf
         dataHead.innerHTML = `<tr>
           <th>Betreff</th>
           ${FEATS.map(f=>`<th>${f.label}</th>`).join("")}
@@ -490,14 +523,11 @@
         return {acc, tp, tn, fp, fn};
       }
 
-      // Neu: Tabellen-Renderer
       function renderEpochTable(){
-        const body = $("epochTableBody");
-        body.innerHTML = trainHistory.map(h=> `<tr><td>${h.epoch}</td><td>${h.updates}</td></tr>`).join("");
+        $("epochTableBody").innerHTML = trainHistory.map(h=> `<tr><td>${h.epoch}</td><td>${h.updates}</td></tr>`).join("");
       }
       function renderWeightTable(){
-        const body = $("weightTableBody");
-        body.innerHTML = trainHistory.map(h=>{
+        $("weightTableBody").innerHTML = trainHistory.map(h=>{
           const w = h.w.map(v=> v.toFixed(2));
           return `<tr><td>${h.epoch}</td><td>${w[0]}</td><td>${w[1]}</td><td>${w[2]}</td><td>${w[3]}</td><td>${w[4]}</td><td>${h.theta.toFixed(2)}</td></tr>`;
         }).join("");
@@ -506,20 +536,17 @@
         trainHistory = [];
         $("epochTableBody").innerHTML = "";
         $("weightTableBody").innerHTML = "";
-        trainLog.textContent = "";
+        $("trainLog").textContent = "";
       }
-
       function snapshot(epoch, updates){
         trainHistory.push({ epoch, updates, w: getWeights().slice(), theta: getTheta() });
       }
 
       function trainPerceptron(epochs=50, lr=0.2, singleEpoch=false){
-        // Startzustand loggen (Epoche 0)
-        if(trainHistory.length===0) snapshot(0, 0);
+        if(trainHistory.length===0) snapshot(0, 0); // Startzustand
 
         let w = getWeights();
         let theta = getTheta();
-        let stopped = false;
 
         for(let e=1; e<=epochs; e++){
           let updates = 0;
@@ -527,29 +554,23 @@
             const x = mailToFeatVec(m);
             const sum = x.reduce((s,xi,i)=> s + xi*w[i], 0);
             const yhat = sum >= theta ? 1 : 0;
-            const error = m.y - yhat; // +1, 0, -1
+            const error = m.y - yhat;
             if(error!==0){
-              for(let i=0;i<w.length;i++) w[i] = clamp(w[i] + lr*error*x[i], -2, 2);
-              theta = clamp(theta - lr*error, 0, 3);
+              for(let i=0;i<w.length;i++) w[i] = Math.max(-2,Math.min(2, w[i] + lr*error*x[i]));
+              theta = Math.max(0, Math.min(3, theta - lr*error));
               updates++;
             }
           }
-          // Gewichte in UI übernehmen (für sofortiges Feedback)
           setWeights(w.map(v=> +v.toFixed(2)));
           sliders.theta[0].value = (+theta.toFixed(2));
           sliders.theta[1].value = (+theta.toFixed(2));
           snapshot(e, updates);
-
-          trainLog.textContent += `Epoche ${e}: ${updates===0? "keine Änderung":"Updates: "+updates}\n`;
-
-          if(updates===0){ stopped = true; break; }
-          if(singleEpoch) break; // nur 1× trainieren
+          $("trainLog").textContent += `Epoche ${e}: ${updates===0? "keine Änderung":"Updates: "+updates}\n`;
+          if(updates===0 || singleEpoch) break;
         }
-
         renderEpochTable();
         renderWeightTable();
         updateAll();
-        return stopped;
       }
 
       /* ---------- Render ---------- */
@@ -628,6 +649,67 @@
         updateAll();
       }
 
+      /* ---------- Export-Funktionen ---------- */
+      function buildDatasetAndRulesExport(){
+        // Datensatz-Listen
+        const subj=[], f0=[],f1=[],f2=[],f3=[],f4=[], gold=[];
+        data.forEach(m=>{
+          subj.push(m.subj);
+          f0.push(m.g); f1.push(m.k); f2.push(m.l); f3.push(m.c); f4.push(m.d);
+          gold.push(m.y);
+        });
+        // Regeln
+        const rules = [
+          `rule_f1_spam=${+document.querySelector('input[data-key="r0"]').checked}`,
+          `rule_f5_spam=${+document.querySelector('input[data-key="r4"]').checked}`,
+          `rule_f2_safe=${+document.querySelector('input[data-key="r1"]').checked}`,
+          `rule_f4u3_spam=${+document.querySelector('input[data-key="r3"]').checked}`,
+          `rule_order=${document.getElementById('ruleOrder').value}`
+        ];
+        return [
+          'Liste Betreff:', subj.join('\n'),
+          'Liste F1:', f0.join('\n'),
+          'Liste F2:', f1.join('\n'),
+          'Liste F3:', f2.join('\n'),
+          'Liste F4:', f3.join('\n'),
+          'Liste F5:', f4.join('\n'),
+          'Liste Soll:', gold.join('\n'),
+          'Variablen (Regeln):', rules.join('\n')
+        ].join('\n\n');
+      }
+      function buildWeightsExport(){
+        const w = getWeights();
+        const t = getTheta();
+        return [
+          `w1=${w[0].toFixed(2)}`,
+          `w2=${w[1].toFixed(2)}`,
+          `w3=${w[2].toFixed(2)}`,
+          `w4=${w[3].toFixed(2)}`,
+          `w5=${w[4].toFixed(2)}`,
+          `theta=${t.toFixed(2)}`
+        ].join('\n');
+      }
+
+      // Buttons: Datensatz & Regeln
+      $("btnExportDatasetRules").addEventListener("click", ()=>{
+        $("scratchOut1").textContent = buildDatasetAndRulesExport();
+      });
+      $("btnClearExport1").addEventListener("click", ()=>{ $("scratchOut1").textContent=""; });
+
+      // Buttons: Gewichte
+      $("btnExportWeights").addEventListener("click", ()=>{
+        $("scratchOut2").textContent = buildWeightsExport();
+      });
+      $("btnClearExport2").addEventListener("click", ()=>{ $("scratchOut2").textContent=""; });
+
+      // Scratch einbetten
+      $("btnLoadScratch1").addEventListener("click", ()=>{
+        $("scratchFrame1").src = $("scratchUrl1").value.trim();
+      });
+      $("btnLoadScratch2").addEventListener("click", ()=>{
+        $("scratchFrame2").src = $("scratchUrl2").value.trim();
+      });
+
       /* ---------- Events ---------- */
       modeSwitch.addEventListener("click", ()=>{ mode = (mode==="rule" ? "learn" : "rule"); applyMode(); });
       modeSwitch.addEventListener("keydown", (e)=>{ if(e.key==="Enter" || e.key===" "){ e.preventDefault(); mode = (mode==="rule" ? "learn" : "rule"); applyMode(); }});
@@ -640,20 +722,19 @@
         number.addEventListener("input", ()=>{ range.value = number.value; updateAll(); });
       });
 
-      fitOnceBtn.addEventListener("click", ()=>{
-        resetTrainingDisplays();
-        // Startzustand loggen
+      // Training
+      $("fitOnce").addEventListener("click", ()=>{
+        trainHistory = []; $("trainLog").textContent=""; renderEpochTable(); renderWeightTable();
         snapshot(0, 0);
-        // Eine Epoche
         trainPerceptron(1, 0.2, true);
       });
-      fitAutoBtn.addEventListener("click", ()=>{
-        resetTrainingDisplays();
+      $("fitAuto").addEventListener("click", ()=>{
+        trainHistory = []; $("trainLog").textContent=""; renderEpochTable(); renderWeightTable();
         snapshot(0, 0);
         trainPerceptron(50, 0.2, false);
       });
-      resetWBtn.addEventListener("click", ()=>{
-        resetTrainingDisplays();
+      $("resetW").addEventListener("click", ()=>{
+        trainHistory = []; $("trainLog").textContent=""; renderEpochTable(); renderWeightTable();
         setWeights([0.8,-0.5,0.6,0.4,0.7]);
         sliders.theta[0].value=0.7; sliders.theta[1].value=0.7;
         updateAll();
@@ -674,7 +755,7 @@
             const i = +inp.getAttribute("data-i");
             const k = inp.getAttribute("data-k");
             if(k==="subj"){ data[i].subj = inp.value; }
-            else { data[i][k] = clamp(parseInt(inp.value||"0")||0,0,1); inp.value = data[i][k]; }
+            else { data[i][k] = Math.max(0,Math.min(1, parseInt(inp.value||"0")||0)); inp.value = data[i][k]; }
             renderEmailSelect(); updateAll();
           });
         });
@@ -688,4 +769,5 @@
   </script>
 </body>
 </html>
+
 
