@@ -42,7 +42,8 @@
     .switch::after{content:"";position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15);transition:left .2s}
     .switch.on{background:#bfdbfe;border-color:#93c5fd}
     .switch.on::after{left:41px}
-      /* Scratch-Links schön anzeigen */
+
+    /* Scratch-Links */
     .scratch-section{margin-top:16px;padding:14px;background:#f8fafc;border:1px solid var(--border);border-radius:var(--radius)}
     .scratch-section h3{margin:0 0 10px 0;font-size:15px;color:var(--muted)}
     .scratch-btn{display:inline-block;padding:10px 18px;border-radius:12px;background:var(--accent);color:#fff;font-weight:700;text-decoration:none;box-shadow:var(--shadow);transition:transform .15s, background .15s}
@@ -153,13 +154,12 @@
 
         <!-- Main -->
         <main style="display:grid;gap:18px">
+          <!-- Regel-Panel -->
           <section class="panel" id="rulePanel">
             <h2>Regelbasierter Filter (Wenn-Dann)</h2>
             <div class="small">Starre Regeln. Reihenfolge kann Wirkung haben.</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
               <details><summary>Regeln bearbeiten</summary>
-              <div>
-                <h3 class="hidden">Regeln</h3>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r0" checked> <span id="ruleLbl0">Merkmal 1</span> ⇒ Spam</label></div>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r4" checked> <span id="ruleLbl4">Merkmal 5</span> ⇒ Spam</label></div>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r1" checked> <span id="ruleLbl1">Merkmal 2</span> ⇒ kein Spam</label></div>
@@ -171,13 +171,50 @@
                     <option value="prioritizeSpam">„Spam“ zuerst</option>
                   </select>
                 </label></div>
-              </div></details>
+              </details>
+              <div>
+                <h3>Ausgabe</h3>
+                <div id="ruleWhy" class="small mono">Regeln: –</div>
+                <div id="ruleOut" class="out" aria-live="polite">–</div>
+                <div class="small mono" style="margin-top:6px">Trefferquote: <span id="ruleAcc">–</span></div>
+
+                <details style="margin-top:6px">
+                  <summary>Auswertung</summary>
+                  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:8px">
+                    <div class="panel"><div class="small">TP / TN</div><div id="ruleTP" class="out">–</div></div>
+                    <div class="panel"><div class="small">FP / FN</div><div id="ruleFP" class="out">–</div></div>
+                  </div>
+                </details>
+              </div>
+            </div>
+
+            <!-- Scratch-Link nach dem Wenn-Dann-Teil -->
+            <div class="scratch-section">
+              <h3>Scratch-Projekt (nach dem Wenn-Dann-Teil)</h3>
+              <a class="scratch-btn" href="https://scratch.mit.edu/projects/1228228243/editor/" target="_blank" rel="noopener">🔗 Scratch: Spam-Detector</a>
+            </div>
+          </section>
+
+          <!-- Neuron-Panel -->
+          <section class="panel hidden" id="neuronPanel">
+            <h2>Mini-Neuron (Perzeptron)</h2>
+            <div class="small">Gewichtete Summe der Merkmale, Vergleich mit Schwelle θ.</div>
+
+            <div class="row" style="flex-wrap:wrap;margin-top:6px">
+              <label id="wName0">Merkmal 1 w₁ <input id="w0" type="range" min="-2" max="2" step="0.1" value="0.8"><input id="w0Val" type="number" min="-2" max="2" step="0.1" value="0.8" style="width:80px"></label>
+              <label id="wName1">Merkmal 2 w₂ <input id="w1" type="range" min="-2" max="2" step="0.1" value="-0.5"><input id="w1Val" type="number" min="-2" max="2" step="0.1" value="-0.5" style="width:80px"></label>
+              <label id="wName2">Merkmal 3 w₃ <input id="w2" type="range" min="-2" max="2" step="0.1" value="0.6"><input id="w2Val" type="number" min="-2" max="2" step="0.1" value="0.6" style="width:80px"></label>
+              <label id="wName3">Merkmal 4 w₄ <input id="w3" type="range" min="-2" max="2" step="0.1" value="0.4"><input id="w3Val" type="number" min="-2" max="2" step="0.1" value="0.4" style="width:80px"></label>
+              <label id="wName4">Merkmal 5 w₅ <input id="w4" type="range" min="-2" max="2" step="0.1" value="0.7"><input id="w4Val" type="number" min="-2" max="2" step="0.1" value="0.7" style="width:80px"></label>
+              <label>θ <input id="theta" type="range" min="0" max="3" step="0.1" value="0.7"><input id="thetaVal" type="number" min="0" max="3" step="0.1" value="0.7" style="width:80px"></label>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
               <div>
                 <h3>Ausgabe</h3>
                 <div id="neuSum" class="small mono">Summe = –</div>
                 <div id="neuOut" class="out" aria-live="polite">–</div>
                 <div class="small mono" style="margin-top:6px">Trefferquote: <span id="neuAcc">–</span></div>
-
                 <details style="margin-top:6px">
                   <summary>Auswertung</summary>
                   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:8px">
@@ -185,46 +222,39 @@
                     <div class="panel"><div class="small">FP / FN</div><div id="neuFP" class="out">–</div></div>
                   </div>
                 </details>
-
-                <details style="margin-top:6px">
-                  <summary>Training</summary>
-                  <div class="row" style="margin-top:8px">
-                    <button id="fitOnce">🚀 1× trainieren</button>
-                    <button id="fitAuto" class="primary">🤖 Auto-Training (Perzeptron)</button>
-                    <button id="resetW">🔁 Gewichte zurücksetzen</button>
-                  </div>
-                  <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px"></div>
-                  <details>
-                    <summary>📉 Fehler pro Epoche</summary>
-                    <table>
-                      <thead><tr><th>Epoche</th><th>Anzahl Updates (Fehler)</th></tr></thead>
-                      <tbody id="epochTableBody"></tbody>
-                    </table>
-                  </details>
-                  <details>
-                    <summary>⚖️ Gewichtsverlauf (w₁…w₅, θ)</summary>
-                    <div class="small" style="margin:6px 0">Werte nach jeder Epoche (inkl. Startzustand als Epoche 0).</div>
-                    <table>
-                      <thead>
-                        <tr><th>Epoche</th><th>w₁</th><th>w₂</th><th>w₃</th><th>w₄</th><th>w₅</th><th>θ</th></tr>
-                      </thead>
-                      <tbody id="weightTableBody"></tbody>
-                    </table>
-                  </details>
+              </div>
+              <div>
+                <h3>Training</h3>
+                <div class="row" style="margin-top:8px">
+                  <button id="fitOnce">🚀 1× trainieren</button>
+                  <button id="fitAuto" class="primary">🤖 Auto-Training (Perzeptron)</button>
+                  <button id="resetW">🔁 Gewichte zurücksetzen</button>
+                </div>
+                <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px"></div>
+                <details>
+                  <summary>📉 Fehler pro Epoche</summary>
+                  <table>
+                    <thead><tr><th>Epoche</th><th>Anzahl Updates (Fehler)</th></tr></thead>
+                    <tbody id="epochTableBody"></tbody>
+                  </table>
+                </details>
+                <details>
+                  <summary>⚖️ Gewichtsverlauf (w₁…w₅, θ)</summary>
+                  <div class="small" style="margin:6px 0">Werte nach jeder Epoche, inklusive Startzustand (Epoche 0).</div>
+                  <table>
+                    <thead>
+                      <tr><th>Epoche</th><th>w₁</th><th>w₂</th><th>w₃</th><th>w₄</th><th>w₅</th><th>θ</th></tr>
+                    </thead>
+                    <tbody id="weightTableBody"></tbody>
+                  </table>
                 </details>
               </div>
+            </div>
 
-                <details style="margin-top:10px">
-                  <summary>💡 Was passiert hier?</summary>
-                  <ul class="small">
-                    <li><strong>1× Trainieren:</strong> eine Epoche über alle Beispiele, Updates bei Fehlern.</li>
-                    <li><strong>Auto-Training:</strong> mehrere Epochen, Stopp wenn eine Epoche 0 Updates hat.</li>
-                    <li><strong>Gewichte:</strong> Beitrag eines Merkmals zur Entscheidung.</li>
-                    <li><strong>Schwelle (θ):</strong> ab dieser Summe ⇒ „Spam“.</li>
-                    <li><strong>Hinweis:</strong> Nicht separable Daten führen nicht zu 0-Fehlern.</li>
-                  </ul>
-                </details>
-              </div>
+            <!-- Scratch-Link nach dem Lernen-Teil -->
+            <div class="scratch-section">
+              <h3>Scratch-Projekt (nach dem Lernen-Teil)</h3>
+              <a class="scratch-btn" href="https://scratch.mit.edu/projects/1228380055/editor/" target="_blank" rel="noopener">🔗 Scratch: Perzeptron</a>
             </div>
           </section>
 
@@ -243,425 +273,392 @@
   </div>
 
   <script>
-    "use strict";
-    document.addEventListener("DOMContentLoaded", function(){
-      /* ---------- Daten ---------- */
-      const DEFAULT_DATA = [
-        { subj:"GRATIS iPhone jetzt sichern", g:1, k:0, l:1, c:1, d:1, y:1 },
-        { subj:"Elternabend – Raumänderung",   g:0, k:1, l:0, c:0, d:0, y:0 },
-        { subj:"Ihr Paket konnte nicht zugestellt werden", g:0, k:0, l:1, c:0, d:1, y:1 },
-        { subj:"Klausurplan KW 42",            g:0, k:1, l:0, c:0, d:0, y:0 },
-      ];
-      let data = JSON.parse(localStorage.getItem("spamDemoData") || "null") || DEFAULT_DATA.slice();
+  "use strict";
+  document.addEventListener("DOMContentLoaded", function(){
+    /* ---------- Daten ---------- */
+    const DEFAULT_DATA = [
+      { subj:"GRATIS iPhone jetzt sichern", g:1, k:0, l:1, c:1, d:1, y:1 },
+      { subj:"Elternabend - Raumänderung",   g:0, k:1, l:0, c:0, d:0, y:0 },
+      { subj:"Ihr Paket konnte nicht zugestellt werden", g:0, k:0, l:1, c:0, d:1, y:1 },
+      { subj:"Klausurplan KW 42",            g:0, k:1, l:0, c:0, d:0, y:0 },
+    ];
+    let data = JSON.parse(localStorage.getItem("spamDemoData") || "null") || DEFAULT_DATA.slice();
 
-      // Feature-Labels (werden aus Brainstorming überschrieben)
-      let FEATS = [
-        { key:"g", label:"Merkmal 1" },
-        { key:"k", label:"Merkmal 2" },
-        { key:"l", label:"Merkmal 3" },
-        { key:"c", label:"Merkmal 4" },
-        { key:"d", label:"Merkmal 5" },
-      ];
+    // Feature-Labels (werden aus Brainstorming überschrieben)
+    let FEATS = [
+      { key:"g", label:"Merkmal 1" },
+      { key:"k", label:"Merkmal 2" },
+      { key:"l", label:"Merkmal 3" },
+      { key:"c", label:"Merkmal 4" },
+      { key:"d", label:"Merkmal 5" },
+    ];
 
-      /* ---------- Hilfen ---------- */
-      const $ = (id) => document.getElementById(id);
-      const clamp = (v,min,max)=> Math.max(min, Math.min(max, v));
-      const saveData = ()=> localStorage.setItem("spamDemoData", JSON.stringify(data));
-      const currentMail = ()=> data[$("emailSelect").selectedIndex || 0];
-      const mailToFeatVec = (m)=> [m.g, m.k, m.l, m.c, m.d];
-      const escapeHtml = (s)=> String(s).replace(/[&<>\"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
-      const escapeAttr = (s)=> String(s).replace(/"/g,"&quot;");
+    /* ---------- Hilfen ---------- */
+    const $ = (id) => document.getElementById(id);
+    const saveData = ()=> localStorage.setItem("spamDemoData", JSON.stringify(data));
+    const currentMail = ()=> data[$("emailSelect").selectedIndex || 0];
+    const mailToFeatVec = (m)=> [m.g, m.k, m.l, m.c, m.d];
+    const escapeHtml = (s)=> String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+    const escapeAttr = (s)=> String(s).replace(/"/g,"&quot;");
 
-      /* ---------- Phasen ---------- */
-      function setPhase(p){
-        ["phase0","phase1","phase2"].forEach((id,idx)=> $(id).classList.toggle("hidden", idx!==p));
-      }
-      $("startBrainstorm").addEventListener("click", ()=> setPhase(1));
+    /* ---------- Phasen ---------- */
+    function setPhase(p){
+      ["phase0","phase1","phase2"].forEach((id,idx)=> $(id).classList.toggle("hidden", idx!==p));
+    }
+    $("startBrainstorm").addEventListener("click", ()=> setPhase(1));
 
-      /* ---------- Brainstorming ---------- */
-      const featInputs = [0,1,2,3,4].map(i=> $("featName"+i));
-      const bsHeads = [0,1,2,3,4].map(i=> $("bsHead"+i));
-      const bsBody = $("bsBody");
+    /* ---------- Brainstorming ---------- */
+    const featInputs = [0,1,2,3,4].map(i=> $("featName"+i));
+    const bsHeads = [0,1,2,3,4].map(i=> $("bsHead"+i));
+    const bsBody = $("bsBody");
 
-      function addBsRow(){
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><input type="text" placeholder="Betreff"></td>
-          <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
-          <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
-          <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
-          <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
-          <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
-          <td><input type="number" min="0" max="1" step="1" value="0" style="width:90px"></td>`;
-        bsBody.appendChild(tr);
-      }
-      $("bsAdd").addEventListener("click", addBsRow);
-      $("bsReset").addEventListener("click", ()=>{ bsBody.innerHTML=""; addBsRow(); addBsRow(); addBsRow(); });
-      featInputs.forEach((inp,i)=> inp.addEventListener("input", ()=>{ bsHeads[i].textContent = inp.value.trim() || ("Merkmal "+(i+1)); }));
+    function addBsRow(){
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><input type="text" placeholder="Betreff"></td>
+        <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
+        <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
+        <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
+        <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
+        <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
+        <td><input type="number" min="0" max="1" step="1" value="0" style="width:90px"></td>`;
+      bsBody.appendChild(tr);
+    }
+    $("bsAdd").addEventListener("click", addBsRow);
+    $("bsReset").addEventListener("click", ()=>{ bsBody.innerHTML=""; addBsRow(); addBsRow(); addBsRow(); });
+    featInputs.forEach((inp,i)=> inp.addEventListener("input", ()=>{ bsHeads[i].textContent = inp.value.trim() || ("Merkmal "+(i+1)); }));
 
-      // Seed: 3 leere Zeilen
-      addBsRow(); addBsRow(); addBsRow();
+    // Seed: 3 leere Zeilen
+    addBsRow(); addBsRow(); addBsRow();
 
-      $("bsApply").addEventListener("click", applyBrainstorm);
+    $("bsApply").addEventListener("click", applyBrainstorm);
 
-      function applyBrainstorm(){
-        try{
-          // Labels übernehmen (falls Felder existieren)
-          if(FEATS && featInputs){
-            FEATS.forEach((f,i)=>{ if(featInputs[i]) f.label = featInputs[i].value.trim() || f.label; });
-          }
+    function applyBrainstorm(){
+      try{
+        FEATS.forEach((f,i)=>{ if(featInputs[i]) f.label = featInputs[i].value.trim() || f.label; });
 
-          // Beispiele übernehmen (robust gegen leere Zeilen)
-          const rows = Array.from(bsBody ? bsBody.querySelectorAll("tr") : []);
-          const newData = [];
-          rows.forEach(tr=>{
-            const t = tr.querySelectorAll("td");
-            if(t.length<7) return;
-            const subj = (t[0].querySelector("input")||{}).value?.trim() || "";
-            if(!subj) return;
-            const num = (td)=> Math.max(0, Math.min(1, parseInt((td.querySelector("input")||{}).value||"0")||0));
-            const f0 = num(t[1]);
-            const f1 = num(t[2]);
-            const f2 = num(t[3]);
-            const f3 = num(t[4]);
-            const f4 = num(t[5]);
-            const y  = num(t[6]);
-            newData.push({ subj, g:f0, k:f1, l:f2, c:f3, d:f4, y });
-          });
-
-          if(newData.length>=1){ data = newData; saveData(); }
-
-          // UI aktualisieren, Regelmodus aktiv, Phase 2 zeigen (nur wenn Elemente vorhanden)
-          if(typeof renderDynamicLabels === 'function') renderDynamicLabels();
-          if(typeof renderDataTable === 'function') { renderDataTable(); if(typeof attachDataInputs==='function') attachDataInputs(); }
-          if($("emailSelect")) { renderEmailSelect(); $("emailSelect").selectedIndex = 0; }
-          mode = "rule"; // global nutzen
-          if(typeof applyMode==='function') applyMode();
-          setPhase(2);
-          if(typeof updateAll==='function') updateAll();
-        }catch(err){
-          console.error("applyBrainstorm error", err);
-          // Fallback: trotzdem in Phase 2 wechseln, damit man weitermachen kann
-          setPhase(2);
-        }
-      });
+        const rows = Array.from(bsBody.querySelectorAll("tr"));
+        const newData = [];
+        rows.forEach(tr=>{
+          const t = tr.querySelectorAll("td");
+          if(t.length<7) return;
+          const subj = (t[0].querySelector("input")||{}).value?.trim() || "";
+          if(!subj) return;
+          const num = (td)=> Math.max(0, Math.min(1, parseInt((td.querySelector("input")||{}).value||"0")||0));
+          const f0 = num(t[1]);
+          const f1 = num(t[2]);
+          const f2 = num(t[3]);
+          const f3 = num(t[4]);
+          const f4 = num(t[5]);
+          const y  = num(t[6]);
+          newData.push({ subj, g:f0, k:f1, l:f2, c:f3, d:f4, y });
         });
 
-        // Sicher überschreiben
-        localStorage.removeItem("spamDemoData");
-        if(newData.length>=1) data = newData;
-        saveData();
+        if(newData.length>=1){ data = newData; saveData(); }
 
-        // UI aktualisieren, Regelmodus aktiv, Phase 2 zeigen
         renderDynamicLabels();
         renderDataTable(); attachDataInputs(); renderEmailSelect();
         $("emailSelect").selectedIndex = 0;
-        let mode = "rule"; // lokale Neu-Init
-        applyMode();
+        mode = "rule"; applyMode();
         setPhase(2);
         updateAll();
+      }catch(err){
+        console.error("applyBrainstorm error", err);
+        setPhase(2);
       }
+    }
 
-      /* ---------- Regel & Neuron ---------- */
-      const modeSwitch = $("modeSwitch");
-      const modeText = $("modeText");
-      let mode = "rule";
+    /* ---------- Regel & Neuron ---------- */
+    const modeSwitch = $("modeSwitch");
+    const modeText = $("modeText");
+    let mode = "rule";
 
-      const emailSelect = $("emailSelect");
-      const goldTag = $("goldTag");
-      const featTableBody = document.querySelector("#featTable tbody");
-      const dataHead = $("dataHead");
-      const dataBody = $("dataBody");
-      const compareBody = $("compareBody");
+    const emailSelect = $("emailSelect");
+    const goldTag = $("goldTag");
+    const featTableBody = document.querySelector("#featTable tbody");
+    const dataHead = $("dataHead");
+    const dataBody = $("dataBody");
+    const compareBody = $("compareBody");
 
-      const ruleChecks = {
-        r0: document.querySelector('input[data-key="r0"]'),
-        r4: document.querySelector('input[data-key="r4"]'),
-        r1: document.querySelector('input[data-key="r1"]'),
-        r3: document.querySelector('input[data-key="r3"]'),
-      };
-      const ruleOrderSel = $("ruleOrder");
-      const ruleOut = $("ruleOut");
-      const ruleWhy = $("ruleWhy");
-      const ruleAcc = $("ruleAcc");
-      const ruleTP = $("ruleTP");
-      const ruleFP = $("ruleFP");
+    const ruleChecks = {
+      r0: document.querySelector('input[data-key="r0"]'),
+      r4: document.querySelector('input[data-key="r4"]'),
+      r1: document.querySelector('input[data-key="r1"]'),
+      r3: document.querySelector('input[data-key="r3"]'),
+    };
+    const ruleOrderSel = $("ruleOrder");
+    const ruleOut = $("ruleOut");
+    const ruleWhy = $("ruleWhy");
+    const ruleAcc = $("ruleAcc");
+    const ruleTP = $("ruleTP");
+    const ruleFP = $("ruleFP");
 
-      const sliders = {
-        w0:[$("w0"),$("w0Val")], w1:[$("w1"),$("w1Val")], w2:[$("w2"),$("w2Val")],
-        w3:[$("w3"),$("w3Val")], w4:[$("w4"),$("w4Val")], theta:[$("theta"),$("thetaVal")]
-      };
-      const neuSum = $("neuSum");
-      const neuOut = $("neuOut");
-      const neuAcc = $("neuAcc");
-      const neuTP = $("neuTP");
-      const neuFP = $("neuFP");
-      const trainLog = $("trainLog");
+    const sliders = {
+      w0:[$("w0"),$("w0Val")], w1:[$("w1"),$("w1Val")], w2:[$("w2"),$("w2Val")],
+      w3:[$("w3"),$("w3Val")], w4:[$("w4"),$("w4Val")], theta:[$("theta"),$("thetaVal")]
+    };
+    const neuSum = $("neuSum");
+    const neuOut = $("neuOut");
+    const neuAcc = $("neuAcc");
+    const neuTP = $("neuTP");
+    const neuFP = $("neuFP");
 
-      const addRowBtn = $("addRow");
-      const resetDataBtn = $("resetData");
+    const addRowBtn = $("addRow");
+    const resetDataBtn = $("resetData");
 
-      // Trainings-Historie
-      let trainHistory = []; // [{epoch, updates, w:[...], theta}]
+    // Trainings-Historie
+    let trainHistory = []; // [{epoch, updates, w:[...], theta}]
 
-      function renderDynamicLabels(){
-        $("ruleLbl0").textContent = FEATS[0].label;
-        $("ruleLbl1").textContent = FEATS[1].label + " (⇒ kein Spam)";
-        $("ruleLbl2").textContent = FEATS[2].label;
-        $("ruleLbl3").textContent = FEATS[3].label;
-        $("ruleLbl4").textContent = FEATS[4].label;
-        $("wName0").textContent = FEATS[0].label;
-        $("wName1").textContent = FEATS[1].label;
-        $("wName2").textContent = FEATS[2].label;
-        $("wName3").textContent = FEATS[3].label;
-        $("wName4").textContent = FEATS[4].label;
-        dataHead.innerHTML = `<tr>
-          <th>Betreff</th>
-          ${FEATS.map(f=>`<th>${f.label}</th>`).join("")}
-          <th>Soll (Spam)</th>
-        </tr>`;
+    function renderDynamicLabels(){
+      $("ruleLbl0").textContent = FEATS[0].label;
+      $("ruleLbl1").textContent = FEATS[1].label + " (⇒ kein Spam)";
+      $("ruleLbl2").textContent = FEATS[2].label;
+      $("ruleLbl3").textContent = FEATS[3].label;
+      $("ruleLbl4").textContent = FEATS[4].label;
+
+      dataHead.innerHTML = `<tr>
+        <th>Betreff</th>
+        ${FEATS.map(f=>`<th>${f.label}</th>`).join("")}
+        <th>Soll (Spam)</th>
+      </tr>`;
+    }
+
+    function predRule(m){
+      const order = ruleOrderSel.value;
+      const seq = order==="prioritizeSafe" ? ["safe","f0","f4","f3x2"]
+                 : order==="prioritizeSpam" ? ["f0","f4","f3x2","safe"]
+                 : ["f0","f4","safe","f3x2"];
+      const why=[];
+      for(const r of seq){
+        if(r==="f0"   && ruleChecks.r0.checked && m.g===1){ why.push(`Regel: ${FEATS[0].label} ⇒ Spam`); return [1, why.join(" | ")]; }
+        if(r==="f4"   && ruleChecks.r4.checked && m.d===1){ why.push(`Regel: ${FEATS[4].label} ⇒ Spam`); return [1, why.join(" | ")]; }
+        if(r==="safe" && ruleChecks.r1.checked && m.k===1){ why.push(`Regel: ${FEATS[1].label} ⇒ kein Spam`); return [0, why.join(" | ")]; }
+        if(r==="f3x2" && ruleChecks.r3.checked && m.c===1 && m.l===1){ why.push(`Regel: ${FEATS[3].label} & ${FEATS[2].label} ⇒ Spam`); return [1, why.join(" | ")]; }
       }
+      if(!why.length) why.push("Default ⇒ kein Spam");
+      return [0, why.join(" | ")];
+    }
 
-      function predRule(m){
-        const order = ruleOrderSel.value;
-        const seq = order==="prioritizeSafe" ? ["safe","f0","f4","f3x2"]
-                   : order==="prioritizeSpam" ? ["f0","f4","f3x2","safe"]
-                   : ["f0","f4","safe","f3x2"];
-        const why=[];
-        for(const r of seq){
-          if(r==="f0"   && ruleChecks.r0.checked && m.g===1){ why.push(`Regel: ${FEATS[0].label} ⇒ Spam`); return [1, why.join(" | ")]; }
-          if(r==="f4"   && ruleChecks.r4.checked && m.d===1){ why.push(`Regel: ${FEATS[4].label} ⇒ Spam`); return [1, why.join(" | ")]; }
-          if(r==="safe" && ruleChecks.r1.checked && m.k===1){ why.push(`Regel: ${FEATS[1].label} ⇒ kein Spam`); return [0, why.join(" | ")]; }
-          if(r==="f3x2" && ruleChecks.r3.checked && m.c===1 && m.l===1){ why.push(`Regel: ${FEATS[3].label} & ${FEATS[2].label} ⇒ Spam`); return [1, why.join(" | ")]; }
-        }
-        if(!why.length) why.push("Default ⇒ kein Spam");
-        return [0, why.join(" | ")];
-      }
+    function getWeights(){
+      return ["w0","w1","w2","w3","w4"].map(id=> parseFloat(sliders[id][0].value));
+    }
+    function setWeights(ws){
+      ["w0","w1","w2","w3","w4"].forEach((id,i)=>{ sliders[id][0].value = ws[i]; sliders[id][1].value = ws[i]; });
+      updateAll();
+    }
+    const getTheta = ()=> parseFloat(sliders.theta[0].value);
 
-      function getWeights(){
-        return ["w0","w1","w2","w3","w4"].map(id=> parseFloat(sliders[id][0].value));
-      }
-      function setWeights(ws){
-        ["w0","w1","w2","w3","w4"].forEach((id,i)=>{ sliders[id][0].value = ws[i]; sliders[id][1].value = ws[i]; });
-        updateAll();
-      }
-      const getTheta = ()=> parseFloat(sliders.theta[0].value);
+    function predNeuron(m){
+      const x = mailToFeatVec(m);
+      const w = getWeights();
+      const sum = x.reduce((s,xi,i)=> s + xi*w[i], 0);
+      const y = sum >= getTheta() ? 1 : 0;
+      return {sum, y};
+    }
 
-      function predNeuron(m){
-        const x = mailToFeatVec(m);
-        const w = getWeights();
-        const sum = x.reduce((s,xi,i)=> s + xi*w[i], 0);
-        const y = sum >= getTheta() ? 1 : 0;
-        return {sum, y};
+    function evaluate(modelFn){
+      let tp=0, tn=0, fp=0, fn=0;
+      for(const m of data){
+        const p = modelFn(m);
+        const yhat = Array.isArray(p) ? p[0] : p.y;
+        if(yhat===1 && m.y===1) tp++;
+        else if(yhat===0 && m.y===0) tn++;
+        else if(yhat===1 && m.y===0) fp++;
+        else fn++;
       }
+      const acc = data.length ? ((tp+tn)/data.length) : 0;
+      return {acc, tp, tn, fp, fn};
+    }
 
-      function evaluate(modelFn){
-        let tp=0, tn=0, fp=0, fn=0;
+    function renderEpochTable(){
+      $("epochTableBody").innerHTML = trainHistory.map(h=> `<tr><td>${h.epoch}</td><td>${h.updates}</td></tr>`).join("");
+    }
+    function renderWeightTable(){
+      $("weightTableBody").innerHTML = trainHistory.map(h=>{
+        const w = h.w.map(v=> v.toFixed(2));
+        return `<tr><td>${h.epoch}</td><td>${w[0]}</td><td>${w[1]}</td><td>${w[2]}</td><td>${w[3]}</td><td>${w[4]}</td><td>${h.theta.toFixed(2)}</td></tr>`;
+      }).join("");
+    }
+    function resetTrainingDisplays(){
+      trainHistory = [];
+      $("epochTableBody").innerHTML = "";
+      $("weightTableBody").innerHTML = "";
+      $("trainLog").textContent = "";
+    }
+    function snapshot(epoch, updates){
+      trainHistory.push({ epoch, updates, w: getWeights().slice(), theta: getTheta() });
+    }
+
+    function trainPerceptron(epochs=50, lr=0.2, singleEpoch=false){
+      if(trainHistory.length===0) snapshot(0, 0); // Startzustand
+      let w = getWeights();
+      let theta = getTheta();
+      for(let e=1; e<=epochs; e++){
+        let updates = 0;
         for(const m of data){
-          const p = modelFn(m);
-          const yhat = Array.isArray(p) ? p[0] : p.y;
-          if(yhat===1 && m.y===1) tp++;
-          else if(yhat===0 && m.y===0) tn++;
-          else if(yhat===1 && m.y===0) fp++;
-          else fn++;
-        }
-        const acc = data.length ? ((tp+tn)/data.length) : 0;
-        return {acc, tp, tn, fp, fn};
-      }
-
-      function renderEpochTable(){
-        $("epochTableBody").innerHTML = trainHistory.map(h=> `<tr><td>${h.epoch}</td><td>${h.updates}</td></tr>`).join("");
-      }
-      function renderWeightTable(){
-        $("weightTableBody").innerHTML = trainHistory.map(h=>{
-          const w = h.w.map(v=> v.toFixed(2));
-          return `<tr><td>${h.epoch}</td><td>${w[0]}</td><td>${w[1]}</td><td>${w[2]}</td><td>${w[3]}</td><td>${w[4]}</td><td>${h.theta.toFixed(2)}</td></tr>`;
-        }).join("");
-      }
-      function resetTrainingDisplays(){
-        trainHistory = [];
-        $("epochTableBody").innerHTML = "";
-        $("weightTableBody").innerHTML = "";
-        $("trainLog").textContent = "";
-      }
-      function snapshot(epoch, updates){
-        trainHistory.push({ epoch, updates, w: getWeights().slice(), theta: getTheta() });
-      }
-
-      function trainPerceptron(epochs=50, lr=0.2, singleEpoch=false){
-        if(trainHistory.length===0) snapshot(0, 0); // Startzustand
-
-        let w = getWeights();
-        let theta = getTheta();
-
-        for(let e=1; e<=epochs; e++){
-          let updates = 0;
-          for(const m of data){
-            const x = mailToFeatVec(m);
-            const sum = x.reduce((s,xi,i)=> s + xi*w[i], 0);
-            const yhat = sum >= theta ? 1 : 0;
-            const error = m.y - yhat;
-            if(error!==0){
-              for(let i=0;i<w.length;i++) w[i] = Math.max(-2,Math.min(2, w[i] + lr*error*x[i]));
-              theta = Math.max(0, Math.min(3, theta - lr*error));
-              updates++;
-            }
+          const x = mailToFeatVec(m);
+          const sum = x.reduce((s,xi,i)=> s + xi*w[i], 0);
+          const yhat = sum >= theta ? 1 : 0;
+          const error = m.y - yhat;
+          if(error!==0){
+            for(let i=0;i<w.length;i++) w[i] = Math.max(-2,Math.min(2, w[i] + lr*error*x[i]));
+            theta = Math.max(0, Math.min(3, theta - lr*error));
+            updates++;
           }
-          // Auf zwei Nachkommastellen normalisieren
-          w = w.map(v=> +v.toFixed(2));
-          theta = +theta.toFixed(2);
-          sliders.theta[0].value = theta; sliders.theta[1].value = theta;
-          ["w0","w1","w2","w3","w4"].forEach((id,i)=>{ sliders[id][0].value = w[i]; sliders[id][1].value = w[i]; });
-          snapshot(e, updates);
-          $("trainLog").textContent += `Epoche ${e}: ${updates===0? "keine Änderung":"Updates: "+updates}\n`;
-          if(updates===0 || singleEpoch) break;
         }
-        renderEpochTable();
-        renderWeightTable();
-        updateAll();
+        w = w.map(v=> +v.toFixed(2));
+        theta = +theta.toFixed(2);
+        sliders.theta[0].value = theta; sliders.theta[1].value = theta;
+        ["w0","w1","w2","w3","w4"].forEach((id,i)=>{ sliders[id][0].value = w[i]; sliders[id][1].value = w[i]; });
+        snapshot(e, updates);
+        $("trainLog").textContent += `Epoche ${e}: ${updates===0? "keine Änderung":"Updates: "+updates}\n`;
+        if(updates===0 || singleEpoch) break;
       }
+      renderEpochTable();
+      renderWeightTable();
+      updateAll();
+    }
 
-      /* ---------- Render ---------- */
-      function renderEmailSelect(){
-        const prev = emailSelect.selectedIndex;
-        emailSelect.innerHTML = data.map((m,i)=>`<option value="${i}">${i+1}. ${escapeHtml(m.subj)}</option>`).join("");
-        emailSelect.selectedIndex = (prev>=0 && prev < data.length) ? prev : 0;
-      }
-      function renderFeatTable(){
-        const m = currentMail();
-        goldTag.textContent = `Soll: ${m.y===1? "Spam":"kein Spam"}`;
-        goldTag.style.color = m.y===1? "var(--bad)" : "var(--ok)";
-        const map=["g","k","l","c","d"];
-        featTableBody.innerHTML = map.map((k,idx)=> `<tr><td>${FEATS[idx].label}</td><td class="mono">${m[k]}</td></tr>`).join("");
-      }
-      function renderDataTable(){
-        dataHead.innerHTML = `<tr>
-          <th>Betreff</th>
-          ${FEATS.map(f=>`<th>${f.label}</th>`).join("")}
-          <th>Soll (Spam)</th>
+    /* ---------- Render ---------- */
+    function renderEmailSelect(){
+      const prev = emailSelect.selectedIndex;
+      emailSelect.innerHTML = data.map((m,i)=>`<option value="${i}">${i+1}. ${escapeHtml(m.subj)}</option>`).join("");
+      emailSelect.selectedIndex = (prev>=0 && prev < data.length) ? prev : 0;
+    }
+    function renderFeatTable(){
+      const m = currentMail();
+      goldTag.textContent = `Soll: ${m.y===1? "Spam":"kein Spam"}`;
+      goldTag.style.color = m.y===1? "var(--bad)" : "var(--ok)";
+      const map=["g","k","l","c","d"];
+      featTableBody.innerHTML = map.map((k,idx)=> `<tr><td>${FEATS[idx].label}</td><td class="mono">${m[k]}</td></tr>`).join("");
+    }
+    function renderDataTable(){
+      dataHead.innerHTML = `<tr>
+        <th>Betreff</th>
+        ${FEATS.map(f=>`<th>${f.label}</th>`).join("")}
+        <th>Soll (Spam)</th>
+      </tr>`;
+      dataBody.innerHTML = data.map((m,i)=>{
+        const vals = ["g","k","l","c","d"].map(k=>`<td><input data-i="${i}" data-k="${k}" type="number" min="0" max="1" step="1" value="${m[k]}"></td>`).join("");
+        return `<tr>
+          <td><input data-i="${i}" data-k="subj" type="text" value="${escapeAttr(m.subj)}" style="width:100%"></td>
+          ${vals}
+          <td><input data-i="${i}" data-k="y" type="number" min="0" max="1" step="1" value="${m.y}"></td>
         </tr>`;
-        dataBody.innerHTML = data.map((m,i)=>{
-          const vals = ["g","k","l","c","d"].map(k=>`<td><input data-i="${i}" data-k="${k}" type="number" min="0" max="1" step="1" value="${m[k]}"></td>`).join("");
-          return `<tr>
-            <td><input data-i="${i}" data-k="subj" type="text" value="${escapeAttr(m.subj)}" style="width:100%"></td>
-            ${vals}
-            <td><input data-i="${i}" data-k="y" type="number" min="0" max="1" step="1" value="${m.y}"></td>
-          </tr>`;
-        }).join("");
-      }
-      function renderRuleOutput(){
-        const [y, why] = predRule(currentMail());
-        ruleOut.textContent = y? "Spam" : "kein Spam";
-        ruleOut.className = "out " + (y? "bad":"ok");
-        ruleWhy.textContent = why;
-        const s = evaluate(predRule);
-        ruleAcc.textContent = (s.acc*100).toFixed(0)+"%";
-        ruleTP.textContent = `${s.tp} / ${s.tn}`;
-        ruleFP.textContent = `${s.fp} / ${s.fn}`;
-      }
-      function renderNeuronOutput(){
-        const p = predNeuron(currentMail());
-        neuSum.textContent = `Summe = ${p.sum.toFixed(2)}  ${p.sum >= getTheta()? "≥":"<"}  θ=${getTheta().toFixed(2)}`;
-        neuOut.textContent = p.y? "Spam":"kein Spam";
-        neuOut.className = "out " + (p.y? "bad":"ok");
-        const s = evaluate(predNeuron);
-        neuAcc.textContent = (s.acc*100).toFixed(0)+"%";
-        neuTP.textContent = `${s.tp} / ${s.tn}`;
-        neuFP.textContent = `${s.fp} / ${s.fn}`;
-      }
-      function renderCompare(){
-        compareBody.innerHTML = data.map(m=>{
-          const r = predRule(m)[0];
-          const n = predNeuron(m).y;
-          return `<tr>
-            <td>${escapeHtml(m.subj)}</td>
-            <td class="${r? "bad":"ok"}">${r? "Spam":"kein Spam"}</td>
-            <td class="${n? "bad":"ok"}">${n? "Spam":"kein Spam"}</td>
-            <td class="${m.y? "bad":"ok"}">${m.y? "Spam":"kein Spam"}</td>
-          </tr>`;
-        }).join("");
-      }
-      function updateAll(){
-        renderFeatTable();
-        renderRuleOutput();
-        if(mode==="learn"){ renderNeuronOutput(); renderCompare(); }
-        saveData();
-      }
-      function applyMode(){
-        const neuronPanel = $("neuronPanel");
-        const comparePanel = $("comparePanel");
-        const learn = (mode==="learn");
-        neuronPanel.classList.toggle("hidden", !learn);
-        comparePanel.classList.toggle("hidden", !learn);
-        modeText.textContent = learn? "Lernendes System" : "Regelbasiert";
-        modeSwitch.classList.toggle("on", learn);
-        modeSwitch.setAttribute("aria-checked", learn ? "true" : "false");
-        updateAll();
-      }
+      }).join("");
+    }
+    function renderRuleOutput(){
+      const [y, why] = predRule(currentMail());
+      ruleOut.textContent = y? "Spam" : "kein Spam";
+      ruleOut.className = "out " + (y? "bad":"ok");
+      ruleWhy.textContent = why;
+      const s = evaluate(predRule);
+      ruleAcc.textContent = (s.acc*100).toFixed(0)+"%";
+      ruleTP.textContent = `${s.tp} / ${s.tn}`;
+      ruleFP.textContent = `${s.fp} / ${s.fn}`;
+    }
+    function renderNeuronOutput(){
+      const p = predNeuron(currentMail());
+      neuSum.textContent = `Summe = ${p.sum.toFixed(2)}  ${p.sum >= getTheta()? "≥":"<"}  θ=${getTheta().toFixed(2)}`;
+      neuOut.textContent = p.y? "Spam":"kein Spam";
+      neuOut.className = "out " + (p.y? "bad":"ok");
+      const s = evaluate(predNeuron);
+      neuAcc.textContent = (s.acc*100).toFixed(0)+"%";
+      neuTP.textContent = `${s.tp} / ${s.tn}`;
+      neuFP.textContent = `${s.fp} / ${s.fn}`;
+    }
+    function renderCompare(){
+      compareBody.innerHTML = data.map(m=>{
+        const r = predRule(m)[0];
+        const n = predNeuron(m).y;
+        return `<tr>
+          <td>${escapeHtml(m.subj)}</td>
+          <td class="${r? "bad":"ok"}">${r? "Spam":"kein Spam"}</td>
+          <td class="${n? "bad":"ok"}">${n? "Spam":"kein Spam"}</td>
+          <td class="${m.y? "bad":"ok"}">${m.y? "Spam":"kein Spam"}</td>
+        </tr>`;
+      }).join("");
+    }
+    function updateAll(){
+      renderFeatTable();
+      renderRuleOutput();
+      if(mode==="learn"){ renderNeuronOutput(); renderCompare(); }
+      saveData();
+    }
+    function applyMode(){
+      const neuronPanel = $("neuronPanel");
+      const comparePanel = $("comparePanel");
+      const learn = (mode==="learn");
+      neuronPanel.classList.toggle("hidden", !learn);
+      comparePanel.classList.toggle("hidden", !learn);
+      modeText.textContent = learn? "Lernendes System" : "Regelbasiert";
+      modeSwitch.classList.toggle("on", learn);
+      modeSwitch.setAttribute("aria-checked", learn ? "true" : "false");
+      updateAll();
+    }
 
-      /* ---------- Events ---------- */
-      modeSwitch.addEventListener("click", ()=>{ mode = (mode==="rule" ? "learn" : "rule"); applyMode(); });
-      modeSwitch.addEventListener("keydown", (e)=>{ if(e.key==="Enter" || e.key===" "){ e.preventDefault(); mode = (mode==="rule" ? "learn" : "rule"); applyMode(); }});
-      emailSelect.addEventListener("change", updateAll);
-      Object.values(ruleChecks).forEach(el=> el.addEventListener("change", updateAll));
-      ruleOrderSel.addEventListener("change", updateAll);
+    /* ---------- Events ---------- */
+    modeSwitch.addEventListener("click", ()=>{ mode = (mode==="rule" ? "learn" : "rule"); applyMode(); });
+    modeSwitch.addEventListener("keydown", (e)=>{ if(e.key==="Enter" || e.key===" "){ e.preventDefault(); mode = (mode==="rule" ? "learn" : "rule"); applyMode(); }});
+    emailSelect.addEventListener("change", updateAll);
+    Object.values(ruleChecks).forEach(el=> el.addEventListener("change", updateAll));
+    ruleOrderSel.addEventListener("change", updateAll);
 
-      Object.values(sliders).forEach(([range, number])=>{
-        range.addEventListener("input", ()=>{ number.value = range.value; updateAll(); });
-        number.addEventListener("input", ()=>{ range.value = number.value; updateAll(); });
-      });
-
-      // Training
-      $("fitOnce").addEventListener("click", ()=>{
-        trainHistory = []; $("trainLog").textContent=""; renderEpochTable(); renderWeightTable();
-        snapshot(0, 0);
-        trainPerceptron(1, 0.2, true);
-      });
-      $("fitAuto").addEventListener("click", ()=>{
-        trainHistory = []; $("trainLog").textContent=""; renderEpochTable(); renderWeightTable();
-        snapshot(0, 0);
-        trainPerceptron(50, 0.2, false);
-      });
-      $("resetW").addEventListener("click", ()=>{
-        trainHistory = []; $("trainLog").textContent=""; renderEpochTable(); renderWeightTable();
-        setWeights([0.8,-0.5,0.6,0.4,0.7]);
-        sliders.theta[0].value=0.7; sliders.theta[1].value=0.7;
-        updateAll();
-      });
-
-      addRowBtn.addEventListener("click", ()=>{
-        data.push({ subj:"Neues Beispiel", g:0,k:0,l:0,c:0,d:0,y:0 });
-        renderDataTable(); attachDataInputs(); renderEmailSelect(); updateAll();
-      });
-      resetDataBtn.addEventListener("click", ()=>{
-        data = DEFAULT_DATA.slice();
-        renderDataTable(); attachDataInputs(); renderEmailSelect(); updateAll();
-      });
-
-      /* keine zusätzlichen Link-Handler nötig (feste Links im Markup) */
-      function attachDataInputs(){
-        dataBody.querySelectorAll("input").forEach(inp=>{
-          inp.addEventListener("input", ()=>{
-            const i = +inp.getAttribute("data-i");
-            const k = inp.getAttribute("data-k");
-            if(k==="subj"){ data[i].subj = inp.value; }
-            else { data[i][k] = Math.max(0,Math.min(1, parseInt(inp.value||"0")||0)); inp.value = data[i][k]; }
-            renderEmailSelect(); updateAll();
-          });
-        });
-      }
-
-      /* ---------- Initial ---------- */
-      renderDynamicLabels();
-      renderDataTable(); attachDataInputs(); renderEmailSelect();
-      setPhase(0);
-      // ARIA-Init für Switch
-      modeSwitch.setAttribute("aria-checked", "false");
-      // Links sind fest im Markup gesetzt
+    Object.values(sliders).forEach(([range, number])=>{
+      if(!range || !number) return;
+      range.addEventListener("input", ()=>{ number.value = range.value; updateAll(); });
+      number.addEventListener("input", ()=>{ range.value = number.value; updateAll(); });
     });
+
+    // Training
+    $("fitOnce").addEventListener("click", ()=>{
+      resetTrainingDisplays();
+      snapshot(0, 0);
+      trainPerceptron(1, 0.2, true);
+    });
+    $("fitAuto").addEventListener("click", ()=>{
+      resetTrainingDisplays();
+      snapshot(0, 0);
+      trainPerceptron(50, 0.2, false);
+    });
+    $("resetW").addEventListener("click", ()=>{
+      resetTrainingDisplays();
+      setWeights([0.8,-0.5,0.6,0.4,0.7]);
+      sliders.theta[0].value=0.7; sliders.theta[1].value=0.7;
+      updateAll();
+    });
+
+    addRowBtn.addEventListener("click", ()=>{
+      data.push({ subj:"Neues Beispiel", g:0,k:0,l:0,c:0,d:0,y:0 });
+      renderDataTable(); attachDataInputs(); renderEmailSelect(); updateAll();
+    });
+    resetDataBtn.addEventListener("click", ()=>{
+      data = DEFAULT_DATA.slice();
+      renderDataTable(); attachDataInputs(); renderEmailSelect(); updateAll();
+    });
+
+    function attachDataInputs(){
+      dataBody.querySelectorAll("input").forEach(inp=>{
+        inp.addEventListener("input", ()=>{
+          const i = +inp.getAttribute("data-i");
+          const k = inp.getAttribute("data-k");
+          if(k==="subj"){ data[i].subj = inp.value; }
+          else { data[i][k] = Math.max(0,Math.min(1, parseInt(inp.value||"0")||0)); inp.value = data[i][k]; }
+          renderEmailSelect(); updateAll();
+        });
+      });
+    }
+
+    /* ---------- Initial ---------- */
+    renderDynamicLabels();
+    renderDataTable(); attachDataInputs(); renderEmailSelect();
+    setPhase(0);
+    modeSwitch.setAttribute("aria-checked", "false");
+  });
   </script>
 </body>
 </html>
+
 
 
 
