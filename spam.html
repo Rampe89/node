@@ -176,13 +176,16 @@
               </div>
             </div>
 
-            <!-- Nur Scratch einbetten (kein Export) -->
             <details>
               <summary>🎮 Scratch-Projekt einbetten (Regelmodus)</summary>
-              <div class="small" style="margin-bottom:6px">URL von Scratch oder TurboWarp einfügen und laden.</div>
+              <div class="small" style="margin-bottom:6px">URL von Scratch oder TurboWarp einfügen und laden. Hinweis: Scratch blockiert Iframes, daher werden Scratch-Links automatisch als TurboWarp-Embed geöffnet.</div>
               <div class="row">
                 <input id="scratchUrl1" type="text" placeholder="https://scratch.mit.edu/projects/1228228243/" style="flex:1">
                 <button id="btnLoadScratch1">Projekt laden</button>
+              </div>
+              <div class="row">
+                <button id="btnOpenScratchEditor" title="Im Scratch-Editor öffnen">In Scratch-Editor öffnen</button>
+                <button id="btnOpenTurboWarpEditor" title="Im TurboWarp-Editor öffnen" class="primary">In TurboWarp-Editor öffnen</button>
               </div>
               <iframe id="scratchFrame1" title="Scratch-Einbettung Regelmodus" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px;margin-top:8px" src="" loading="lazy" referrerpolicy="no-referrer"></iframe>
             </details>
@@ -261,17 +264,6 @@
                     </thead>
                     <tbody id="weightTableBody"></tbody>
                   </table>
-                </details>
-
-                <!-- Nur Scratch einbetten (kein Export) -->
-                <details>
-                  <summary>🎮 Scratch-Projekt einbetten (Lernmodus)</summary>
-                  <div class="small" style="margin-bottom:6px">URL von Scratch oder TurboWarp einfügen und laden.</div>
-                  <div class="row">
-                    <input id="scratchUrl2" type="text" placeholder="https://scratch.mit.edu/projects/PROJEKTNR/embed oder https://turbowarp.org/PROJEKTNR/embed" style="flex:1">
-                    <button id="btnLoadScratch2">Projekt laden</button>
-                  </div>
-                  <iframe id="scratchFrame2" title="Scratch-Einbettung Lernmodus" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px;margin-top:8px" src="" loading="lazy" referrerpolicy="no-referrer"></iframe>
                 </details>
 
                 <details style="margin-top:10px">
@@ -360,6 +352,20 @@
         }catch(e){ return ""; }
       }
 
+      // Projekt-ID-Utilities für Editor-Links
+      function getProjectIdFromInput(raw){
+        if(!raw) return "";
+        try{
+          const u = new URL(raw);
+          const m = u.pathname.match(/(\d{5,})/);
+          return m ? m[1] : "";
+        }catch(e){ return ""; }
+      }
+      function getProjectIdFromEmbed(src){
+        const m = String(src||"").match(/(\d{5,})/);
+        return m ? m[1] : "";
+      }
+
       /* ---------- Phasen ---------- */
       function setPhase(p){
         ["phase0","phase1","phase2"].forEach((id,idx)=> $(id).classList.toggle("hidden", idx!==p));
@@ -421,7 +427,7 @@
         renderDynamicLabels();
         renderDataTable(); attachDataInputs(); renderEmailSelect();
         $("emailSelect").selectedIndex = 0;
-        mode = "rule";
+        let mode = "rule"; // lokale Neu-Init
         applyMode();
         setPhase(2);
         updateAll();
@@ -461,9 +467,6 @@
       const neuAcc = $("neuAcc");
       const neuTP = $("neuTP");
       const neuFP = $("neuFP");
-      const fitOnceBtn = $("fitOnce");
-      const fitAutoBtn = $("fitAuto");
-      const resetWBtn = $("resetW");
       const trainLog = $("trainLog");
 
       const addRowBtn = $("addRow");
@@ -708,16 +711,34 @@
 
       // Scratch einbetten (Auto-Konvertierung auf TurboWarp + Fallback)
       $("btnLoadScratch1").addEventListener("click", function(){
-        var raw = $("scratchUrl1").value.trim();
-        var url = normalizeEmbed(raw) || DEFAULT_EMBED_URL;
+        const raw = $("scratchUrl1").value.trim();
+        const url = normalizeEmbed(raw) || DEFAULT_EMBED_URL;
         if(url){ $("scratchFrame1").src = url; $("scratchUrl1").value = url; }
         else { alert("Ungültige URL. Erlaubt: scratch.mit.edu (wird automatisch umgewandelt) oder turbowarp.org"); }
       });
       $("btnLoadScratch2").addEventListener("click", function(){
-        var raw = $("scratchUrl2").value.trim();
-        var url = normalizeEmbed(raw) || DEFAULT_EMBED_URL;
+        const raw = $("scratchUrl2").value.trim();
+        const url = normalizeEmbed(raw) || DEFAULT_EMBED_URL;
         if(url){ $("scratchFrame2").src = url; $("scratchUrl2").value = url; }
         else { alert("Ungültige URL. Erlaubt: scratch.mit.edu (wird automatisch umgewandelt) oder turbowarp.org"); }
+      });
+
+      // Editor-Buttons öffnen den Editor im neuen Tab
+      $("btnOpenScratchEditor").addEventListener("click", function(){
+        const id = getProjectIdFromInput($("scratchUrl1").value) || getProjectIdFromEmbed($("scratchFrame1").src) || "1228228243";
+        window.open("https://scratch.mit.edu/projects/"+id+"/editor/", "_blank", "noopener");
+      });
+      $("btnOpenTurboWarpEditor").addEventListener("click", function(){
+        const id = getProjectIdFromInput($("scratchUrl1").value) || getProjectIdFromEmbed($("scratchFrame1").src) || "1228228243";
+        window.open("https://turbowarp.org/editor?project_id="+id, "_blank", "noopener");
+      });
+      $("btnOpenScratchEditor2").addEventListener("click", function(){
+        const id = getProjectIdFromInput($("scratchUrl2").value) || getProjectIdFromEmbed($("scratchFrame2").src) || "1228228243";
+        window.open("https://scratch.mit.edu/projects/"+id+"/editor/", "_blank", "noopener");
+      });
+      $("btnOpenTurboWarpEditor2").addEventListener("click", function(){
+        const id = getProjectIdFromInput($("scratchUrl2").value) || getProjectIdFromEmbed($("scratchFrame2").src) || "1228228243";
+        window.open("https://turbowarp.org/editor?project_id="+id, "_blank", "noopener");
       });
 
       function attachDataInputs(){
@@ -747,6 +768,5 @@
   </script>
 </body>
 </html>
-
 
 
