@@ -155,8 +155,9 @@
             <h2>Regelbasierter Filter (Wenn-Dann)</h2>
             <div class="small">Starre Regeln. Reihenfolge kann Wirkung haben.</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+              <details><summary>Regeln bearbeiten</summary>
               <div>
-                <h3>Regeln</h3>
+                <h3 class="hidden">Regeln</h3>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r0" checked> <span id="ruleLbl0">Merkmal 1</span> ⇒ Spam</label></div>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r4" checked> <span id="ruleLbl4">Merkmal 5</span> ⇒ Spam</label></div>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r1" checked> <span id="ruleLbl1">Merkmal 2</span> ⇒ kein Spam</label></div>
@@ -168,103 +169,48 @@
                     <option value="prioritizeSpam">„Spam“ zuerst</option>
                   </select>
                 </label></div>
-              </div>
-              <div>
-                <h3>Ausgabe</h3>
-                <div id="ruleOut" class="out" aria-live="polite">–</div>
-                <div id="ruleWhy" class="small mono"></div>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px">
-                  <div class="panel"><div class="small">Trefferquote</div><div id="ruleAcc" class="out">–</div></div>
-                  <div class="panel"><div class="small">TP / TN</div><div id="ruleTP" class="out">–</div></div>
-                  <div class="panel"><div class="small">FP / FN</div><div id="ruleFP" class="out">–</div></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="scratch-section">
-                <h3>Scratch-Projekt (Regeln)</h3>
-                <a id="ruleScratchLink" class="scratch-btn" href="https://scratch.mit.edu/projects/1228228243/" target="_blank" rel="noopener">Zum Projekt</a>
-              </div>
-          </section>
-
-          <section class="panel hidden" id="neuronPanel">
-            <h2>Gewichtetes „Mini-Neuron“ (lernend)</h2>
-            <div class="small">Eingabe × Gewicht ⇒ Summe ⇒ Schwelle. Training passt Gewichte an.</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-              <div>
-                <h3>Gewichte & Schwelle</h3>
-
-                <div class="row">
-                  <span id="wName0" class="small" style="min-width:180px">Merkmal 1</span>
-                  <input type="range" id="w0" min="-1.5" max="1.5" step="0.1" value="0.8">
-                  <input id="w0Val" type="number" step="0.1" style="width:70px" value="0.8">
-                </div>
-                <div class="row">
-                  <span id="wName1" class="small" style="min-width:180px">Merkmal 2</span>
-                  <input type="range" id="w1" min="-1.5" max="1.5" step="0.1" value="-0.5">
-                  <input id="w1Val" type="number" step="0.1" style="width:70px" value="-0.5">
-                </div>
-                <div class="row">
-                  <span id="wName2" class="small" style="min-width:180px">Merkmal 3</span>
-                  <input type="range" id="w2" min="-1.5" max="1.5" step="0.1" value="0.6">
-                  <input id="w2Val" type="number" step="0.1" style="width:70px" value="0.6">
-                </div>
-                <div class="row">
-                  <span id="wName3" class="small" style="min-width:180px">Merkmal 4</span>
-                  <input type="range" id="w3" min="-1.5" max="1.5" step="0.1" value="0.4">
-                  <input id="w3Val" type="number" step="0.1" style="width:70px" value="0.4">
-                </div>
-                <div class="row">
-                  <span id="wName4" class="small" style="min-width:180px">Merkmal 5</span>
-                  <input type="range" id="w4" min="-1.5" max="1.5" step="0.1" value="0.7">
-                  <input id="w4Val" type="number" step="0.1" style="width:70px" value="0.7">
-                </div>
-
-                <div class="row">
-                  <span class="small" style="min-width:180px">Schwelle θ</span>
-                  <input type="range" id="theta" min="0" max="2.5" step="0.05" value="0.7">
-                  <input id="thetaVal" type="number" step="0.05" style="width:70px" value="0.7">
-                </div>
-              </div>
+              </div></details>
               <div>
                 <h3>Ausgabe</h3>
                 <div id="neuSum" class="small mono">Summe = –</div>
                 <div id="neuOut" class="out" aria-live="polite">–</div>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px">
-                  <div class="panel"><div class="small">Trefferquote</div><div id="neuAcc" class="out">–</div></div>
-                  <div class="panel"><div class="small">TP / TN</div><div id="neuTP" class="out">–</div></div>
-                  <div class="panel"><div class="small">FP / FN</div><div id="neuFP" class="out">–</div></div>
-                </div>
-                <div class="row" style="margin-top:8px">
-                  <button id="fitOnce">🚀 1× trainieren</button>
-                  <button id="fitAuto" class="primary">🤖 Auto-Training (Perzeptron)</button>
-                  <button id="resetW">🔁 Gewichte zurücksetzen</button>
-                </div>
-                <div class="scratch-section">
-                  <h3>Scratch-Projekt (Lernendes System)</h3>
-                  <a id="learnScratchLink" class="scratch-btn" href="https://scratch.mit.edu/projects/0000000000/" target="_blank" rel="noopener">Zum Projekt</a>
-                </div>
+                <div class="small mono" style="margin-top:6px">Trefferquote: <span id="neuAcc">–</span></div>
 
-                <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px"></div>
-
-                <details>
-                  <summary>📉 Fehler pro Epoche</summary>
-                  <table>
-                    <thead><tr><th>Epoche</th><th>Anzahl Updates (Fehler)</th></tr></thead>
-                    <tbody id="epochTableBody"></tbody>
-                  </table>
+                <details style="margin-top:6px">
+                  <summary>Auswertung</summary>
+                  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:8px">
+                    <div class="panel"><div class="small">TP / TN</div><div id="neuTP" class="out">–</div></div>
+                    <div class="panel"><div class="small">FP / FN</div><div id="neuFP" class="out">–</div></div>
+                  </div>
                 </details>
 
-                <details>
-                  <summary>⚖️ Gewichtsverlauf (w₁…w₅, θ)</summary>
-                  <div class="small" style="margin:6px 0">Werte nach jeder Epoche (inkl. Startzustand als Epoche 0).</div>
-                  <table>
-                    <thead>
-                      <tr><th>Epoche</th><th>w₁</th><th>w₂</th><th>w₃</th><th>w₄</th><th>w₅</th><th>θ</th></tr>
-                    </thead>
-                    <tbody id="weightTableBody"></tbody>
-                  </table>
+                <details style="margin-top:6px">
+                  <summary>Training</summary>
+                  <div class="row" style="margin-top:8px">
+                    <button id="fitOnce">🚀 1× trainieren</button>
+                    <button id="fitAuto" class="primary">🤖 Auto-Training (Perzeptron)</button>
+                    <button id="resetW">🔁 Gewichte zurücksetzen</button>
+                  </div>
+                  <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px"></div>
+                  <details>
+                    <summary>📉 Fehler pro Epoche</summary>
+                    <table>
+                      <thead><tr><th>Epoche</th><th>Anzahl Updates (Fehler)</th></tr></thead>
+                      <tbody id="epochTableBody"></tbody>
+                    </table>
+                  </details>
+                  <details>
+                    <summary>⚖️ Gewichtsverlauf (w₁…w₅, θ)</summary>
+                    <div class="small" style="margin:6px 0">Werte nach jeder Epoche (inkl. Startzustand als Epoche 0).</div>
+                    <table>
+                      <thead>
+                        <tr><th>Epoche</th><th>w₁</th><th>w₂</th><th>w₃</th><th>w₄</th><th>w₅</th><th>θ</th></tr>
+                      </thead>
+                      <tbody id="weightTableBody"></tbody>
+                    </table>
+                  </details>
                 </details>
+              </div>
 
                 <details style="margin-top:10px">
                   <summary>💡 Was passiert hier?</summary>
