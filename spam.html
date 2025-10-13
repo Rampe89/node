@@ -40,10 +40,6 @@
     .switch::after{content:"";position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15);transition:left .2s}
     .switch.on{background:#bfdbfe;border-color:#93c5fd}
     .switch.on::after{left:41px}
-    .copybar{display:flex;gap:8px;align-items:center;margin:6px 0}
-    .copybar input{width:100%}
-    .copybtn{white-space:nowrap}
-    pre.export{white-space:pre-wrap;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px;max-height:220px;overflow:auto}
   </style>
 </head>
 <body>
@@ -178,21 +174,15 @@
               </div>
             </div>
 
-            <!-- Scratch-Export & -Einbettung für Regeln + Datensatz -->
+            <!-- Nur Scratch einbetten (kein Export) -->
             <details>
-              <summary>🔁 Scratch-Export (Datensatz & Regeln) / Projekt einbetten</summary>
+              <summary>🎮 Scratch-Projekt einbetten (Regelmodus)</summary>
+              <div class="small" style="margin-bottom:6px">URL von Scratch oder TurboWarp einfügen und laden.</div>
               <div class="row">
-                <button id="btnExportDatasetRules">Export: Datensatz & Regeln</button>
-                <button id="btnClearExport1">Leeren</button>
+                <input id="scratchUrl1" type="text" placeholder="https://scratch.mit.edu/projects/1228228243/" style="flex:1">
+                <button id="btnLoadScratch1">Projekt laden</button>
               </div>
-              <pre id="scratchOut1" class="export mono"></pre>
-
-              <div class="small" style="margin-top:10px">Projekt einbetten (optional):</div>
-              <div class="copybar">
-                <input id="scratchUrl1" type="text" placeholder="https://scratch.mit.edu/projects/PROJEKTNR/embed oder https://turbowarp.org/PROJEKTNR/embed">
-                <button id="btnLoadScratch1" class="copybtn">Projekt laden</button>
-              </div>
-              <iframe id="scratchFrame1" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px" src="" loading="lazy"></iframe>
+              <iframe id="scratchFrame1" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px;margin-top:8px" src="" loading="lazy"></iframe>
             </details>
           </section>
 
@@ -271,21 +261,15 @@
                   </table>
                 </details>
 
-                <!-- Scratch-Export & -Einbettung für Gewichte -->
+                <!-- Nur Scratch einbetten (kein Export) -->
                 <details>
-                  <summary>🔁 Scratch-Export (Gewichte & Schwelle) / Projekt einbetten</summary>
+                  <summary>🎮 Scratch-Projekt einbetten (Lernmodus)</summary>
+                  <div class="small" style="margin-bottom:6px">URL von Scratch oder TurboWarp einfügen und laden.</div>
                   <div class="row">
-                    <button id="btnExportWeights">Export: Gewichte & θ</button>
-                    <button id="btnClearExport2">Leeren</button>
+                    <input id="scratchUrl2" type="text" placeholder="https://scratch.mit.edu/projects/PROJEKTNR/embed oder https://turbowarp.org/PROJEKTNR/embed" style="flex:1">
+                    <button id="btnLoadScratch2">Projekt laden</button>
                   </div>
-                  <pre id="scratchOut2" class="export mono"></pre>
-
-                  <div class="small" style="margin-top:10px">Projekt einbetten (optional):</div>
-                  <div class="copybar">
-                    <input id="scratchUrl2" type="text" placeholder="https://scratch.mit.edu/projects/PROJEKTNR/embed oder https://turbowarp.org/PROJEKTNR/embed">
-                    <button id="btnLoadScratch2" class="copybtn">Projekt laden</button>
-                  </div>
-                  <iframe id="scratchFrame2" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px" src="" loading="lazy"></iframe>
+                  <iframe id="scratchFrame2" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px;margin-top:8px" src="" loading="lazy"></iframe>
                 </details>
 
                 <details style="margin-top:10px">
@@ -649,67 +633,6 @@
         updateAll();
       }
 
-      /* ---------- Export-Funktionen ---------- */
-      function buildDatasetAndRulesExport(){
-        // Datensatz-Listen
-        const subj=[], f0=[],f1=[],f2=[],f3=[],f4=[], gold=[];
-        data.forEach(m=>{
-          subj.push(m.subj);
-          f0.push(m.g); f1.push(m.k); f2.push(m.l); f3.push(m.c); f4.push(m.d);
-          gold.push(m.y);
-        });
-        // Regeln
-        const rules = [
-          `rule_f1_spam=${+document.querySelector('input[data-key="r0"]').checked}`,
-          `rule_f5_spam=${+document.querySelector('input[data-key="r4"]').checked}`,
-          `rule_f2_safe=${+document.querySelector('input[data-key="r1"]').checked}`,
-          `rule_f4u3_spam=${+document.querySelector('input[data-key="r3"]').checked}`,
-          `rule_order=${document.getElementById('ruleOrder').value}`
-        ];
-        return [
-          'Liste Betreff:', subj.join('\n'),
-          'Liste F1:', f0.join('\n'),
-          'Liste F2:', f1.join('\n'),
-          'Liste F3:', f2.join('\n'),
-          'Liste F4:', f3.join('\n'),
-          'Liste F5:', f4.join('\n'),
-          'Liste Soll:', gold.join('\n'),
-          'Variablen (Regeln):', rules.join('\n')
-        ].join('\n\n');
-      }
-      function buildWeightsExport(){
-        const w = getWeights();
-        const t = getTheta();
-        return [
-          `w1=${w[0].toFixed(2)}`,
-          `w2=${w[1].toFixed(2)}`,
-          `w3=${w[2].toFixed(2)}`,
-          `w4=${w[3].toFixed(2)}`,
-          `w5=${w[4].toFixed(2)}`,
-          `theta=${t.toFixed(2)}`
-        ].join('\n');
-      }
-
-      // Buttons: Datensatz & Regeln
-      $("btnExportDatasetRules").addEventListener("click", ()=>{
-        $("scratchOut1").textContent = buildDatasetAndRulesExport();
-      });
-      $("btnClearExport1").addEventListener("click", ()=>{ $("scratchOut1").textContent=""; });
-
-      // Buttons: Gewichte
-      $("btnExportWeights").addEventListener("click", ()=>{
-        $("scratchOut2").textContent = buildWeightsExport();
-      });
-      $("btnClearExport2").addEventListener("click", ()=>{ $("scratchOut2").textContent=""; });
-
-      // Scratch einbetten
-      $("btnLoadScratch1").addEventListener("click", ()=>{
-        $("scratchFrame1").src = $("scratchUrl1").value.trim();
-      });
-      $("btnLoadScratch2").addEventListener("click", ()=>{
-        $("scratchFrame2").src = $("scratchUrl2").value.trim();
-      });
-
       /* ---------- Events ---------- */
       modeSwitch.addEventListener("click", ()=>{ mode = (mode==="rule" ? "learn" : "rule"); applyMode(); });
       modeSwitch.addEventListener("keydown", (e)=>{ if(e.key==="Enter" || e.key===" "){ e.preventDefault(); mode = (mode==="rule" ? "learn" : "rule"); applyMode(); }});
@@ -747,6 +670,14 @@
       resetDataBtn.addEventListener("click", ()=>{
         data = DEFAULT_DATA.slice();
         renderDataTable(); attachDataInputs(); renderEmailSelect(); updateAll();
+      });
+
+      // Scratch einbetten
+      $("btnLoadScratch1").addEventListener("click", ()=>{
+        $("scratchFrame1").src = $("scratchUrl1").value.trim();
+      });
+      $("btnLoadScratch2").addEventListener("click", ()=>{
+        $("scratchFrame2").src = $("scratchUrl2").value.trim();
       });
 
       function attachDataInputs(){
