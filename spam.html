@@ -176,19 +176,10 @@
               </div>
             </div>
 
-            <details>
-              <summary>🎮 Scratch-Projekt einbetten (Regelmodus)</summary>
-              <div class="small" style="margin-bottom:6px">URL von Scratch oder TurboWarp einfügen und laden. Hinweis: Scratch blockiert Iframes, daher werden Scratch-Links automatisch als TurboWarp-Embed geöffnet.</div>
-              <div class="row">
-                <input id="scratchUrl1" type="text" placeholder="https://scratch.mit.edu/projects/1228228243/" style="flex:1">
-                <button id="btnLoadScratch1">Projekt laden</button>
+            <div class="row" style="margin-top:12px">
+                <span class="small" style="min-width:180px">Scratch-Projekt (Regeln)</span>
+                <a id="ruleScratchLink" class="tag" href="https://scratch.mit.edu/projects/1228228243/" target="_blank" rel="noopener">Öffnen</a>
               </div>
-              <div class="row">
-                <button id="btnOpenScratchEditor" title="Im Scratch-Editor öffnen">In Scratch-Editor öffnen</button>
-                <button id="btnOpenTurboWarpEditor" title="Im TurboWarp-Editor öffnen" class="primary">In TurboWarp-Editor öffnen</button>
-              </div>
-              <iframe id="scratchFrame1" title="Scratch-Einbettung Regelmodus" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px;margin-top:8px" src="" loading="lazy" referrerpolicy="no-referrer"></iframe>
-            </details>
           </section>
 
           <section class="panel hidden" id="neuronPanel">
@@ -243,6 +234,10 @@
                   <button id="fitOnce">🚀 1× trainieren</button>
                   <button id="fitAuto" class="primary">🤖 Auto-Training (Perzeptron)</button>
                   <button id="resetW">🔁 Gewichte zurücksetzen</button>
+                </div>
+                <div class="row" style="margin-top:12px">
+                  <span class="small" style="min-width:180px">Scratch-Projekt (Lernendes System)</span>
+                  <a id="learnScratchLink" class="tag" href="https://scratch.mit.edu/projects/0000000000/" target="_blank" rel="noopener">Öffnen</a>
                 </div>
 
                 <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px"></div>
@@ -323,48 +318,6 @@
       const mailToFeatVec = (m)=> [m.g, m.k, m.l, m.c, m.d];
       const escapeHtml = (s)=> String(s).replace(/[&<>\"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
       const escapeAttr = (s)=> String(s).replace(/"/g,"&quot;");
-
-      // Safe-Embed einfacher Allowlist-Check
-      function safeEmbed(url){
-        try{
-          const u = new URL(url);
-          const host = u.hostname.replace(/^www\./,"");
-          const allowed = ["scratch.mit.edu","turbowarp.org"];
-          return allowed.includes(host);
-        }catch(e){ return false; }
-      }
-
-      // Einbettung: Standard-Projekt & URL-Normalisierung (automatisch aus Scratch-URL)
-      const DEFAULT_EMBED_URL = "https://turbowarp.org/1228228243/embed";
-      function normalizeEmbed(url){
-        if(!url) return "";
-        try{
-          const u = new URL(url);
-          const host = u.hostname.replace(/^www\./, "");
-          const idMatch = (u.pathname.match(new RegExp("([0-9]{5,})"))||[])[1];
-          if(host === "scratch.mit.edu"){
-            return idMatch ? "https://turbowarp.org/"+idMatch+"/embed" : "";
-          }
-          if(host === "turbowarp.org"){
-            return u.pathname.endsWith("/embed") ? u.toString() : (idMatch ? "https://turbowarp.org/"+idMatch+"/embed" : "");
-          }
-          return "";
-        }catch(e){ return ""; }
-      }
-
-      // Projekt-ID-Utilities für Editor-Links
-      function getProjectIdFromInput(raw){
-        if(!raw) return "";
-        try{
-          const u = new URL(raw);
-          const m = u.pathname.match(/(\d{5,})/);
-          return m ? m[1] : "";
-        }catch(e){ return ""; }
-      }
-      function getProjectIdFromEmbed(src){
-        const m = String(src||"").match(/(\d{5,})/);
-        return m ? m[1] : "";
-      }
 
       /* ---------- Phasen ---------- */
       function setPhase(p){
@@ -709,38 +662,7 @@
         renderDataTable(); attachDataInputs(); renderEmailSelect(); updateAll();
       });
 
-      // Scratch einbetten (Auto-Konvertierung auf TurboWarp + Fallback)
-      $("btnLoadScratch1").addEventListener("click", function(){
-        const raw = $("scratchUrl1").value.trim();
-        const url = normalizeEmbed(raw) || DEFAULT_EMBED_URL;
-        if(url){ $("scratchFrame1").src = url; $("scratchUrl1").value = url; }
-        else { alert("Ungültige URL. Erlaubt: scratch.mit.edu (wird automatisch umgewandelt) oder turbowarp.org"); }
-      });
-      $("btnLoadScratch2").addEventListener("click", function(){
-        const raw = $("scratchUrl2").value.trim();
-        const url = normalizeEmbed(raw) || DEFAULT_EMBED_URL;
-        if(url){ $("scratchFrame2").src = url; $("scratchUrl2").value = url; }
-        else { alert("Ungültige URL. Erlaubt: scratch.mit.edu (wird automatisch umgewandelt) oder turbowarp.org"); }
-      });
-
-      // Editor-Buttons öffnen den Editor im neuen Tab
-      $("btnOpenScratchEditor").addEventListener("click", function(){
-        const id = getProjectIdFromInput($("scratchUrl1").value) || getProjectIdFromEmbed($("scratchFrame1").src) || "1228228243";
-        window.open("https://scratch.mit.edu/projects/"+id+"/editor/", "_blank", "noopener");
-      });
-      $("btnOpenTurboWarpEditor").addEventListener("click", function(){
-        const id = getProjectIdFromInput($("scratchUrl1").value) || getProjectIdFromEmbed($("scratchFrame1").src) || "1228228243";
-        window.open("https://turbowarp.org/editor?project_id="+id, "_blank", "noopener");
-      });
-      $("btnOpenScratchEditor2").addEventListener("click", function(){
-        const id = getProjectIdFromInput($("scratchUrl2").value) || getProjectIdFromEmbed($("scratchFrame2").src) || "1228228243";
-        window.open("https://scratch.mit.edu/projects/"+id+"/editor/", "_blank", "noopener");
-      });
-      $("btnOpenTurboWarpEditor2").addEventListener("click", function(){
-        const id = getProjectIdFromInput($("scratchUrl2").value) || getProjectIdFromEmbed($("scratchFrame2").src) || "1228228243";
-        window.open("https://turbowarp.org/editor?project_id="+id, "_blank", "noopener");
-      });
-
+      /* keine zusätzlichen Link-Handler nötig (feste Links im Markup) */
       function attachDataInputs(){
         dataBody.querySelectorAll("input").forEach(inp=>{
           inp.addEventListener("input", ()=>{
@@ -759,14 +681,11 @@
       setPhase(0);
       // ARIA-Init für Switch
       modeSwitch.setAttribute("aria-checked", "false");
-      // Standard-Projekt ohne Eingabe direkt laden
-      $("scratchUrl1").value = DEFAULT_EMBED_URL;
-      $("scratchFrame1").src = DEFAULT_EMBED_URL;
-      $("scratchUrl2").value = DEFAULT_EMBED_URL;
-      $("scratchFrame2").src = DEFAULT_EMBED_URL;
+      // Links sind fest im Markup gesetzt
     });
   </script>
 </body>
 </html>
+
 
 
