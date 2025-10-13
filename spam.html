@@ -47,6 +47,8 @@
     .scratch-section h3{margin:0 0 10px 0;font-size:15px;color:var(--muted)}
     .scratch-btn{display:inline-block;padding:10px 18px;border-radius:12px;background:var(--accent);color:#fff;font-weight:700;text-decoration:none;box-shadow:var(--shadow);transition:transform .15s, background .15s}
     .scratch-btn:hover{background:#2563eb;transform:translateY(-2px)}
+    .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .actions button{height:40px}
   </style>
 </head>
 <body>
@@ -303,23 +305,46 @@
       $("bsApply").addEventListener("click", applyBrainstorm);
 
       function applyBrainstorm(){
-        // Labels übernehmen
-        FEATS.forEach((f,i)=> f.label = featInputs[i].value.trim() || f.label);
+        try{
+          // Labels übernehmen (falls Felder existieren)
+          if(FEATS && featInputs){
+            FEATS.forEach((f,i)=>{ if(featInputs[i]) f.label = featInputs[i].value.trim() || f.label; });
+          }
 
-        // Beispiele übernehmen
-        const rows = Array.from(bsBody.querySelectorAll("tr"));
-        const newData = [];
-        rows.forEach(tr=>{
-          const t = tr.querySelectorAll("td");
-          const subj = t[0].querySelector("input").value.trim();
-          if(!subj) return;
-          const f0 = clamp(parseInt(t[1].querySelector("input").value)||0,0,1);
-          const f1 = clamp(parseInt(t[2].querySelector("input").value)||0,0,1);
-          const f2 = clamp(parseInt(t[3].querySelector("input").value)||0,0,1);
-          const f3 = clamp(parseInt(t[4].querySelector("input").value)||0,0,1);
-          const f4 = clamp(parseInt(t[5].querySelector("input").value)||0,0,1);
-          const y  = clamp(parseInt(t[6].querySelector("input").value)||0,0,1);
-          newData.push({ subj, g:f0, k:f1, l:f2, c:f3, d:f4, y });
+          // Beispiele übernehmen (robust gegen leere Zeilen)
+          const rows = Array.from(bsBody ? bsBody.querySelectorAll("tr") : []);
+          const newData = [];
+          rows.forEach(tr=>{
+            const t = tr.querySelectorAll("td");
+            if(t.length<7) return;
+            const subj = (t[0].querySelector("input")||{}).value?.trim() || "";
+            if(!subj) return;
+            const num = (td)=> Math.max(0, Math.min(1, parseInt((td.querySelector("input")||{}).value||"0")||0));
+            const f0 = num(t[1]);
+            const f1 = num(t[2]);
+            const f2 = num(t[3]);
+            const f3 = num(t[4]);
+            const f4 = num(t[5]);
+            const y  = num(t[6]);
+            newData.push({ subj, g:f0, k:f1, l:f2, c:f3, d:f4, y });
+          });
+
+          if(newData.length>=1){ data = newData; saveData(); }
+
+          // UI aktualisieren, Regelmodus aktiv, Phase 2 zeigen (nur wenn Elemente vorhanden)
+          if(typeof renderDynamicLabels === 'function') renderDynamicLabels();
+          if(typeof renderDataTable === 'function') { renderDataTable(); if(typeof attachDataInputs==='function') attachDataInputs(); }
+          if($("emailSelect")) { renderEmailSelect(); $("emailSelect").selectedIndex = 0; }
+          mode = "rule"; // global nutzen
+          if(typeof applyMode==='function') applyMode();
+          setPhase(2);
+          if(typeof updateAll==='function') updateAll();
+        }catch(err){
+          console.error("applyBrainstorm error", err);
+          // Fallback: trotzdem in Phase 2 wechseln, damit man weitermachen kann
+          setPhase(2);
+        }
+      });
         });
 
         // Sicher überschreiben
