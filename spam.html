@@ -25,6 +25,8 @@
     button{cursor:pointer}
     button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
     button:hover{transform:translateY(-1px)}
+    @media (prefers-reduced-motion: reduce){ button:hover{transform:none} }
+    button:focus-visible, .switch:focus-visible, input:focus-visible, select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}
     th,td{border-bottom:1px solid var(--border);padding:10px;text-align:left}
     thead th{background:#f1f5f9;font-weight:700;font-size:14px}
@@ -69,11 +71,11 @@
 
       <h3>Merkmale</h3>
       <div class="row" style="flex-wrap:wrap">
-        <label>1 <input id="featName0" type="text" value="Betreff enthält ‚gratis‘" style="width:260px"></label>
-        <label>2 <input id="featName1" type="text" value="" placeholder="Merkmal 2" style="width:260px"></label>
-        <label>3 <input id="featName2" type="text" value="" placeholder="Merkmal 3" style="width:260px"></label>
-        <label>4 <input id="featName3" type="text" value="" placeholder="Merkmal 4" style="width:260px"></label>
-        <label>5 <input id="featName4" type="text" value="" placeholder="Merkmal 5" style="width:260px"></label>
+        <label>1 <input id="featName0" type="text" value="Betreff enthält ‚gratis‘" style="width:260px" aria-label="Merkmal 1"></label>
+        <label>2 <input id="featName1" type="text" value="" placeholder="Merkmal 2" style="width:260px" aria-label="Merkmal 2"></label>
+        <label>3 <input id="featName2" type="text" value="" placeholder="Merkmal 3" style="width:260px" aria-label="Merkmal 3"></label>
+        <label>4 <input id="featName3" type="text" value="" placeholder="Merkmal 4" style="width:260px" aria-label="Merkmal 4"></label>
+        <label>5 <input id="featName4" type="text" value="" placeholder="Merkmal 5" style="width:260px" aria-label="Merkmal 5"></label>
       </div>
 
       <h3 style="margin-top:12px">Beispiele erfassen</h3>
@@ -105,7 +107,7 @@
           <div class="small">Start im Regelmodus. Schiebeschalter für den Lernmodus.</div>
           <div class="mode" title="Regelbasiert ↔ Lernendes System">
             <span class="small">Modus:</span>
-            <div id="modeSwitch" class="switch" role="switch" aria-checked="false" tabindex="0"></div>
+            <div id="modeSwitch" class="switch" role="switch" aria-checked="false" aria-label="Modus umschalten" tabindex="0"></div>
             <span id="modeText" class="small">Regelbasiert</span>
           </div>
         </div>
@@ -118,7 +120,7 @@
           <p class="small">Wähle eine Beispiel-Mail. Features sind 0/1. „Soll“ ist die korrekte Klasse.</p>
           <div class="row">
             <label>Mail:
-              <select id="emailSelect"></select>
+              <select id="emailSelect" aria-label="Beispiel-Mail wählen"></select>
             </label>
             <span id="goldTag" class="tag">Soll: –</span>
           </div>
@@ -155,7 +157,7 @@
                 <div class="row"><label><input type="checkbox" class="r" data-key="r1" checked> <span id="ruleLbl1">Merkmal 2</span> ⇒ kein Spam</label></div>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r3"> <span id="ruleLbl3">Merkmal 4</span> & <span id="ruleLbl2">Merkmal 3</span> ⇒ Spam</label></div>
                 <div class="row"><label>Reihenfolge:
-                  <select id="ruleOrder">
+                  <select id="ruleOrder" aria-label="Regelreihenfolge">
                     <option value="natural">Natürliche Reihenfolge</option>
                     <option value="prioritizeSafe">„Kein Spam“ zuerst</option>
                     <option value="prioritizeSpam">„Spam“ zuerst</option>
@@ -164,7 +166,7 @@
               </div>
               <div>
                 <h3>Ausgabe</h3>
-                <div id="ruleOut" class="out">–</div>
+                <div id="ruleOut" class="out" aria-live="polite">–</div>
                 <div id="ruleWhy" class="small mono"></div>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px">
                   <div class="panel"><div class="small">Trefferquote</div><div id="ruleAcc" class="out">–</div></div>
@@ -182,7 +184,7 @@
                 <input id="scratchUrl1" type="text" placeholder="https://scratch.mit.edu/projects/1228228243/" style="flex:1">
                 <button id="btnLoadScratch1">Projekt laden</button>
               </div>
-              <iframe id="scratchFrame1" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px;margin-top:8px" src="" loading="lazy"></iframe>
+              <iframe id="scratchFrame1" title="Scratch-Einbettung Regelmodus" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px;margin-top:8px" src="" loading="lazy" referrerpolicy="no-referrer"></iframe>
             </details>
           </section>
 
@@ -228,7 +230,7 @@
               <div>
                 <h3>Ausgabe</h3>
                 <div id="neuSum" class="small mono">Summe = –</div>
-                <div id="neuOut" class="out">–</div>
+                <div id="neuOut" class="out" aria-live="polite">–</div>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px">
                   <div class="panel"><div class="small">Trefferquote</div><div id="neuAcc" class="out">–</div></div>
                   <div class="panel"><div class="small">TP / TN</div><div id="neuTP" class="out">–</div></div>
@@ -269,7 +271,7 @@
                     <input id="scratchUrl2" type="text" placeholder="https://scratch.mit.edu/projects/PROJEKTNR/embed oder https://turbowarp.org/PROJEKTNR/embed" style="flex:1">
                     <button id="btnLoadScratch2">Projekt laden</button>
                   </div>
-                  <iframe id="scratchFrame2" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px;margin-top:8px" src="" loading="lazy"></iframe>
+                  <iframe id="scratchFrame2" title="Scratch-Einbettung Lernmodus" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px;margin-top:8px" src="" loading="lazy" referrerpolicy="no-referrer"></iframe>
                 </details>
 
                 <details style="margin-top:10px">
@@ -327,8 +329,36 @@
       const saveData = ()=> localStorage.setItem("spamDemoData", JSON.stringify(data));
       const currentMail = ()=> data[$("emailSelect").selectedIndex || 0];
       const mailToFeatVec = (m)=> [m.g, m.k, m.l, m.c, m.d];
-      const escapeHtml = (s)=> s.replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
-      const escapeAttr = (s)=> s.replace(/"/g,"&quot;");
+      const escapeHtml = (s)=> String(s).replace(/[&<>\"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+      const escapeAttr = (s)=> String(s).replace(/"/g,"&quot;");
+
+      // Safe-Embed einfacher Allowlist-Check
+      function safeEmbed(url){
+        try{
+          const u = new URL(url);
+          const host = u.hostname.replace(/^www\./,"");
+          const allowed = ["scratch.mit.edu","turbowarp.org"];
+          return allowed.includes(host);
+        }catch(e){ return false; }
+      }
+
+      // Einbettung: Standard-Projekt & URL-Normalisierung (automatisch aus Scratch-URL)
+      const DEFAULT_EMBED_URL = "https://turbowarp.org/1228228243/embed";
+      function normalizeEmbed(url){
+        if(!url) return "";
+        try{
+          const u = new URL(url);
+          const host = u.hostname.replace(/^www\./, "");
+          const idMatch = (u.pathname.match(new RegExp("([0-9]{5,})"))||[])[1];
+          if(host === "scratch.mit.edu"){
+            return idMatch ? "https://turbowarp.org/"+idMatch+"/embed" : "";
+          }
+          if(host === "turbowarp.org"){
+            return u.pathname.endsWith("/embed") ? u.toString() : (idMatch ? "https://turbowarp.org/"+idMatch+"/embed" : "");
+          }
+          return "";
+        }catch(e){ return ""; }
+      }
 
       /* ---------- Phasen ---------- */
       function setPhase(p){
@@ -545,9 +575,11 @@
               updates++;
             }
           }
-          setWeights(w.map(v=> +v.toFixed(2)));
-          sliders.theta[0].value = (+theta.toFixed(2));
-          sliders.theta[1].value = (+theta.toFixed(2));
+          // Auf zwei Nachkommastellen normalisieren
+          w = w.map(v=> +v.toFixed(2));
+          theta = +theta.toFixed(2);
+          sliders.theta[0].value = theta; sliders.theta[1].value = theta;
+          ["w0","w1","w2","w3","w4"].forEach((id,i)=>{ sliders[id][0].value = w[i]; sliders[id][1].value = w[i]; });
           snapshot(e, updates);
           $("trainLog").textContent += `Epoche ${e}: ${updates===0? "keine Änderung":"Updates: "+updates}\n`;
           if(updates===0 || singleEpoch) break;
@@ -559,8 +591,9 @@
 
       /* ---------- Render ---------- */
       function renderEmailSelect(){
+        const prev = emailSelect.selectedIndex;
         emailSelect.innerHTML = data.map((m,i)=>`<option value="${i}">${i+1}. ${escapeHtml(m.subj)}</option>`).join("");
-        emailSelect.selectedIndex = 0;
+        emailSelect.selectedIndex = (prev>=0 && prev < data.length) ? prev : 0;
       }
       function renderFeatTable(){
         const m = currentMail();
@@ -630,6 +663,7 @@
         comparePanel.classList.toggle("hidden", !learn);
         modeText.textContent = learn? "Lernendes System" : "Regelbasiert";
         modeSwitch.classList.toggle("on", learn);
+        modeSwitch.setAttribute("aria-checked", learn ? "true" : "false");
         updateAll();
       }
 
@@ -672,12 +706,18 @@
         renderDataTable(); attachDataInputs(); renderEmailSelect(); updateAll();
       });
 
-      // Scratch einbetten
-      $("btnLoadScratch1").addEventListener("click", ()=>{
-        $("scratchFrame1").src = $("scratchUrl1").value.trim();
+      // Scratch einbetten (Auto-Konvertierung auf TurboWarp + Fallback)
+      $("btnLoadScratch1").addEventListener("click", function(){
+        var raw = $("scratchUrl1").value.trim();
+        var url = normalizeEmbed(raw) || DEFAULT_EMBED_URL;
+        if(url){ $("scratchFrame1").src = url; $("scratchUrl1").value = url; }
+        else { alert("Ungültige URL. Erlaubt: scratch.mit.edu (wird automatisch umgewandelt) oder turbowarp.org"); }
       });
-      $("btnLoadScratch2").addEventListener("click", ()=>{
-        $("scratchFrame2").src = $("scratchUrl2").value.trim();
+      $("btnLoadScratch2").addEventListener("click", function(){
+        var raw = $("scratchUrl2").value.trim();
+        var url = normalizeEmbed(raw) || DEFAULT_EMBED_URL;
+        if(url){ $("scratchFrame2").src = url; $("scratchUrl2").value = url; }
+        else { alert("Ungültige URL. Erlaubt: scratch.mit.edu (wird automatisch umgewandelt) oder turbowarp.org"); }
       });
 
       function attachDataInputs(){
@@ -696,9 +736,17 @@
       renderDynamicLabels();
       renderDataTable(); attachDataInputs(); renderEmailSelect();
       setPhase(0);
+      // ARIA-Init für Switch
+      modeSwitch.setAttribute("aria-checked", "false");
+      // Standard-Projekt ohne Eingabe direkt laden
+      $("scratchUrl1").value = DEFAULT_EMBED_URL;
+      $("scratchFrame1").src = DEFAULT_EMBED_URL;
+      $("scratchUrl2").value = DEFAULT_EMBED_URL;
+      $("scratchFrame2").src = DEFAULT_EMBED_URL;
     });
   </script>
 </body>
 </html>
+
 
 
