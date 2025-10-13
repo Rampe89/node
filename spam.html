@@ -183,7 +183,6 @@
               <div>
                 <h3>Gewichte & Schwelle</h3>
 
-                <!-- Gewichtszeilen mit eigenem Label-Span, damit kein firstChild-Hack nötig ist -->
                 <div class="row">
                   <span id="wName0" class="small" style="min-width:180px">Merkmal 1</span>
                   <input type="range" id="w0" min="-1.5" max="1.5" step="0.1" value="0.8">
@@ -230,15 +229,37 @@
                   <button id="fitAuto" class="primary">🤖 Auto-Training (Perzeptron)</button>
                   <button id="resetW">🔁 Gewichte zurücksetzen</button>
                 </div>
+
+                <!-- Neu: Klarer Trainingslog + zwei Auswertungen -->
                 <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px"></div>
+
+                <details>
+                  <summary>📉 Fehler pro Epoche</summary>
+                  <table>
+                    <thead><tr><th>Epoche</th><th>Anzahl Updates (Fehler)</th></tr></thead>
+                    <tbody id="epochTableBody"></tbody>
+                  </table>
+                </details>
+
+                <details>
+                  <summary>⚖️ Gewichtsverlauf (w₁…w₅, θ)</summary>
+                  <div class="small" style="margin:6px 0">Werte nach jeder Epoche (inkl. Startzustand als Epoche 0).</div>
+                  <table>
+                    <thead>
+                      <tr><th>Epoche</th><th>w₁</th><th>w₂</th><th>w₃</th><th>w₄</th><th>w₅</th><th>θ</th></tr>
+                    </thead>
+                    <tbody id="weightTableBody"></tbody>
+                  </table>
+                </details>
+
                 <details style="margin-top:10px">
                   <summary>💡 Was passiert hier?</summary>
                   <ul class="small">
-                    <li><strong>1× Trainieren:</strong> passt die Gewichte einmal über alle Beispiele an.</li>
-                    <li><strong>Auto-Training:</strong> wiederholt viele Epochen, stoppt wenn keine Änderungen mehr auftreten.</li>
-                    <li><strong>Gewichte:</strong> Stärke des Beitrags eines Merkmals zur Entscheidung.</li>
+                    <li><strong>1× Trainieren:</strong> eine Epoche über alle Beispiele, Updates bei Fehlern.</li>
+                    <li><strong>Auto-Training:</strong> mehrere Epochen, Stopp wenn eine Epoche 0 Updates hat.</li>
+                    <li><strong>Gewichte:</strong> Beitrag eines Merkmals zur Entscheidung.</li>
                     <li><strong>Schwelle (θ):</strong> ab dieser Summe ⇒ „Spam“.</li>
-                    <li><strong>Hinweis:</strong> Lernen braucht repräsentative Beispiele.</li>
+                    <li><strong>Hinweis:</strong> Nicht separable Daten führen nicht zu 0-Fehlern.</li>
                   </ul>
                 </details>
               </div>
@@ -398,6 +419,9 @@
       const addRowBtn = $("addRow");
       const resetDataBtn = $("resetData");
 
+      // Neu: Trainings-Historie für Anzeigen
+      let trainHistory = []; // [{epoch, updates, w:[...], theta}]
+
       function renderDynamicLabels(){
         // Regel-Labels
         $("ruleLbl0").textContent = FEATS[0].label;
@@ -466,31 +490,66 @@
         return {acc, tp, tn, fp, fn};
       }
 
-      function trainPerceptron(epochs=50, lr=0.2){
+      // Neu: Tabellen-Renderer
+      function renderEpochTable(){
+        const body = $("epochTableBody");
+        body.innerHTML = trainHistory.map(h=> `<tr><td>${h.epoch}</td><td>${h.updates}</td></tr>`).join("");
+      }
+      function renderWeightTable(){
+        const body = $("weightTableBody");
+        body.innerHTML = trainHistory.map(h=>{
+          const w = h.w.map(v=> v.toFixed(2));
+          return `<tr><td>${h.epoch}</td><td>${w[0]}</td><td>${w[1]}</td><td>${w[2]}</td><td>${w[3]}</td><td>${w[4]}</td><td>${h.theta.toFixed(2)}</td></tr>`;
+        }).join("");
+      }
+      function resetTrainingDisplays(){
+        trainHistory = [];
+        $("epochTableBody").innerHTML = "";
+        $("weightTableBody").innerHTML = "";
+        trainLog.textContent = "";
+      }
+
+      function snapshot(epoch, updates){
+        trainHistory.push({ epoch, updates, w: getWeights().slice(), theta: getTheta() });
+      }
+
+      function trainPerceptron(epochs=50, lr=0.2, singleEpoch=false){
+        // Startzustand loggen (Epoche 0)
+        if(trainHistory.length===0) snapshot(0, 0);
+
         let w = getWeights();
         let theta = getTheta();
-        let improved=false;
-        for(let e=0;e<epochs;e++){
-          let changed=false;
+        let stopped = false;
+
+        for(let e=1; e<=epochs; e++){
+          let updates = 0;
           for(const m of data){
             const x = mailToFeatVec(m);
             const sum = x.reduce((s,xi,i)=> s + xi*w[i], 0);
             const yhat = sum >= theta ? 1 : 0;
-            const error = m.y - yhat;
+            const error = m.y - yhat; // +1, 0, -1
             if(error!==0){
               for(let i=0;i<w.length;i++) w[i] = clamp(w[i] + lr*error*x[i], -2, 2);
               theta = clamp(theta - lr*error, 0, 3);
-              changed = true; improved = true;
+              updates++;
             }
           }
-          trainLog.textContent += `Epoche ${e+1}: ${changed? "Update durchgeführt":"keine Änderung"}\n`;
-          if(!changed) break;
+          // Gewichte in UI übernehmen (für sofortiges Feedback)
+          setWeights(w.map(v=> +v.toFixed(2)));
+          sliders.theta[0].value = (+theta.toFixed(2));
+          sliders.theta[1].value = (+theta.toFixed(2));
+          snapshot(e, updates);
+
+          trainLog.textContent += `Epoche ${e}: ${updates===0? "keine Änderung":"Updates: "+updates}\n`;
+
+          if(updates===0){ stopped = true; break; }
+          if(singleEpoch) break; // nur 1× trainieren
         }
-        setWeights(w.map(v=> +v.toFixed(2)));
-        sliders.theta[0].value = (+theta.toFixed(2));
-        sliders.theta[1].value = (+theta.toFixed(2));
+
+        renderEpochTable();
+        renderWeightTable();
         updateAll();
-        return improved;
+        return stopped;
       }
 
       /* ---------- Render ---------- */
@@ -580,9 +639,25 @@
         range.addEventListener("input", ()=>{ number.value = range.value; updateAll(); });
         number.addEventListener("input", ()=>{ range.value = number.value; updateAll(); });
       });
-      fitOnceBtn.addEventListener("click", ()=>{ trainLog.textContent=""; trainPerceptron(1, 0.2); });
-      fitAutoBtn.addEventListener("click", ()=>{ trainLog.textContent=""; trainPerceptron(50, 0.2); });
-      resetWBtn.addEventListener("click", ()=>{ trainLog.textContent=""; setWeights([0.8,-0.5,0.6,0.4,0.7]); sliders.theta[0].value=0.7; sliders.theta[1].value=0.7; updateAll(); });
+
+      fitOnceBtn.addEventListener("click", ()=>{
+        resetTrainingDisplays();
+        // Startzustand loggen
+        snapshot(0, 0);
+        // Eine Epoche
+        trainPerceptron(1, 0.2, true);
+      });
+      fitAutoBtn.addEventListener("click", ()=>{
+        resetTrainingDisplays();
+        snapshot(0, 0);
+        trainPerceptron(50, 0.2, false);
+      });
+      resetWBtn.addEventListener("click", ()=>{
+        resetTrainingDisplays();
+        setWeights([0.8,-0.5,0.6,0.4,0.7]);
+        sliders.theta[0].value=0.7; sliders.theta[1].value=0.7;
+        updateAll();
+      });
 
       addRowBtn.addEventListener("click", ()=>{
         data.push({ subj:"Neues Beispiel", g:0,k:0,l:0,c:0,d:0,y:0 });
@@ -613,3 +688,4 @@
   </script>
 </body>
 </html>
+
