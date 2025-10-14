@@ -6,49 +6,79 @@
   <title>Von der Wenn-Dann-Regel zum lernenden System – Spamfilter Demo</title>
   <style>
     :root{
-      --bg:#f7f9fc;--panel:#fff;--ink:#0f172a;--muted:#64748b;--accent:#3b82f6;
-      --ok:#16a34a;--bad:#ef4444;--border:#e2e8f0;--shadow:0 8px 24px rgba(2,6,23,.06);--radius:16px;
+      --bg:#0b1220; --panel:#0f172a; --ink:#eef2ff; --muted:#94a3b8; --accent:#60a5fa;
+      --ok:#22c55e; --bad:#ef4444; --border:#1f2a44; --shadow:0 12px 40px rgba(0,0,0,.35);
+      --radius:16px;
     }
     *{box-sizing:border-box}
-    body{margin:0;font:17px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial;background:var(--bg);color:var(--ink)}
-    .wrap{max-width:1200px;margin:0 auto;padding:28px}
-    header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:20px}
-    h1{font-size:26px;margin:0;font-weight:800}
-    .grid{display:grid;grid-template-columns:320px 1fr;gap:18px}
-    .panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+    html,body{height:100%}
+    body{
+      margin:0; font:16px/1.6 Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial;
+      color:var(--ink); background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(59,130,246,.20), transparent 60%),
+        radial-gradient(900px 600px at 110% 10%, rgba(16,185,129,.15), transparent 60%),
+        var(--bg);
+    }
+    .wrap{max-width:1200px; margin:0 auto; padding:28px}
+    header{display:flex; gap:16px; align-items:center; justify-content:space-between; margin-bottom:20px}
+    h1{font-size:26px; margin:0; font-weight:800; letter-spacing:.2px}
+    h2{margin:0 0 8px; font-size:20px}
+    h3{margin:0 0 8px; font-size:16px}
+    .grid{display:grid; grid-template-columns:320px 1fr; gap:18px}
+    .panel{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)) , var(--panel);
+      border:1px solid var(--border); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow);
+      backdrop-filter: blur(6px)
+    }
     .phase{margin-bottom:18px}
-    .small{font-size:14px;color:var(--muted)}
-    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-    label{display:flex;align-items:center;gap:8px}
-    input[type="range"]{width:200px}
-    select,input,button,textarea{background:#fff;border:1px solid var(--border);color:var(--ink);padding:10px 12px;border-radius:12px}
-    button{cursor:pointer}
-    button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .small{font-size:13px; color:var(--muted)}
+    .row{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+    label{display:flex; align-items:center; gap:8px}
+    input[type="range"]{width:220px}
+    select,input,button,textarea{
+      background:#0b1326; border:1px solid var(--border); color:var(--ink);
+      padding:10px 12px; border-radius:12px
+    }
+    select, input[type="number"], input[type="text"]{height:40px}
+    button{cursor:pointer; height:40px; transition:transform .12s ease, background .12s ease, border-color .12s ease}
+    button.primary{background:var(--accent); color:#0b1220; border-color:var(--accent); font-weight:700}
     button:hover{transform:translateY(-1px)}
     @media (prefers-reduced-motion: reduce){ button:hover{transform:none} }
-    button:focus-visible, .switch:focus-visible, input:focus-visible, select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-    table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}
-    th,td{border-bottom:1px solid var(--border);padding:10px;text-align:left}
-    thead th{background:#f1f5f9;font-weight:700;font-size:14px}
-    .tag{font-size:12px;border:1px solid var(--border);padding:4px 10px;border-radius:999px;color:var(--muted);background:#fff}
-    .out{font-weight:800}
+    button:focus-visible, .switch:focus-visible, input:focus-visible, select:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+    table{width:100%; border-collapse:collapse; background:#0b1326; border-radius:12px; overflow:hidden}
+    th,td{border-bottom:1px solid var(--border); padding:10px; text-align:left}
+    thead th{background:#0a1a33; font-weight:700; font-size:13px; color:#cbd5e1}
+    .tag{font-size:12px; border:1px solid var(--border); padding:4px 10px; border-radius:999px; color:#cbd5e1; background:#0b1326}
+    .out{font-weight:800; font-size:18px}
     .ok{color:var(--ok)} .bad{color:var(--bad)}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
-    details{border:1px dashed var(--border);border-radius:8px;padding:8px;background:#fff;margin-top:10px}
-    summary{cursor:pointer;color:var(--muted);font-weight:600}
+    details{border:1px dashed var(--border); border-radius:8px; padding:8px; background:#0b1326; margin-top:10px}
+    summary{cursor:pointer; color:#cbd5e1; font-weight:600}
     .hidden{display:none}
-    .mode{display:flex;align-items:center;gap:10px}
-    .switch{position:relative;width:72px;height:34px;background:#e5e7eb;border-radius:999px;border:1px solid var(--border);cursor:pointer;transition:background .2s}
-    .switch::after{content:"";position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15);transition:left .2s}
-    .switch.on{background:#bfdbfe;border-color:#93c5fd}
-    .switch.on::after{left:41px}
 
-    /* Scratch-Links */
-    .scratch-section{margin-top:16px;padding:14px;background:#f8fafc;border:1px solid var(--border);border-radius:var(--radius)}
-    .scratch-section h3{margin:0 0 10px 0;font-size:15px;color:var(--muted)}
-    .scratch-btn{display:inline-block;padding:10px 18px;border-radius:12px;background:var(--accent);color:#fff;font-weight:700;text-decoration:none;box-shadow:var(--shadow);transition:transform .15s, background .15s}
-    .scratch-btn:hover{background:#2563eb;transform:translateY(-2px)}
-    .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    /* Mode switch */
+    .mode{display:flex; align-items:center; gap:10px}
+    .switch{
+      position:relative; width:78px; height:36px; background:#1e293b; border-radius:999px; border:1px solid var(--border);
+      cursor:pointer; transition:background .2s
+    }
+    .switch::after{
+      content:""; position:absolute; top:3px; left:3px; width:30px; height:30px; border-radius:999px;
+      background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.35); transition:left .2s
+    }
+    .switch.on{background:#1d4ed8}
+    .switch.on::after{left:45px}
+
+    /* Scratch links */
+    .scratch-section{margin-top:14px; padding:12px; background:#0a1a33; border:1px solid var(--border); border-radius:12px}
+    .scratch-section h3{margin:0 0 8px 0; font-size:14px; color:#93c5fd}
+    .scratch-btn{
+      display:inline-block; padding:10px 16px; border-radius:12px; background:var(--accent); color:#0b1220;
+      font-weight:700; text-decoration:none; box-shadow:var(--shadow)
+    }
+
+    /* Actions */
+    .actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
     .actions button{height:40px}
   </style>
 </head>
@@ -157,83 +187,26 @@
           <!-- Regel-Panel -->
           <section class="panel" id="rulePanel">
             <h2>Regelbasierter Filter (Wenn-Dann)</h2>
-            <div class="small">Starre Regeln. Du kannst nun nach dem Brainstorming eine Logik pro Merkmal festlegen (UND/ODER/NOT).
-            </div>
-
+            <div class="small">Jede Checkbox bedeutet: „Wenn Merkmal aktiv ist, klassifiziere als Spam“.</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-              <details open><summary>🧩 Logik‑Composer (empfohlen)</summary>
-                <div class="small" style="margin:6px 0">Wähle pro Merkmal: Ignorieren, Positiv (x) oder Negativ (NOT x). Danach den Verknüpfungs‑Operator (UND/ODER). Diese Logik ersetzt die klassischen Einzelregeln.</div>
-                <table>
-                  <thead><tr><th>Merkmal</th><th>Rolle</th></tr></thead>
-                  <tbody>
-                    <tr><td id="compLbl0">Merkmal 1</td><td>
-                      <select id="compRole0">
-                        <option value="ignore">Ignorieren</option>
-                        <option value="pos" selected>Positiv (x)</option>
-                        <option value="neg">Negativ (NOT x)</option>
-                      </select>
-                    </td></tr>
-                    <tr><td id="compLbl1">Merkmal 2</td><td>
-                      <select id="compRole1">
-                        <option value="ignore">Ignorieren</option>
-                        <option value="pos" selected>Positiv (x)</option>
-                        <option value="neg">Negativ (NOT x)</option>
-                      </select>
-                    </td></tr>
-                    <tr><td id="compLbl2">Merkmal 3</td><td>
-                      <select id="compRole2">
-                        <option value="ignore">Ignorieren</option>
-                        <option value="pos" selected>Positiv (x)</option>
-                        <option value="neg">Negativ (NOT x)</option>
-                      </select>
-                    </td></tr>
-                    <tr><td id="compLbl3">Merkmal 4</td><td>
-                      <select id="compRole3">
-                        <option value="ignore">Ignorieren</option>
-                        <option value="pos" selected>Positiv (x)</option>
-                        <option value="neg">Negativ (NOT x)</option>
-                      </select>
-                    </td></tr>
-                    <tr><td id="compLbl4">Merkmal 5</td><td>
-                      <select id="compRole4">
-                        <option value="ignore">Ignorieren</option>
-                        <option value="pos" selected>Positiv (x)</option>
-                        <option value="neg">Negativ (NOT x)</option>
-                      </select>
-                    </td></tr>
-                  </tbody>
-                </table>
-                <div class="row" style="margin-top:8px">
-                  <label>Verknüpfung:
-                    <select id="compOp" aria-label="Operator">
-                      <option value="OR" selected>ODER (mind. 1 trifft zu)</option>
-                      <option value="AND">UND (alle treffen zu)</option>
-                    </select>
-                  </label>
-                  <label class="row" style="gap:6px"><input type="checkbox" id="useComposer" checked> Composer nutzen</label>
-                </div>
-              </details>
-
-              <details><summary>⚙️ Klassische Einzelregeln (optional)</summary>
+              <details open><summary>Regeln bearbeiten</summary>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r0" checked> <span id="ruleLbl0">Merkmal 1</span> ⇒ Spam</label></div>
-                <div class="row"><label><input type="checkbox" class="r" data-key="r4" checked> <span id="ruleLbl4">Merkmal 5</span> ⇒ Spam</label></div>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r1" checked> <span id="ruleLbl1">Merkmal 2</span> ⇒ Spam</label></div>
-                <div class="row"><label><input type="checkbox" class="r" data-key="r3"> <span id="ruleLbl3">Merkmal 4</span> & <span id="ruleLbl2">Merkmal 3</span> ⇒ Spam</label></div>
+                <div class="row"><label><input type="checkbox" class="r" data-key="r2" checked> <span id="ruleLbl2">Merkmal 3</span> ⇒ Spam</label></div>
+                <div class="row"><label><input type="checkbox" class="r" data-key="r3" checked> <span id="ruleLbl3">Merkmal 4</span> ⇒ Spam</label></div>
+                <div class="row"><label><input type="checkbox" class="r" data-key="r4" checked> <span id="ruleLbl4">Merkmal 5</span> ⇒ Spam</label></div>
                 <div class="row"><label>Reihenfolge:
                   <select id="ruleOrder" aria-label="Regelreihenfolge">
                     <option value="natural">Natürliche Reihenfolge</option>
-                    <option value="prioF1">Merkmal 2 zuerst</option>
-                    <option value="deprioF1">Merkmal 2 zuletzt</option>
+                    <option value="prioritizeSpam">„Spam“-Regeln zuerst</option>
                   </select>
                 </label></div>
               </details>
-
               <div>
                 <h3>Ausgabe</h3>
                 <div id="ruleWhy" class="small mono">Regeln: –</div>
                 <div id="ruleOut" class="out" aria-live="polite">–</div>
                 <div class="small mono" style="margin-top:6px">Trefferquote: <span id="ruleAcc">–</span></div>
-
                 <details style="margin-top:6px">
                   <summary>Auswertung</summary>
                   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:8px">
@@ -246,22 +219,22 @@
 
             <!-- Scratch-Link nach dem Wenn-Dann-Teil -->
             <div class="scratch-section">
-              <h3>Scratch-Projekt (nach dem Wenn-Dann-Teil)</h3>
+              <h3>Scratch-Projekt nach dem Wenn-Dann-Teil</h3>
               <a class="scratch-btn" href="https://scratch.mit.edu/projects/1228228243/editor/" target="_blank" rel="noopener">🔗 Scratch: Spam-Detector</a>
             </div>
           </section>
 
           <!-- Neuron-Panel -->
           <section class="panel hidden" id="neuronPanel">
-            <h2>Mini-Neuron (Perzeptron)</h2>
+            <h2>Lernendes System (Perzeptron)</h2>
             <div class="small">Gewichtete Summe der Merkmale, Vergleich mit Schwelle θ.</div>
 
             <div class="row" style="flex-wrap:wrap;margin-top:6px">
-              <label id="wName0">Merkmal 1 w₁ <input id="w0" type="range" min="-2" max="2" step="0.1" value="0.8"><input id="w0Val" type="number" min="-2" max="2" step="0.1" value="0.8" style="width:80px"></label>
-              <label id="wName1">Merkmal 2 w₂ <input id="w1" type="range" min="-2" max="2" step="0.1" value="-0.5"><input id="w1Val" type="number" min="-2" max="2" step="0.1" value="-0.5" style="width:80px"></label>
-              <label id="wName2">Merkmal 3 w₃ <input id="w2" type="range" min="-2" max="2" step="0.1" value="0.6"><input id="w2Val" type="number" min="-2" max="2" step="0.1" value="0.6" style="width:80px"></label>
-              <label id="wName3">Merkmal 4 w₄ <input id="w3" type="range" min="-2" max="2" step="0.1" value="0.4"><input id="w3Val" type="number" min="-2" max="2" step="0.1" value="0.4" style="width:80px"></label>
-              <label id="wName4">Merkmal 5 w₅ <input id="w4" type="range" min="-2" max="2" step="0.1" value="0.7"><input id="w4Val" type="number" min="-2" max="2" step="0.1" value="0.7" style="width:80px"></label>
+              <label id="wName0">w₁ <input id="w0" type="range" min="-2" max="2" step="0.1" value="0.8"><input id="w0Val" type="number" min="-2" max="2" step="0.1" value="0.8" style="width:80px"></label>
+              <label id="wName1">w₂ <input id="w1" type="range" min="-2" max="2" step="0.1" value="-0.5"><input id="w1Val" type="number" min="-2" max="2" step="0.1" value="-0.5" style="width:80px"></label>
+              <label id="wName2">w₃ <input id="w2" type="range" min="-2" max="2" step="0.1" value="0.6"><input id="w2Val" type="number" min="-2" max="2" step="0.1" value="0.6" style="width:80px"></label>
+              <label id="wName3">w₄ <input id="w3" type="range" min="-2" max="2" step="0.1" value="0.4"><input id="w3Val" type="number" min="-2" max="2" step="0.1" value="0.4" style="width:80px"></label>
+              <label id="wName4">w₅ <input id="w4" type="range" min="-2" max="2" step="0.1" value="0.7"><input id="w4Val" type="number" min="-2" max="2" step="0.1" value="0.7" style="width:80px"></label>
               <label>θ <input id="theta" type="range" min="0" max="3" step="0.1" value="0.7"><input id="thetaVal" type="number" min="0" max="3" step="0.1" value="0.7" style="width:80px"></label>
             </div>
 
@@ -296,7 +269,7 @@
                 </details>
                 <details>
                   <summary>⚖️ Gewichtsverlauf (w₁…w₅, θ)</summary>
-                  <div class="small" style="margin:6px 0">Werte nach jeder Epoche, inklusive Startzustand (Epoche 0).</div>
+                  <div class="small" style="margin:6px 0">Werte nach jeder Epoche (inkl. Startzustand als Epoche 0).</div>
                   <table>
                     <thead>
                       <tr><th>Epoche</th><th>w₁</th><th>w₂</th><th>w₃</th><th>w₄</th><th>w₅</th><th>θ</th></tr>
@@ -309,7 +282,7 @@
 
             <!-- Scratch-Link nach dem Lernen-Teil -->
             <div class="scratch-section">
-              <h3>Scratch-Projekt (nach dem Lernen-Teil)</h3>
+              <h3>Scratch-Projekt nach dem Lernen-Teil</h3>
               <a class="scratch-btn" href="https://scratch.mit.edu/projects/1228380055/editor/" target="_blank" rel="noopener">🔗 Scratch: Perzeptron</a>
             </div>
           </section>
@@ -325,7 +298,7 @@
       </div>
     </section>
 
-    <div class="small" style="margin-top:12px;color:#64748b">© Demo, frei nutzbar.</div>
+    <div class="small" style="margin-top:12px;color:#94a3b8">© Demo, frei nutzbar.</div>
   </div>
 
   <script>
@@ -334,7 +307,7 @@
     /* ---------- Daten ---------- */
     const DEFAULT_DATA = [
       { subj:"GRATIS iPhone jetzt sichern", g:1, k:0, l:1, c:1, d:1, y:1 },
-      { subj:"Elternabend - Raumänderung",   g:0, k:1, l:0, c:0, d:0, y:0 },
+      { subj:"Elternabend – Raumänderung",   g:0, k:1, l:0, c:0, d:0, y:0 },
       { subj:"Ihr Paket konnte nicht zugestellt werden", g:0, k:0, l:1, c:0, d:1, y:1 },
       { subj:"Klausurplan KW 42",            g:0, k:1, l:0, c:0, d:0, y:0 },
     ];
@@ -349,12 +322,12 @@
       { key:"d", label:"Merkmal 5" },
     ];
 
-    /* ---------- Hilfen ---------- */
+    /* ---------- Helpers ---------- */
     const $ = (id) => document.getElementById(id);
     const saveData = ()=> localStorage.setItem("spamDemoData", JSON.stringify(data));
     const currentMail = ()=> data[$("emailSelect").selectedIndex || 0];
     const mailToFeatVec = (m)=> [m.g, m.k, m.l, m.c, m.d];
-    const escapeHtml = (s)=> String(s).replace(/[&<>\"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+    const escapeHtml = (s)=> String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
     const escapeAttr = (s)=> String(s).replace(/"/g,"&quot;");
 
     /* ---------- Phasen ---------- */
@@ -390,6 +363,7 @@
     function applyBrainstorm(){
       try{
         FEATS.forEach((f,i)=>{ if(featInputs[i]) f.label = featInputs[i].value.trim() || f.label; });
+
         const rows = Array.from(bsBody.querySelectorAll("tr"));
         const newData = [];
         rows.forEach(tr=>{
@@ -398,15 +372,12 @@
           const subj = (t[0].querySelector("input")||{}).value?.trim() || "";
           if(!subj) return;
           const num = (td)=> Math.max(0, Math.min(1, parseInt((td.querySelector("input")||{}).value||"0")||0));
-          const f0 = num(t[1]);
-          const f1 = num(t[2]);
-          const f2 = num(t[3]);
-          const f3 = num(t[4]);
-          const f4 = num(t[5]);
-          const y  = num(t[6]);
+          const f0 = num(t[1]); const f1 = num(t[2]); const f2 = num(t[3]); const f3 = num(t[4]); const f4 = num(t[5]); const y  = num(t[6]);
           newData.push({ subj, g:f0, k:f1, l:f2, c:f3, d:f4, y });
         });
+
         if(newData.length>=1){ data = newData; saveData(); }
+
         renderDynamicLabels();
         renderDataTable(); attachDataInputs(); renderEmailSelect();
         $("emailSelect").selectedIndex = 0;
@@ -431,17 +402,19 @@
     const dataBody = $("dataBody");
     const compareBody = $("compareBody");
 
+    // Regel-Checkboxes
     const ruleChecks = {
-      r0: document.querySelector('input[data-key="r0"]'),
-      r4: document.querySelector('input[data-key="r4"]'),
-      r1: document.querySelector('input[data-key="r1"]'),
-      r3: document.querySelector('input[data-key="r3"]'),
+      r0: null, r1: null, r2: null, r3: null, r4: null
     };
+    function resolveRuleRefs(){
+      ruleChecks.r0 = document.querySelector('input[data-key="r0"]');
+      ruleChecks.r1 = document.querySelector('input[data-key="r1"]');
+      ruleChecks.r2 = document.querySelector('input[data-key="r2"]');
+      ruleChecks.r3 = document.querySelector('input[data-key="r3"]');
+      ruleChecks.r4 = document.querySelector('input[data-key="r4"]');
+    }
+    resolveRuleRefs();
 
-    // Composer controls
-    const compOp = $("compOp");
-    const useComposer = $("useComposer");
-    const compRoles = [0,1,2,3,4].map(i=> $("compRole"+i));
     const ruleOrderSel = $("ruleOrder");
     const ruleOut = $("ruleOut");
     const ruleWhy = $("ruleWhy");
@@ -471,68 +444,29 @@
       $("ruleLbl2").textContent = FEATS[2].label;
       $("ruleLbl3").textContent = FEATS[3].label;
       $("ruleLbl4").textContent = FEATS[4].label;
-      $("compLbl0").textContent = FEATS[0].label;
-      $("compLbl1").textContent = FEATS[1].label;
-      $("compLbl2").textContent = FEATS[2].label;
-      $("compLbl3").textContent = FEATS[3].label;
-      $("compLbl4").textContent = FEATS[4].label;
       dataHead.innerHTML = `<tr>
         <th>Betreff</th>
         ${FEATS.map(f=>`<th>${f.label}</th>`).join("")}
         <th>Soll (Spam)</th>
       </tr>`;
-    }</th>`).join("")}
-        <th>Soll (Spam)</th>
-      </tr>`;
     }
 
     function predRule(m){
-      // If composer is active, override classic rules
-      if(useComposer && useComposer.checked){
-        const feats = [m.g,m.k,m.l,m.c,m.d];
-        const roles = compRoles.map(sel=> sel ? sel.value : 'ignore');
-        const terms = roles.map((r,i)=> r==='ignore' ? null : (r==='pos' ? feats[i]===1 : feats[i]===0));
-        const active = terms.filter(t=> t!==null);
-        let y = 0;
-        let why = [];
-        // Build human-readable formula
-        const sym = roles.map((r,i)=> r==='ignore'? null : (r==='pos'? FEATS[i].label : `NOT ${FEATS[i].label}`)).filter(Boolean);
-        if(active.length>0){
-          if(compOp.value==='AND'){
-            y = active.every(Boolean) ? 1 : 0;
-            why.push(`Composer: (${sym.join(' AND ')}) ⇒ ${y? 'Spam' : 'kein Spam'}`);
-          } else {
-            y = active.some(Boolean) ? 1 : 0;
-            why.push(`Composer: (${sym.join(' OR ')}) ⇒ ${y? 'Spam' : 'kein Spam'}`);
-          }
-        } else {
-          y = 0;
-          why.push('Composer: keine aktiven Terme ⇒ Default kein Spam');
-        }
-        return [y, why.join(' | ')];
-      }
+      const rules = [];
+      if(ruleChecks.r0?.checked && m.g===1) rules.push(FEATS[0].label);
+      if(ruleChecks.r1?.checked && m.k===1) rules.push(FEATS[1].label);
+      if(ruleChecks.r2?.checked && m.l===1) rules.push(FEATS[2].label);
+      if(ruleChecks.r3?.checked && m.c===1) rules.push(FEATS[3].label);
+      if(ruleChecks.r4?.checked && m.d===1) rules.push(FEATS[4].label);
 
-      // Fallback: classic rule list
+      // Reihenfolge-Option wirkt nur auf Erklärungstext
       const order = ruleOrderSel.value;
-      const seq = order==="prioF1" ? ["f1","f0","f4","f3x2"]
-                 : order==="deprioF1" ? ["f0","f4","f3x2","f1"]
-                 : ["f0","f4","f1","f3x2"];
-      const why=[];
-      for(const r of seq){
-        if(r==="f0"   && ruleChecks.r0.checked && m.g===1){ why.push(`Regel: ${FEATS[0].label} ⇒ Spam`); return [1, why.join(" | ")]; }
-        if(r==="f4"   && ruleChecks.r4.checked && m.d===1){ why.push(`Regel: ${FEATS[4].label} ⇒ Spam`); return [1, why.join(" | ")]; }
-        if(r==="f1"   && ruleChecks.r1.checked && m.k===1){ why.push(`Regel: ${FEATS[1].label} ⇒ Spam`); return [1, why.join(" | ")]; }
-        if(r==="f3x2" && ruleChecks.r3.checked && m.c===1 && m.l===1){ why.push(`Regel: ${FEATS[3].label} & ${FEATS[2].label} ⇒ Spam`); return [1, why.join(" | ")]; }
-      }
-      if(!why.length) why.push("Default ⇒ kein Spam");
-      return [0, why.join(" | ")];
-    } ⇒ Spam`); return [1, why.join(" | ")]; }
-        if(r==="f4"   && ruleChecks.r4.checked && m.d===1){ why.push(`Regel: ${FEATS[4].label} ⇒ Spam`); return [1, why.join(" | ")]; }
-        if(r==="f1"   && ruleChecks.r1.checked && m.k===1){ why.push(`Regel: ${FEATS[1].label} ⇒ Spam`); return [1, why.join(" | ")]; }
-        if(r==="f3x2" && ruleChecks.r3.checked && m.c===1 && m.l===1){ why.push(`Regel: ${FEATS[3].label} & ${FEATS[2].label} ⇒ Spam`); return [1, why.join(" | ")]; }
-      }
-      if(!why.length) why.push("Default ⇒ kein Spam");
-      return [0, why.join(" | ")];
+      const why = (order==="prioritizeSpam")
+        ? `Regeln (Spam zuerst): ${rules.join(" OR ") || "—"}`
+        : `Regeln: ${rules.join(" OR ") || "—"}`;
+
+      const y = rules.length>0 ? 1 : 0; // ODER-Logik über aktivierte Einzelregeln
+      return [y, y? `Match: ${why}` : `${why} | Default ⇒ kein Spam`];
     }
 
     function getWeights(){
@@ -697,11 +631,12 @@
     modeSwitch.addEventListener("click", ()=>{ mode = (mode==="rule" ? "learn" : "rule"); applyMode(); });
     modeSwitch.addEventListener("keydown", (e)=>{ if(e.key==="Enter" || e.key===" "){ e.preventDefault(); mode = (mode==="rule" ? "learn" : "rule"); applyMode(); }});
     emailSelect.addEventListener("change", updateAll);
-    Object.values(ruleChecks).forEach(el=> el.addEventListener("change", updateAll));
-    // Composer events
-    if(useComposer){ useComposer.addEventListener('change', updateAll); }
-    compRoles.forEach(sel=> sel && sel.addEventListener('change', updateAll));
-    if(compOp){ compOp.addEventListener('change', updateAll); }
+    // bind rule checkbox events
+    Object.values(ruleChecks).forEach(el=> el && el.addEventListener("change", updateAll));
+    // ensure after DOM updates
+    document.addEventListener("change", (e)=>{
+      if(e.target && e.target.matches('input[type="checkbox"].r')) updateAll();
+    });
     ruleOrderSel.addEventListener("change", updateAll);
 
     Object.values(sliders).forEach(([range, number])=>{
@@ -711,20 +646,14 @@
 
     // Training
     $("fitOnce").addEventListener("click", ()=>{
-      resetTrainingDisplays();
-      snapshot(0, 0);
-      trainPerceptron(1, 0.2, true);
+      resetTrainingDisplays(); snapshot(0, 0); trainPerceptron(1, 0.2, true);
     });
     $("fitAuto").addEventListener("click", ()=>{
-      resetTrainingDisplays();
-      snapshot(0, 0);
-      trainPerceptron(50, 0.2, false);
+      resetTrainingDisplays(); snapshot(0, 0); trainPerceptron(50, 0.2, false);
     });
     $("resetW").addEventListener("click", ()=>{
-      resetTrainingDisplays();
-      setWeights([0.8,-0.5,0.6,0.4,0.7]);
-      sliders.theta[0].value=0.7; sliders.theta[1].value=0.7;
-      updateAll();
+      resetTrainingDisplays(); setWeights([0.8,-0.5,0.6,0.4,0.7]);
+      sliders.theta[0].value=0.7; sliders.theta[1].value=0.7; updateAll();
     });
 
     addRowBtn.addEventListener("click", ()=>{
@@ -757,4 +686,5 @@
   </script>
 </body>
 </html>
+
 
