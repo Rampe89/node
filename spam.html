@@ -157,9 +157,64 @@
           <!-- Regel-Panel -->
           <section class="panel" id="rulePanel">
             <h2>Regelbasierter Filter (Wenn-Dann)</h2>
-            <div class="small">Starre Regeln. Reihenfolge kann Wirkung haben.</div>
+            <div class="small">Starre Regeln. Du kannst nun nach dem Brainstorming eine Logik pro Merkmal festlegen (UND/ODER/NOT).
+            </div>
+
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-              <details><summary>Regeln bearbeiten</summary>
+              <details open><summary>🧩 Logik‑Composer (empfohlen)</summary>
+                <div class="small" style="margin:6px 0">Wähle pro Merkmal: Ignorieren, Positiv (x) oder Negativ (NOT x). Danach den Verknüpfungs‑Operator (UND/ODER). Diese Logik ersetzt die klassischen Einzelregeln.</div>
+                <table>
+                  <thead><tr><th>Merkmal</th><th>Rolle</th></tr></thead>
+                  <tbody>
+                    <tr><td id="compLbl0">Merkmal 1</td><td>
+                      <select id="compRole0">
+                        <option value="ignore">Ignorieren</option>
+                        <option value="pos" selected>Positiv (x)</option>
+                        <option value="neg">Negativ (NOT x)</option>
+                      </select>
+                    </td></tr>
+                    <tr><td id="compLbl1">Merkmal 2</td><td>
+                      <select id="compRole1">
+                        <option value="ignore">Ignorieren</option>
+                        <option value="pos" selected>Positiv (x)</option>
+                        <option value="neg">Negativ (NOT x)</option>
+                      </select>
+                    </td></tr>
+                    <tr><td id="compLbl2">Merkmal 3</td><td>
+                      <select id="compRole2">
+                        <option value="ignore">Ignorieren</option>
+                        <option value="pos" selected>Positiv (x)</option>
+                        <option value="neg">Negativ (NOT x)</option>
+                      </select>
+                    </td></tr>
+                    <tr><td id="compLbl3">Merkmal 4</td><td>
+                      <select id="compRole3">
+                        <option value="ignore">Ignorieren</option>
+                        <option value="pos" selected>Positiv (x)</option>
+                        <option value="neg">Negativ (NOT x)</option>
+                      </select>
+                    </td></tr>
+                    <tr><td id="compLbl4">Merkmal 5</td><td>
+                      <select id="compRole4">
+                        <option value="ignore">Ignorieren</option>
+                        <option value="pos" selected>Positiv (x)</option>
+                        <option value="neg">Negativ (NOT x)</option>
+                      </select>
+                    </td></tr>
+                  </tbody>
+                </table>
+                <div class="row" style="margin-top:8px">
+                  <label>Verknüpfung:
+                    <select id="compOp" aria-label="Operator">
+                      <option value="OR" selected>ODER (mind. 1 trifft zu)</option>
+                      <option value="AND">UND (alle treffen zu)</option>
+                    </select>
+                  </label>
+                  <label class="row" style="gap:6px"><input type="checkbox" id="useComposer" checked> Composer nutzen</label>
+                </div>
+              </details>
+
+              <details><summary>⚙️ Klassische Einzelregeln (optional)</summary>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r0" checked> <span id="ruleLbl0">Merkmal 1</span> ⇒ Spam</label></div>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r4" checked> <span id="ruleLbl4">Merkmal 5</span> ⇒ Spam</label></div>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r1" checked> <span id="ruleLbl1">Merkmal 2</span> ⇒ Spam</label></div>
@@ -172,6 +227,7 @@
                   </select>
                 </label></div>
               </details>
+
               <div>
                 <h3>Ausgabe</h3>
                 <div id="ruleWhy" class="small mono">Regeln: –</div>
@@ -381,6 +437,11 @@
       r1: document.querySelector('input[data-key="r1"]'),
       r3: document.querySelector('input[data-key="r3"]'),
     };
+
+    // Composer controls
+    const compOp = $("compOp");
+    const useComposer = $("useComposer");
+    const compRoles = [0,1,2,3,4].map(i=> $("compRole"+i));
     const ruleOrderSel = $("ruleOrder");
     const ruleOut = $("ruleOut");
     const ruleWhy = $("ruleWhy");
@@ -410,14 +471,48 @@
       $("ruleLbl2").textContent = FEATS[2].label;
       $("ruleLbl3").textContent = FEATS[3].label;
       $("ruleLbl4").textContent = FEATS[4].label;
+      $("compLbl0").textContent = FEATS[0].label;
+      $("compLbl1").textContent = FEATS[1].label;
+      $("compLbl2").textContent = FEATS[2].label;
+      $("compLbl3").textContent = FEATS[3].label;
+      $("compLbl4").textContent = FEATS[4].label;
       dataHead.innerHTML = `<tr>
         <th>Betreff</th>
         ${FEATS.map(f=>`<th>${f.label}</th>`).join("")}
         <th>Soll (Spam)</th>
       </tr>`;
+    }</th>`).join("")}
+        <th>Soll (Spam)</th>
+      </tr>`;
     }
 
     function predRule(m){
+      // If composer is active, override classic rules
+      if(useComposer && useComposer.checked){
+        const feats = [m.g,m.k,m.l,m.c,m.d];
+        const roles = compRoles.map(sel=> sel ? sel.value : 'ignore');
+        const terms = roles.map((r,i)=> r==='ignore' ? null : (r==='pos' ? feats[i]===1 : feats[i]===0));
+        const active = terms.filter(t=> t!==null);
+        let y = 0;
+        let why = [];
+        // Build human-readable formula
+        const sym = roles.map((r,i)=> r==='ignore'? null : (r==='pos'? FEATS[i].label : `NOT ${FEATS[i].label}`)).filter(Boolean);
+        if(active.length>0){
+          if(compOp.value==='AND'){
+            y = active.every(Boolean) ? 1 : 0;
+            why.push(`Composer: (${sym.join(' AND ')}) ⇒ ${y? 'Spam' : 'kein Spam'}`);
+          } else {
+            y = active.some(Boolean) ? 1 : 0;
+            why.push(`Composer: (${sym.join(' OR ')}) ⇒ ${y? 'Spam' : 'kein Spam'}`);
+          }
+        } else {
+          y = 0;
+          why.push('Composer: keine aktiven Terme ⇒ Default kein Spam');
+        }
+        return [y, why.join(' | ')];
+      }
+
+      // Fallback: classic rule list
       const order = ruleOrderSel.value;
       const seq = order==="prioF1" ? ["f1","f0","f4","f3x2"]
                  : order==="deprioF1" ? ["f0","f4","f3x2","f1"]
@@ -425,6 +520,13 @@
       const why=[];
       for(const r of seq){
         if(r==="f0"   && ruleChecks.r0.checked && m.g===1){ why.push(`Regel: ${FEATS[0].label} ⇒ Spam`); return [1, why.join(" | ")]; }
+        if(r==="f4"   && ruleChecks.r4.checked && m.d===1){ why.push(`Regel: ${FEATS[4].label} ⇒ Spam`); return [1, why.join(" | ")]; }
+        if(r==="f1"   && ruleChecks.r1.checked && m.k===1){ why.push(`Regel: ${FEATS[1].label} ⇒ Spam`); return [1, why.join(" | ")]; }
+        if(r==="f3x2" && ruleChecks.r3.checked && m.c===1 && m.l===1){ why.push(`Regel: ${FEATS[3].label} & ${FEATS[2].label} ⇒ Spam`); return [1, why.join(" | ")]; }
+      }
+      if(!why.length) why.push("Default ⇒ kein Spam");
+      return [0, why.join(" | ")];
+    } ⇒ Spam`); return [1, why.join(" | ")]; }
         if(r==="f4"   && ruleChecks.r4.checked && m.d===1){ why.push(`Regel: ${FEATS[4].label} ⇒ Spam`); return [1, why.join(" | ")]; }
         if(r==="f1"   && ruleChecks.r1.checked && m.k===1){ why.push(`Regel: ${FEATS[1].label} ⇒ Spam`); return [1, why.join(" | ")]; }
         if(r==="f3x2" && ruleChecks.r3.checked && m.c===1 && m.l===1){ why.push(`Regel: ${FEATS[3].label} & ${FEATS[2].label} ⇒ Spam`); return [1, why.join(" | ")]; }
@@ -596,6 +698,10 @@
     modeSwitch.addEventListener("keydown", (e)=>{ if(e.key==="Enter" || e.key===" "){ e.preventDefault(); mode = (mode==="rule" ? "learn" : "rule"); applyMode(); }});
     emailSelect.addEventListener("change", updateAll);
     Object.values(ruleChecks).forEach(el=> el.addEventListener("change", updateAll));
+    // Composer events
+    if(useComposer){ useComposer.addEventListener('change', updateAll); }
+    compRoles.forEach(sel=> sel && sel.addEventListener('change', updateAll));
+    if(compOp){ compOp.addEventListener('change', updateAll); }
     ruleOrderSel.addEventListener("change", updateAll);
 
     Object.values(sliders).forEach(([range, number])=>{
