@@ -162,13 +162,13 @@
               <details><summary>Regeln bearbeiten</summary>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r0" checked> <span id="ruleLbl0">Merkmal 1</span> ⇒ Spam</label></div>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r4" checked> <span id="ruleLbl4">Merkmal 5</span> ⇒ Spam</label></div>
-                <div class="row"><label><input type="checkbox" class="r" data-key="r1" checked> <span id="ruleLbl1">Merkmal 2</span> ⇒ kein Spam</label></div>
+                <div class="row"><label><input type="checkbox" class="r" data-key="r1" checked> <span id="ruleLbl1">Merkmal 2</span> ⇒ Spam</label></div>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r3"> <span id="ruleLbl3">Merkmal 4</span> & <span id="ruleLbl2">Merkmal 3</span> ⇒ Spam</label></div>
                 <div class="row"><label>Reihenfolge:
                   <select id="ruleOrder" aria-label="Regelreihenfolge">
                     <option value="natural">Natürliche Reihenfolge</option>
-                    <option value="prioritizeSafe">„Kein Spam“ zuerst</option>
-                    <option value="prioritizeSpam">„Spam“ zuerst</option>
+                    <option value="prioF1">Merkmal 2 zuerst</option>
+                    <option value="deprioF1">Merkmal 2 zuletzt</option>
                   </select>
                 </label></div>
               </details>
@@ -298,7 +298,7 @@
     const saveData = ()=> localStorage.setItem("spamDemoData", JSON.stringify(data));
     const currentMail = ()=> data[$("emailSelect").selectedIndex || 0];
     const mailToFeatVec = (m)=> [m.g, m.k, m.l, m.c, m.d];
-    const escapeHtml = (s)=> String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+    const escapeHtml = (s)=> String(s).replace(/[&<>\"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
     const escapeAttr = (s)=> String(s).replace(/"/g,"&quot;");
 
     /* ---------- Phasen ---------- */
@@ -327,8 +327,6 @@
     $("bsAdd").addEventListener("click", addBsRow);
     $("bsReset").addEventListener("click", ()=>{ bsBody.innerHTML=""; addBsRow(); addBsRow(); addBsRow(); });
     featInputs.forEach((inp,i)=> inp.addEventListener("input", ()=>{ bsHeads[i].textContent = inp.value.trim() || ("Merkmal "+(i+1)); }));
-
-    // Seed: 3 leere Zeilen
     addBsRow(); addBsRow(); addBsRow();
 
     $("bsApply").addEventListener("click", applyBrainstorm);
@@ -336,7 +334,6 @@
     function applyBrainstorm(){
       try{
         FEATS.forEach((f,i)=>{ if(featInputs[i]) f.label = featInputs[i].value.trim() || f.label; });
-
         const rows = Array.from(bsBody.querySelectorAll("tr"));
         const newData = [];
         rows.forEach(tr=>{
@@ -353,9 +350,7 @@
           const y  = num(t[6]);
           newData.push({ subj, g:f0, k:f1, l:f2, c:f3, d:f4, y });
         });
-
         if(newData.length>=1){ data = newData; saveData(); }
-
         renderDynamicLabels();
         renderDataTable(); attachDataInputs(); renderEmailSelect();
         $("emailSelect").selectedIndex = 0;
@@ -411,11 +406,10 @@
 
     function renderDynamicLabels(){
       $("ruleLbl0").textContent = FEATS[0].label;
-      $("ruleLbl1").textContent = FEATS[1].label + " (⇒ kein Spam)";
+      $("ruleLbl1").textContent = FEATS[1].label;
       $("ruleLbl2").textContent = FEATS[2].label;
       $("ruleLbl3").textContent = FEATS[3].label;
       $("ruleLbl4").textContent = FEATS[4].label;
-
       dataHead.innerHTML = `<tr>
         <th>Betreff</th>
         ${FEATS.map(f=>`<th>${f.label}</th>`).join("")}
@@ -425,14 +419,14 @@
 
     function predRule(m){
       const order = ruleOrderSel.value;
-      const seq = order==="prioritizeSafe" ? ["safe","f0","f4","f3x2"]
-                 : order==="prioritizeSpam" ? ["f0","f4","f3x2","safe"]
-                 : ["f0","f4","safe","f3x2"];
+      const seq = order==="prioF1" ? ["f1","f0","f4","f3x2"]
+                 : order==="deprioF1" ? ["f0","f4","f3x2","f1"]
+                 : ["f0","f4","f1","f3x2"];
       const why=[];
       for(const r of seq){
         if(r==="f0"   && ruleChecks.r0.checked && m.g===1){ why.push(`Regel: ${FEATS[0].label} ⇒ Spam`); return [1, why.join(" | ")]; }
         if(r==="f4"   && ruleChecks.r4.checked && m.d===1){ why.push(`Regel: ${FEATS[4].label} ⇒ Spam`); return [1, why.join(" | ")]; }
-        if(r==="safe" && ruleChecks.r1.checked && m.k===1){ why.push(`Regel: ${FEATS[1].label} ⇒ kein Spam`); return [0, why.join(" | ")]; }
+        if(r==="f1"   && ruleChecks.r1.checked && m.k===1){ why.push(`Regel: ${FEATS[1].label} ⇒ Spam`); return [1, why.join(" | ")]; }
         if(r==="f3x2" && ruleChecks.r3.checked && m.c===1 && m.l===1){ why.push(`Regel: ${FEATS[3].label} & ${FEATS[2].label} ⇒ Spam`); return [1, why.join(" | ")]; }
       }
       if(!why.length) why.push("Default ⇒ kein Spam");
@@ -605,7 +599,6 @@
     ruleOrderSel.addEventListener("change", updateAll);
 
     Object.values(sliders).forEach(([range, number])=>{
-      if(!range || !number) return;
       range.addEventListener("input", ()=>{ number.value = range.value; updateAll(); });
       number.addEventListener("input", ()=>{ range.value = number.value; updateAll(); });
     });
@@ -658,9 +651,4 @@
   </script>
 </body>
 </html>
-
-
-
-
-
 
