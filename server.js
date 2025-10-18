@@ -79,7 +79,7 @@ const server = http.createServer((req, res) => {
          } else if (req.url === '/spam.html') {
             // spam-Seite ausliefern
             serveFile('spam.html', res);
-         } else if (req.url === '/spam.html') {
+         } else if (req.url === '/sql.html') {
             // sql-Seite ausliefern
             serveFile('sql.html', res);
          } else {
