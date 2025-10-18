@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SQL Injection – Unterrichtssequenz (Simulation)</title>
+<title>SQL Injection – Schritt-für-Schritt (Simulation)</title>
 <style>
 :root{
   --bg:#061426; --card:#0c1b26; --muted:#9fb4c8; --accent:#2ea6ff; --danger:#f44336; --ok:#16a34a; --panel:#071b2a;
@@ -14,6 +14,7 @@ body{font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#0
 .card{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:16px;margin:12px 0}
 h1{margin:0 0 6px 0;font-size:1.5rem}
 h2{margin:6px 0 8px 0;font-size:1.1rem}
+h3{margin:6px 0 6px 0;font-size:1.05rem}
 p{margin:6px 0;color:var(--muted)}
 label{display:block;margin:6px 0 4px 0}
 input[type=text]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:var(--panel);color:#e6eef6}
@@ -32,6 +33,8 @@ th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:left
 .badge{display:inline-block;padding:4px 8px;border-radius:6px;background:#123;color:#9fd;font-size:0.85rem}
 .sensitive{color:transparent;text-shadow:0 0 6px rgba(0,0,0,0.6)}
 .hidden{display:none}
+.small{font-size:0.9rem;color:var(--muted)}
+.kbd{font-family:monospace;background:#102235;border-radius:6px;padding:2px 6px}
 
 /* Stepper */
 .stepper{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
@@ -39,21 +42,19 @@ th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:left
 .step.active{background:#2ea6ff;color:#012}
 .step.done{background:#10936b;color:#012}
 
-/* Teacher modal */
+/* Modal */
 .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:60}
 .modal{background:var(--card);padding:16px;border-radius:10px;width:330px;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
 .modal h3{margin:0 0 8px 0}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.small{font-size:0.9rem;color:var(--muted)}
-.kbd{font-family:monospace;background:#102235;border-radius:6px;padding:2px 6px}
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="card">
-    <h1>SQL Injection – Unterrichtssequenz</h1>
-    <p class="muted">Ablauf in vier Phasen: normale Abfrage, Manipulation ausprobieren, Ursache verstehen, sichere Variante vergleichen.</p>
+    <h1>SQL Injection – Schritt-für-Schritt</h1>
+    <p class="muted">Vier Phasen: normale Abfrage → Manipulation ausprobieren → Ursache verstehen → sichere Variante vergleichen.</p>
     <div class="stepper" id="stepper">
       <div class="step active" data-step="1">1 Normal</div>
       <div class="step" data-step="2">2 Manipulation</div>
@@ -62,14 +63,25 @@ th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:left
     </div>
     <div class="row" style="justify-content:space-between">
       <div>
-        <button id="btn-prev" class="alt">Zurück</button>
-        <button id="btn-next">Weiter</button>
+        <button id="btn-prev" class="alt" disabled>Zurück</button>
+        <button id="btn-next" disabled>Weiter</button>
       </div>
       <div class="row">
         <button id="btn-teacher-login" class="alt">Lehrkraft: Login</button>
         <span id="teacher-state" class="small">(nicht angemeldet)</span>
         <span class="small">Passwort: <span class="badge">lehrer</span></span>
       </div>
+    </div>
+  </div>
+
+  <!-- Mini-Glossar -->
+  <div class="card">
+    <h2>Mini-Glossar</h2>
+    <div class="notice info small">
+      <p><strong>Datenbank</strong>: Ein Programm, das Daten speichert und wieder findet.</p>
+      <p><strong>Tabelle</strong>: Wie eine Tabelle in einem Heft. Zeilen sind Datensätze, Spalten sind Eigenschaften.</p>
+      <p><strong>SQL</strong>: Sprache, mit der man der Datenbank Anweisungen gibt. Beispiel: <code>SELECT</code> holt Daten.</p>
+      <p><strong>WHERE</strong>: Bedingung. Sie grenzt ein, welche Zeilen passen sollen.</p>
     </div>
   </div>
 
@@ -82,7 +94,7 @@ th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:left
       <button id="btn-hide-sensitive" class="alt hidden">Sensible Felder verbergen</button>
       <button id="btn-teacher-logout" class="danger">Logout</button>
     </div>
-    <div class="notice info small">Hinweis: Die Tabelle dient nur als Datengrundlage für die Abfragen.</div>
+    <div class="notice info small">Die Tabelle ist nur die Datenbasis. Darauf wenden wir Abfragen an.</div>
     <div style="overflow:auto">
       <table id="db-table" style="min-width:700px">
         <thead>
@@ -98,7 +110,17 @@ th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:left
   <!-- Phase 1 -->
   <section class="card" id="phase-1">
     <h2>Phase 1: Normale Abfrage</h2>
-    <p>Aufgabe: Finde den Datensatz zu einem Benutzernamen, z. B. <span class="kbd">alice</span>.</p>
+
+    <h3>1a) Tabelle lesen</h3>
+    <p>Suche dir einen Namen aus der Tabelle aus. Beispiel: <span class="kbd">alice</span>.</p>
+
+    <h3>1b) Abfrage in Worten</h3>
+    <div class="notice info small">
+      <p>„Hol alle Spalten <code>*</code> aus der Tabelle <code>students</code>, aber nur die Zeilen, wo <code>username</code> gleich <em>alice</em> ist.“</p>
+      <pre>SELECT * FROM students WHERE username = 'alice';</pre>
+    </div>
+
+    <h3>1c) Abfrage ausführen</h3>
     <label for="q1">Eingabe (username)</label>
     <input id="q1" type="text" placeholder="alice">
     <div class="btn-row" style="margin-top:8px">
@@ -106,17 +128,14 @@ th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:left
       <button class="alt sample" data-val="alice">alice</button>
       <button class="alt sample" data-val="bob">bob</button>
     </div>
-    <div class="notice info" style="margin-top:8px">
-      <strong>SQL-Befehl</strong>
-      <pre id="sql1">SELECT * FROM students WHERE username = 'alice';</pre>
-    </div>
-    <div id="out1"></div>
+    <div id="out1" style="margin-top:8px"></div>
+    <div id="phase1-ok" class="notice good hidden"><strong>Gut.</strong> Du hast eine normale Abfrage erfolgreich ausgeführt.</div>
   </section>
 
   <!-- Phase 2 -->
   <section class="card hidden" id="phase-2">
     <h2>Phase 2: Manipulation ausprobieren</h2>
-    <p>Was passiert, wenn die Eingabe nicht nur ein Name ist. Teste zum Beispiel <span class="kbd">' OR '1'='1' --</span>.</p>
+    <p>Jetzt geben wir etwas ein, das keine Person ist. Teste <span class="kbd">' OR '1'='1' --</span>. Das soll alle Zeilen liefern.</p>
     <label for="q2">Eingabe (username)</label>
     <input id="q2" type="text" placeholder="' OR '1'='1' --">
     <div class="btn-row" style="margin-top:8px">
@@ -126,34 +145,35 @@ th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:left
     </div>
     <div class="notice warn" style="margin-top:8px">
       <strong>Generierte Query (unsicher, String-Konkatenation)</strong>
-      <pre id="sql2">SELECT * FROM students WHERE username = '' OR '1'='1'; -- …</pre>
-      <div class="small">Die WHERE-Bedingung wird durch die Eingabe verändert. Das ist das Kernproblem.</div>
+      <pre id="sql2">SELECT * FROM students WHERE username = '…';</pre>
+      <p class="small">Die Eingabe wird Teil der SQL-Zeichenkette. Dadurch kann sie die Bedingung verändern.</p>
     </div>
     <div id="out2"></div>
+    <div id="phase2-ok" class="notice good hidden"><strong>Richtig.</strong> Alle Zeilen wurden angezeigt. Das ist die Wirkung einer SQL-Injection.</div>
   </section>
 
   <!-- Phase 3 -->
   <section class="card hidden" id="phase-3">
     <h2>Phase 3: Warum funktioniert das</h2>
     <div class="notice info">
-      <p><strong>Erklärung</strong></p>
       <ol>
-        <li>Die Anwendung setzt die Eingabe ungeschützt in die SQL-Zeichenkette.</li>
-        <li>Die Eingabe enthält eine OR-Bedingung, die immer wahr ist.</li>
-        <li>Die Datenbank liefert deshalb alle Zeilen zurück.</li>
+        <li>Die Anwendung setzt deine Eingabe ungeschützt in die SQL-Zeichenkette.</li>
+        <li>In der Eingabe steckt eine <strong>OR-Bedingung</strong>, die immer wahr ist.</li>
+        <li>Damit ist die <code>WHERE</code>-Klausel immer wahr → die Datenbank gibt alle Zeilen zurück.</li>
       </ol>
     </div>
     <div class="notice good" style="margin-top:8px">
-      <strong>Visualisierung der manipulierten Abfrage</strong>
+      <strong>So sieht die manipulierte Abfrage aus</strong>
       <pre id="viz3">SELECT * FROM students WHERE username = '' <span style="background:#223b12">OR '1'='1'</span>;</pre>
-      <div class="small">Der grün markierte Teil stammt aus der Eingabe und ändert die Logik der WHERE-Klausel.</div>
+      <p class="small">Der grün markierte Teil kommt aus der Eingabe und ändert die Logik.</p>
     </div>
+    <label class="row" style="margin-top:8px"><input type="checkbox" id="chk-why"> Ich habe verstanden, warum alle Zeilen erscheinen.</label>
   </section>
 
   <!-- Phase 4 -->
   <section class="card hidden" id="phase-4">
-    <h2>Phase 4: Sichere Variante</h2>
-    <p>Gleiche Eingabe, aber die Anwendung nutzt Parameterbindung. Die Struktur bleibt gleich.</p>
+    <h2>Phase 4: Sichere Variante (Parameter)</h2>
+    <p>Jetzt dieselbe Eingabe, aber die Anwendung nutzt Parameterbindung. Die Struktur bleibt gleich.</p>
     <label for="q4">Eingabe wiederverwenden</label>
     <input id="q4" type="text" placeholder="' OR '1'='1' --">
     <div class="btn-row" style="margin-top:8px">
@@ -163,18 +183,19 @@ th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:left
     <div class="notice info" style="margin-top:8px">
       <strong>Generierte Query (sicher, Parameter)</strong>
       <pre id="sql4">SELECT * FROM students WHERE username = ?  -- bind: ['alice']</pre>
-      <div class="small">Die Eingabe ist ein Wert, kein Code. Eine OR-Bedingung landet nicht in der Struktur.</div>
+      <p class="small">Die Eingabe ist ein Wert, kein Code. Eine OR-Bedingung landet nicht in der Struktur.</p>
     </div>
     <div id="out4"></div>
+    <div id="phase4-ok" class="notice good hidden"><strong>Gut.</strong> Im sicheren Modus erscheinen nicht alle Zeilen. So muss es sein.</div>
   </section>
 
   <!-- Aufgaben -->
   <section class="card">
-    <h2>Aufgaben</h2>
+    <h2>Aufgaben (kurz)</h2>
     <ol>
-      <li>Phase 2: Finde mit minimaler Eingabe alle Datensätze. Notiere die Eingabe.</li>
+      <li>Phase 2: Notiere die Eingabe, die alle Zeilen zeigt.</li>
       <li>Erkläre in einem Satz, warum diese Eingabe wirkt.</li>
-      <li>Phase 4: Teste dieselbe Eingabe. Was ändert sich und warum.</li>
+      <li>Phase 4: Was ändert sich und warum?</li>
       <li>Nenne zwei Schutzmaßnahmen.</li>
     </ol>
     <div class="btn-row" style="margin-top:8px">
@@ -184,11 +205,11 @@ th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:left
     <div id="check-out" class="notice info" style="margin-top:8px"></div>
   </section>
 
-  <!-- Lehrerbereich -->
+  <!-- Lehrkraft -->
   <section class="card hidden" id="teacher-panel">
     <h2>Lehrkraft: Lösungen und Hinweise</h2>
     <ul class="muted">
-      <li>Musterlösung Input: <span class="kbd">' OR '1'='1' --</span></li>
+      <li>Muster-Input: <span class="kbd">' OR '1'='1' --</span></li>
       <li>Kernaussage: OR-Bedingung macht WHERE immer wahr.</li>
       <li>Sicher: Prepared Statements, Input-Validation, least privilege.</li>
     </ul>
@@ -248,14 +269,14 @@ function renderRows(rows, mount){
   }
 }
 function setStep(n){
-  const steps = [1,2,3,4];
-  steps.forEach(s=>{
-    const chip = qs('.step[data-step="'+s+'"]');
-    chip.classList.remove("active","done");
-    if(s<n) chip.classList.add("done");
-    if(s===n) chip.classList.add("active");
+  [1,2,3,4].forEach(s=>{
+    qs('.step[data-step="'+s+'"]').classList.toggle("active", s===n);
     qs("#phase-"+s).classList.toggle("hidden", s!==n);
+    if(s<n) qs('.step[data-step="'+s+'"]').classList.add("done");
   });
+  qs("#btn-prev").disabled = (n===1);
+  // Weiter ist zunächst gesperrt, wird jeweils von den Phasen freigeschaltet
+  qs("#btn-next").disabled = true;
 }
 
 /* -------- Unsichere und sichere „Queries“ -------- */
@@ -264,7 +285,7 @@ function insecureQuery(input){
   qs("#sql2").textContent = sql;
 
   const low = input.toLowerCase();
-  const reAlwaysTrue = /(\bor\b).*?(['"]?\s*1\s*['"]?\s*=\s*['"]?\s*1|true)/i;
+  const reAlwaysTrue = /(\bor\b).*?(['"]?\s*1\s*['"]?\s*=\s*['"]?\s*1|true)/i; // or 1=1 / or '1'='1' / or true
   if(reAlwaysTrue.test(low)){
     return DB.slice();
   }
@@ -280,7 +301,7 @@ function secureQuery(input){
   return DB.filter(r=> r.username === input);
 }
 
-/* -------- Lehrer-Login -------- */
+/* -------- Lehrkraft-Login -------- */
 const PW = "lehrer";
 function openModal(){
   const root = qs("#modal-root");
@@ -309,16 +330,11 @@ function openModal(){
       setTeacher(true);
     } else {
       alert("Falsches Passwort.");
-      qs("#pw").value="";
-      qs("#pw").focus();
+      qs("#pw").value=""; qs("#pw").focus();
     }
   };
 }
-function closeModal(){
-  const root = qs("#modal-root");
-  root.innerHTML="";
-  root.classList.add("hidden");
-}
+function closeModal(){ qs("#modal-root").innerHTML=""; qs("#modal-root").classList.add("hidden"); }
 function setTeacher(on){
   qs("#teacher-panel").classList.toggle("hidden", !on);
   qs("#teacher-controls").style.display = on ? "flex" : "none";
@@ -326,74 +342,59 @@ function setTeacher(on){
   renderDB(!on);
 }
 
-/* -------- Kurz-Check -------- */
-function quickCheck(){
-  const res = qs("#out2 table");
-  const count = res ? Math.max(0,res.querySelectorAll("tbody tr").length) : 0;
-  let score = 0;
-  const fb = [];
+/* -------- Phasen-Logik / Freischaltung -------- */
+let cur = 1;
 
-  if(count === DB.length){ score++; fb.push("1) Phase 2: alle Datensätze angezeigt."); }
-  else fb.push("1) Phase 2: noch nicht alle Datensätze sichtbar.");
+function allowNext(){ qs("#btn-next").disabled = false; }
 
-  const why = qs("#viz3").textContent.toLowerCase();
-  if(why.includes("or") && why.includes("1") && why.includes("=")){ score++; fb.push("2) Ursache erfasst (OR 1=1)."); }
-  else fb.push("2) Ursache noch unklar.");
-
-  const s4 = qs("#sql4").textContent.toLowerCase();
-  if(s4.includes(" ? ") || s4.includes("bind")){ score++; fb.push("3) Parameterbindung erkannt."); }
-  else fb.push("3) Sichere Variante noch prüfen.");
-
-  const out = `<strong>Ergebnis: ${Math.round(score/3*100)}% (${score}/3)</strong><ul><li>${fb.join("</li><li>")}</li></ul>`;
-  qs("#check-out").innerHTML = out;
-}
-
-/* -------- Events -------- */
 document.addEventListener("DOMContentLoaded", ()=>{
-  // Tabelle initial
+  // Start: DB mit maskierten Feldern
   const logged = sessionStorage.getItem("teacher")==="1";
-  setTeacher(logged);
+  setTeacher(logged); renderDB(!logged);
+  setStep(1);
 
-  renderDB(!logged);
-
-  // Samples
+  // Muster-Buttons (füllen die aktive Phase)
   qsa(".sample").forEach(b=>{
-    b.addEventListener("click", ()=> {
+    b.addEventListener("click", ()=>{
       const v = b.getAttribute("data-val");
-      const current = qs('.step.active')?.getAttribute('data-step');
-      if(current==="1") qs("#q1").value = v;
-      if(current==="2") qs("#q2").value = v;
-      if(current==="4") qs("#q4").value = v;
+      if(cur===1) qs("#q1").value = v;
+      if(cur===2) qs("#q2").value = v;
+      if(cur===4) qs("#q4").value = v;
     });
   });
 
-  // Phase 1
+  // Phase 1: normal
   qs("#run1").addEventListener("click", ()=>{
     const v = qs("#q1").value.trim();
     const rows = DB.filter(r=> r.username===v);
-    qs("#sql1").textContent = `SELECT * FROM students WHERE username = '${v}';`;
     renderRows(rows, "#out1");
+    if(rows.length===1){ qs("#phase1-ok").classList.remove("hidden"); allowNext(); }
   });
 
-  // Phase 2
+  // Phase 2: unsicher
   qs("#run2").addEventListener("click", ()=>{
     const v = qs("#q2").value.trim();
     const rows = insecureQuery(v);
     renderRows(rows, "#out2");
+    if(Array.isArray(rows) && rows.length===DB.length){
+      qs("#phase2-ok").classList.remove("hidden"); allowNext();
+    }
   });
 
-  // Phase 4
+  // Phase 3: Verständnis
+  qs("#chk-why").addEventListener("change", ()=>{ if(qs("#chk-why").checked) allowNext(); });
+
+  // Phase 4: sicher
   qs("#run4").addEventListener("click", ()=>{
     const v = qs("#q4").value.trim();
     const rows = secureQuery(v);
     renderRows(rows, "#out4");
+    if(!(Array.isArray(rows) && rows.length===DB.length)){ qs("#phase4-ok").classList.remove("hidden"); allowNext(); }
   });
 
-  // Stepper
-  function step(n){ setStep(n); }
-  let cur = 1;
-  qs("#btn-next").addEventListener("click", ()=>{ cur = Math.min(4, cur+1); step(cur); });
-  qs("#btn-prev").addEventListener("click", ()=>{ cur = Math.max(1, cur-1); step(cur); });
+  // Stepper Navigation
+  qs("#btn-next").addEventListener("click", ()=>{ cur = Math.min(4, cur+1); setStep(cur); });
+  qs("#btn-prev").addEventListener("click", ()=>{ cur = Math.max(1, cur-1); setStep(cur); });
 
   // Lehrkraft
   qs("#btn-teacher-login").addEventListener("click", openModal);
@@ -401,15 +402,22 @@ document.addEventListener("DOMContentLoaded", ()=>{
   qs("#btn-show-sensitive").addEventListener("click", ()=>{ renderDB(false); qs("#btn-show-sensitive").classList.add("hidden"); qs("#btn-hide-sensitive").classList.remove("hidden"); });
   qs("#btn-hide-sensitive").addEventListener("click", ()=>{ renderDB(true); qs("#btn-hide-sensitive").classList.add("hidden"); qs("#btn-show-sensitive").classList.remove("hidden"); });
 
-  // Aufgaben-Check
-  qs("#check").addEventListener("click", quickCheck);
+  // Kurz-Check
+  qs("#check").addEventListener("click", ()=>{
+    const res = qs("#out2 table"); const count = res ? Math.max(0,res.querySelectorAll("tbody tr").length) : 0;
+    let s=0, fb=[];
+    if(count===DB.length){ s++; fb.push("1) Phase 2: alle Zeilen angezeigt."); } else fb.push("1) Phase 2: noch nicht alle Zeilen.");
+    if(qs("#chk-why").checked){ s++; fb.push("2) Ursache bestätigt (OR 1=1)."); } else fb.push("2) Ursache noch bestätigen.");
+    const s4 = qs("#sql4").textContent.toLowerCase(); 
+    if(s4.includes("?") || s4.includes("bind")){ s++; fb.push("3) Parameter erkannt."); } else fb.push("3) Phase 4 erneut testen.");
+    qs("#check-out").innerHTML = `<strong>Ergebnis: ${Math.round(s/3*100)}% (${s}/3)</strong><ul><li>${fb.join("</li><li>")}</li></ul>`;
+  });
   qs("#reset-check").addEventListener("click", ()=>{ qs("#check-out").innerHTML=""; });
 
-  // Direktstart: Phase 1
-  setStep(1);
 });
 </script>
 </body>
 </html>
+
 
 
