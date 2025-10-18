@@ -77,8 +77,11 @@ const server = http.createServer((req, res) => {
             // geheim-Seite ausliefern
             serveFile('geheim.html', res);
          } else if (req.url === '/spam.html') {
-            // geheim-Seite ausliefern
+            // spam-Seite ausliefern
             serveFile('spam.html', res);
+         } else if (req.url === '/spam.html') {
+            // sql-Seite ausliefern
+            serveFile('sql.html', res);
          } else {
             // 404-Seite
             res.statusCode = 404;
