@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SQL Injection — Schülerdaten (Simulation)</title>
+  <style>
+    :root {
+      --bg: #071226;
+      --card: #0c1a2a;
+      --muted: #98b2c6;
+      --accent: #2ea6ff;
+      --danger: #f44336;
+      --ok: #16a34a;
+      --panel: #071726;
+    }
+    body { font-family: Arial, Helvetica, sans-serif; background: linear-gradient(180deg,#051022,#102034); color:#e6eef6; margin:0; padding:20px; }
+    .wrap { max-width:900px; margin:0 auto; }
+    .card { background:var(--card); border:1px solid rgba(255,255,255,0.04); padding:14px; border-radius:8px; margin-bottom:14px; }
+    h1 { margin:0 0 6px 0; font-size:1.4rem; }
+    h2 { margin:6px 0 10px 0; font-size:1.1rem; }
+    p { margin:6px 0; color:var(--muted); }
+    label { display:block; margin-top:8px; color:#cfe6ff; }
+    input[type="text"], textarea { width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.06); background:var(--panel); color:#e6eef6; box-sizing:border-box; }
+    .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    button { background:var(--accent); color:#022; border:none; padding:8px 10px; border-radius:6px; cursor:pointer; font-weight:700; }
+    button.alt { background:#334155; color:#cfe6ff; }
+    button.danger { background:var(--danger); color:#fff; }
+    pre { background:#041624; padding:8px; border-radius:6px; overflow:auto; color:#d8f3ff; }
+    table { width:100%; border-collapse:collapse; margin-top:8px; }
+    th, td { text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,0.03); }
+    .warning { background:#fff0f0; color:#6b0000; padding:8px; border-radius:6px; font-weight:700; margin-bottom:8px; }
+    .muted { color:var(--muted); font-size:0.95rem; }
+    .teacher { display:none; background:#071726; border:1px dashed rgba(46,166,255,0.25); padding:8px; margin-top:8px; border-radius:6px; color:#bfe8ff; }
+    .hint { background:#071f1b; border-left:4px solid #06b6a4; padding:8px; border-radius:4px; color:#cfeee6; }
+    .ok { color:var(--ok); font-weight:700; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card warning">
+      ACHTUNG: Diese Seite zeigt absichtlich ein Sicherheitsproblem. Alle Operationen sind lokal und simuliert. Nicht auf Produktivsystemen nachmachen.
+    </div>
+
+    <div class="card">
+      <h1>Schülerdatenbank: SQL &amp; SQL Injection (Simulation)</h1>
+      <p class="muted">Ziel: Verstehen, wie eine einfache SQL-Abfrage aufgebaut ist, wie eine Injection funktioniert und wie Parameterbindung schützt.</p>
+    </div>
+
+    <div class="card">
+      <h2>Kurze Einführung: Was ist SQL?</h2>
+      <p>SQL ist die Sprache, mit der man Daten in einer Datenbank abfragt oder verändert. Eine typische Abfrage, um einen Datensatz mit Benutzernamen zu finden, sieht so aus:</p>
+      <pre>SELECT * FROM students WHERE username = 'alice';</pre>
+      <p class="muted">Wichtig: Der Teil in einfachen Anführungszeichen ist ein Wert. Wenn dieser Teil durch Nutzerangaben unkontrolliert zusammengesetzt wird, kann das zu Problemen führen.</p>
+    </div>
+
+    <div class="card">
+      <h2>Die simulierte Schülerdatenbank</h2>
+      <p class="muted">Wir verwenden hier keine echte Datenbank. Alles läuft im Browser in JavaScript.</p>
+      <pre id="db-preview"></pre>
+    </div>
+
+    <div class="card">
+      <h2>Moduswahl</h2>
+      <div class="row">
+        <label><input type="radio" name="mode" id="mode-vuln" checked> Unsichere Abfrage (String-Konkatenation)</label>
+        <label><input type="radio" name="mode" id="mode-safe"> Sichere Abfrage (parametrisiert)</label>
+        <button id="teacher-toggle" class="alt">Lehrkraft: Hinweise ein/aus</button>
+      </div>
+      <div id="teacher-panel" class="teacher">
+        <strong>Lehrkraft-Hinweis</strong>
+        <p class="muted">Im unsicheren Modus bauen wir die "Query" durch Zusammenfügen von Strings. Das erlaubt Manipulationen. Im sicheren Modus behandeln wir die Eingabe strikt als Parameter.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Abfrage formulieren</h2>
+      <p class="muted">Gib einen Benutzernamen ein oder versuche typische Injection-Strings. Klicke auf Ausführen.</p>
+      <label for="input-q">Eingabe (username):</label>
+      <input id="input-q" type="text" placeholder="z. B. alice  oder  ' OR '1'='1">
+      <div style="margin-top:8px" class="row">
+        <button id="run">Ausführen</button>
+        <button id="reset" class="danger">Zurücksetzen</button>
+        <button class="alt sample" data-s="alice">alice</button>
+        <button class="alt sample" data-s="bob">bob</button>
+        <button class="alt sample" data-s="' OR '1'='1"> ' OR '1'='1 </button>
+        <button class="alt sample" data-s="'; DROP TABLE students; --"> '; DROP TABLE students; -- </button>
+      </div>
+
+      <div style="margin-top:12px">
+        <div id="query-built" class="muted"></div>
+        <div id="results"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Warum funktioniert <code>' OR '1'='1</code>?</h2>
+      <p class="muted">Wenn man die Eingabe ungeprüft in die WHERE-Klausel setzt, verwandelt sich die Bedingung in etwas wie</p>
+      <pre>WHERE username = '' OR '1'='1';</pre>
+      <p class="muted">Die Prüfung <code>'1'='1'</code> ist immer wahr. Deshalb liefert die Query alle Datensätze.</p>
+    </div>
+
+    <div class="card">
+      <h2>Aufgabe</h2>
+      <ol>
+        <li>Finde mit minimaler Eingabe alle Datensätze im unsicheren Modus.</li>
+        <li>Formuliere in kurzen Worten, warum die Eingabe wirkt.</li>
+        <li>Wechsle in den sicheren Modus. Gib denselben Input ein. Was passiert?</li>
+      </ol>
+      <p class="muted">Wenn du die Aufgaben gelöst hast, notiere deine Antworten. Lehrkraft: Lösungen lassen sich am Ende einsehen.</p>
+    </div>
+
+    <div class="card hint" id="explanation">
+      <strong>Sichere Umsetzung</strong>
+      <p>Statt Werte in die Query zu kleben, benutzt man Platzhalter und bindet Parameter. Dadurch bleibt die Struktur der Query unveränderlich.</p>
+      <pre>SELECT * FROM students WHERE username = ?  -- bind: ['alice']</pre>
+      <p class="muted">In echten Systemen sind das Prepared Statements oder parametrisierte APIs des Datenbank-Treibers.</p>
+    </div>
+
+    <div class="card">
+      <h2>Weiterführend</h2>
+      <ul class="muted">
+        <li>Whitelist-Prüfungen für Felder, die vornehmlich bestimmte Muster haben</li>
+        <li>Least-privilege: DB-User mit minimalen Rechten</li>
+        <li>Monitoring ungewöhnlicher Queries oder Häufung von Syntaxfragmenten</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <script>
+    // Simulierte DB: Schülerdaten
+    const MOCK_DB = [
+      { id: 1, username: "alice", class: "7a", grade: 2.1, note: "aktiv" },
+      { id: 2, username: "bob", class: "8b", grade: 3.4, note: "schreibt gut" },
+      { id: 3, username: "carol", class: "9a", grade: 1.7, note: "Klassenvertretung" },
+      { id: 4, username: "dave", class: "7a", grade: 2.9, note: "unregelmäßig" },
+      { id: 5, username: "eva", class: "10c", grade: 1.3, note: "Tutor" }
+    ];
+
+    // UI-Elemente
+    const dbPreview = document.getElementById("db-preview");
+    const inputQ = document.getElementById("input-q");
+    const runBtn = document.getElementById("run");
+    const resetBtn = document.getElementById("reset");
+    const queryBuilt = document.getElementById("query-built");
+    const results = document.getElementById("results");
+    const teacherToggle = document.getElementById("teacher-toggle");
+    const teacherPanel = document.getElementById("teacher-panel");
+
+    // Anzeige der DB
+    function showDB() {
+      dbPreview.textContent = JSON.stringify(MOCK_DB, null, 2);
+    }
+    showDB();
+
+    // Utility: sichere Anzeige (escaped)
+    function esc(s) {
+      return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+
+    // Unsichere "Query"-Simulation: String-Konkatenation
+    function insecureQuery(userInput) {
+      // So würde eine unsichere Query aufgebaut aussehen
+      const sql = "SELECT * FROM students WHERE username = '" + userInput + "';";
+      queryBuilt.innerHTML = "<strong>Generierte Query (unsicher)</strong><pre>" + esc(sql) + "</pre>";
+
+      // Simuliere Auswertung: erkenne einfache pattern
+      const low = userInput.toLowerCase();
+      // pattern: OR 1=1
+      if (low.includes(" or ") && (low.includes("1=1") || low.includes("'1'='1'") || low.includes("true"))) {
+        // liefert alle
+        return MOCK_DB.slice();
+      }
+      // pattern: manuelle comment/semicolon -> simulate a destructive payload: show as "erkannt"
+      if (low.includes("drop table") || low.includes(";")) {
+        // wir zeigen was passieren *würde*, aber führen nichts aus
+        return { error: "Gefährliche Anweisung erkannt. In dieser Simulation wird nichts gelöscht. In echten Systemen wäre das kritisch." };
+      }
+      // sonst exakter Vergleich
+      const found = MOCK_DB.filter(r => r.username === userInput);
+      return found;
+    }
+
+    // Sichere "Query"-Simulation: Parameterbindung
+    function safeQuery(userInput) {
+      const sql = "SELECT * FROM students WHERE username = ?  -- bind: [" + esc(userInput) + "]";
+      queryBuilt.innerHTML = "<strong>Generierte Query (sicher)</strong><pre>" + esc(sql) + "</pre>";
+      // Parameter werden als Werte behandelt. Kein OR 1=1 Effekt.
+      const found = MOCK_DB.filter(r => r.username === userInput);
+      return found;
+    }
+
+    // Ergebnisanzeige
+    function renderResult(data) {
+      results.innerHTML = "";
+      if (data == null) return;
+      if (Array.isArray(data)) {
+        if (data.length === 0) {
+          results.innerHTML = "<p class='muted'>Keine Ergebnisse</p>";
+          return;
+        }
+        const table = document.createElement("table");
+        const head = document.createElement("tr");
+        head.innerHTML = "<th>ID</th><th>Username</th><th>Klasse</th><th>Note</th>";
+        table.appendChild(head);
+        data.forEach(r => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = "<td>" + esc(r.id) + "</td><td>" + esc(r.username) + "</td><td>" + esc(r.class) + "</td><td>" + esc(r.grade) + "</td>";
+          table.appendChild(tr);
+        });
+        results.appendChild(table);
+        return;
+      }
+      // Fehlerobjekt
+      if (data && data.error) {
+        results.innerHTML = "<pre style='color:#ffdede;background:#2a0b09;padding:8px;border-radius:6px'>" + esc(data.error) + "</pre>";
+        return;
+      }
+      results.innerHTML = "<pre class='muted'>" + esc(JSON.stringify(data, null, 2)) + "</pre>";
+    }
+
+    // Handler
+    runBtn.addEventListener("click", () => {
+      const val = inputQ.value.trim();
+      if (!val) {
+        alert("Bitte etwas eingeben.");
+        return;
+      }
+      const vuln = document.getElementById("mode-vuln").checked;
+      let out;
+      try {
+        out = vuln ? insecureQuery(val) : safeQuery(val);
+      } catch (e) {
+        out = { error: "Fehler bei Ausführung: " + String(e) };
+      }
+      renderResult(out);
+    });
+
+    resetBtn.addEventListener("click", () => {
+      inputQ.value = "";
+      queryBuilt.innerHTML = "";
+      results.innerHTML = "";
+    });
+
+    document.querySelectorAll(".sample").forEach(b => {
+      b.addEventListener("click", () => {
+        inputQ.value = b.dataset.s;
+      });
+    });
+
+    teacherToggle.addEventListener("click", () => {
+      teacherPanel.style.display = teacherPanel.style.display === "block" ? "none" : "block";
+    });
+
+    // Quick-help: wenn Schüler in vulnerablen Modus alle zeigen möchte, Vorschlag anzeigen
+    // (nur für Demo, nicht automatisch ausführen)
+    // footprints: nothing else
+
+    // DOM ready
+    window.addEventListener("DOMContentLoaded", () => {
+      // nothing to do yet
+    });
+  </script>
+</body>
+</html>
