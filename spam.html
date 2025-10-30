@@ -9,6 +9,7 @@
       --bg:#f7fafc; --panel:#ffffff; --ink:#0b1220; --muted:#4b5563; --accent:#2563eb;
       --ok:#16a34a; --bad:#dc2626; --border:#e5e7eb; --shadow:0 1px 2px rgba(0,0,0,.05);
       --radius:12px; --card:#ffffff; --meta:#6b7280;
+      --divider:#e5e7eb;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -17,7 +18,7 @@
       color:var(--ink); background:var(--bg);
     }
     .wrap{max-width:1100px; margin:0 auto; padding:24px}
-    header{display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:16px}
+    header{display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:12px}
     h1{font-size:24px; margin:0; font-weight:800; letter-spacing:.2px}
     h2{margin:0 0 6px; font-size:18px}
     h3{margin:0 0 6px; font-size:15px}
@@ -28,6 +29,10 @@
       background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
       padding:16px; box-shadow:var(--shadow);
     }
+    .section{margin-top:16px}
+    .divider{height:1px; background:var(--divider); margin:12px 0}
+    .pill{display:inline-block; font-size:12px; padding:4px 10px; border-radius:999px; background:#eef2ff; color:#1f2937; border:1px solid var(--border)}
+
     select,input,button,textarea{
       background:#ffffff; border:1px solid var(--border); color:var(--ink);
       padding:10px 12px; border-radius:10px; height:40px
@@ -39,15 +44,16 @@
     button:focus-visible, .switch:focus-visible, input:focus-visible, select:focus-visible{
       outline:2px solid var(--accent); outline-offset:2px
     }
+
     table{width:100%; border-collapse:collapse; background:#ffffff; border:1px solid var(--border); border-radius:8px; overflow:hidden}
     th,td{border-bottom:1px solid var(--border); padding:10px; text-align:left}
     thead th{background:#f3f4f6; font-weight:700; font-size:13px; color:#374151}
+
     .out{font-weight:800; font-size:18px}
     .ok{color:var(--ok)} .bad{color:var(--bad)}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
-    .hidden{display:none}
 
-    /* Inbox-Karte (hell) */
+    /* Inbox */
     .inbox{display:grid; gap:12px}
     .email-card{
       display:grid; grid-template-columns:40px 1fr auto; gap:12px; align-items:center;
@@ -62,7 +68,7 @@
     .meta{color:var(--meta); font-size:12px}
     .label{display:inline-block; font-size:12px; padding:3px 8px; border-radius:999px; border:1px solid var(--border); background:#f9fafb; margin-left:6px}
 
-    /* Entscheidungskästen */
+    /* Entscheidung */
     .decision{display:grid; grid-template-columns:1fr 1fr; gap:12px}
     .decision .box{background:#ffffff; border:1px solid var(--border); border-radius:10px; padding:12px}
 
@@ -82,186 +88,180 @@
     <header>
       <div>
         <h1>Von der Wenn-Dann-Regel zum lernenden System · Spamfilter (Demo)</h1>
-        <div class="small">Physischer Posteingang → Regeln → Lernendes System. Klarer Direktvergleich.</div>
+        <div class="small">Posteingang simulieren, Regeln prüfen, Perzeptron testen. Direktstart.</div>
       </div>
       <div class="row">
         <button id="btnShot">Screenshot-Ansicht</button>
       </div>
     </header>
 
-    <!-- Phase 0 -->
-    <section id="phase0" class="panel">
-      <h2>Workshop-Ziele</h2>
-      <ul class="small">
-        <li>Unterschied: feste Entscheidungsregeln vs. lernende Systeme</li>
-        <li>Physischer Posteingang: Mails mit „falls … sonst …“ sortieren</li>
-        <li>Vergleich: Regeln vs. Perzeptron</li>
-      </ul>
-      <div class="row">
-        <button id="goDemo" class="primary">Weiter zur Demo</button>
-      </div>
-    </section>
+    <div class="grid">
+      <!-- Sidebar -->
+      <aside class="panel">
+        <h2>Datensatz</h2>
+        <p class="small">Beispiel-Mails. Features sind 0/1. „Soll“ = korrektes Label.</p>
 
-    <!-- Phase 2 -->
-    <section id="phase2" class="panel hidden">
-      <div class="row" style="justify-content:space-between; margin-bottom:12px">
         <div class="row">
-          <button id="prevMail">⟨ Zurück</button>
-          <button id="nextMail" class="primary">Weiter ⟩</button>
-          <button id="autoPlay">Auto</button>
-          <span class="small">Mail <span id="idxNow">1</span>/<span id="idxTotal">–</span></span>
+          <label>Mail:
+            <select id="emailSelect" aria-label="Beispiel-Mail wählen"></select>
+          </label>
+          <span id="goldTag" class="pill">Soll: –</span>
         </div>
-        <div class="mode" title="Regelbasiert ↔ Lernendes System">
-          <span class="small">Modus:</span>
-          <div id="modeSwitch" class="switch" role="switch" aria-checked="false" aria-label="Modus umschalten" tabindex="0"></div>
-          <span id="modeText" class="small">Regelbasiert</span>
-        </div>
-      </div>
 
-      <div class="grid">
-        <!-- Sidebar -->
-        <aside class="panel">
-          <h2>Datensatz</h2>
-          <p class="small">Beispiel-Mails. Features sind 0/1. „Soll“ ist das korrekte Label.</p>
-          <div class="row">
-            <label>Mail:
-              <select id="emailSelect" aria-label="Beispiel-Mail wählen"></select>
-            </label>
-            <span id="goldTag" class="label">Soll: –</span>
-          </div>
+        <div class="divider"></div>
 
-          <table id="featTable" style="margin-top:10px">
-            <thead><tr><th>Feature</th><th>Wert</th></tr></thead>
-            <tbody></tbody>
+        <table id="featTable" aria-label="Merkmalswerte">
+          <thead><tr><th>Feature</th><th>Wert</th></tr></thead>
+          <tbody></tbody>
+        </table>
+
+        <details class="section">
+          <summary>Alle Datensätze</summary>
+          <table id="dataTable" style="margin-top:8px">
+            <thead id="dataHead"></thead>
+            <tbody id="dataBody"></tbody>
           </table>
+        </details>
+      </aside>
 
-          <details style="margin-top:12px">
-            <summary>Datensätze ansehen</summary>
-            <table id="dataTable">
-              <thead id="dataHead"></thead>
-              <tbody id="dataBody"></tbody>
-            </table>
-          </details>
-        </aside>
+      <!-- Main -->
+      <main style="display:grid;gap:16px">
+        <!-- Inbox -->
+        <section class="panel">
+          <div class="row" style="justify-content:space-between">
+            <h2 style="margin:0">Posteingang</h2>
+            <div class="row">
+              <button id="prevMail">⟨ Zurück</button>
+              <button id="nextMail" class="primary">Weiter ⟩</button>
+              <button id="autoPlay">Auto</button>
+              <span class="small">Mail <span id="idxNow">1</span>/<span id="idxTotal">–</span></span>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div id="inbox" class="inbox"></div>
 
-        <!-- Main -->
-        <main style="display:grid;gap:16px">
-          <!-- Inbox -->
-          <section class="panel">
-            <h2>Posteingang</h2>
-            <div id="inbox" class="inbox"></div>
-            <div class="decision" style="margin-top:12px">
+          <div class="section">
+            <div class="decision">
               <div class="box">
                 <h3>Regelbasierte Entscheidung</h3>
                 <div id="ruleWhy" class="small mono">Regeln: –</div>
                 <div id="ruleOut" class="out" aria-live="polite">–</div>
+                <div class="divider"></div>
+                <h4 style="margin:0 0 4px 0">Auswertung</h4>
+                <div class="small mono">Trefferquote: <span id="ruleAcc">–</span></div>
+                <div class="small mono">TP / TN: <span id="ruleTP">–</span></div>
+                <div class="small mono">FP / FN: <span id="ruleFP">–</span></div>
               </div>
               <div class="box" id="learnBox">
                 <h3>Perzeptron-Entscheidung</h3>
                 <div id="neuSum" class="small mono">Summe = –</div>
                 <div id="neuOut" class="out" aria-live="polite">–</div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Regel-Panel -->
-          <section class="panel" id="rulePanel">
-            <h2>Regelbasierter Filter (Wenn-Dann)</h2>
-            <div class="small">Aktiviere Merkmale, die „Spam ⇒ ja“ auslösen.</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-              <details open><summary>Regeln bearbeiten</summary>
-                <div class="row"><label><input type="checkbox" class="r" data-key="r0" checked> <span id="ruleLbl0">Betreff enthält »gratis«</span> ⇒ Spam</label></div>
-                <div class="row"><label><input type="checkbox" class="r" data-key="r1" checked> <span id="ruleLbl1">Verdächtige/typo Absenderdomäne</span> ⇒ Spam</label></div>
-                <div class="row"><label><input type="checkbox" class="r" data-key="r2" checked> <span id="ruleLbl2">Betreff in ALL CAPS</span> ⇒ Spam</label></div>
-                <div class="row"><label><input type="checkbox" class="r" data-key="r3" checked> <span id="ruleLbl3">Dringlichkeit/Alarm</span> ⇒ Spam</label></div>
-                <div class="row"><label><input type="checkbox" class="r" data-key="r4" checked> <span id="ruleLbl4">Werbung/Promo-Sprache</span> ⇒ Spam</label></div>
-                <div class="row"><label>Reihenfolge:
-                  <select id="ruleOrder" aria-label="Regelreihenfolge">
-                    <option value="natural">Natürliche Reihenfolge</option>
-                    <option value="prioritizeSpam">„Spam“-Regeln zuerst</option>
-                  </select>
-                </label></div>
-              </details>
-              <div>
-                <h3>Modellgüte</h3>
-                <div class="small mono">Trefferquote: <span id="ruleAcc">–</span></div>
-                <details style="margin-top:6px">
-                  <summary>Auswertung</summary>
-                  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:8px">
-                    <div class="panel"><div class="small">TP / TN</div><div id="ruleTP" class="out">–</div></div>
-                    <div class="panel"><div class="small">FP / FN</div><div id="ruleFP" class="out">–</div></div>
-                  </div>
-                </details>
-              </div>
-            </div>
-          </section>
-
-          <!-- Neuron-Panel -->
-          <section class="panel hidden" id="neuronPanel">
-            <h2>Lernendes System (Perzeptron)</h2>
-            <div class="small">Gewichtete Summe der Merkmale, Vergleich mit Schwelle θ.</div>
-
-            <div class="row" style="flex-wrap:wrap;margin-top:6px">
-              <label id="wName0">w₁ <input id="w0" type="range" min="-2" max="2" step="0.1" value="0.8"><input id="w0Val" type="number" min="-2" max="2" step="0.1" value="0.8" style="width:80px"></label>
-              <label id="wName1">w₂ <input id="w1" type="range" min="-2" max="2" step="0.1" value="-0.5"><input id="w1Val" type="number" min="-2" max="2" step="0.1" value="-0.5" style="width:80px"></label>
-              <label id="wName2">w₃ <input id="w2" type="range" min="-2" max="2" step="0.1" value="0.6"><input id="w2Val" type="number" min="-2" max="2" step="0.1" value="0.6" style="width:80px"></label>
-              <label id="wName3">w₄ <input id="w3" type="range" min="-2" max="2" step="0.1" value="0.4"><input id="w3Val" type="number" min="-2" max="2" step="0.1" value="0.4" style="width:80px"></label>
-              <label id="wName4">w₅ <input id="w4" type="range" min="-2" max="2" step="0.1" value="0.7"><input id="w4Val" type="number" min="-2" max="2" step="0.1" value="0.7" style="width:80px"></label>
-              <label>θ <input id="theta" type="range" min="0" max="3" step="0.1" value="0.7"><input id="thetaVal" type="number" min="0" max="3" step="0.1" value="0.7" style="width:80px"></label>
-            </div>
-
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-              <div>
-                <h3>Modellgüte</h3>
+                <div class="divider"></div>
+                <h4 style="margin:0 0 4px 0">Auswertung</h4>
                 <div class="small mono">Trefferquote: <span id="neuAcc">–</span></div>
-                <details style="margin-top:6px">
-                  <summary>Auswertung</summary>
-                  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:8px">
-                    <div class="panel"><div class="small">TP / TN</div><div id="neuTP" class="out">–</div></div>
-                    <div class="panel"><div class="small">FP / FN</div><div id="neuFP" class="out">–</div></div>
-                  </div>
-                </details>
-              </div>
-              <div>
-                <h3>Training</h3>
-                <div class="row" style="margin-top:8px">
-                  <button id="fitOnce">🚀 1× trainieren</button>
-                  <button id="fitAuto" class="primary">🤖 Auto-Training (Perzeptron)</button>
-                  <button id="resetW">🔁 Gewichte zurücksetzen</button>
-                </div>
-                <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px"></div>
-                <details>
-                  <summary>📉 Fehler pro Epoche</summary>
-                  <table>
-                    <thead><tr><th>Epoche</th><th>Anzahl Updates (Fehler)</th></tr></thead>
-                    <tbody id="epochTableBody"></tbody>
-                  </table>
-                </details>
-                <details>
-                  <summary>⚖️ Gewichtsverlauf (w₁…w₅, θ)</summary>
-                  <div class="small" style="margin:6px 0">Werte nach jeder Epoche (inkl. Startzustand als Epoche 0).</div>
-                  <table>
-                    <thead>
-                      <tr><th>Epoche</th><th>w₁</th><th>w₂</th><th>w₃</th><th>w₄</th><th>w₅</th><th>θ</th></tr>
-                    </thead>
-                    <tbody id="weightTableBody"></tbody>
-                  </table>
-                </details>
+                <div class="small mono">TP / TN: <span id="neuTP">–</span></div>
+                <div class="small mono">FP / FN: <span id="neuFP">–</span></div>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Vergleichstabelle (optional sichtbar im Lernmodus) -->
-          <section class="panel hidden" id="comparePanel">
-            <h2>Direkter Vergleich</h2>
-            <table>
-              <thead><tr><th>Mail</th><th>Regelbasiert</th><th>Mini-Neuron</th><th>Soll</th></tr></thead>
-              <tbody id="compareBody"></tbody>
-            </table>
-          </section>
-        </main>
-      </div>
-    </section>
+        <!-- Regel-Panel -->
+        <section class="panel" id="rulePanel">
+          <div class="row" style="justify-content:space-between">
+            <h2 style="margin:0">Regelbasierter Filter (Wenn-Dann)</h2>
+            <div class="mode" title="Regelbasiert ↔ Lernendes System">
+              <span class="small">Lernmodus:</span>
+              <div id="modeSwitch" class="switch" role="switch" aria-checked="true" aria-label="Lernmodus umschalten" tabindex="0"></div>
+              <span id="modeText" class="small">An</span>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <details open><summary>Regeln bearbeiten</summary>
+              <div class="row"><label><input type="checkbox" class="r" data-key="r0" checked> <span id="ruleLbl0">Betreff enthält »gratis«</span> ⇒ Spam</label></div>
+              <div class="row"><label><input type="checkbox" class="r" data-key="r1" checked> <span id="ruleLbl1">Verdächtige/typo Absenderdomäne</span> ⇒ Spam</label></div>
+              <div class="row"><label><input type="checkbox" class="r" data-key="r2" checked> <span id="ruleLbl2">Betreff in ALL CAPS</span> ⇒ Spam</label></div>
+              <div class="row"><label><input type="checkbox" class="r" data-key="r3" checked> <span id="ruleLbl3">Dringlichkeit/Alarm</span> ⇒ Spam</label></div>
+              <div class="row"><label><input type="checkbox" class="r" data-key="r4" checked> <span id="ruleLbl4">Werbung/Promo-Sprache</span> ⇒ Spam</label></div>
+              <div class="row"><label>Reihenfolge:
+                <select id="ruleOrder" aria-label="Regelreihenfolge">
+                  <option value="natural">Natürliche Reihenfolge</option>
+                  <option value="prioritizeSpam">„Spam“-Regeln zuerst</option>
+                </select>
+              </label></div>
+            </details>
+            <div>
+              <h3 style="margin:0 0 6px 0">Modellgüte (akt. Einstellungen)</h3>
+              <div class="small mono">Trefferquote: <span id="ruleAccTop">–</span></div>
+              <div class="small mono">TP / TN: <span id="ruleTPTop">–</span></div>
+              <div class="small mono">FP / FN: <span id="ruleFPTop">–</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Neuron-Panel -->
+        <section class="panel" id="neuronPanel">
+          <h2 style="margin:0">Lernendes System (Perzeptron)</h2>
+          <div class="divider"></div>
+
+          <div class="small">Gewichtete Summe der Merkmale, Vergleich mit Schwelle θ.</div>
+          <div class="row" style="flex-wrap:wrap;margin-top:6px">
+            <label id="wName0">w₁ <input id="w0" type="range" min="-2" max="2" step="0.1" value="0.8"><input id="w0Val" type="number" min="-2" max="2" step="0.1" value="0.8" style="width:80px"></label>
+            <label id="wName1">w₂ <input id="w1" type="range" min="-2" max="2" step="0.1" value="-0.5"><input id="w1Val" type="number" min="-2" max="2" step="0.1" value="-0.5" style="width:80px"></label>
+            <label id="wName2">w₃ <input id="w2" type="range" min="-2" max="2" step="0.1" value="0.6"><input id="w2Val" type="number" min="-2" max="2" step="0.1" value="0.6" style="width:80px"></label>
+            <label id="wName3">w₄ <input id="w3" type="range" min="-2" max="2" step="0.1" value="0.4"><input id="w3Val" type="number" min="-2" max="2" step="0.1" value="0.4" style="width:80px"></label>
+            <label id="wName4">w₅ <input id="w4" type="range" min="-2" max="2" step="0.1" value="0.7"><input id="w4Val" type="number" min="-2" max="2" step="0.1" value="0.7" style="width:80px"></label>
+            <label>θ <input id="theta" type="range" min="0" max="3" step="0.1" value="0.7"><input id="thetaVal" type="number" min="0" max="3" step="0.1" value="0.7" style="width:80px"></label>
+          </div>
+
+          <div class="divider"></div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+            <div>
+              <h3 style="margin:0 0 6px 0">Modellgüte (aktuelle Gewichte)</h3>
+              <div class="small mono">Trefferquote: <span id="neuAcc">–</span></div>
+              <div class="small mono">TP / TN: <span id="neuTP">–</span></div>
+              <div class="small mono">FP / FN: <span id="neuFP">–</span></div>
+            </div>
+            <div>
+              <h3 style="margin:0 0 6px 0">Training</h3>
+              <div class="row" style="margin-top:4px">
+                <button id="fitOnce">🚀 1× trainieren</button>
+                <button id="fitAuto" class="primary">🤖 Auto-Training (Perzeptron)</button>
+                <button id="resetW">🔁 Gewichte zurücksetzen</button>
+              </div>
+              <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px"></div>
+              <details class="section">
+                <summary>📉 Fehler pro Epoche</summary>
+                <table style="margin-top:8px">
+                  <thead><tr><th>Epoche</th><th>Anzahl Updates (Fehler)</th></tr></thead>
+                  <tbody id="epochTableBody"></tbody>
+                </table>
+              </details>
+              <details class="section">
+                <summary>⚖️ Gewichtsverlauf (w₁…w₅, θ)</summary>
+                <div class="small" style="margin:6px 0">Werte nach jeder Epoche (inkl. Startzustand als Epoche 0).</div>
+                <table>
+                  <thead><tr><th>Epoche</th><th>w₁</th><th>w₂</th><th>w₃</th><th>w₄</th><th>w₅</th><th>θ</th></tr></thead>
+                  <tbody id="weightTableBody"></tbody>
+                </table>
+              </details>
+            </div>
+          </div>
+        </section>
+
+        <!-- Vergleich -->
+        <section class="panel" id="comparePanel">
+          <h2 style="margin:0">Direkter Vergleich</h2>
+          <div class="divider"></div>
+          <table>
+            <thead><tr><th>Mail</th><th>Regelbasiert</th><th>Mini-Neuron</th><th>Soll</th></tr></thead>
+            <tbody id="compareBody"></tbody>
+          </table>
+        </section>
+      </main>
+    </div>
 
     <div class="small" style="margin-top:12px;color:#6b7280">© Demo, frei nutzbar.</div>
   </div>
@@ -296,16 +296,12 @@
     const saveData = ()=> localStorage.setItem("spamDemoDataFixed", JSON.stringify(data));
     const currentMail = ()=> data[$("emailSelect").selectedIndex || 0];
     const mailToFeatVec = (m)=> [m.g, m.k, m.l, m.c, m.d];
-    const escapeHtml = (s)=> String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;","&quot;":"&quot;","<":"&lt;",">":"&gt;"}[c]));
-
-    /* ---------- Phasen ---------- */
-    function setPhase(p){ ["phase0","phase2"].forEach((id,idx)=> $(id).classList.toggle("hidden", idx!==p)); }
-    $("goDemo").addEventListener("click", ()=> setPhase(1));
+    const escapeHtml = (s)=> String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
 
     /* ---------- Regel & Neuron ---------- */
     const modeSwitch = $("modeSwitch");
     const modeText = $("modeText");
-    let mode = "rule";
+    let mode = "learn"; // Lernmodus standardmäßig AN
 
     const emailSelect = $("emailSelect");
     const goldTag = $("goldTag");
@@ -331,6 +327,9 @@
     const ruleAcc = $("ruleAcc");
     const ruleTP = $("ruleTP");
     const ruleFP = $("ruleFP");
+    const ruleAccTop = $("ruleAccTop");
+    const ruleTPTop = $("ruleTPTop");
+    const ruleFPTop = $("ruleFPTop");
 
     const sliders = {
       w0:[$("w0"),$("w0Val")], w1:[$("w1"),$("w1Val")], w2:[$("w2"),$("w2Val")],
@@ -361,7 +360,7 @@
         </div>`;
     }
 
-    /* ---------- Evaluation ---------- */
+    /* ---------- Modelle ---------- */
     function predRule(m){
       const rules = [];
       if(ruleChecks.r0?.checked && m.g===1) rules.push(FEATS[0].label);
@@ -399,7 +398,7 @@
       return {acc, tp, tn, fp, fn};
     }
 
-    /* ---------- Vergleichstabelle ---------- */
+    /* ---------- Vergleich ---------- */
     function renderCompare(){
       compareBody.innerHTML = data.map(m=>{
         const r = predRule(m)[0];
@@ -413,7 +412,7 @@
       }).join("");
     }
 
-    /* ---------- Render core ---------- */
+    /* ---------- Render ---------- */
     function renderEmailSelect(){
       const prev = emailSelect.selectedIndex;
       emailSelect.innerHTML = data.map((m,i)=>`<option value="${i}">${i+1}. ${escapeHtml(m.subj)}</option>`).join("");
@@ -424,7 +423,8 @@
     function renderFeatTable(){
       const m = currentMail();
       goldTag.textContent = `Soll: ${m.y===1? "Spam":"kein Spam"}`;
-      goldTag.className = "label " + (m.y===1? "bad":"ok");
+      goldTag.style.background = m.y? "#fee2e2" : "#dcfce7";
+      goldTag.style.borderColor = m.y? "#fecaca" : "#bbf7d0";
       const map=["g","k","l","c","d"];
       featTableBody.innerHTML = map.map((k,idx)=> `<tr><td>${FEATS[idx].label}</td><td class="mono">${m[k]}</td></tr>`).join("");
     }
@@ -444,32 +444,44 @@
       }).join("");
     }
     function renderDecisions(){
+      // Regel
       const [yr, why] = predRule(currentMail());
       ruleOut.textContent = yr? "Spam" : "kein Spam";
       ruleOut.className = "out " + (yr? "bad":"ok");
       ruleWhy.textContent = why;
+      const sr = evaluate(predRule);
+      ruleAcc.textContent = (sr.acc*100).toFixed(0)+"%";
+      ruleTP.textContent = `${sr.tp} / ${sr.tn}`;
+      ruleFP.textContent = `${sr.fp} / ${sr.fn}`;
+      // Top-Box im Regel-Panel
+      ruleAccTop.textContent = (sr.acc*100).toFixed(0)+"%";
+      ruleTPTop.textContent = `${sr.tp} / ${sr.tn}`;
+      ruleFPTop.textContent = `${sr.fp} / ${sr.fn}`;
+
+      // Perzeptron
       const pn = predNeuron(currentMail());
       neuSum.textContent = `Summe = ${pn.sum.toFixed(2)}  ${pn.sum >= getTheta()? "≥":"<"}  θ=${getTheta().toFixed(2)}`;
       neuOut.textContent = pn.y? "Spam":"kein Spam";
       neuOut.className = "out " + (pn.y? "bad":"ok");
+      const sn = evaluate(predNeuron);
+      neuAcc.textContent = (sn.acc*100).toFixed(0)+"%";
+      neuTP.textContent = `${sn.tp} / ${sn.tn}`;
+      neuFP.textContent = `${sn.fp} / ${sn.fn}`;
     }
     function updateAll(){
       renderInboxCard();
       renderFeatTable();
       renderDecisions();
+      renderCompare();
       saveData();
     }
+
     function applyMode(){
-      const neuronPanel = $("neuronPanel");
-      const comparePanel = $("comparePanel");
       const learn = (mode==="learn");
-      neuronPanel.classList.toggle("hidden", !learn);
-      comparePanel.classList.toggle("hidden", !learn);
-      $("learnBox").classList.toggle("hidden", !learn);
-      modeText.textContent = learn? "Lernendes System" : "Regelbasiert";
+      modeText.textContent = learn? "An" : "Aus";
       modeSwitch.classList.toggle("on", learn);
-      modeSwitch.setAttribute("aria-checked", learn ? "true" : "false");
-      if(learn){ renderCompare(); }
+      $("learnBox").classList.toggle("hidden", !learn);
+      // neuronPanel bleibt sichtbar, weil Training auch bei Aus sinnvoll demonstrierbar ist
       updateAll();
     }
 
@@ -512,13 +524,13 @@
     /* ---------- Initial ---------- */
     renderDataTable();
     renderEmailSelect();
-    setPhase(0);
-    document.getElementById("modeSwitch").setAttribute("aria-checked","false");
-    updateAll();
+    mode = "learn"; // standardmäßig an
+    applyMode();
   });
   </script>
 </body>
 </html>
+
 
 
 
