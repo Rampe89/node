@@ -60,6 +60,7 @@
       display:inline-block; margin-top:8px; padding:10px 14px; border-radius:10px; font-weight:700; text-decoration:none;
       background:#111827; color:#fff; border:1px solid #111827
     }
+    .legend{font-size:13px; color:#374151; margin-top:6px}
   </style>
 </head>
 <body>
@@ -131,13 +132,15 @@
         <section class="panel">
           <h2>Lernendes System (Perzeptron)</h2>
           <p class="small">Gewichtete Summe der Merkmale, Vergleich mit Schwelle θ.</p>
-          <div class="row" style="margin-top:6px; flex-wrap:wrap; gap:12px 16px">
-            <label> w₁ <input id="w0" type="range" min="-2" max="2" step="0.1" value="0.9"> <input id="w0Val" type="number" min="-2" max="2" step="0.1" value="0.9"></label>
-            <label> w₂ <input id="w1" type="range" min="-2" max="2" step="0.1" value="0.3"> <input id="w1Val" type="number" min="-2" max="2" step="0.1" value="0.3"></label>
-            <label> w₃ <input id="w2" type="range" min="-2" max="2" step="0.1" value="0.6"> <input id="w2Val" type="number" min="-2" max="2" step="0.1" value="0.6"></label>
-            <label> w₄ <input id="w3" type="range" min="-2" max="2" step="0.1" value="0.5"> <input id="w3Val" type="number" min="-2" max="2" step="0.1" value="0.5"></label>
-            <label> w₅ <input id="w4" type="range" min="-2" max="2" step="0.1" value="0.7"> <input id="w4Val" type="number" min="-2" max="2" step="0.1" value="0.7"></label>
-            <label> θ <input id="theta" type="range" min="0" max="3" step="0.1" value="1.2"> <input id="thetaVal" type="number" min="0" max="3" step="0.1" value="1.2"></label>
+          <!-- Konsistente Beschriftung: w₁..w₅ sind fest g,k,l,c,d zugeordnet -->
+          <div class="legend mono">Zuordnung: w₁→g „gratis“, w₂→k „typo/verdächtig“, w₃→l „ALL CAPS“, w₄→c „dringend“, w₅→d „Werbung“</div>
+          <div class="row" style="margin-top:8px; flex-wrap:wrap; gap:12px 16px">
+            <label title="w₁ steuert g: ‚gratis‘"> w₁ · „gratis“ <input id="w0" type="range" min="-2" max="2" step="0.1" value="0.9"> <input id="w0Val" type="number" min="-2" max="2" step="0.1" value="0.9"></label>
+            <label title="w₂ steuert k: typo/verdächtige Domäne"> w₂ · „typo/verdächtig“ <input id="w1" type="range" min="-2" max="2" step="0.1" value="0.3"> <input id="w1Val" type="number" min="-2" max="2" step="0.1" value="0.3"></label>
+            <label title="w₃ steuert l: ALL CAPS"> w₃ · „ALL CAPS“ <input id="w2" type="range" min="-2" max="2" step="0.1" value="0.6"> <input id="w2Val" type="number" min="-2" max="2" step="0.1" value="0.6"></label>
+            <label title="w₄ steuert c: dringlich"> w₄ · „dringend“ <input id="w3" type="range" min="-2" max="2" step="0.1" value="0.5"> <input id="w3Val" type="number" min="-2" max="2" step="0.1" value="0.5"></label>
+            <label title="w₅ steuert d: Werbung"> w₅ · „Werbung“ <input id="w4" type="range" min="-2" max="2" step="0.1" value="0.7"> <input id="w4Val" type="number" min="-2" max="2" step="0.1" value="0.7"></label>
+            <label title="Schwelle θ"> θ <input id="theta" type="range" min="0" max="3" step="0.1" value="1.2"> <input id="thetaVal" type="number" min="0" max="3" step="0.1" value="1.2"></label>
           </div>
           <div class="row" style="gap:10px; margin-top:8px">
             <button id="btnTrain" class="primary">Training starten (10 Epochen)</button>
@@ -221,8 +224,8 @@
 
     // ========= Helpers =========
     const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
-    const features = m => [m.g,m.k,m.l,m.c,m.d];
-    const weights = () => [parseFloat(w0.value),parseFloat(w1.value),parseFloat(w2.value),parseFloat(w3.value),parseFloat(w4.value)];
+    const features = m => [m.g,m.k,m.l,m.c,m.d]; // Reihenfolge g,k,l,c,d
+    const weights = () => [parseFloat(w0.value),parseFloat(w1.value),parseFloat(w2.value),parseFloat(w3.value),parseFloat(w4.value)]; // w₁..w₅
     const setWeights = ws => { [w0,w1,w2,w3,w4].forEach((r,i)=>{ r.value = ws[i].toFixed(2); }); syncInputs(); };
     const Θ = () => parseFloat(theta.value);
     const setTheta = t => { theta.value = t.toFixed(2); thetaVal.value = t.toFixed(2); };
@@ -235,7 +238,7 @@
     }
     function neuronDecision(m){
       const x = features(m); const w = weights();
-      const sum = x.reduce((s,xi,i)=>s+xi*w[i],0);
+      const sum = x.reduce((s,xi,i)=>s+xi*w[i],0); // Σ wᵢ·xᵢ in der festen Reihenfolge g,k,l,c,d ↔ w₁..w₅
       return { y: sum>=Θ()?1:0, sum };
     }
     function evaluate(model){
@@ -266,7 +269,7 @@
         if(updates===0) break; // früh stoppen
       }
       setWeights(w); setTheta(t);
-      trainStatus.textContent = `Training fertig. w=[${w.map(v=>v.toFixed(2)).join(', ')}], θ=${t.toFixed(2)}`;
+      trainStatus.textContent = `Training fertig. w₁..w₅=[${w.map(v=>v.toFixed(2)).join(', ')}], θ=${t.toFixed(2)}`;
       update();
     }
     function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
@@ -304,7 +307,7 @@
       const n = neuronDecision(m); neuOut.textContent = n.y?"Spam":"kein Spam"; neuOut.className = n.y?"badText":"okText"; neuSum.textContent = `Summe = ${n.sum.toFixed(2)}  ${n.sum>=Θ()?"≥":"<"}  θ=${Θ().toFixed(2)}`;
 
       const rs = evaluate(m=>ruleDecision(m).y); ruleAcc.textContent=(rs.acc*100).toFixed(0)+"%"; ruleTP.textContent=`${rs.tp} / ${rs.tn}`; ruleFP.textContent=`${rs.fp} / ${rs.fn}`;
-      const ns = evaluate(m=>neuronDecision(m).y); neuAcc.textContent=(ns.acc*100).toFixed(0)+"%"; neuTP.textContent=`${ns.tp} / ${ns.tn}`; neuFP.textContent=`${ns.fp} / ${ns.fn}`;
+      const ns = evaluate(m=>neuronDecision(m).y); neuAcc.textContent=(ns.acc*100).toFixed(0)+"%"; neuTP.textContent=`${ns.tp} / ${ns.tn}`; neuFP.textContent=`${ns.fn!==undefined?ns.fp:0} / ${ns.fn!==undefined?ns.fn:0}`;
     }
 
     function update(){
@@ -337,6 +340,7 @@
   </script>
 </body>
 </html>
+
 
 
 
