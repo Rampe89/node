@@ -3,523 +3,215 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Von der Wenn-Dann-Regel zum lernenden System – Spamfilter Demo</title>
+  <title>Spamfilter-Demo · Regeln vs. Lernendes System</title>
   <style>
+    /* ====== BASISSTIL ====== */
     :root{
-      --bg:#f7fafc; --panel:#ffffff; --ink:#0b1220; --muted:#4b5563; --accent:#2563eb;
-      --ok:#16a34a; --bad:#dc2626; --border:#e5e7eb; --shadow:0 1px 2px rgba(0,0,0,.05);
-      --radius:12px; --meta:#6b7280; --divider:#e5e7eb;
+      --bg:#f6f7fb; --panel:#ffffff; --ink:#0b1220; --muted:#4b5563; --accent:#2563eb;
+      --ok:#16a34a; --bad:#dc2626; --border:#e5e7eb; --shadow:0 10px 28px rgba(20,30,55,.08);
+      --radius:16px; --meta:#6b7280; --divider:#e7e9ee; --sel:#dbeafe;
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0; font:16px/1.6 Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica, Arial; color:var(--ink); background:var(--bg)}
-    .wrap{max-width:1080px; margin:0 auto; padding:20px}
-    header{display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:10px}
-    h1{font-size:22px; margin:0; font-weight:800}
-    h2{margin:0 0 6px; font-size:18px}
-    h3{margin:0 0 6px; font-size:15px}
+    body{margin:0; font:16px/1.6 Inter, ui-sans-serif, system-ui; color:var(--ink); background:var(--bg)}
+    .wrap{max-width:1200px; margin:0 auto; padding:22px}
+    h1{font-size:26px; margin:0 0 6px; font-weight:800}
+    h2{font-size:20px; margin:0 0 8px}
     .small{font-size:13px; color:var(--muted)}
-    .label{display:inline-block; font-size:12px; padding:3px 8px; border-radius:999px; border:1px solid var(--border); background:#f9fafb}
+    .panel{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow)}
+    .divider{height:1px; background:var(--divider); margin:14px 0}
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
 
-    /* Layout */
-    .grid{display:grid; grid-template-columns:minmax(280px,320px) 1fr; gap:18px}
-    .panel{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:14px; box-shadow:var(--shadow)}
-    .divider{height:1px; background:var(--divider); margin:10px 0}
-    .row{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
-
-    /* Controls */
-    select,input,button,textarea{background:#fff; border:1px solid var(--border); color:var(--ink); padding:10px 12px; border-radius:10px; height:40px}
-    select{width:100%}
-    input[type="number"]{width:90px}
-    input[type="range"]{height:auto}
-    button{cursor:pointer; transition:transform .12s ease}
-    button.primary{background:var(--accent); color:#fff; border-color:var(--accent); font-weight:700}
-    button:hover{transform:translateY(-1px)}
-    button:focus-visible, input:focus-visible, select:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
-
-    /* Tables */
-    table{width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--border); border-radius:8px; overflow:hidden}
-    th,td{border-bottom:1px solid var(--border); padding:8px 10px; text-align:left}
-    thead th{background:#f3f4f6; font-weight:700; font-size:13px; color:#374151}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
-
-    /* Inbox */
-    .inbox{display:grid; gap:10px}
-    .email-card{display:grid; grid-template-columns:36px 1fr auto; gap:10px; align-items:center; background:#fff; border:1px solid var(--border); border-radius:10px; padding:10px}
-    .avatar{width:30px; height:30px; border-radius:999px; background:#e5e7eb; color:#374151; display:grid; place-items:center; font-weight:700; font-size:11px}
-    .subject{font-weight:800}
+    /* ====== POSTEINGANG ====== */
+    .inbox-wrap{padding:18px; border:2px solid var(--border); border-radius:20px; background:#fff; box-shadow:var(--shadow)}
+    .inbox{display:grid; gap:12px}
+    .email-card{
+      display:grid; grid-template-columns:56px 1fr auto; gap:14px; align-items:center;
+      background:#fff; border:1px solid var(--border); border-radius:14px; padding:14px;
+      transition:background .12s, transform .12s;
+    }
+    .email-card:hover{transform:translateY(-1px)}
+    .email-card.selected{background:var(--sel); border-color:#93c5fd}
+    .avatar{width:44px; height:44px; border-radius:999px; background:#e5e7eb; display:grid; place-items:center; font-weight:800; color:#1e3a8a}
+    .subject{font-weight:900; font-size:17px}
     .snippet{color:var(--muted); font-size:14px; margin-top:2px}
-    .meta{color:var(--meta); font-size:12px}
-    .pill-ok{background:#dcfce7; border-color:#bbf7d0}
-    .pill-bad{background:#fee2e2; border-color:#fecaca}
+    .meta{color:var(--meta); font-size:12px; margin-top:2px}
+    .label{padding:4px 10px; border-radius:999px; font-size:12px; font-weight:700}
+    .ok{background:#dcfce7; color:#166534}
+    .bad{background:#fee2e2; color:#991b1b}
 
-    /* Decision boxes */
-    .decision{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-    .decision .box{background:#fff; border:1px solid var(--border); border-radius:10px; padding:10px}
-    .out{font-weight:800; font-size:18px}
-    .ok{color:var(--ok)} .bad{color:var(--bad)}
+    /* ====== INTERAKTION ====== */
+    label input[type="checkbox"]{transform:translateY(1px)}
+    input[type=range]{width:140px}
+    button{cursor:pointer; border:1px solid var(--border); border-radius:8px; background:var(--accent); color:#fff; font-weight:600; padding:6px 14px}
+    button:hover{opacity:.9}
+    table{width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden}
+    th,td{padding:10px; border-bottom:1px solid var(--border); text-align:left}
+    thead th{background:#f3f4f6; color:#374151; font-weight:700; font-size:13px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header>
-      <div>
-        <h1>Von der Wenn-Dann-Regel zum lernenden System · Spamfilter (Demo)</h1>
-        <div class="small">Posteingang simulieren, Regeln prüfen, Perzeptron testen. Direktstart.</div>
+    <h1>Spamfilter-Demo: Regelbasiert vs. Lernendes System</h1>
+    <p class="small">Didaktische Simulation mit kommentiertem Code und realistischen Beispielen.</p>
+
+    <!-- ===================== POSTEINGANG ===================== -->
+    <section class="inbox-wrap">
+      <h2>Posteingang</h2>
+      <div id="inbox" class="inbox"></div>
+    </section>
+
+    <!-- ===================== REGELBASIERTES SYSTEM ===================== -->
+    <section class="panel">
+      <h2>Regelbasiertes System</h2>
+      <p class="small">Wenn eine aktivierte Regel zutrifft → Spam. Jede Regel kann einzeln deaktiviert werden.</p>
+      <div class="row">
+        <label><input type="checkbox" class="rule" data-key="g" checked> „gratis“ im Betreff</label>
+        <label><input type="checkbox" class="rule" data-key="k" checked> Verdächtige Domäne</label>
+        <label><input type="checkbox" class="rule" data-key="l" checked> Alles GROSS</label>
+        <label><input type="checkbox" class="rule" data-key="c" checked> Dringlichkeit</label>
+        <label><input type="checkbox" class="rule" data-key="d" checked> Werbung</label>
       </div>
-      <button id="btnShot">Screenshot-Ansicht</button>
-    </header>
+      <div class="divider"></div>
+      <p><strong>Aktuelle Entscheidung:</strong> <span id="ruleOut">–</span></p>
+      <p class="small mono" id="ruleWhy"></p>
+    </section>
 
-    <div class="grid">
-      <!-- Sidebar -->
-      <aside class="panel" style="align-self:start">
-        <h2>Datensatz</h2>
-        <p class="small">Beispiel-Mails. Features sind 0/1. „Soll“ = korrektes Label.</p>
+    <!-- ===================== LERNENDES SYSTEM ===================== -->
+    <section class="panel">
+      <h2>Lernendes System (Perzeptron)</h2>
+      <p class="small">Gewichte können angepasst werden – das System lernt, welche Merkmale wichtiger sind.</p>
+      <div class="row">
+        <label>w₁<input type="range" id="w0" min="-2" max="2" step="0.1" value="0.9"></label>
+        <label>w₂<input type="range" id="w1" min="-2" max="2" step="0.1" value="0.3"></label>
+        <label>w₃<input type="range" id="w2" min="-2" max="2" step="0.1" value="0.6"></label>
+        <label>w₄<input type="range" id="w3" min="-2" max="2" step="0.1" value="0.5"></label>
+        <label>w₅<input type="range" id="w4" min="-2" max="2" step="0.1" value="0.7"></label>
+        <label>θ<input type="range" id="theta" min="0" max="3" step="0.1" value="1.2"></label>
+      </div>
+      <div class="divider"></div>
+      <p><strong>Aktuelle Entscheidung:</strong> <span id="neuOut">–</span></p>
+      <p class="small mono" id="neuSum"></p>
+    </section>
 
-        <label class="small" for="emailSelect" style="display:block;margin-top:6px">Mail auswählen</label>
-        <select id="emailSelect" aria-label="Beispiel-Mail wählen"></select>
-        <div style="margin-top:8px"><span id="goldTag" class="label">Soll: –</span></div>
-
-        <div class="divider"></div>
-
-        <table id="featTable" aria-label="Merkmalswerte">
-          <thead><tr><th>Feature</th><th>Wert</th></tr></thead>
-          <tbody></tbody>
-        </table>
-
-        <details style="margin-top:10px">
-          <summary>Alle Datensätze</summary>
-          <table id="dataTable" style="margin-top:8px">
-            <thead id="dataHead"></thead>
-            <tbody id="dataBody"></tbody>
-          </table>
-        </details>
-      </aside>
-
-      <!-- Main -->
-      <main style="display:grid;gap:16px">
-        <!-- Inbox + Entscheidungen -->
-        <section class="panel">
-          <div class="row" style="justify-content:space-between">
-            <h2 style="margin:0">Posteingang</h2>
-            <div class="row">
-              <button id="prevMail">⟨ Zurück</button>
-              <button id="nextMail" class="primary">Weiter ⟩</button>
-              <button id="autoPlay">Auto</button>
-              <span class="small">Mail <span id="idxNow">1</span>/<span id="idxTotal">–</span></span>
-            </div>
-          </div>
-          <div class="divider"></div>
-
-          <div id="inbox" class="inbox"></div>
-
-          <div class="divider"></div>
-          <div class="decision">
-            <div class="box">
-              <h3>Regelbasierte Entscheidung</h3>
-              <div id="ruleWhy" class="small mono">Regeln: –</div>
-              <div id="ruleOut" class="out">–</div>
-              <div class="divider"></div>
-              <h4 style="margin:0 0 4px 0">Auswertung</h4>
-              <div class="small mono">Trefferquote: <span id="ruleAcc">–</span></div>
-              <div class="small mono">TP / TN: <span id="ruleTP">–</span></div>
-              <div class="small mono">FP / FN: <span id="ruleFP">–</span></div>
-            </div>
-            <div class="box" id="learnBox">
-              <h3>Perzeptron-Entscheidung</h3>
-              <div id="neuSum" class="small mono">Summe = –</div>
-              <div id="neuOut" class="out">–</div>
-              <div class="divider"></div>
-              <h4 style="margin:0 0 4px 0">Auswertung</h4>
-              <div class="small mono">Trefferquote: <span id="neuAcc">–</span></div>
-              <div class="small mono">TP / TN: <span id="neuTP">–</span></div>
-              <div class="small mono">FP / FN: <span id="neuFP">–</span></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Regeln -->
-        <section class="panel" id="rulePanel">
-          <h2 style="margin:0">Regelbasierter Filter</h2>
-          <div class="divider"></div>
-          <div class="row"><label><input type="checkbox" class="r" data-key="r0" checked> <span id="ruleLbl0">Betreff enthält »gratis«</span> ⇒ Spam</label></div>
-          <div class="row"><label><input type="checkbox" class="r" data-key="r1" checked> <span id="ruleLbl1">Verdächtige/typo Absenderdomäne</span> ⇒ Spam</label></div>
-          <div class="row"><label><input type="checkbox" class="r" data-key="r2" checked> <span id="ruleLbl2">Betreff in ALL CAPS</span> ⇒ Spam</label></div>
-          <div class="row"><label><input type="checkbox" class="r" data-key="r3" checked> <span id="ruleLbl3">Dringlichkeit/Alarm</span> ⇒ Spam</label></div>
-          <div class="row"><label><input type="checkbox" class="r" data-key="r4" checked> <span id="ruleLbl4">Werbung/Promo-Sprache</span> ⇒ Spam</label></div>
-          <div class="row" style="margin-top:6px"><label>Erklär-Reihenfolge:
-            <select id="ruleOrder" aria-label="Regelreihenfolge">
-              <option value="natural">Natürliche Reihenfolge</option>
-              <option value="prioritizeSpam">„Spam“-Regeln zuerst</option>
-            </select>
-          </label></div>
-        </section>
-
-        <!-- Perzeptron -->
-        <section class="panel" id="neuronPanel">
-          <h2 style="margin:0">Lernendes System (Perzeptron)</h2>
-          <div class="divider"></div>
-          <div class="small">Gewichtete Summe der Merkmale, Vergleich mit Schwelle θ.</div>
-          <div class="row" style="flex-wrap:wrap;margin-top:6px">
-            <label id="wName0">w₁ <input id="w0" type="range" min="-2" max="2" step="0.1" value="0.8"><input id="w0Val" type="number" min="-2" max="2" step="0.1" value="0.8"></label>
-            <label id="wName1">w₂ <input id="w1" type="range" min="-2" max="2" step="0.1" value="-0.5"><input id="w1Val" type="number" min="-2" max="2" step="0.1" value="-0.5"></label>
-            <label id="wName2">w₃ <input id="w2" type="range" min="-2" max="2" step="0.1" value="0.6"><input id="w2Val" type="number" min="-2" max="2" step="0.1" value="0.6"></label>
-            <label id="wName3">w₄ <input id="w3" type="range" min="-2" max="2" step="0.1" value="0.4"><input id="w3Val" type="number" min="-2" max="2" step="0.1" value="0.4"></label>
-            <label id="wName4">w₅ <input id="w4" type="range" min="-2" max="2" step="0.1" value="0.7"><input id="w4Val" type="number" min="-2" max="2" step="0.1" value="0.7"></label>
-            <label>θ <input id="theta" type="range" min="0" max="3" step="0.1" value="0.7"><input id="thetaVal" type="number" min="0" max="3" step="0.1" value="0.7"></label>
-          </div>
-
-          <div class="divider"></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px">
-            <div>
-              <h3 style="margin:0 0 6px 0">Training</h3>
-              <div class="row" style="margin-top:4px">
-                <button id="fitOnce">🚀 1× trainieren</button>
-                <button id="fitAuto" class="primary">🤖 Auto-Training</button>
-                <button id="resetW">🔁 Gewichte zurücksetzen</button>
-              </div>
-              <div id="trainLog" class="small mono" style="margin-top:8px;max-height:120px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px"></div>
-            </div>
-            <div>
-              <details>
-                <summary>📉 Fehler pro Epoche</summary>
-                <table style="margin-top:6px">
-                  <thead><tr><th>Epoche</th><th>Updates</th></tr></thead>
-                  <tbody id="epochTableBody"></tbody>
-                </table>
-              </details>
-              <details style="margin-top:6px">
-                <summary>⚖️ Gewichtsverlauf</summary>
-                <table style="margin-top:6px">
-                  <thead><tr><th>Epoche</th><th>w₁</th><th>w₂</th><th>w₃</th><th>w₄</th><th>w₅</th><th>θ</th></tr></thead>
-                  <tbody id="weightTableBody"></tbody>
-                </table>
-              </details>
-            </div>
-          </div>
-        </section>
-
-        <!-- Vergleich -->
-        <section class="panel" id="comparePanel">
-          <h2 style="margin:0">Direkter Vergleich</h2>
-          <div class="divider"></div>
-          <table>
-            <thead><tr><th>Mail</th><th>Regelbasiert</th><th>Mini-Neuron</th><th>Soll</th></tr></thead>
-            <tbody id="compareBody"></tbody>
-          </table>
-        </section>
-      </main>
-    </div>
-
-    <div class="small" style="margin-top:10px;color:#6b7280">© Demo, frei nutzbar.</div>
+    <!-- ===================== VERGLEICH ===================== -->
+    <section class="panel">
+      <h2>Vergleich aller Mails</h2>
+      <table>
+        <thead><tr><th>Mail</th><th>Regel-System</th><th>Perzeptron</th><th>Soll</th></tr></thead>
+        <tbody id="compare"></tbody>
+      </table>
+    </section>
   </div>
 
   <script>
-  "use strict";
-  document.addEventListener("DOMContentLoaded", function(){
-    /* ---------- Daten ---------- */
-    // Features: g=»gratis«, k=typo/verdächtige Domäne, l=ALL CAPS, c=Dringlichkeit, d=Promo-Sprache
-    const DEFAULT_DATA = [
-      { subj:"GRATIS IPHONE JETZT SICHERN", fromName:"Gewinn-Club", from:"support@rnicrosoft.com", time:"09:12", snippet:"Nur heute: Jetzt sichern und abholen.", g:1, k:1, l:1, c:1, d:1, y:1 },
-      { subj:"WICHTIG: IHR PAKET KONNTE NICHT ZUGESTELLT WERDEN", fromName:"Zustellung", from:"benachrichtigung@am4zon-help.net", time:"11:28", snippet:"Bestätigen Sie Ihre Adresse, um die Zustellung abzuschließen.", g:0, k:1, l:1, c:1, d:0, y:1 },
-      { subj:"SONDERAKTION HEUTE NUR FÜR SIE", fromName:"Shopping World", from:"deals@shopping-world.net", time:"08:41", snippet:"Exklusive Rabatte für kurze Zeit.", g:0, k:0, l:1, c:1, d:1, y:1 },
-      { subj:"Gewinn bestätigt: Jetzt PRÄMIE abholen", fromName:"Lotto Online", from:"gewinn@lotto-online.net", time:"10:05", snippet:"Herzlichen Glückwunsch! Folgen Sie dem Link zur Prämie.", g:0, k:1, l:0, c:1, d:1, y:1 },
-      { subj:"Rechnung Oktober", fromName:"Buchhaltung", from:"invoice@contoso.com", time:"08:01", snippet:"Ihre Monatsabrechnung ist verfügbar.", g:0, k:1, l:0, c:0, d:0, y:0 },
-      { subj:"Elternabend – Raumänderung", fromName:"Sekretariat HSA Klunkau", from:"sekretariat@hsa-klunkau.de", time:"07:43", snippet:"Bitte beachten: Der Elternabend findet nun in Raum B104 statt.", g:0, k:0, l:0, c:0, d:0, y:0 },
-      { subj:"Einladung: Fachgruppe Informatik – Protokoll", fromName:"Fachgruppe", from:"kollegium@hs-klunkau.de", time:"15:06", snippet:"Anbei das Protokoll der letzten Sitzung.", g:0, k:0, l:0, c:0, d:0, y:0 }
-    ];
-    let data = DEFAULT_DATA.slice();
+  /* ===================== JAVASCRIPT: LOGIK ===================== */
 
-    const FEATS = [
-      { key:"g", label:"Betreff enthält »gratis«" },
-      { key:"k", label:"Verdächtige/typo Absenderdomäne" },
-      { key:"l", label:"Betreff in ALL CAPS" },
-      { key:"c", label:"Dringlichkeit/Alarm" },
-      { key:"d", label:"Werbung/Promo-Sprache" }
+  document.addEventListener("DOMContentLoaded", () => {
+
+    // --------- DATEN: Beispiele mit unterschiedlichen Merkmalen ---------
+    // g=gratis, k=typo, l=ALL CAPS, c=Dringlichkeit, d=Werbung, y=Soll (1=Spam)
+    const mails = [
+      { subj:"GRATIS IPHONE JETZT SICHERN", from:"rnicrosoft@support-mail.com", g:1,k:1,l:1,c:1,d:1,y:1, snip:"Nur heute – Ihr exklusives Geschenk wartet!" },
+      { subj:"Ihr Paket konnte nicht zugestellt werden", from:"service@am4zon-help.net", g:0,k:1,l:0,c:1,d:0,y:1, snip:"Bitte Adresse bestätigen, um erneute Lieferung zu starten." },
+      { subj:"SONDERAKTION NUR HEUTE", from:"deals@shopping-world.net", g:0,k:0,l:1,c:1,d:1,y:1, snip:"Profitieren Sie jetzt von unserem exklusiven Sale." },
+      { subj:"Dringend: Passwort läuft ab", from:"support@schule.de", g:0,k:0,l:0,c:1,d:0,y:0, snip:"Interne Erinnerung: Passwort alle 90 Tage ändern." }, // sieht spammy aus, ist aber echt
+      { subj:"Elternabend – Raumänderung", from:"sekretariat@schule.de", g:0,k:0,l:0,c:0,d:0,y:0, snip:"Der Termin bleibt, aber neuer Raum B104." },
+      { subj:"Gewinn bestätigt: Jetzt PRÄMIE abholen", from:"gewinn@lotto-online.net", g:1,k:0,l:1,c:1,d:1,y:1, snip:"Ihre Prämie wartet auf Sie." },
+      { subj:"Newsletter Oktober", from:"newsletter@stadtbibliothek.de", g:0,k:0,l:0,c:0,d:1,y:0, snip:"Neue Medien, Veranstaltungen und Tipps." }, // Werbung, aber kein Spam
+      { subj:"RECHNUNG Oktober", from:"buchhaltung@service.de", g:0,k:0,l:1,c:0,d:0,y:0, snip:"Im Anhang finden Sie Ihre Monatsabrechnung." }, // nur 1 Merkmal (Caps)
+      { subj:"Eilmeldung: Konto gesperrt", from:"secure@bank-alerts.net", g:0,k:1,l:0,c:1,d:0,y:1, snip:"Bitte sofort einloggen und verifizieren." } // typischer Scam
     ];
 
-    /* ---------- Helpers ---------- */
-    const $ = (id) => document.getElementById(id);
-    const currentMail = ()=> data[$("emailSelect").selectedIndex || 0];
-    const mailToFeatVec = (m)=> [m.g, m.k, m.l, m.c, m.d];
-    const escapeHtml = (s)=> String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
-    function initials(name){ return (name||"?").split(/\s+/).map(p=>p[0]).filter(Boolean).slice(0,2).join("").toUpperCase(); }
+    const inbox = document.getElementById("inbox");
+    const compare = document.getElementById("compare");
+    const ruleOut = document.getElementById("ruleOut");
+    const ruleWhy = document.getElementById("ruleWhy");
+    const neuOut = document.getElementById("neuOut");
+    const neuSum = document.getElementById("neuSum");
+    const ruleBoxes = Array.from(document.querySelectorAll(".rule"));
+    const sliders = ["w0","w1","w2","w3","w4"].map(id=>document.getElementById(id));
+    const theta = document.getElementById("theta");
 
-    /* ---------- UI Nodes ---------- */
-    const emailSelect = $("emailSelect");
-    const goldTag = $("goldTag");
-    const featTableBody = document.querySelector("#featTable tbody");
-    const dataHead = $("dataHead");
-    const dataBody = $("dataBody");
-    const compareBody = $("compareBody");
-    const inbox = $("inbox");
+    let selected = 0;
 
-    // Regel-Checkboxes
-    const ruleChecks = { r0:null, r1:null, r2:null, r3:null, r4:null };
-    function resolveRuleRefs(){
-      ruleChecks.r0 = document.querySelector('input[data-key="r0"]');
-      ruleChecks.r1 = document.querySelector('input[data-key="r1"]');
-      ruleChecks.r2 = document.querySelector('input[data-key="r2"]');
-      ruleChecks.r3 = document.querySelector('input[data-key="r3"]');
-      ruleChecks.r4 = document.querySelector('input[data-key="r4"]');
-    }
-    resolveRuleRefs();
-    const ruleOrderSel = $("ruleOrder");
-    const ruleOut = $("ruleOut");
-    const ruleWhy = $("ruleWhy");
-    const ruleAcc = $("ruleAcc");
-    const ruleTP = $("ruleTP");
-    const ruleFP = $("ruleFP");
+    // --------- Hilfsfunktionen ---------
+    const features = m => [m.g,m.k,m.l,m.c,m.d];
+    const weights = () => sliders.map(s=>parseFloat(s.value));
+    const Θ = () => parseFloat(theta.value);
 
-    // Perzeptron
-    const sliders = {
-      w0:[$("w0"),$("w0Val")], w1:[$("w1"),$("w1Val")], w2:[$("w2"),$("w2Val")],
-      w3:[$("w3"),$("w3Val")], w4:[$("w4"),$("w4Val")], theta:[$("theta"),$("thetaVal")]
-    };
-    const neuSum = $("neuSum");
-    const neuOut = $("neuOut");
-    const neuAcc = $("neuAcc");
-    const neuTP = $("neuTP");
-    const neuFP = $("neuFP");
-
-    /* ---------- Rendering ---------- */
-    function renderInboxCard(){
-      const m = currentMail();
-      inbox.innerHTML = `
-        <div class="email-card">
-          <div class="avatar" aria-hidden="true">${escapeHtml(initials(m.fromName))}</div>
-          <div>
-            <div class="subject">${escapeHtml(m.subj)}</div>
-            <div class="snippet">${escapeHtml(m.snippet||"")}</div>
-            <div class="meta">Von ${escapeHtml(m.fromName)} &lt;${escapeHtml(m.from)}&gt; <span class="label ${m.y? "pill-bad":"pill-ok"}">${m.y? "Soll: Spam":"Soll: kein Spam"}</span></div>
-          </div>
-          <div class="meta">${escapeHtml(m.time||"")}</div>
-        </div>`;
+    // Regelentscheidung
+    function ruleDecision(m){
+      const active = ruleBoxes.filter(ch=>ch.checked && m[ch.dataset.key]===1);
+      return {y:active.length>0?1:0, why:active.map(a=>a.nextSibling.textContent.trim()).join(", ")||"keine aktiv"};
     }
 
-    function renderEmailSelect(){
-      const prev = emailSelect.selectedIndex;
-      emailSelect.innerHTML = data.map((m,i)=>`<option value="${i}">${i+1}. ${escapeHtml(m.subj)}</option>`).join("");
-      emailSelect.selectedIndex = (prev>=0 && prev < data.length) ? prev : 0;
-      $("idxTotal").textContent = data.length;
-      $("idxNow").textContent = (emailSelect.selectedIndex+1);
+    // Lernende Entscheidung
+    function neuronDecision(m){
+      const x = features(m);
+      const w = weights();
+      const sum = x.reduce((s,xi,i)=>s+xi*w[i],0);
+      const y = sum>=Θ()?1:0;
+      return {y,sum};
     }
 
-    function renderFeatTable(){
-      const m = currentMail();
-      goldTag.textContent = `Soll: ${m.y===1? "Spam":"kein Spam"}`;
-      goldTag.className = "label " + (m.y? "pill-bad":"pill-ok");
-      const map=["g","k","l","c","d"];
-      featTableBody.innerHTML = map.map((k,idx)=> `<tr><td>${FEATS[idx].label}</td><td class="mono">${m[k]}</td></tr>`).join("");
-    }
+    // Auswertungen aktualisieren
+    function update(){
+      const m = mails[selected];
+      inbox.querySelectorAll(".email-card").forEach((e,i)=>e.classList.toggle("selected",i===selected));
 
-    function renderDataTable(){
-      dataHead.innerHTML = `<tr>
-        <th>Betreff</th>
-        ${FEATS.map(f=>`<th>${f.label}</th>`).join("")}
-        <th>Soll (Spam)</th>
-      </tr>`;
-      dataBody.innerHTML = data.map((m)=>{
-        const vals = ["g","k","l","c","d"].map(k=>`<td class="mono">${m[k]}</td>`).join("");
-        return `<tr>
-          <td>${escapeHtml(m.subj)}</td>
-          ${vals}
-          <td class="mono">${m.y}</td>
-        </tr>`;
+      const rule = ruleDecision(m);
+      ruleOut.textContent = rule.y?"Spam":"Kein Spam";
+      ruleOut.className = rule.y?"bad":"ok";
+      ruleWhy.textContent = "Aktiv: " + rule.why;
+
+      const neu = neuronDecision(m);
+      neuOut.textContent = neu.y?"Spam":"Kein Spam";
+      neuOut.className = neu.y?"bad":"ok";
+      neuSum.textContent = `Summe = ${neu.sum.toFixed(2)} / θ = ${Θ().toFixed(2)}`;
+
+      compare.innerHTML = mails.map(mm=>{
+        const r=ruleDecision(mm).y;
+        const n=neuronDecision(mm).y;
+        return `<tr><td>${mm.subj}</td>
+          <td class="${r?'bad':'ok'}">${r?'Spam':'Kein Spam'}</td>
+          <td class="${n?'bad':'ok'}">${n?'Spam':'Kein Spam'}</td>
+          <td class="${mm.y?'bad':'ok'}">${mm.y?'Spam':'Kein Spam'}</td></tr>`;
       }).join("");
     }
 
-    /* ---------- Modelle ---------- */
-    function predRule(m){
-      const rules = [];
-      if(ruleChecks.r0?.checked && m.g===1) rules.push(FEATS[0].label);
-      if(ruleChecks.r1?.checked && m.k===1) rules.push(FEATS[1].label);
-      if(ruleChecks.r2?.checked && m.l===1) rules.push(FEATS[2].label);
-      if(ruleChecks.r3?.checked && m.c===1) rules.push(FEATS[3].label);
-      if(ruleChecks.r4?.checked && m.d===1) rules.push(FEATS[4].label);
-      const order = ruleOrderSel.value;
-      const why = (order==="prioritizeSpam") ? `Regeln (Spam zuerst): ${rules.join(" OR ") || "—"}` : `Regeln: ${rules.join(" OR ") || "—"}`;
-      const y = rules.length>0 ? 1 : 0;
-      return [y, y? `Match: ${why}` : `${why} | Default ⇒ kein Spam`];
-    }
+    // --------- Rendering des Posteingangs ---------
+    inbox.innerHTML = mails.map((m,i)=>`
+      <div class="email-card ${i===0?'selected':''}" data-i="${i}">
+        <div class="avatar">${m.subj[0]}</div>
+        <div>
+          <div class="subject">${m.subj}</div>
+          <div class="snippet">${m.snip}</div>
+          <div class="meta">Von: ${m.from}</div>
+        </div>
+        <div class="label ${m.y?'bad':'ok'}">${m.y?'Soll: Spam':'Soll: Kein Spam'}</div>
+      </div>
+    `).join("");
 
-    function getWeights(){ return ["w0","w1","w2","w3","w4"].map(id=> parseFloat(sliders[id][0].value)); }
-    function setWeights(ws){ ["w0","w1","w2","w3","w4"].forEach((id,i)=>{ sliders[id][0].value = ws[i]; sliders[id][1].value = ws[i]; }); }
-    const getTheta = ()=> parseFloat(sliders.theta[0].value);
-
-    function predNeuron(m){
-      const x = mailToFeatVec(m);
-      const w = getWeights();
-      const sum = x.reduce((s,xi,i)=> s + xi*w[i], 0);
-      const y = sum >= getTheta() ? 1 : 0;
-      return {sum, y};
-    }
-
-    function evaluate(modelFn){
-      let tp=0, tn=0, fp=0, fn=0;
-      for(const m of data){
-        const p = modelFn(m);
-        const yhat = Array.isArray(p) ? p[0] : p.y;
-        if(yhat===1 && m.y===1) tp++;
-        else if(yhat===0 && m.y===0) tn++;
-        else if(yhat===1 && m.y===0) fp++;
-        else fn++;
-      }
-      const acc = data.length ? ((tp+tn)/data.length) : 0;
-      return {acc, tp, tn, fp, fn};
-    }
-
-    /* ---------- Vergleich ---------- */
-    function renderCompare(){
-      compareBody.innerHTML = data.map(m=>{
-        const r = predRule(m)[0];
-        const n = predNeuron(m).y;
-        return `<tr>
-          <td>${escapeHtml(m.subj)}</td>
-          <td class="${r? "bad":"ok"}">${r? "Spam":"kein Spam"}</td>
-          <td class="${n? "bad":"ok"}">${n? "Spam":"kein Spam"}</td>
-          <td class="${m.y? "bad":"ok"}">${m.y? "Spam":"kein Spam"}</td>
-        </tr>`;
-      }).join("");
-    }
-
-    /* ---------- Render core ---------- */
-    function renderDecisions(){
-      const [yr, why] = predRule(currentMail());
-      ruleOut.textContent = yr? "Spam" : "kein Spam";
-      ruleOut.className = "out " + (yr? "bad":"ok");
-      ruleWhy.textContent = why;
-      const sr = evaluate(predRule);
-      ruleAcc.textContent = (sr.acc*100).toFixed(0)+"%";
-      ruleTP.textContent = `${sr.tp} / ${sr.tn}`;
-      ruleFP.textContent = `${sr.fp} / ${sr.fn}`;
-
-      const pn = predNeuron(currentMail());
-      neuSum.textContent = `Summe = ${pn.sum.toFixed(2)}  ${pn.sum >= getTheta()? "≥":"<"}  θ=${getTheta().toFixed(2)}`;
-      neuOut.textContent = pn.y? "Spam":"kein Spam";
-      neuOut.className = "out " + (pn.y? "bad":"ok");
-      const sn = evaluate(predNeuron);
-      neuAcc.textContent = (sn.acc*100).toFixed(0)+"%";
-      neuTP.textContent = `${sn.tp} / ${sn.tn}`;
-      neuFP.textContent = `${sn.fp} / ${sn.fn}`;
-    }
-
-    function updateAll(){
-      renderInboxCard();
-      renderFeatTable();
-      renderDecisions();
-      renderCompare();
-    }
-
-    /* ---------- Training ---------- */
-    let trainHistory = []; // [{epoch, updates, w:[...], theta}]
-    function snapshot(epoch, updates){
-      trainHistory.push({ epoch, updates, w: getWeights().slice(), theta: getTheta() });
-      // simple tables
-      $("epochTableBody").innerHTML = trainHistory.map(h=> `<tr><td>${h.epoch}</td><td>${h.updates}</td></tr>`).join("");
-      $("weightTableBody").innerHTML = trainHistory.map(h=>{
-        const w = h.w.map(v=> v.toFixed(2));
-        return `<tr><td>${h.epoch}</td><td>${w[0]}</td><td>${w[1]}</td><td>${w[2]}</td><td>${w[3]}</td><td>${w[4]}</td><td>${h.theta.toFixed(2)}</td></tr>`;
-      }).join("");
-    }
-    function resetTrainingDisplays(){
-      trainHistory = [];
-      $("epochTableBody").innerHTML = "";
-      $("weightTableBody").innerHTML = "";
-      $("trainLog").textContent = "";
-    }
-    function trainPerceptron(epochs=50, lr=0.2, singleEpoch=false){
-      if(trainHistory.length===0) snapshot(0, 0); // Startzustand
-      let w = getWeights();
-      let theta = getTheta();
-      for(let e=1; e<=epochs; e++){
-        let updates = 0;
-        for(const m of data){
-          const x = mailToFeatVec(m);
-          const sum = x.reduce((s,xi,i)=> s + xi*w[i], 0);
-          const yhat = sum >= theta ? 1 : 0;
-          const error = m.y - yhat;
-          if(error!==0){
-            for(let i=0;i<w.length;i++) w[i] = Math.max(-2,Math.min(2, w[i] + lr*error*x[i]));
-            theta = Math.max(0, Math.min(3, theta - lr*error));
-            updates++;
-          }
-        }
-        // round to 2 decimals
-        w = w.map(v=> +v.toFixed(2));
-        theta = +theta.toFixed(2);
-        setWeights(w);
-        sliders.theta[0].value = theta; sliders.theta[1].value = theta;
-        snapshot(e, updates);
-        $("trainLog").textContent += `Epoche ${e}: ${updates===0? "keine Änderung":"Updates: "+updates}\n`;
-        if(updates===0 || singleEpoch) break;
-      }
-      updateAll();
-    }
-
-    /* ---------- Events ---------- */
-    emailSelect.addEventListener("change", ()=>{ updateAll(); $("idxNow").textContent = (emailSelect.selectedIndex+1); });
-
-    document.addEventListener("change", (e)=>{
-      if(e.target && e.target.matches('input[type="checkbox"].r')) updateAll();
-    });
-    ruleOrderSel.addEventListener("change", updateAll);
-
-    // Slider + Number koppeln
-    Object.values(sliders).forEach(([range, number])=>{
-      range.addEventListener("input", ()=>{ number.value = range.value; updateAll(); });
-      number.addEventListener("input", ()=>{ range.value = number.value; updateAll(); });
+    inbox.addEventListener("click", e=>{
+      const card = e.target.closest(".email-card");
+      if(!card) return;
+      selected = parseInt(card.dataset.i);
+      update();
     });
 
-    // Navigator
-    $("prevMail").addEventListener("click", ()=>{
-      emailSelect.selectedIndex = Math.max(0, emailSelect.selectedIndex-1);
-      emailSelect.dispatchEvent(new Event('change'));
-    });
-    $("nextMail").addEventListener("click", ()=>{
-      emailSelect.selectedIndex = Math.min(data.length-1, emailSelect.selectedIndex+1);
-      emailSelect.dispatchEvent(new Event('change'));
+    document.addEventListener("input", e=>{
+      if(e.target.matches(".rule,input[type=range]")) update();
     });
 
-    // Autoplay
-    let timer = null;
-    $("autoPlay").addEventListener("click", ()=>{
-      if(timer){ clearInterval(timer); timer=null; $("autoPlay").textContent='Auto'; return; }
-      $("autoPlay").textContent='Stopp';
-      timer = setInterval(()=>{
-        emailSelect.selectedIndex = (emailSelect.selectedIndex+1) % data.length;
-        emailSelect.dispatchEvent(new Event('change'));
-      }, 2500);
-    });
-
-    // Screenshot-Modus (Shadows aus)
-    $("btnShot").addEventListener("click", ()=>{ document.documentElement.classList.toggle('screenshot'); });
-
-    /* ---------- Initial ---------- */
-    // Labels in Regel-Box
-    $("ruleLbl0").textContent = FEATS[0].label;
-    $("ruleLbl1").textContent = FEATS[1].label;
-    $("ruleLbl2").textContent = FEATS[2].label;
-    $("ruleLbl3").textContent = FEATS[3].label;
-    $("ruleLbl4").textContent = FEATS[4].label;
-
-    renderDataTable();
-    renderEmailSelect();
-    updateAll();
-
-    // Training-Buttons
-    $("fitOnce").addEventListener("click", ()=>{ resetTrainingDisplays(); snapshot(0,0); trainPerceptron(1, 0.2, true); });
-    $("fitAuto").addEventListener("click", ()=>{ resetTrainingDisplays(); snapshot(0,0); trainPerceptron(50, 0.2, false); });
-    $("resetW").addEventListener("click", ()=>{
-      resetTrainingDisplays();
-      setWeights([0.8,-0.5,0.6,0.4,0.7]);
-      sliders.theta[0].value=0.7; sliders.theta[1].value=0.7;
-      updateAll();
-    });
+    // Initial anzeigen
+    update();
   });
   </script>
 </body>
 </html>
+
+
 
 
 
