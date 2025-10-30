@@ -8,7 +8,7 @@
     :root{
       --bg:#0b1220; --panel:#0f172a; --ink:#eef2ff; --muted:#94a3b8; --accent:#60a5fa;
       --ok:#22c55e; --bad:#ef4444; --border:#1f2a44; --shadow:0 12px 40px rgba(0,0,0,.35);
-      --radius:16px;
+      --radius:16px; --card:#0b1326; --meta:#cbd5e1;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -18,13 +18,14 @@
         radial-gradient(1200px 600px at 10% -10%, rgba(59,130,246,.20), transparent 60%),
         radial-gradient(900px 600px at 110% 10%, rgba(16,185,129,.15), transparent 60%),
         var(--bg);
+      transition: background .2s ease;
     }
     .wrap{max-width:1200px; margin:0 auto; padding:28px}
     header{display:flex; gap:16px; align-items:center; justify-content:space-between; margin-bottom:20px}
     h1{font-size:26px; margin:0; font-weight:800; letter-spacing:.2px}
     h2{margin:0 0 8px; font-size:20px}
     h3{margin:0 0 8px; font-size:16px}
-    .grid{display:grid; grid-template-columns:320px 1fr; gap:18px}
+    .grid{display:grid; grid-template-columns:360px 1fr; gap:18px}
     .panel{
       background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)) , var(--panel);
       border:1px solid var(--border); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow);
@@ -69,17 +70,27 @@
     .switch.on{background:#1d4ed8}
     .switch.on::after{left:45px}
 
-    /* Scratch links */
-    .scratch-section{margin-top:14px; padding:12px; background:#0a1a33; border:1px solid var(--border); border-radius:12px}
-    .scratch-section h3{margin:0 0 8px 0; font-size:14px; color:#93c5fd}
-    .scratch-btn{
-      display:inline-block; padding:10px 16px; border-radius:12px; background:var(--accent); color:#0b1220;
-      font-weight:700; text-decoration:none; box-shadow:var(--shadow)
+    /* Inbox card */
+    .inbox{display:grid; gap:12px}
+    .email-card{
+      display:grid; grid-template-columns:48px 1fr auto; gap:12px; align-items:center;
+      background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px; box-shadow:var(--shadow); position:relative
     }
+    .avatar{width:40px; height:40px; border-radius:999px; background:linear-gradient(135deg,#1e293b,#0f172a); display:grid; place-items:center; font-weight:800}
+    .subject{font-weight:800}
+    .snippet{color:var(--muted); font-size:14px; margin-top:2px}
+    .meta{color:var(--meta); font-size:12px}
+    .label{display:inline-block; font-size:12px; padding:3px 8px; border-radius:999px; border:1px solid var(--border); background:#07101f; margin-left:6px}
+    .incoming{animation: slideIn .28s ease-out}
+    @keyframes slideIn{from{transform:translateY(-6px); opacity:.0} to{transform:translateY(0); opacity:1}}
 
-    /* Actions */
-    .actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-    .actions button{height:40px}
+    .decision{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .decision .box{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px}
+
+    /* Screenshot/Print mode */
+    .screenshot body{background:#0b1220}
+    .screenshot .panel{box-shadow:none}
+    .screenshot .email-card{box-shadow:none}
   </style>
 </head>
 <body>
@@ -87,7 +98,10 @@
     <header>
       <div>
         <h1>Von der Wenn-Dann-Regel zum lernenden System · Spamfilter (Demo)</h1>
-        <div class="small">Ablauf: Ziele → Brainstorming → Regeln → Lernendes System</div>
+        <div class="small">Ablauf: Physischer Posteingang → Regeln → Lernendes System</div>
+      </div>
+      <div class="row">
+        <button id="btnShot">Screenshot-Ansicht</button>
       </div>
     </header>
 
@@ -96,45 +110,11 @@
       <h2>Workshop-Ziele</h2>
       <ul class="small">
         <li>Unterschied: feste Entscheidungsregeln vs. lernende Systeme</li>
-        <li>Eigene Spam-Kriterien sammeln und nutzen</li>
-        <li>Regeln mit einem einfachen lernenden Modell vergleichen</li>
+        <li>Physischer Posteingang: Mails mit „falls … sonst …“ sortieren</li>
+        <li>Vergleich: Regeln vs. Perzeptron</li>
       </ul>
-      <button id="startBrainstorm" class="primary">Los geht’s → Brainstorming</button>
-    </section>
-
-    <!-- Phase 1 -->
-    <section id="phase1" class="panel phase hidden">
-      <h2>Brainstorming: Kriterien & Beispiele</h2>
-      <p class="small">Nur das erste Feld ist als Orientierung vorausgefüllt. Tragt eure eigenen Merkmale und Beispiele ein.</p>
-
-      <h3>Merkmale</h3>
-      <div class="row" style="flex-wrap:wrap">
-        <label>1 <input id="featName0" type="text" value="Betreff enthält ‚gratis‘" style="width:260px" aria-label="Merkmal 1"></label>
-        <label>2 <input id="featName1" type="text" value="" placeholder="Merkmal 2" style="width:260px" aria-label="Merkmal 2"></label>
-        <label>3 <input id="featName2" type="text" value="" placeholder="Merkmal 3" style="width:260px" aria-label="Merkmal 3"></label>
-        <label>4 <input id="featName3" type="text" value="" placeholder="Merkmal 4" style="width:260px" aria-label="Merkmal 4"></label>
-        <label>5 <input id="featName4" type="text" value="" placeholder="Merkmal 5" style="width:260px" aria-label="Merkmal 5"></label>
-      </div>
-
-      <h3 style="margin-top:12px">Beispiele erfassen</h3>
-      <table id="bsTable">
-        <thead>
-          <tr>
-            <th>Betreff</th>
-            <th id="bsHead0">Merkmal 1</th>
-            <th id="bsHead1">Merkmal 2</th>
-            <th id="bsHead2">Merkmal 3</th>
-            <th id="bsHead3">Merkmal 4</th>
-            <th id="bsHead4">Merkmal 5</th>
-            <th>Soll (Spam)</th>
-          </tr>
-        </thead>
-        <tbody id="bsBody"></tbody>
-      </table>
-      <div class="row" style="margin-top:8px">
-        <button id="bsAdd">➕ Zeile</button>
-        <button id="bsReset">🗑️ Leeren</button>
-        <button id="bsApply" class="primary">Übernehmen & weiter → Regeln</button>
+      <div class="row">
+        <button id="goDemo" class="primary">Weiter zur Demo</button>
       </div>
     </section>
 
@@ -142,7 +122,12 @@
     <section id="phase2" class="phase hidden">
       <div class="panel" style="margin-bottom:18px">
         <div class="row" style="justify-content:space-between">
-          <div class="small">Start im Regelmodus. Schiebeschalter für den Lernmodus.</div>
+          <div class="row">
+            <button id="prevMail">⟨ Zurück</button>
+            <button id="nextMail" class="primary">Weiter ⟩</button>
+            <button id="autoPlay">Auto</button>
+            <span class="small">Mail <span id="idxNow">1</span>/<span id="idxTotal">–</span></span>
+          </div>
           <div class="mode" title="Regelbasiert ↔ Lernendes System">
             <span class="small">Modus:</span>
             <div id="modeSwitch" class="switch" role="switch" aria-checked="false" aria-label="Modus umschalten" tabindex="0"></div>
@@ -155,7 +140,7 @@
         <!-- Sidebar -->
         <aside class="panel">
           <h2>Datensatz</h2>
-          <p class="small">Wähle eine Beispiel-Mail. Features sind 0/1. „Soll“ ist die korrekte Klasse.</p>
+          <p class="small">Beispiel-Mails. Features sind 0/1. „Soll“ ist das korrekte Label.</p>
           <div class="row">
             <label>Mail:
               <select id="emailSelect" aria-label="Beispiel-Mail wählen"></select>
@@ -169,25 +154,38 @@
           </table>
 
           <details style="margin-top:12px">
-            <summary>Datensätze anzeigen/bearbeiten</summary>
-            <div class="small" style="margin:6px 0 8px">Beispiele hinzufügen. Werte 0/1, „Soll“ als 0/1.</div>
+            <summary>Datensätze ansehen</summary>
             <table id="dataTable">
               <thead id="dataHead"></thead>
               <tbody id="dataBody"></tbody>
             </table>
-            <div class="row" style="margin-top:8px">
-              <button id="addRow">➕ Beispiel</button>
-              <button id="resetData">🗑️ Zurücksetzen</button>
-            </div>
           </details>
         </aside>
 
         <!-- Main -->
         <main style="display:grid;gap:18px">
+          <!-- Inbox -->
+          <section class="panel">
+            <h2>Posteingang</h2>
+            <div id="inbox" class="inbox"></div>
+            <div class="decision" style="margin-top:12px">
+              <div class="box">
+                <h3>Regelbasierte Entscheidung</h3>
+                <div id="ruleWhy" class="small mono">Regeln: –</div>
+                <div id="ruleOut" class="out" aria-live="polite">–</div>
+              </div>
+              <div class="box" id="learnBox">
+                <h3>Perzeptron-Entscheidung</h3>
+                <div id="neuSum" class="small mono">Summe = –</div>
+                <div id="neuOut" class="out" aria-live="polite">–</div>
+              </div>
+            </div>
+          </section>
+
           <!-- Regel-Panel -->
           <section class="panel" id="rulePanel">
             <h2>Regelbasierter Filter (Wenn-Dann)</h2>
-            <div class="small">Jede Checkbox bedeutet: „Wenn Merkmal aktiv ist, klassifiziere als Spam“.</div>
+            <div class="small">Aktiviere Merkmale, die „Spam ⇒ ja“ auslösen.</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
               <details open><summary>Regeln bearbeiten</summary>
                 <div class="row"><label><input type="checkbox" class="r" data-key="r0" checked> <span id="ruleLbl0">Merkmal 1</span> ⇒ Spam</label></div>
@@ -203,10 +201,8 @@
                 </label></div>
               </details>
               <div>
-                <h3>Ausgabe</h3>
-                <div id="ruleWhy" class="small mono">Regeln: –</div>
-                <div id="ruleOut" class="out" aria-live="polite">–</div>
-                <div class="small mono" style="margin-top:6px">Trefferquote: <span id="ruleAcc">–</span></div>
+                <h3>Modellgüte</h3>
+                <div class="small mono">Trefferquote: <span id="ruleAcc">–</span></div>
                 <details style="margin-top:6px">
                   <summary>Auswertung</summary>
                   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:8px">
@@ -217,8 +213,7 @@
               </div>
             </div>
 
-            <!-- Scratch-Link nach dem Wenn-Dann-Teil -->
-            <div class="scratch-section">
+            <div class="scratch-section" style="margin-top:10px">
               <h3>Scratch-Projekt nach dem Wenn-Dann-Teil</h3>
               <a class="scratch-btn" href="https://scratch.mit.edu/projects/1228228243/editor/" target="_blank" rel="noopener">🔗 Scratch: Spam-Detector</a>
             </div>
@@ -240,10 +235,8 @@
 
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
               <div>
-                <h3>Ausgabe</h3>
-                <div id="neuSum" class="small mono">Summe = –</div>
-                <div id="neuOut" class="out" aria-live="polite">–</div>
-                <div class="small mono" style="margin-top:6px">Trefferquote: <span id="neuAcc">–</span></div>
+                <h3>Modellgüte</h3>
+                <div class="small mono">Trefferquote: <span id="neuAcc">–</span></div>
                 <details style="margin-top:6px">
                   <summary>Auswertung</summary>
                   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:8px">
@@ -280,7 +273,6 @@
               </div>
             </div>
 
-            <!-- Scratch-Link nach dem Lernen-Teil -->
             <div class="scratch-section">
               <h3>Scratch-Projekt nach dem Lernen-Teil</h3>
               <a class="scratch-btn" href="https://scratch.mit.edu/projects/1228380055/editor/" target="_blank" rel="noopener">🔗 Scratch: Perzeptron</a>
@@ -306,89 +298,33 @@
   document.addEventListener("DOMContentLoaded", function(){
     /* ---------- Daten ---------- */
     const DEFAULT_DATA = [
-      { subj:"GRATIS iPhone jetzt sichern", g:1, k:0, l:1, c:1, d:1, y:1 },
-      { subj:"Elternabend – Raumänderung",   g:0, k:1, l:0, c:0, d:0, y:0 },
-      { subj:"Ihr Paket konnte nicht zugestellt werden", g:0, k:0, l:1, c:0, d:1, y:1 },
-      { subj:"Klausurplan KW 42",            g:0, k:1, l:0, c:0, d:0, y:0 },
+      { subj:"GRATIS iPhone jetzt sichern", fromName:"Gewinn-Club", from:"promo@gewinn-club.com", time:"09:12", snippet:"Nur heute: Sichern Sie sich Ihr neues iPhone.", g:1, k:0, l:1, c:1, d:1, y:1 },
+      { subj:"Elternabend – Raumänderung", fromName:"Sekretariat HSA Klunkau", from:"sekretariat@hsa-klunkau.de", time:"07:43", snippet:"Bitte beachten: Der Elternabend findet in Raum B104 statt.", g:0, k:1, l:0, c:0, d:0, y:0 },
+      { subj:"Ihr Paket konnte nicht zugestellt werden", fromName:"Zustellung", from:"service@paket-depot.info", time:"11:28", snippet:"Bestätigen Sie Ihre Adresse, um die Zustellung abzuschließen.", g:0, k:0, l:1, c:0, d:1, y:1 },
+      { subj:"Klausurplan KW 42", fromName:"Fachgruppe", from:"fg@schule-intern.de", time:"15:06", snippet:"Anbei der Plan für die kommende Woche.", g:0, k:1, l:0, c:0, d:0, y:0 },
+      { subj:"Rechnung Oktober", fromName:"Buchhaltung", from:"invoice@contoso.com", time:"08:01", snippet:"Ihre Monatsabrechnung ist verfügbar.", g:0, k:1, l:0, c:0, d:1, y:0 }
     ];
-    let data = JSON.parse(localStorage.getItem("spamDemoData") || "null") || DEFAULT_DATA.slice();
+    let data = JSON.parse(localStorage.getItem("spamDemoDataFixed") || "null") || DEFAULT_DATA.slice();
 
-    // Feature-Labels (werden aus Brainstorming überschrieben)
+    // Feature-Labels (fix)
     let FEATS = [
-      { key:"g", label:"Merkmal 1" },
-      { key:"k", label:"Merkmal 2" },
-      { key:"l", label:"Merkmal 3" },
-      { key:"c", label:"Merkmal 4" },
-      { key:"d", label:"Merkmal 5" },
+      { key:"g", label:"Betreff enthält ‚gratis‘" },
+      { key:"k", label:"Schul-/Dienstbezug" },
+      { key:"l", label:"Dringlichkeit/Alarm" },
+      { key:"c", label:"Call-to-Action (klicken)" },
+      { key:"d", label:"Unübliche Absenderdomäne" }
     ];
 
     /* ---------- Helpers ---------- */
     const $ = (id) => document.getElementById(id);
-    const saveData = ()=> localStorage.setItem("spamDemoData", JSON.stringify(data));
+    const saveData = ()=> localStorage.setItem("spamDemoDataFixed", JSON.stringify(data));
     const currentMail = ()=> data[$("emailSelect").selectedIndex || 0];
     const mailToFeatVec = (m)=> [m.g, m.k, m.l, m.c, m.d];
     const escapeHtml = (s)=> String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
-    const escapeAttr = (s)=> String(s).replace(/"/g,"&quot;");
 
     /* ---------- Phasen ---------- */
-    function setPhase(p){
-      ["phase0","phase1","phase2"].forEach((id,idx)=> $(id).classList.toggle("hidden", idx!==p));
-    }
-    $("startBrainstorm").addEventListener("click", ()=> setPhase(1));
-
-    /* ---------- Brainstorming ---------- */
-    const featInputs = [0,1,2,3,4].map(i=> $("featName"+i));
-    const bsHeads = [0,1,2,3,4].map(i=> $("bsHead"+i));
-    const bsBody = $("bsBody");
-
-    function addBsRow(){
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td><input type="text" placeholder="Betreff"></td>
-        <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
-        <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
-        <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
-        <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
-        <td><input type="number" min="0" max="1" step="1" value="0" style="width:70px"></td>
-        <td><input type="number" min="0" max="1" step="1" value="0" style="width:90px"></td>`;
-      bsBody.appendChild(tr);
-    }
-    $("bsAdd").addEventListener("click", addBsRow);
-    $("bsReset").addEventListener("click", ()=>{ bsBody.innerHTML=""; addBsRow(); addBsRow(); addBsRow(); });
-    featInputs.forEach((inp,i)=> inp.addEventListener("input", ()=>{ bsHeads[i].textContent = inp.value.trim() || ("Merkmal "+(i+1)); }));
-    addBsRow(); addBsRow(); addBsRow();
-
-    $("bsApply").addEventListener("click", applyBrainstorm);
-
-    function applyBrainstorm(){
-      try{
-        FEATS.forEach((f,i)=>{ if(featInputs[i]) f.label = featInputs[i].value.trim() || f.label; });
-
-        const rows = Array.from(bsBody.querySelectorAll("tr"));
-        const newData = [];
-        rows.forEach(tr=>{
-          const t = tr.querySelectorAll("td");
-          if(t.length<7) return;
-          const subj = (t[0].querySelector("input")||{}).value?.trim() || "";
-          if(!subj) return;
-          const num = (td)=> Math.max(0, Math.min(1, parseInt((td.querySelector("input")||{}).value||"0")||0));
-          const f0 = num(t[1]); const f1 = num(t[2]); const f2 = num(t[3]); const f3 = num(t[4]); const f4 = num(t[5]); const y  = num(t[6]);
-          newData.push({ subj, g:f0, k:f1, l:f2, c:f3, d:f4, y });
-        });
-
-        if(newData.length>=1){ data = newData; saveData(); }
-
-        renderDynamicLabels();
-        renderDataTable(); attachDataInputs(); renderEmailSelect();
-        $("emailSelect").selectedIndex = 0;
-        mode = "rule"; applyMode();
-        setPhase(2);
-        updateAll();
-      }catch(err){
-        console.error("applyBrainstorm error", err);
-        setPhase(2);
-      }
-    }
+    function setPhase(p){ ["phase0","phase2"].forEach((id,idx)=> $(id).classList.toggle("hidden", idx!==p)); }
+    $("goDemo").addEventListener("click", ()=> setPhase(1));
 
     /* ---------- Regel & Neuron ---------- */
     const modeSwitch = $("modeSwitch");
@@ -403,9 +339,7 @@
     const compareBody = $("compareBody");
 
     // Regel-Checkboxes
-    const ruleChecks = {
-      r0: null, r1: null, r2: null, r3: null, r4: null
-    };
+    const ruleChecks = { r0:null, r1:null, r2:null, r3:null, r4:null };
     function resolveRuleRefs(){
       ruleChecks.r0 = document.querySelector('input[data-key="r0"]');
       ruleChecks.r1 = document.querySelector('input[data-key="r1"]');
@@ -418,9 +352,6 @@
     const ruleOrderSel = $("ruleOrder");
     const ruleOut = $("ruleOut");
     const ruleWhy = $("ruleWhy");
-    const ruleAcc = $("ruleAcc");
-    const ruleTP = $("ruleTP");
-    const ruleFP = $("ruleFP");
 
     const sliders = {
       w0:[$("w0"),$("w0Val")], w1:[$("w1"),$("w1Val")], w2:[$("w2"),$("w2Val")],
@@ -428,29 +359,34 @@
     };
     const neuSum = $("neuSum");
     const neuOut = $("neuOut");
+
     const neuAcc = $("neuAcc");
     const neuTP = $("neuTP");
     const neuFP = $("neuFP");
+    const ruleAcc = $("ruleAcc");
+    const ruleTP = $("ruleTP");
+    const ruleFP = $("ruleFP");
 
-    const addRowBtn = $("addRow");
-    const resetDataBtn = $("resetData");
-
-    // Trainings-Historie
-    let trainHistory = []; // [{epoch, updates, w:[...], theta}]
-
-    function renderDynamicLabels(){
-      $("ruleLbl0").textContent = FEATS[0].label;
-      $("ruleLbl1").textContent = FEATS[1].label;
-      $("ruleLbl2").textContent = FEATS[2].label;
-      $("ruleLbl3").textContent = FEATS[3].label;
-      $("ruleLbl4").textContent = FEATS[4].label;
-      dataHead.innerHTML = `<tr>
-        <th>Betreff</th>
-        ${FEATS.map(f=>`<th>${f.label}</th>`).join("")}
-        <th>Soll (Spam)</th>
-      </tr>`;
+    /* ---------- Inbox Rendering ---------- */
+    const inbox = $("inbox");
+    function initials(name){
+      return (name||"?").split(/\s+/).map(p=>p[0]).filter(Boolean).slice(0,2).join("").toUpperCase();
+    }
+    function renderInboxCard(){
+      const m = currentMail();
+      inbox.innerHTML = `
+        <div class="email-card incoming">
+          <div class="avatar" aria-hidden="true">${escapeHtml(initials(m.fromName))}</div>
+          <div>
+            <div class="subject">${escapeHtml(m.subj)}</div>
+            <div class="snippet">${escapeHtml(m.snippet||"")}</div>
+            <div class="meta">Von ${escapeHtml(m.fromName)} &lt;${escapeHtml(m.from)}&gt; <span class="label">${m.y?"Soll: Spam":"Soll: kein Spam"}</span></div>
+          </div>
+          <div class="meta">${escapeHtml(m.time||"")}</div>
+        </div>`;
     }
 
+    /* ---------- Evaluation ---------- */
     function predRule(m){
       const rules = [];
       if(ruleChecks.r0?.checked && m.g===1) rules.push(FEATS[0].label);
@@ -458,26 +394,15 @@
       if(ruleChecks.r2?.checked && m.l===1) rules.push(FEATS[2].label);
       if(ruleChecks.r3?.checked && m.c===1) rules.push(FEATS[3].label);
       if(ruleChecks.r4?.checked && m.d===1) rules.push(FEATS[4].label);
-
-      // Reihenfolge-Option wirkt nur auf Erklärungstext
       const order = ruleOrderSel.value;
       const why = (order==="prioritizeSpam")
         ? `Regeln (Spam zuerst): ${rules.join(" OR ") || "—"}`
         : `Regeln: ${rules.join(" OR ") || "—"}`;
-
-      const y = rules.length>0 ? 1 : 0; // ODER-Logik über aktivierte Einzelregeln
+      const y = rules.length>0 ? 1 : 0;
       return [y, y? `Match: ${why}` : `${why} | Default ⇒ kein Spam`];
     }
-
-    function getWeights(){
-      return ["w0","w1","w2","w3","w4"].map(id=> parseFloat(sliders[id][0].value));
-    }
-    function setWeights(ws){
-      ["w0","w1","w2","w3","w4"].forEach((id,i)=>{ sliders[id][0].value = ws[i]; sliders[id][1].value = ws[i]; });
-      updateAll();
-    }
+    function getWeights(){ return ["w0","w1","w2","w3","w4"].map(id=> parseFloat(sliders[id][0].value)); }
     const getTheta = ()=> parseFloat(sliders.theta[0].value);
-
     function predNeuron(m){
       const x = mailToFeatVec(m);
       const w = getWeights();
@@ -485,7 +410,6 @@
       const y = sum >= getTheta() ? 1 : 0;
       return {sum, y};
     }
-
     function evaluate(modelFn){
       let tp=0, tn=0, fp=0, fn=0;
       for(const m of data){
@@ -500,60 +424,13 @@
       return {acc, tp, tn, fp, fn};
     }
 
-    function renderEpochTable(){
-      $("epochTableBody").innerHTML = trainHistory.map(h=> `<tr><td>${h.epoch}</td><td>${h.updates}</td></tr>`).join("");
-    }
-    function renderWeightTable(){
-      $("weightTableBody").innerHTML = trainHistory.map(h=>{
-        const w = h.w.map(v=> v.toFixed(2));
-        return `<tr><td>${h.epoch}</td><td>${w[0]}</td><td>${w[1]}</td><td>${w[2]}</td><td>${w[3]}</td><td>${w[4]}</td><td>${h.theta.toFixed(2)}</td></tr>`;
-      }).join("");
-    }
-    function resetTrainingDisplays(){
-      trainHistory = [];
-      $("epochTableBody").innerHTML = "";
-      $("weightTableBody").innerHTML = "";
-      $("trainLog").textContent = "";
-    }
-    function snapshot(epoch, updates){
-      trainHistory.push({ epoch, updates, w: getWeights().slice(), theta: getTheta() });
-    }
-
-    function trainPerceptron(epochs=50, lr=0.2, singleEpoch=false){
-      if(trainHistory.length===0) snapshot(0, 0); // Startzustand
-      let w = getWeights();
-      let theta = getTheta();
-      for(let e=1; e<=epochs; e++){
-        let updates = 0;
-        for(const m of data){
-          const x = mailToFeatVec(m);
-          const sum = x.reduce((s,xi,i)=> s + xi*w[i], 0);
-          const yhat = sum >= theta ? 1 : 0;
-          const error = m.y - yhat;
-          if(error!==0){
-            for(let i=0;i<w.length;i++) w[i] = Math.max(-2,Math.min(2, w[i] + lr*error*x[i]));
-            theta = Math.max(0, Math.min(3, theta - lr*error));
-            updates++;
-          }
-        }
-        w = w.map(v=> +v.toFixed(2));
-        theta = +theta.toFixed(2);
-        sliders.theta[0].value = theta; sliders.theta[1].value = theta;
-        ["w0","w1","w2","w3","w4"].forEach((id,i)=>{ sliders[id][0].value = w[i]; sliders[id][1].value = w[i]; });
-        snapshot(e, updates);
-        $("trainLog").textContent += `Epoche ${e}: ${updates===0? "keine Änderung":"Updates: "+updates}\n`;
-        if(updates===0 || singleEpoch) break;
-      }
-      renderEpochTable();
-      renderWeightTable();
-      updateAll();
-    }
-
-    /* ---------- Render ---------- */
+    /* ---------- Render core ---------- */
     function renderEmailSelect(){
       const prev = emailSelect.selectedIndex;
       emailSelect.innerHTML = data.map((m,i)=>`<option value="${i}">${i+1}. ${escapeHtml(m.subj)}</option>`).join("");
       emailSelect.selectedIndex = (prev>=0 && prev < data.length) ? prev : 0;
+      $("idxTotal").textContent = data.length;
+      $("idxNow").textContent = (emailSelect.selectedIndex+1);
     }
     function renderFeatTable(){
       const m = currentMail();
@@ -568,59 +445,39 @@
         ${FEATS.map(f=>`<th>${f.label}</th>`).join("")}
         <th>Soll (Spam)</th>
       </tr>`;
-      dataBody.innerHTML = data.map((m,i)=>{
-        const vals = ["g","k","l","c","d"].map(k=>`<td><input data-i="${i}" data-k="${k}" type="number" min="0" max="1" step="1" value="${m[k]}"></td>`).join("");
-        return `<tr>
-          <td><input data-i="${i}" data-k="subj" type="text" value="${escapeAttr(m.subj)}" style="width:100%"></td>
-          ${vals}
-          <td><input data-i="${i}" data-k="y" type="number" min="0" max="1" step="1" value="${m.y}"></td>
-        </tr>`;
-      }).join("");
-    }
-    function renderRuleOutput(){
-      const [y, why] = predRule(currentMail());
-      ruleOut.textContent = y? "Spam" : "kein Spam";
-      ruleOut.className = "out " + (y? "bad":"ok");
-      ruleWhy.textContent = why;
-      const s = evaluate(predRule);
-      ruleAcc.textContent = (s.acc*100).toFixed(0)+"%";
-      ruleTP.textContent = `${s.tp} / ${s.tn}`;
-      ruleFP.textContent = `${s.fp} / ${s.fn}`;
-    }
-    function renderNeuronOutput(){
-      const p = predNeuron(currentMail());
-      neuSum.textContent = `Summe = ${p.sum.toFixed(2)}  ${p.sum >= getTheta()? "≥":"<"}  θ=${getTheta().toFixed(2)}`;
-      neuOut.textContent = p.y? "Spam":"kein Spam";
-      neuOut.className = "out " + (p.y? "bad":"ok");
-      const s = evaluate(predNeuron);
-      neuAcc.textContent = (s.acc*100).toFixed(0)+"%";
-      neuTP.textContent = `${s.tp} / ${s.tn}`;
-      neuFP.textContent = `${s.fp} / ${s.fn}`;
-    }
-    function renderCompare(){
-      compareBody.innerHTML = data.map(m=>{
-        const r = predRule(m)[0];
-        const n = predNeuron(m).y;
+      dataBody.innerHTML = data.map((m)=>{
+        const vals = ["g","k","l","c","d"].map(k=>`<td class="mono">${m[k]}</td>`).join("");
         return `<tr>
           <td>${escapeHtml(m.subj)}</td>
-          <td class="${r? "bad":"ok"}">${r? "Spam":"kein Spam"}</td>
-          <td class="${n? "bad":"ok"}">${n? "Spam":"kein Spam"}</td>
-          <td class="${m.y? "bad":"ok"}">${m.y? "Spam":"kein Spam"}</td>
+          ${vals}
+          <td class="mono">${m.y}</td>
         </tr>`;
       }).join("");
     }
+    function renderDecisions(){
+      const [yr, why] = predRule(currentMail());
+      ruleOut.textContent = yr? "Spam" : "kein Spam";
+      ruleOut.className = "out " + (yr? "bad":"ok");
+      ruleWhy.textContent = why;
+      const pn = predNeuron(currentMail());
+      neuSum.textContent = `Summe = ${pn.sum.toFixed(2)}  ${pn.sum >= getTheta()? "≥":"<"}  θ=${getTheta().toFixed(2)}`;
+      neuOut.textContent = pn.y? "Spam":"kein Spam";
+      neuOut.className = "out " + (pn.y? "bad":"ok");
+    }
     function updateAll(){
+      renderInboxCard();
       renderFeatTable();
-      renderRuleOutput();
-      if(mode==="learn"){ renderNeuronOutput(); renderCompare(); }
+      renderDecisions();
       saveData();
     }
+
     function applyMode(){
       const neuronPanel = $("neuronPanel");
       const comparePanel = $("comparePanel");
       const learn = (mode==="learn");
       neuronPanel.classList.toggle("hidden", !learn);
       comparePanel.classList.toggle("hidden", !learn);
+      $("learnBox").classList.toggle("hidden", !learn);
       modeText.textContent = learn? "Lernendes System" : "Regelbasiert";
       modeSwitch.classList.toggle("on", learn);
       modeSwitch.setAttribute("aria-checked", learn ? "true" : "false");
@@ -630,61 +487,58 @@
     /* ---------- Events ---------- */
     modeSwitch.addEventListener("click", ()=>{ mode = (mode==="rule" ? "learn" : "rule"); applyMode(); });
     modeSwitch.addEventListener("keydown", (e)=>{ if(e.key==="Enter" || e.key===" "){ e.preventDefault(); mode = (mode==="rule" ? "learn" : "rule"); applyMode(); }});
-    emailSelect.addEventListener("change", updateAll);
-    // bind rule checkbox events
-    Object.values(ruleChecks).forEach(el=> el && el.addEventListener("change", updateAll));
-    // ensure after DOM updates
-    document.addEventListener("change", (e)=>{
-      if(e.target && e.target.matches('input[type="checkbox"].r')) updateAll();
-    });
-    ruleOrderSel.addEventListener("change", updateAll);
+    emailSelect.addEventListener("change", ()=>{ updateAll(); $("idxNow").textContent = (emailSelect.selectedIndex+1); });
 
-    Object.values(sliders).forEach(([range, number])=>{
+    document.addEventListener("change", (e)=>{ if(e.target && e.target.matches('input[type="checkbox"].r')) updateAll(); });
+
+    ["w0","w1","w2","w3","w4"].forEach(id=>{
+      const range = sliders[id][0]; const number = sliders[id][1];
+      range.addEventListener("input", ()=>{ number.value = range.value; updateAll(); });
+      number.addEventListener("input", ()=>{ range.value = number.value; updateAll(); });
+    });
+    ["theta"].forEach(id=>{
+      const range = sliders[id][0]; const number = sliders[id][1];
       range.addEventListener("input", ()=>{ number.value = range.value; updateAll(); });
       number.addEventListener("input", ()=>{ range.value = number.value; updateAll(); });
     });
 
-    // Training
-    $("fitOnce").addEventListener("click", ()=>{
-      resetTrainingDisplays(); snapshot(0, 0); trainPerceptron(1, 0.2, true);
-    });
-    $("fitAuto").addEventListener("click", ()=>{
-      resetTrainingDisplays(); snapshot(0, 0); trainPerceptron(50, 0.2, false);
-    });
-    $("resetW").addEventListener("click", ()=>{
-      resetTrainingDisplays(); setWeights([0.8,-0.5,0.6,0.4,0.7]);
-      sliders.theta[0].value=0.7; sliders.theta[1].value=0.7; updateAll();
+    // Navigator
+    $("prevMail").addEventListener("click", ()=>{ emailSelect.selectedIndex = Math.max(0, emailSelect.selectedIndex-1); emailSelect.dispatchEvent(new Event('change')); });
+    $("nextMail").addEventListener("click", ()=>{ emailSelect.selectedIndex = Math.min(data.length-1, emailSelect.selectedIndex+1); emailSelect.dispatchEvent(new Event('change')); });
+
+    // Auto-Play
+    let timer = null;
+    $("autoPlay").addEventListener("click", ()=>{
+      if(timer){ clearInterval(timer); timer=null; $("autoPlay").textContent='Auto'; return; }
+      $("autoPlay").textContent='Stopp';
+      timer = setInterval(()=>{
+        emailSelect.selectedIndex = (emailSelect.selectedIndex+1) % data.length;
+        emailSelect.dispatchEvent(new Event('change'));
+      }, 2500);
     });
 
-    addRowBtn.addEventListener("click", ()=>{
-      data.push({ subj:"Neues Beispiel", g:0,k:0,l:0,c:0,d:0,y:0 });
-      renderDataTable(); attachDataInputs(); renderEmailSelect(); updateAll();
+    // Screenshot Mode
+    $("btnShot").addEventListener("click", ()=>{
+      document.documentElement.classList.toggle('screenshot');
     });
-    resetDataBtn.addEventListener("click", ()=>{
-      data = DEFAULT_DATA.slice();
-      renderDataTable(); attachDataInputs(); renderEmailSelect(); updateAll();
-    });
-
-    function attachDataInputs(){
-      dataBody.querySelectorAll("input").forEach(inp=>{
-        inp.addEventListener("input", ()=>{
-          const i = +inp.getAttribute("data-i");
-          const k = inp.getAttribute("data-k");
-          if(k==="subj"){ data[i].subj = inp.value; }
-          else { data[i][k] = Math.max(0,Math.min(1, parseInt(inp.value||"0")||0)); inp.value = data[i][k]; }
-          renderEmailSelect(); updateAll();
-        });
-      });
-    }
 
     /* ---------- Initial ---------- */
-    renderDynamicLabels();
-    renderDataTable(); attachDataInputs(); renderEmailSelect();
+    $("ruleLbl0").textContent = FEATS[0].label;
+    $("ruleLbl1").textContent = FEATS[1].label;
+    $("ruleLbl2").textContent = FEATS[2].label;
+    $("ruleLbl3").textContent = FEATS[3].label;
+    $("ruleLbl4").textContent = FEATS[4].label;
+
+    renderDataTable();
+    renderEmailSelect();
     setPhase(0);
-    modeSwitch.setAttribute("aria-checked", "false");
+    $("idxTotal").textContent = data.length;
+    document.getElementById("modeSwitch").setAttribute("aria-checked","false");
+    updateAll();
   });
   </script>
 </body>
 </html>
+
 
 
