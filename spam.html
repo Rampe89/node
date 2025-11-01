@@ -53,6 +53,19 @@
     button{cursor:pointer; border:1px solid var(--border); border-radius:8px; background:var(--accent); color:#fff; font-weight:700; padding:8px 14px}
     button:hover{opacity:.9}
     a.scratch{display:inline-block; margin-top:8px; padding:10px 14px; border-radius:10px; font-weight:700; text-decoration:none; background:#111827; color:#fff; border:1px solid #111827}
+
+    /* Prominente Status-Banner */
+    .status{
+      display:flex; align-items:center; gap:10px; padding:14px 16px; border-radius:14px;
+      border:2px solid transparent; font-weight:900; font-size:18px; letter-spacing:.2px;
+    }
+    .status.ok{background:#ecfdf5; color:#065f46; border-color:#a7f3d0}
+    .status.bad{background:#fef2f2; color:#7f1d1d; border-color:#fecaca}
+    .status .icon{font-size:22px; line-height:1}
+
+    /* sanfter Highlight-Impuls bei Änderung */
+    @keyframes flash { 0%{box-shadow:0 0 0 0 rgba(37,99,235,0.35)} 100%{box-shadow:0 0 0 10px rgba(37,99,235,0)} }
+    .flash{animation:flash .6s ease-out}
   </style>
 </head>
 <body>
@@ -100,8 +113,12 @@
           </div>
           <div class="divider"></div>
           <h3>Ausgabe</h3>
-          <p><strong>Klasse:</strong> <span id="ruleOut">–</span></p>
-          <p class="small mono" id="ruleWhy"></p>
+          <!-- prominenter Banner statt einfachem Text -->
+          <div id="ruleBox" class="status" role="status" aria-live="polite">
+            <span class="icon" aria-hidden="true">⏺</span>
+            <span id="ruleOut">–</span>
+          </div>
+          <p class="small mono" id="ruleWhy" style="margin-top:8px"></p>
           <div class="divider"></div>
           <h3>Auswertung (auf gesamten Datensatz)</h3>
           <div class="row small mono">
@@ -132,8 +149,12 @@
 
           <div class="divider"></div>
           <h3>Ausgabe</h3>
-          <p><strong>Klasse:</strong> <span id="neuOut">–</span></p>
-          <p class="small mono" id="neuSum"></p>
+          <!-- prominenter Banner statt einfachem Text -->
+          <div id="neuBox" class="status" role="status" aria-live="polite">
+            <span class="icon" aria-hidden="true">⏺</span>
+            <span id="neuOut">–</span>
+          </div>
+          <p class="small mono" id="neuSum" style="margin-top:8px"></p>
 
           <div class="divider"></div>
           <h3>Auswertung (auf gesamten Datensatz)</h3>
@@ -180,12 +201,14 @@
     const mailView   = document.getElementById("mailView");
     const ruleChecks = Array.from(document.querySelectorAll(".rule"));
 
+    const ruleBox = document.getElementById("ruleBox");
     const ruleOut = document.getElementById("ruleOut");
     const ruleWhy = document.getElementById("ruleWhy");
     const ruleAcc = document.getElementById("ruleAcc");
     const ruleTP  = document.getElementById("ruleTP");
     const ruleFP  = document.getElementById("ruleFP");
 
+    const neuBox = document.getElementById("neuBox");
     const neuOut = document.getElementById("neuOut");
     const neuSum = document.getElementById("neuSum");
     const neuAcc = document.getElementById("neuAcc");
@@ -236,6 +259,9 @@
       }
       return { acc:(tp+tn)/DATA.length, tp, tn, fp, fn };
     }
+
+    // kleine Hilfsfunktion für visuellen Impuls
+    function flash(el){ el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }
 
     // ---------- Training (Perzeptron) ----------
     function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
@@ -294,14 +320,21 @@
     function renderDecisions(){
       const m = DATA[current];
       const r = ruleDecision(m);
-      ruleOut.textContent = r.y ? "Spam" : "kein Spam";
-      ruleOut.className = r.y ? "badText" : "okText";
+      const n = neuronDecision(m);
+
+      // Regeln: Banner aktualisieren
+      ruleOut.textContent = r.y ? "SPAM" : "KEIN SPAM";
+      ruleBox.className = `status ${r.y?'bad':'ok'}`;
+      ruleBox.querySelector('.icon').textContent = r.y ? '⛔' : '✅';
+      flash(ruleBox);
       ruleWhy.textContent = r.why;
 
-      const n = neuronDecision(m);
-      neuOut.textContent = n.y ? "Spam" : "kein Spam";
-      neuOut.className = n.y ? "badText" : "okText";
-      neuSum.textContent = `Summe = ${n.sum.toFixed(2)}  ${n.sum >= Θ() ? "≥" : "<"}  θ=${Θ().toFixed(2)}`;
+      // Perzeptron: Banner aktualisieren
+      neuOut.textContent = n.y ? "SPAM" : "KEIN SPAM";
+      neuBox.className = `status ${n.y?'bad':'ok'}`;
+      neuBox.querySelector('.icon').textContent = n.y ? '⛔' : '✅';
+      flash(neuBox);
+      neuSum.textContent = `Summe = ${n.sum.toFixed(2)}  ${n.sum >= Θ() ? '≥' : '<'}  θ=${Θ().toFixed(2)}`;
 
       const rs = evaluate(m=>ruleDecision(m).y);
       ruleAcc.textContent = (rs.acc*100).toFixed(0)+"%";
@@ -335,6 +368,7 @@
   </script>
 </body>
 </html>
+
 
 
 
