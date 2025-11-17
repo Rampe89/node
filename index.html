@@ -18,16 +18,16 @@
     .hidden {
       display: none;
     }
-  header {
-    background: rgba(31, 44, 56, 0.8); /* halbtransparenter Hintergrund */
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  }
-  header h1 {
-    margin: 0;
-    color: #f0f0f0;
-  }
+    header {
+      background: rgba(31, 44, 56, 0.8); /* halbtransparenter Hintergrund */
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+    header h1 {
+      margin: 0;
+      color: #f0f0f0;
+    }
 
     nav {
       margin-top: 10px;
@@ -79,10 +79,10 @@
     }
     /* Flexbox-Aufteilung der Aufgaben */
     .flex-container {
-     display: flex;
-     flex-wrap: wrap;
-     gap: 20px;
-     align-items: flex-start; 
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: flex-start; 
     }
 
     .column {
@@ -215,7 +215,7 @@
     </p>
 
     <!-- Fortschrittsanzeige & Fortschrittsbalken -->
-    <div id="progress">Fortschritt: 0/12 Flags gesammelt</div>
+    <div id="progress">Fortschritt: 0/13 Flags gesammelt</div>
     <div id="progress-bar">
       <div id="progress-fill"></div>
     </div>
@@ -297,6 +297,16 @@
               Prüfen
             </button>
           </div>
+          <!-- SQL Injection Lab -->
+          <div class="task">
+            <h3>SQL Injection Lab</h3>
+            <p>Hier siehst du an einer kleinen Datenbanksimulation, wie eine manipulierte Eingabe wirkt und wie eine sichere Abfrage diese Wirkung stoppt.</p>
+            <a href="sql.html" class="btn">Aufgabe öffnen</a>
+            <input type="text" id="flag13" placeholder="{Flag eingeben}"/>
+            <button class="btn" onclick="checkFlag(13, 'e1lPVURJRFdIQVQ/fQ==', '💉 SQL Injector')">
+              Prüfen
+            </button>
+          </div>
           <!-- Hashing Lab (zwei Flags) -->
           <div class="task">
             <h3>Hashing Lab</h3>
@@ -368,33 +378,32 @@
     </div>
   </div>
 
-<!-- Footer -->
-<footer>
-  Lizenziert unter der MIT-Lizenz von Ramon Berghorn, 2025 | Bildungszwecke |
-  <a href="impressum.html">Impressum</a> |
-  <a href="datenschutz.html">Datenschutzerklärung</a> |
-  <a href="sources.html">Quellen</a> |
-  <a href="/fred.html">🐭</a> |
-  <a href="/contact.html">Kontakt</a>
-</footer>
+  <!-- Footer -->
+  <footer>
+    Lizenziert unter der MIT-Lizenz von Ramon Berghorn, 2025 | Bildungszwecke |
+    <a href="impressum.html">Impressum</a> |
+    <a href="datenschutz.html">Datenschutzerklärung</a> |
+    <a href="sources.html">Quellen</a> |
+    <a href="/fred.html">🐭</a> |
+    <a href="/contact.html">Kontakt</a>
+  </footer>
 
-<style>
-  footer {
-    text-align: center;
-    margin: 20px 0;
-    color: #ccc; /* Grundfarbe des Textes */
-    font-size: 14px;
-  }
-  footer a {
-    color: #ffffff; /* Weiß für die Links */
-    text-decoration: none;
-  }
-  footer a:hover {
-    color: #ffdd00; /* Gelb beim Hover */
-    text-decoration: underline;
-  }
-</style>
-
+  <style>
+    footer {
+      text-align: center;
+      margin: 20px 0;
+      color: #ccc; /* Grundfarbe des Textes */
+      font-size: 14px;
+    }
+    footer a {
+      color: #ffffff; /* Weiß für die Links */
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: #ffdd00; /* Gelb beim Hover */
+      text-decoration: underline;
+    }
+  </style>
 
   <!-- Cookie-Banner -->
   <div class="cookie-banner" id="cookie-banner">
@@ -407,14 +416,14 @@
     /***********************************
      * Globale Variablen & Konfiguration
      ***********************************/
-    // Insgesamt 12 Flags (Index 0-11)
+    // Insgesamt 13 Flags (Index 0-12)
     let collectedFlags = JSON.parse(localStorage.getItem("collectedFlags")) || 
-      [false, false, false, false, false, false, false, false, false, false, false, false];
+      [false, false, false, false, false, false, false, false, false, false, false, false, false];
     // Base64-String für das Cookie {COOKIES_REVEAL_SECRETS}
     const cookieEncoded = "e0NPT0tJRVNfUkVWRUFMX1NFQ1JFVFN9";
     // Konfetti soll nur einmal ausgelöst werden
     let confettiShown = false;
-    // Mapping: Flag-Index (1-12) → Achievement-Titel
+    // Mapping: Flag-Index (1-13) → Achievement-Titel
     const ACHIEVEMENTS = {
       1: '🎣 Phishing-Profi',
       2: '🔓 Passwortknacker',
@@ -427,7 +436,8 @@
       9: '👑 SysAdmin',
       10: '🤖 Mr. Robot',
       11: '🐭 Mäusejäger',
-      12: '💬 Console Leak'
+      12: '💬 Console Leak',
+      13: '💉 SQL Injector'
     };
     
 
@@ -460,7 +470,7 @@
     
       // Rekonstruiere Achievements unten aus localStorage
       renderAchievementsFromStorage();
-};
+    };
 
     /****************************
      * Cookie-Handling Funktionen
@@ -565,10 +575,10 @@
      ****************************/
     function updateProgress() {
       const count = collectedFlags.filter(Boolean).length;
-      document.getElementById("progress").textContent = `Fortschritt: ${count}/12 Flags gesammelt`;
-      const percentage = (count / 12) * 100;
+      document.getElementById("progress").textContent = `Fortschritt: ${count}/13 Flags gesammelt`;
+      const percentage = (count / 13) * 100;
       document.getElementById("progress-fill").style.width = percentage + '%';
-      if (count === 12 && !confettiShown) {
+      if (count === 13 && !confettiShown) {
         confetti();
         confettiShown = true;
         alert("Flag: {Mission_accomplished}");
@@ -576,11 +586,10 @@
     }
     function saveFlags() {
       localStorage.setItem("collectedFlags", JSON.stringify(collectedFlags));
-    
       renderAchievementsFromStorage();
     }
     function updateUI() {
-      for (let i = 1; i <= 12; i++) {
+      for (let i = 1; i <= 13; i++) {
         const el = document.getElementById(`flag${i}`);
         if (el && collectedFlags[i - 1]) {
           el.disabled = true;
@@ -590,22 +599,14 @@
     function renderAchievementsFromStorage() {
       const wrap = document.getElementById('achievements');
       if (!wrap) return;
-      // Titel
-      if (!wrap.querySelector('h2')) {
-        const h = document.createElement('h2');
-        h.textContent = 'Erreichte Titel';
-        wrap.prepend(h);
-      }
       const any = collectedFlags.some(Boolean);
       if (!any) {
         wrap.classList.add('hidden');
-        // Liste leeren
         const listNodes = wrap.querySelectorAll('.achievement');
         listNodes.forEach(n => n.remove());
         return;
       }
       wrap.classList.remove('hidden');
-      // Liste neu aufbauen
       const listNodes = wrap.querySelectorAll('.achievement');
       listNodes.forEach(n => n.remove());
       collectedFlags.forEach((done, idx) => {
@@ -626,8 +627,6 @@
       div.className = "achievement";
       div.textContent = title;
       achievements.appendChild(div);
-    
-      // Liste konsistent aus Storage neu aufbauen
       renderAchievementsFromStorage();
     }
   </script>
