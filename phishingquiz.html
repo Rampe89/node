@@ -106,14 +106,17 @@
     .email-body a:hover::after {
       content: "Ziel: " attr(href);
       position: absolute;
-      bottom: -1.8em; /* etwas unterhalb des Links */
+      bottom: -1.8em;
       left: 0;
       background: rgba(255, 255, 255, 0.95);
       color: #0056b3;
       padding: 3px 8px;
       border: 1px solid #ddd;
       border-radius: 5px;
-      white-space: nowrap;
+      max-width: 320px;
+      white-space: normal;
+      word-wrap: break-word;
+      overflow-wrap: anywhere;
       z-index: 100;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
@@ -133,6 +136,26 @@
     .controls button:hover {
       background-color: #0056b3;
     }
+
+    /* Navigation für vorige / nächste E-Mail */
+    .nav-controls {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .nav-controls button {
+      background-color: #6c757d;
+      color: white;
+      padding: 6px 14px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      margin: 0 5px;
+      font-size: 0.9em;
+    }
+    .nav-controls button:hover {
+      background-color: #5a6268;
+    }
+
     .explanation {
       margin-top: 20px;
       padding: 10px;
@@ -205,6 +228,10 @@
         <button id="phishing-btn">Phishing</button>
         <button id="not-phishing-btn">Kein Phishing</button>
       </div>
+      <div class="nav-controls">
+        <button id="prev-email-btn">&larr; Zurück</button>
+        <button id="next-email-btn">Weiter &rarr;</button>
+      </div>
       <div id="explanation" class="explanation"></div>
     </div>
     <div id="result" class="result hidden"></div>
@@ -266,7 +293,7 @@
           explanation: "Phishing: Die E-Mail verspricht einen hohen Geldgewinn – ein typisches Merkmal von Phishing."
         },
         {
-          sender: "info@dhl.de",
+          sender: "noreply@dhl.de",
           subject: "Ihr Paket ist unterwegs",
           body: "Liebe Kundin, lieber Kunde,<br><br>Ihr Paket befindet sich bereits auf dem Weg zu Ihnen. Sie können den aktuellen Status Ihrer Lieferung jederzeit online verfolgen. Folgen Sie hierzu bitte diesem Link: <a href='https://www.dhl.de/sendungsverfolgung'>hier</a>.<br><br>Wir wünschen Ihnen viel Freude mit Ihrem Einkauf.<br><br>Ihr DHL-Team",
           isPhishing: false,
@@ -318,7 +345,8 @@
       
       let currentEmailIndex = 0;
       let correctAnswers = 0;
-      
+      let userAnswers = [];
+
       function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -328,13 +356,16 @@
       
       function setupQuiz() {
         shuffle(emailPool);
+        userAnswers = new Array(emailPool.length).fill(null);
         loadEmail();
       }
       
       function updateProgressBar() {
-        const progress = ((currentEmailIndex / emailPool.length) * 100).toFixed(0);
-        document.getElementById("progress-bar").style.width = `${progress}%`;
-        document.getElementById("progress-bar").textContent = `${progress}%`;
+        const answeredCount = userAnswers.filter(a => a !== null).length;
+        const progress = ((answeredCount / emailPool.length) * 100).toFixed(0);
+        const bar = document.getElementById("progress-bar");
+        bar.style.width = `${progress}%`;
+        bar.textContent = `${progress}%`;
       }
       
       function loadEmail() {
@@ -343,26 +374,64 @@
           return;
         }
         const email = emailPool[currentEmailIndex];
-        document.getElementById("email-header").textContent = `Von: ${email.sender} | Betreff: ${email.subject}`;
-        document.getElementById("email-body").innerHTML = email.body;
-        
+        const header = document.getElementById("email-header");
+        const body = document.getElementById("email-body");
+        const explanationDiv = document.getElementById("explanation");
+        const phishingBtn = document.getElementById("phishing-btn");
+        const notPhishingBtn = document.getElementById("not-phishing-btn");
+
+        header.textContent = `Von: ${email.sender} | Betreff: ${email.subject}`;
+        body.innerHTML = email.body;
+
+        // Zustand je nach bereits gegebener Antwort
+        if (userAnswers[currentEmailIndex] !== null) {
+          explanationDiv.textContent = email.explanation;
+          explanationDiv.style.display = "block";
+          phishingBtn.disabled = true;
+          notPhishingBtn.disabled = true;
+        } else {
+          explanationDiv.style.display = "none";
+          phishingBtn.disabled = false;
+          notPhishingBtn.disabled = false;
+        }
+
         updateProgressBar();
       }
       
       function checkAnswer(isPhishing) {
-        // Deaktivieren der Buttons, um Mehrfachklicks zu verhindern
-        document.getElementById("phishing-btn").disabled = true;
-        document.getElementById("not-phishing-btn").disabled = true;
+        const phishingBtn = document.getElementById("phishing-btn");
+        const notPhishingBtn = document.getElementById("not-phishing-btn");
+        const explanationDiv = document.getElementById("explanation");
+
+        // Wenn schon beantwortet: keine erneute Auswertung
+        if (userAnswers[currentEmailIndex] !== null) {
+          return;
+        }
+
+        phishingBtn.disabled = true;
+        notPhishingBtn.disabled = true;
         
         const email = emailPool[currentEmailIndex];
-        const explanationDiv = document.getElementById("explanation");
-        
-        if (email.isPhishing === isPhishing) correctAnswers++;
+        const isCorrect = email.isPhishing === isPhishing;
+
+        userAnswers[currentEmailIndex] = {
+          chosen: isPhishing,
+          correct: isCorrect
+        };
+
+        if (isCorrect) correctAnswers++;
         
         explanationDiv.textContent = email.explanation;
         explanationDiv.style.display = "block";
+
+        const questionIndex = currentEmailIndex;
         
         setTimeout(() => {
+          // Wenn der Nutzer in der Zwischenzeit navigiert hat, nicht zwangsweise weiterspringen
+          if (currentEmailIndex !== questionIndex) {
+            return;
+          }
+
           explanationDiv.style.display = "none";
           currentEmailIndex++;
           if (currentEmailIndex < emailPool.length) {
@@ -370,10 +439,23 @@
           } else {
             endQuiz();
           }
-          // Buttons wieder aktivieren
-          document.getElementById("phishing-btn").disabled = false;
-          document.getElementById("not-phishing-btn").disabled = false;
+          phishingBtn.disabled = false;
+          notPhishingBtn.disabled = false;
         }, 4000);
+      }
+
+      function showPreviousEmail() {
+        if (currentEmailIndex > 0) {
+          currentEmailIndex--;
+          loadEmail();
+        }
+      }
+
+      function showNextEmail() {
+        if (currentEmailIndex < emailPool.length - 1) {
+          currentEmailIndex++;
+          loadEmail();
+        }
       }
       
       function endQuiz() {
@@ -394,6 +476,8 @@
       
       document.getElementById("phishing-btn").addEventListener("click", () => checkAnswer(true));
       document.getElementById("not-phishing-btn").addEventListener("click", () => checkAnswer(false));
+      document.getElementById("prev-email-btn").addEventListener("click", showPreviousEmail);
+      document.getElementById("next-email-btn").addEventListener("click", showNextEmail);
     });
   </script>
 </body>
