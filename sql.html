@@ -465,7 +465,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     qs("#btn-show-sensitive").classList.remove("hidden");
   });
 
-  // Quick check
+  // Quick check + Flag
   qs("#check").addEventListener("click", ()=>{
     const res = qs("#out2 table");
     const count = res ? Math.max(0, res.querySelectorAll("tbody tr").length) : 0;
@@ -474,7 +474,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
     if(qs("#chk-why").checked){ s++; fb.push("2) Ursache bestätigt."); } else fb.push("2) Ursache noch nicht bestätigt.");
     const sql4 = qs("#sql4").textContent.toLowerCase();
     if(sql4.includes("?") || sql4.includes("bind")){ s++; fb.push("3) Parameterbindung erkannt."); } else fb.push("3) Parameterbindung prüfen.");
-    qs("#check-out").innerHTML = `<strong>Ergebnis: ${Math.round(s/3*100)}% (${s}/3)</strong><ul><li>${fb.join("</li><li>")}</li></ul>`;
+
+    const percent = Math.round(s/3*100);
+    let html = `<strong>Ergebnis: ${percent}% (${s}/3)</strong><ul><li>${fb.join("</li><li>")}</li></ul>`;
+
+    // Flag nur bei vollem Verständnis
+    if(s === 3){
+      html += `<p><strong>Flag:</strong> {YOUDIDWHAT?}</p>`;
+    }
+
+    qs("#check-out").innerHTML = html;
   });
 
   qs("#reset-check").addEventListener("click", ()=>{ qs("#check-out").innerHTML = ""; });
