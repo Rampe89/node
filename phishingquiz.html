@@ -58,7 +58,7 @@
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       margin-bottom: 20px;
-      overflow: hidden;
+      overflow: visible; /* Tooltips dürfen über den Rand hinausragen */
       position: relative;
     }
     .email-header {
@@ -96,6 +96,7 @@
       background: #f8f8f8;
       font-size: 1em;
       line-height: 1.6;
+      position: relative;
     }
     /* Tooltip per CSS, direkt bei Hover auf den Link */
     .email-body a {
@@ -106,17 +107,14 @@
     .email-body a:hover::after {
       content: "Ziel: " attr(href);
       position: absolute;
-      bottom: -1.8em;
+      bottom: -2.2em; /* etwas unterhalb des Links */
       left: 0;
       background: rgba(255, 255, 255, 0.95);
       color: #0056b3;
       padding: 3px 8px;
       border: 1px solid #ddd;
       border-radius: 5px;
-      max-width: 320px;
-      white-space: normal;
-      word-wrap: break-word;
-      overflow-wrap: anywhere;
+      white-space: nowrap; /* einzeilig, kein erzwungener Umbruch */
       z-index: 100;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
@@ -383,7 +381,6 @@
         header.textContent = `Von: ${email.sender} | Betreff: ${email.subject}`;
         body.innerHTML = email.body;
 
-        // Zustand je nach bereits gegebener Antwort
         if (userAnswers[currentEmailIndex] !== null) {
           explanationDiv.textContent = email.explanation;
           explanationDiv.style.display = "block";
@@ -403,7 +400,6 @@
         const notPhishingBtn = document.getElementById("not-phishing-btn");
         const explanationDiv = document.getElementById("explanation");
 
-        // Wenn schon beantwortet: keine erneute Auswertung
         if (userAnswers[currentEmailIndex] !== null) {
           return;
         }
@@ -427,7 +423,6 @@
         const questionIndex = currentEmailIndex;
         
         setTimeout(() => {
-          // Wenn der Nutzer in der Zwischenzeit navigiert hat, nicht zwangsweise weiterspringen
           if (currentEmailIndex !== questionIndex) {
             return;
           }
@@ -466,9 +461,7 @@
           ? "Herzlichen Glückwunsch! Du hast alle richtig beantwortet. 🎉 Flag: {CAUGHT_ALL_THE_PHISH}" 
           : `Du hast ${correctAnswers} von ${emailPool.length} richtig beantwortet.`;
         result.classList.remove("hidden");
-        // Infotext anzeigen
         document.getElementById("info-text").style.display = "block";
-        // Home-Button anzeigen
         document.getElementById("home-button").style.display = "block";
       }
       
