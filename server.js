@@ -82,6 +82,9 @@ const server = http.createServer((req, res) => {
          } else if (req.url === '/sql.html') {
             // sql-Seite ausliefern
             serveFile('sql.html', res);
+        } else if (req.url === '/landing.html') {
+            // landing-Seite ausliefern
+            serveFile('landing.html', res);   
          } else {
             // 404-Seite
             res.statusCode = 404;
