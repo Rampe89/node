@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Ramon Berghorn | CyberDefense Lab & Informatik</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CyberDefense Lab, Unterrichtsmaterial und Fortbildungen von Ramon Berghorn">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050611;
+      --bg-soft: #0c0f1f;
+      --bg-softer: #15182a;
+      --accent: #40e9b2;
+      --accent-soft: rgba(64, 233, 178, 0.08);
+      --accent-strong: #00ffcc;
+      --text: #f5f7ff;
+      --text-soft: #a0a6c0;
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --danger: #ff5c7a;
+      --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.65);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-full: 999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #151932 0, #050611 55%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 16px 12px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1180px;
+      background: linear-gradient(135deg, rgba(14, 18, 40, 0.96), rgba(5, 6, 17, 0.92));
+      border-radius: 28px;
+      padding: 20px 22px 22px 22px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 10% 0, rgba(0, 255, 204, 0.14) 0, transparent 55%),
+        radial-gradient(circle at 80% 0, rgba(255, 92, 122, 0.16) 0, transparent 50%),
+        radial-gradient(circle at 50% 110%, rgba(68, 109, 255, 0.22) 0, transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    .page::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.08) 1px,
+        transparent 1px
+      );
+      background-size: 100% 64px;
+      opacity: 0.05;
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 30% 20%, #ffffff 0, #00ffcc 40%, #011b16 70%);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 24px rgba(0, 255, 204, 0.4);
+    }
+
+    .brand-logo::after {
+      content: "</>";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #020612;
+      text-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .brand-tagline {
+      font-size: 12px;
+      color: var(--text-soft);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pill {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 7px 12px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(2, 5, 16, 0.86);
+      color: var(--text-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent-strong);
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.9);
+    }
+
+    .btn-ghost {
+      font-size: 13px;
+      padding: 7px 14px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+      background: rgba(10, 12, 27, 0.85);
+      color: var(--text);
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-ghost span.chevron {
+      font-size: 16px;
+      transform: translateY(0.5px);
+    }
+
+    .btn-ghost:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 255, 255, 0.25);
+      background: rgba(18, 21, 42, 0.95);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.95fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 880px) {
+      main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .page {
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .header-right {
+        align-self: stretch;
+        justify-content: space-between;
+      }
+    }
+
+    .hero {
+      padding: 10px 4px 6px 4px;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px 4px 4px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(1, 6, 16, 0.88);
+      margin-bottom: 16px;
+      backdrop-filter: blur(12px);
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .hero-kicker-badge {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #020308;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 10px;
+    }
+
+    .hero-kicker-text {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    h1 {
+      font-size: clamp(30px, 3.6vw, 40px);
+      line-height: 1.05;
+      margin-bottom: 10px;
+    }
+
+    h1 span.highlight {
+      background: linear-gradient(120deg, var(--accent-strong), #88ffe6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow:
+        0 0 22px rgba(0, 255, 204, 0.45),
+        0 0 55px rgba(0, 0, 0, 0.9);
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: var(--text-soft);
+      max-width: 26rem;
+      line-height: 1.45;
+      margin-bottom: 18px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .meta-tag {
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.14), rgba(1, 3, 10, 0.98));
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .btn-main {
+      border-radius: var(--radius-full);
+      padding: 10px 18px;
+      border: none;
+      background: radial-gradient(circle at 20% 0, #ffffff 0, var(--accent-strong) 35%, #0de1b4 60%, #06745e 100%);
+      box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(0, 255, 204, 0.6);
+      color: #051013;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      transform: translateY(0);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+    }
+
+    .btn-main span.icon {
+      font-size: 16px;
+    }
+
+    .btn-main:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow:
+        0 16px 38px rgba(0, 0, 0, 0.92),
+        0 0 54px rgba(0, 255, 204, 0.85);
+    }
+
+    .btn-secondary {
+      padding: 9px 15px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(1, 6, 16, 0.9);
+      color: var(--text-soft);
+      text-decoration: none;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+      backdrop-filter: blur(14px);
+    }
+
+    .btn-secondary span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--danger);
+      box-shadow: 0 0 8px rgba(255, 92, 122, 0.8);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(11, 14, 33, 0.98);
+      border-color: rgba(255, 255, 255, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .hero-footnote {
+      font-size: 11px;
+      color: var(--text-soft);
+      opacity: 0.84;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .hero-footnote span.label {
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(2, 7, 18, 0.94);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 9px;
+      color: rgba(164, 172, 210, 0.98);
+    }
+
+    .hero-footnote span.divider {
+      opacity: 0.3;
+    }
+
+    .grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: radial-gradient(circle at top, rgba(34, 41, 88, 0.9), rgba(7, 9, 24, 0.98));
+      padding: 14px 14px 12px 14px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(0, 255, 204, 0.18) 0, transparent 50%),
+        radial-gradient(circle at 120% 0, rgba(68, 109, 255, 0.16) 0, transparent 50%);
+      opacity: 0.7;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .card-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(193, 203, 240, 0.96);
+    }
+
+    .card-chip {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(3, 10, 24, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: rgba(178, 190, 232, 0.95);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+    }
+
+    .card-chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent-strong);
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.9);
+    }
+
+    .card-title {
+      font-size: 17px;
+      margin-bottom: 3px;
+    }
+
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-bottom: 8px;
+    }
+
+    .card-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .link-pill {
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(2, 8, 22, 0.96);
+      color: var(--text-soft);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+    }
+
+    .link-pill span.bullet {
+      font-size: 12px;
+    }
+
+    .link-pill:hover {
+      background: rgba(12, 18, 37, 0.98);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 11px;
+      color: rgba(191, 199, 238, 0.98);
+      margin-top: 2px;
+    }
+
+    .card-footer span.count {
+      opacity: 0.86;
+    }
+
+    .card-footer a.card-cta {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent-strong);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-footer a.card-cta span.arrow {
+      font-size: 14px;
+    }
+
+    .secondary-card {
+      background: radial-gradient(circle at top, rgba(28, 24, 62, 0.92), rgba(7, 10, 28, 0.98));
+    }
+
+    .ribbon {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      background: rgba(3, 8, 20, 0.96);
+      border-radius: 999px;
+      padding: 3px 7px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: rgba(174, 185, 230, 0.98);
+      backdrop-filter: blur(10px);
+    }
+
+    .glow-orb {
+      position: absolute;
+      bottom: -36px;
+      right: -18px;
+      width: 150px;
+      height: 150px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 30% 10%, rgba(255, 255, 255, 0.7) 0, transparent 40%),
+        radial-gradient(circle at 70% 90%, #40e9b2 0, #005247 65%);
+      opacity: 0.2;
+      filter: blur(1px);
+      pointer-events: none;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .mini-badge {
+      font-size: 10px;
+      padding: 4px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(2, 8, 21, 0.96);
+      color: rgba(166, 176, 222, 0.98);
+    }
+
+    .status-strip {
+      margin-top: 10px;
+      padding: 7px 8px;
+      border-radius: var(--radius-md);
+      border: 1px dashed rgba(255, 255, 255, 0.22);
+      background: rgba(3, 9, 23, 0.9);
+      font-size: 11px;
+      color: rgba(174, 185, 230, 0.96);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #23ff86;
+      box-shadow: 0 0 12px rgba(35, 255, 134, 0.9);
+    }
+
+    .status-strip span.label {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 10px;
+      opacity: 0.9;
+    }
+
+    .status-strip span.text {
+      opacity: 0.9;
+    }
+
+    /* Schnellzugriff unten */
+
+    .quick-links {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 960px) {
+      .quick-links {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .quick-links {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .quick-card {
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(5, 9, 24, 0.96);
+      padding: 10px 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .quick-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .quick-card-title {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 10px;
+      color: rgba(182, 191, 233, 0.98);
+    }
+
+    .quick-card-tag {
+      font-size: 10px;
+      padding: 3px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: rgba(160, 170, 218, 0.98);
+    }
+
+    .quick-card p {
+      color: var(--text-soft);
+      font-size: 12px;
+    }
+
+    .quick-card a {
+      margin-top: 2px;
+      font-size: 11px;
+      text-decoration: none;
+      color: var(--accent-strong);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .quick-card a span.arrow {
+      font-size: 13px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-logo"></div>
+        <div class="brand-text">
+          <div class="brand-name">Ramon Berghorn</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="pill">
+          <span class="pill-dot"></span>
+          <span>Teacher. Hacker. Runner.</span>
+        </div>
+        <a class="btn-ghost" href="#material">
+          <span>Direkt zum Material</span>
+          <span class="chevron">↘</span>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-kicker">
+          <span class="hero-kicker-badge">Lab Access</span>
+          <span class="hero-kicker-text">Schule, Cybersecurity, echte Praxis</span>
+        </div>
+
+        <h1>
+          
+          <span class="highlight">Informatik zum Anfassen</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Ein Einstieg für alles, was ich als Informatiklehrer, Fachberater und Security Nerd aufbaue. Von Unterrichtsmaterial bis zu Hacking Labs.
+        </p>
+
+        <div class="hero-meta">
+          <div class="meta-tag">Sek I Informatik</div>
+          <div class="meta-tag">Ethical Hacking</div>
+          <div class="meta-tag">Workshops & Fortbildungen</div>
+        </div>
+
+        <div class="hero-actions">
+          <a class="btn-main" href="https://node-xejd.onrender.com/">
+            <span class="icon">⚡</span>
+            <span>Zum CyberDefense Lab</span>
+          </a>
+
+          <a class="btn-secondary" href="#material">
+            <span class="dot"></span>
+            <span>Unterricht & Fachberatung</span>
+          </a>
+        </div>
+
+        <div class="hero-footnote">
+          <span class="divider">·</span>
+        </div>
+      </section>
+
+      <section class="grid">
+        <!-- CyberDefense Lab Karte -->
+        <article class="card" id="lab">
+          <div class="card-inner">
+            <div class="card-header">
+              <div class="card-label">CyberDefense Lab</div>
+              <div class="card-chip">
+                <span class="card-chip-dot"></span>
+                <span>Angriff & Verteidigung</span>
+              </div>
+            </div>
+
+            <h2 class="card-title">Von TryHackMe zum Schul Lab</h2>
+            <p class="card-subtitle">
+              Szenarien, in denen Lernende legitime Angriffe verstehen, verteidigen und reflektieren. Sauber dokumentiert, schulgeeignet und rechtlich sauber gedacht.
+            </p>
+
+            <div class="card-links">
+              <a class="link-pill" href="https://dein-cyberdefense-lab-link.de">
+                <span class="bullet">▸</span>
+                <span>Lab Portal öffnen</span>
+              </a>
+              <a class="link-pill" href="https://dein-cyberdefense-overview.de">
+                <span class="bullet">▸</span>
+                <span>Didaktisches Konzept</span>
+              </a>
+              <a class="link-pill" href="mailto:deine-mail@schule.de">
+                <span class="bullet">✉</span>
+                <span>Kontakt für Workshops</span>
+              </a>
+            </div>
+
+            <div class="badge-row">
+              <div class="mini-badge">Network Basics</div>
+              <div class="mini-badge">Linux & CLI</div>
+              <div class="mini-badge">Web Security</div>
+              <div class="mini-badge">Red Team</div>
+            </div>
+
+            <div class="status-strip">
+              <span class="status-dot"></span>
+              <span class="label">Status</span>
+              <span class="text">Aktiv im Aufbau. Neue Szenarien werden laufend ergänzt.</span>
+            </div>
+
+            <div class="card-footer">
+              <span class="count">Für AGs, Projekttage, Profile und Fortbildungen geeignet.</span>
+              <a class="card-cta" href="https://dein-cyberdefense-lab-link.de">
+                <span>Zum Lab</span>
+                <span class="arrow">↗</span>
+              </a>
+            </div>
+          </div>
+          <div class="glow-orb"></div>
+        </article>
+
+        <!-- Informatik / Fachberatung Karte -->
+        <article class="card secondary-card" id="material">
+          <div class="card-inner">
+            <div class="card-header">
+              <div class="card-label">Informatikunterricht & Fachberatung</div>
+              <div class="card-chip">
+                <span class="card-chip-dot" style="background: #ffcc66; box-shadow: 0 0 10px rgba(255, 204, 102, 0.9);"></span>
+                <span>Material & Konzepte</span>
+              </div>
+            </div>
+
+            <h2 class="card-title">Bausteine für deinen Informatikunterricht in Sek I</h2>
+            <p class="card-subtitle">
+              Klar strukturiert, praxiserprobt, mit Fokus auf Kompetenzen statt Folienfeuerwerk.
+            </p>
+
+            <div class="card-links">
+              <a class="link-pill" href="https://dein-material-link.de">
+                <span class="bullet">▸</span>
+                <span>Materialübersicht</span>
+              </a>
+              <a class="link-pill" href="https://dein-fachberater-link.de">
+                <span class="bullet">▸</span>
+                <span>Fachberatung Informatik</span>
+              </a>
+              <a class="link-pill" href="https://dein-vortraege-link.de">
+                <span class="bullet">▸</span>
+                <span>Vorträge & Workshops</span>
+              </a>
+            </div>
+
+            <div class="badge-row">
+              <div class="mini-badge">Algorithmik & Datenstrukturen</div>
+              <div class="mini-badge">Programmieren im Unterricht</div>
+              <div class="mini-badge">Künstliche Intelligenz</div>
+              <div class="mini-badge">Medienbildung</div>
+            </div>
+
+            <div class="card-footer">
+              <span class="count">Für Kolleginnen, Fachkonferenzen, Fortbildner und Schulleitungen.</span>
+              <a class="card-cta" href="https://dein-material-link.de">
+                <span>Zum Material</span>
+                <span class="arrow">↗</span>
+              </a>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <!-- Schnellzugriff unten -->
+    <section class="quick-links">
+      <div class="quick-card">
+        <div class="quick-card-header">
+          <div class="quick-card-title">Für Schüler</div>
+          <div class="quick-card-tag">Start hier</div>
+        </div>
+        <p>Direkter Einstieg in das CyberDefense Lab mit Szenarien, die im Unterricht oder in AGs laufen.</p>
+        <a href="https://dein-cyberdefense-lab-link.de">
+          <span>Zum Lab</span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+
+      <div class="quick-card">
+        <div class="quick-card-header">
+          <div class="quick-card-title">Für Kolleginnen</div>
+          <div class="quick-card-tag">Material</div>
+        </div>
+        <p>Unterrichtsmaterial, Reihen und Bausteine für Sek I Informatik, sortiert nach Themen.</p>
+        <a href="https://dein-material-link.de">
+          <span>Material öffnen</span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+
+      <div class="quick-card">
+        <div class="quick-card-header">
+          <div class="quick-card-title">Für Fortbildungen</div>
+          <div class="quick-card-tag">Kontakt</div>
+        </div>
+        <p>Anfragen für Workshops, Vorträge und Konzepte zur Verankerung von Informatik und Cybersecurity.</p>
+        <a href="mailto:deine-mail@schule.de">
+          <span>Kontakt aufnehmen</span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
