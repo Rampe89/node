@@ -97,7 +97,7 @@
       list-style: none;
       padding: 6px 10px;
       display: flex;
-      align-items: center;
+      align-items: ander;
       gap: 0.4rem;
       font-size: 0.9rem;
       color: var(--muted);
@@ -363,6 +363,82 @@ admin'--</code></pre>
             </ul>
             <div class="mini-label">Netcat Listener</div>
             <pre><code>nc -lvnp 4444</code></pre>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Beispielmethodik: Online-Shop (z. B. Rabbit Store)</summary>
+          <div class="details-body">
+            <p>Ziel: Vorgehen beschreiben, wie ein typischer Webshop systematisch untersucht werden kann.</p>
+            <ol>
+              <li>
+                <strong>Struktur erfassen</strong><br>
+                Startseite, Produktübersichten, Produktdetails, Warenkorb, Checkout, Login/Registrierung, Profil, Admin-Bereich (falls vorhanden) bewusst durchklicken.
+              </li>
+              <li>
+                <strong>Requests und Parameter beobachten</strong><br>
+                Mit Burp Suite oder Browser-Devtools alle Anfragen verfolgen:
+                <ul>
+                  <li>Produkt-IDs in URLs und Parametern (z. B. <code>product_id=123</code>).</li>
+                  <li>Warenkorb- oder Order-IDs.</li>
+                  <li>Benutzerbezogene Werte (z. B. <code>user_id</code>, <code>role</code>, <code>is_admin</code>).</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Basis-Test auf IDOR</strong><br>
+                Wo immer eine ID im Request vorkommt, prüfen, ob sie veränderbar ist:
+                <ul>
+                  <li>Produkt- oder Order-ID einer anderen Zahl zuordnen.</li>
+                  <li>Überprüfung: Werden fremde Daten sichtbar, ohne entsprechende Berechtigung?</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Eingaben systematisch prüfen</strong><br>
+                Formularfelder für Registrierung, Login, Kommentare, Support-Anfragen:
+                <ul>
+                  <li>Tests auf SQLi (einfache Payloads).</li>
+                  <li>XSS-Tests in Feldern, die später wieder angezeigt werden (z. B. „Profilname“, „Adresse“).</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Business Logic prüfen</strong><br>
+                Vorgänge wie „Guthaben aufladen“, „Rabatt verwenden“ oder „Kredit anfordern“:
+                <ul>
+                  <li>Kann ein Betrag negativ gesetzt werden?</li>
+                  <li>Lässt sich ein Limit umgehen (z. B. durch mehrere Schnellaufrufe oder Parameteränderungen)?</li>
+                  <li>Werden Rabatte korrekt begrenzt?</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Dateiuploads untersuchen (falls vorhanden)</strong><br>
+                Wenn ein Shop Lebensläufe, Bilder oder Dokumente akzeptiert:
+                <ul>
+                  <li>Typprüfung nur clientseitig oder auch serverseitig?</li>
+                  <li>Reaktion auf doppelte Endungen (<code>.jpg.php</code>, <code>.exe.pdf</code>) analysieren.</li>
+                  <li>Speicherort und erreichbare Pfade prüfen (bspw. statische URLs).</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Session- und Rollenmodell verstehen</strong><br>
+                Nach dem Login:
+                <ul>
+                  <li>Welche Cookies oder Tokens werden gesetzt?</li>
+                  <li>Ändert sich der Funktionsumfang bei unterschiedlicher Rolle (z. B. „user“ und „staff“)?</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Kombination von Schwachstellen</strong><br>
+                Ziel ist es, einzelne Schwachstellen zur Kette zu verbinden:
+                <ul>
+                  <li>Z. B. IDOR in einem Kontobereich → Zugriff auf fremde Daten.</li>
+                  <li>Business-Logic-Fehler → Manipulation von Guthaben/Limit.</li>
+                  <li>Upload-Missbrauch → Codeausführung.</li>
+                </ul>
+              </li>
+            </ol>
+            <p class="if-then">
+              Wenn kein klarer Angriffspfad ersichtlich ist, wieder zur Struktur zurückkehren, weitere Parameter beobachten und im Zweifel einen Teilbereich (z. B. nur IDOR oder nur Business Logic) gezielt vertiefen.
+            </p>
           </div>
         </details>
 
@@ -757,7 +833,7 @@ cat flag.txt</code></pre>
           <li><strong>Mass Assignment</strong> in Formularen (z. B. Rollen- oder Statusparameter, die nicht geschützt sind).</li>
           <li><strong>Race Conditions</strong> bei Vorgängen wie Kreditanträgen oder Kontotransaktionen.</li>
           <li><strong>Persistente XSS</strong>, bei denen Payloads dauerhaft in Daten gespeichert werden.</li>
-          <li><strong>Datei-Uploads</strong>, inklusive Umgang mit Doppel-Endungen (<code>.exe.pdf</code>) und Webshells.</li>
+          <li><strong>Datei-Uploads</strong>, inklusive Umgang mit Doppel-Endungen (<code>.jpg.php</code>, <code>.exe.pdf</code>) und Webshells.</li>
         </ul>
       </div>
     </details>
@@ -766,13 +842,13 @@ cat flag.txt</code></pre>
       <summary><span class="bullet"></span> Netzwerk-/Host-Themen</summary>
       <div class="details-body">
         <ul>
-          <li><strong>Remote Code Execution</strong> in Webanwendungen (z. B. unsichere .aspx-Seiten oder bekannte CVEs in Webdiensten).</li>
+          <li><strong>Remote Code Execution</strong> in Webanwendungen oder Diensten.</li>
           <li><strong>Missbrauch von Privilegien</strong> wie <code>SeImpersonatePrivilege</code> für Token-Impersonation.</li>
-          <li><strong>Metasploit-basierte Exploits</strong> gegen bekannte verwundbare Anwendungen.</li>
+          <li><strong>Metasploit-basierte Exploits</strong> gegen verwundbare Anwendungen.</li>
           <li><strong>Unzureichende Datei-Validierung</strong> bei Upload-Funktionen (Ausführung hochgeladener Binaries).</li>
           <li><strong>Persistenz</strong> durch geplante Tasks oder ähnliche Mechanismen.</li>
           <li><strong>Linux-Privesc</strong> über fehlerhafte sudo-Konfigurationen und SUID-Binaries.</li>
-          <li><strong>RCE aus öffentlichen Bug-Bounty/CVE-Berichten</strong>, anschließend klassische lokale Privesc.</li>
+          <li><strong>RCE aus allgemeinen CVE-Berichten</strong>, anschließend lokale Privesc.</li>
         </ul>
       </div>
     </details>
@@ -783,12 +859,12 @@ cat flag.txt</code></pre>
         <ul>
           <li><strong>Tomcat Manager</strong>: WAR-Deployment und Reverse Shells.</li>
           <li><strong>SeImpersonatePrivilege</strong> und ähnliche Rechte für Privilegieneskalation.</li>
-          <li><strong>GenericWrite / GenericAll</strong>-Berechtigungen auf Objekte (z. B. Gruppen, Service-Accounts).</li>
-          <li><strong>Verschachtelte Gruppenstrukturen</strong> (z. B. verschachtelte Admin-Gruppen) und deren Ausnutzung.</li>
-          <li><strong>Tunneling</strong> mit Werkzeugen wie Chisel, teilweise kombiniert mit ProxyChains.</li>
-          <li><strong>Lateral Movement</strong> mit Werkzeugen wie PsExec oder ähnlichen Remote-Execution-Mechanismen.</li>
-          <li><strong>SMB-Gastzugriff</strong>, z. B. Zugriff auf ZIP-Dateien mit sensiblen Inhalten.</li>
-          <li><strong>SeBackupPrivilege</strong> und ähnliche Rechte für Zugriff auf eigentlich geschützte Dateien.</li>
+          <li><strong>GenericWrite / GenericAll</strong>-Berechtigungen auf Objekte.</li>
+          <li><strong>Verschachtelte Gruppenstrukturen</strong> und deren Ausnutzung.</li>
+          <li><strong>Tunneling</strong> mit Werkzeugen wie Chisel und ProxyChains.</li>
+          <li><strong>Lateral Movement</strong> mit Remote-Execution-Mechanismen.</li>
+          <li><strong>SMB-Gastzugriff</strong> auf Dateien mit sensiblen Inhalten.</li>
+          <li><strong>SeBackupPrivilege</strong> für Zugriff auf geschützte Dateien.</li>
           <li><strong>Domain-Enumeration</strong> mit BloodHound/SharpHound.</li>
           <li><strong>Kerberoasting</strong>: Service-Tickets anfordern, offline cracken, Credentials nutzen.</li>
         </ul>
@@ -800,9 +876,9 @@ cat flag.txt</code></pre>
       <div class="details-body">
         <ul>
           <li><strong>Kombination von Web und Host</strong>: Dateiupload → Codeausführung → lokale Privesc.</li>
-          <li><strong>Übergang von lokalem Admin zu Domänenkontext</strong> (z. B. durch Credentials, Tickets, Delegation).</li>
+          <li><strong>Übergang von lokalem Admin zu Domänenkontext</strong>.</li>
           <li><strong>Strukturierte Verwendung von Werkzeugen</strong> (Burp, Nmap, Metasploit, BloodHound, Mimikatz, LinPEAS/WinPEAS).</li>
-          <li><strong>Saubere Dokumentation</strong> aller Schritte, um später einen verständlichen Bericht zu erstellen.</li>
+          <li><strong>Saubere Dokumentation</strong> aller Schritte, als Grundlage für Berichte.</li>
         </ul>
       </div>
     </details>
@@ -810,4 +886,5 @@ cat flag.txt</code></pre>
 </div>
 </body>
 </html>
+
 
