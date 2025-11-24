@@ -135,13 +135,6 @@
       text-transform: uppercase;
     }
 
-    .brand-tagline {
-      font-size: 12px;
-      color: var(--text-soft);
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-
     .header-right {
       display: flex;
       align-items: center;
@@ -198,17 +191,12 @@
     }
 
     main {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.95fr);
+      display: flex;
+      flex-direction: column;
       gap: 22px;
-      align-items: stretch;
     }
 
     @media (max-width: 880px) {
-      main {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
       .page {
         padding: 18px;
         border-radius: 22px;
@@ -306,7 +294,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 14px;
+      margin-bottom: 4px;
     }
 
     .btn-main {
@@ -375,35 +363,16 @@
       transform: translateY(-1px);
     }
 
-    .hero-footnote {
-      font-size: 11px;
-      color: var(--text-soft);
-      opacity: 0.84;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
     }
 
-    .hero-footnote span.label {
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      background: rgba(2, 7, 18, 0.94);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 9px;
-      color: rgba(164, 172, 210, 0.98);
-    }
-
-    .hero-footnote span.divider {
-      opacity: 0.3;
-    }
-
-    .grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    @media (max-width: 880px) {
+      .cards-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
 
     .card {
@@ -414,6 +383,10 @@
       padding: 14px 14px 12px 14px;
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
       overflow: hidden;
+    }
+
+    .card.secondary-card {
+      background: radial-gradient(circle at top, rgba(28, 24, 62, 0.92), rgba(7, 10, 28, 0.98));
     }
 
     .card::before {
@@ -481,100 +454,6 @@
       margin-bottom: 8px;
     }
 
-    .card-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .link-pill {
-      font-size: 11px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(2, 8, 22, 0.96);
-      color: var(--text-soft);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
-    }
-
-    .link-pill span.bullet {
-      font-size: 12px;
-    }
-
-    .link-pill:hover {
-      background: rgba(12, 18, 37, 0.98);
-      border-color: rgba(255, 255, 255, 0.3);
-      transform: translateY(-1px);
-    }
-
-    .card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      font-size: 11px;
-      color: rgba(191, 199, 238, 0.98);
-      margin-top: 2px;
-    }
-
-    .card-footer span.count {
-      opacity: 0.86;
-    }
-
-    .card-footer a.card-cta {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--accent-strong);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .card-footer a.card-cta span.arrow {
-      font-size: 14px;
-    }
-
-    .secondary-card {
-      background: radial-gradient(circle at top, rgba(28, 24, 62, 0.92), rgba(7, 10, 28, 0.98));
-    }
-
-    .ribbon {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      background: rgba(3, 8, 20, 0.96);
-      border-radius: 999px;
-      padding: 3px 7px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      color: rgba(174, 185, 230, 0.98);
-      backdrop-filter: blur(10px);
-    }
-
-    .glow-orb {
-      position: absolute;
-      bottom: -36px;
-      right: -18px;
-      width: 150px;
-      height: 150px;
-      border-radius: 999px;
-      background:
-        radial-gradient(circle at 30% 10%, rgba(255, 255, 255, 0.7) 0, transparent 40%),
-        radial-gradient(circle at 70% 90%, #40e9b2 0, #005247 65%);
-      opacity: 0.2;
-      filter: blur(1px);
-      pointer-events: none;
-    }
-
     .badge-row {
       display: flex;
       flex-wrap: wrap;
@@ -623,83 +502,27 @@
       opacity: 0.9;
     }
 
-    /* Schnellzugriff unten */
-
-    .quick-links {
-      margin-top: 18px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
-      gap: 14px;
-    }
-
-    @media (max-width: 960px) {
-      .quick-links {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      }
-    }
-
-    @media (max-width: 640px) {
-      .quick-links {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    .quick-card {
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(5, 9, 24, 0.96);
-      padding: 10px 11px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 12px;
-    }
-
-    .quick-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .quick-card-title {
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      font-size: 10px;
-      color: rgba(182, 191, 233, 0.98);
-    }
-
-    .quick-card-tag {
-      font-size: 10px;
-      padding: 3px 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      color: rgba(160, 170, 218, 0.98);
-    }
-
-    .quick-card p {
-      color: var(--text-soft);
-      font-size: 12px;
-    }
-
-    .quick-card a {
-      margin-top: 2px;
+    .card-footer {
+      margin-top: 10px;
       font-size: 11px;
-      text-decoration: none;
-      color: var(--accent-strong);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      color: rgba(191, 199, 238, 0.98);
+      opacity: 0.9;
     }
 
-    .quick-card a span.arrow {
-      font-size: 13px;
+    .glow-orb {
+      position: absolute;
+      bottom: -36px;
+      right: -18px;
+      width: 150px;
+      height: 150px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 30% 10%, rgba(255, 255, 255, 0.7) 0, transparent 40%),
+        radial-gradient(circle at 70% 90%, #40e9b2 0, #005247 65%);
+      opacity: 0.2;
+      filter: blur(1px);
+      pointer-events: none;
     }
-
   </style>
 </head>
 <body>
@@ -716,14 +539,11 @@
           <span class="pill-dot"></span>
           <span>Teacher. Hacker. Runner.</span>
         </div>
-        <a class="btn-ghost" href="#material">
-          <span>Direkt zum Material</span>
-          <span class="chevron">↘</span>
-        </a>
       </div>
     </header>
 
     <main>
+      <!-- Hero über die volle Breite -->
       <section class="hero">
         <div class="hero-kicker">
           <span class="hero-kicker-badge">Lab Access</span>
@@ -731,12 +551,11 @@
         </div>
 
         <h1>
-          
           <span class="highlight">Informatik zum Anfassen</span>
         </h1>
 
         <p class="hero-subtitle">
-          Ein Einstieg für alles, was ich als Informatiklehrer, Fachberater und Security Nerd aufbaue. Von Unterrichtsmaterial bis zu Hacking Labs.
+          Ein Einstieg für alles, was ich als Informatiklehrer, Fachberater und Security Nerd aufbaue: CyberDefense Lab, Unterrichtsmaterial und Fortbildungen.
         </p>
 
         <div class="hero-meta">
@@ -746,23 +565,22 @@
         </div>
 
         <div class="hero-actions">
-          <a class="btn-main" href="https://node-xejd.onrender.com/">
+          <!-- einziger Lab-Link -->
+          <a class="btn-main" href="/index.html">
             <span class="icon">⚡</span>
             <span>Zum CyberDefense Lab</span>
           </a>
 
-          <a class="btn-secondary" href="#material">
+          <!-- einziger Material-Link -->
+          <a class="btn-secondary" href="https://dein-material-link.de">
             <span class="dot"></span>
-            <span>Unterricht & Fachberatung</span>
+            <span>Zum Unterrichtsmaterial</span>
           </a>
-        </div>
-
-        <div class="hero-footnote">
-          <span class="divider">·</span>
         </div>
       </section>
 
-      <section class="grid">
+      <!-- Kartenreihe: nur Einordnung, keine weiteren Links -->
+      <section class="cards-grid">
         <!-- CyberDefense Lab Karte -->
         <article class="card" id="lab">
           <div class="card-inner">
@@ -776,43 +594,24 @@
 
             <h2 class="card-title">Von TryHackMe zum Schul Lab</h2>
             <p class="card-subtitle">
-              Szenarien, in denen Lernende legitime Angriffe verstehen, verteidigen und reflektieren. Sauber dokumentiert, schulgeeignet und rechtlich sauber gedacht.
+              Szenarien, in denen Lernende legitime Angriffe nachvollziehen, verteidigen und reflektieren. Sauber dokumentiert, schulgeeignet und mit Blick auf Rechtssicherheit gedacht.
             </p>
-
-            <div class="card-links">
-              <a class="link-pill" href="https://dein-cyberdefense-lab-link.de">
-                <span class="bullet">▸</span>
-                <span>Lab Portal öffnen</span>
-              </a>
-              <a class="link-pill" href="https://dein-cyberdefense-overview.de">
-                <span class="bullet">▸</span>
-                <span>Didaktisches Konzept</span>
-              </a>
-              <a class="link-pill" href="mailto:deine-mail@schule.de">
-                <span class="bullet">✉</span>
-                <span>Kontakt für Workshops</span>
-              </a>
-            </div>
 
             <div class="badge-row">
               <div class="mini-badge">Network Basics</div>
               <div class="mini-badge">Linux & CLI</div>
               <div class="mini-badge">Web Security</div>
-              <div class="mini-badge">Red Team</div>
+              <div class="mini-badge">Red Team Perspektive</div>
             </div>
 
             <div class="status-strip">
               <span class="status-dot"></span>
               <span class="label">Status</span>
-              <span class="text">Aktiv im Aufbau. Neue Szenarien werden laufend ergänzt.</span>
+              <span class="text">Aktiv im Aufbau. Neue Szenarien kommen nach und nach dazu.</span>
             </div>
 
             <div class="card-footer">
-              <span class="count">Für AGs, Projekttage, Profile und Fortbildungen geeignet.</span>
-              <a class="card-cta" href="https://dein-cyberdefense-lab-link.de">
-                <span>Zum Lab</span>
-                <span class="arrow">↗</span>
-              </a>
+              Für AGs, Projekttage, Profile und Fortbildungen. Zugriff auf das Lab oben über den Button.
             </div>
           </div>
           <div class="glow-orb"></div>
@@ -831,23 +630,8 @@
 
             <h2 class="card-title">Bausteine für deinen Informatikunterricht in Sek I</h2>
             <p class="card-subtitle">
-              Klar strukturiert, praxiserprobt, mit Fokus auf Kompetenzen statt Folienfeuerwerk.
+              Klar strukturierte Reihen und Bausteine mit Fokus auf Kompetenzen und belastbare Praxis: von Algorithmik über Programmieren bis hin zu KI und Medienbildung.
             </p>
-
-            <div class="card-links">
-              <a class="link-pill" href="https://dein-material-link.de">
-                <span class="bullet">▸</span>
-                <span>Materialübersicht</span>
-              </a>
-              <a class="link-pill" href="https://dein-fachberater-link.de">
-                <span class="bullet">▸</span>
-                <span>Fachberatung Informatik</span>
-              </a>
-              <a class="link-pill" href="https://dein-vortraege-link.de">
-                <span class="bullet">▸</span>
-                <span>Vorträge & Workshops</span>
-              </a>
-            </div>
 
             <div class="badge-row">
               <div class="mini-badge">Algorithmik & Datenstrukturen</div>
@@ -857,55 +641,13 @@
             </div>
 
             <div class="card-footer">
-              <span class="count">Für Kolleginnen, Fachkonferenzen, Fortbildner und Schulleitungen.</span>
-              <a class="card-cta" href="https://dein-material-link.de">
-                <span>Zum Material</span>
-                <span class="arrow">↗</span>
-              </a>
+              Für Kolleginnen, Fachkonferenzen, Fortbildner und Schulleitungen. Materialzugang oben über den Button.
             </div>
           </div>
         </article>
       </section>
     </main>
-
-    <!-- Schnellzugriff unten -->
-    <section class="quick-links">
-      <div class="quick-card">
-        <div class="quick-card-header">
-          <div class="quick-card-title">Für Schüler</div>
-          <div class="quick-card-tag">Start hier</div>
-        </div>
-        <p>Direkter Einstieg in das CyberDefense Lab mit Szenarien, die im Unterricht oder in AGs laufen.</p>
-        <a href="https://dein-cyberdefense-lab-link.de">
-          <span>Zum Lab</span>
-          <span class="arrow">↗</span>
-        </a>
-      </div>
-
-      <div class="quick-card">
-        <div class="quick-card-header">
-          <div class="quick-card-title">Für Kolleginnen</div>
-          <div class="quick-card-tag">Material</div>
-        </div>
-        <p>Unterrichtsmaterial, Reihen und Bausteine für Sek I Informatik, sortiert nach Themen.</p>
-        <a href="https://dein-material-link.de">
-          <span>Material öffnen</span>
-          <span class="arrow">↗</span>
-        </a>
-      </div>
-
-      <div class="quick-card">
-        <div class="quick-card-header">
-          <div class="quick-card-title">Für Fortbildungen</div>
-          <div class="quick-card-tag">Kontakt</div>
-        </div>
-        <p>Anfragen für Workshops, Vorträge und Konzepte zur Verankerung von Informatik und Cybersecurity.</p>
-        <a href="mailto:deine-mail@schule.de">
-          <span>Kontakt aufnehmen</span>
-          <span class="arrow">↗</span>
-        </a>
-      </div>
-    </section>
   </div>
 </body>
 </html>
+
