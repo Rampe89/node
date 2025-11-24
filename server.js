@@ -88,6 +88,9 @@ const server = http.createServer((req, res) => {
         } else if (req.url === '/lehrplan.html') {
             // lehrplan-Seite ausliefern
             serveFile('lehrplan.html', res);
+        } else if (req.url === '/pt1.html') {
+            // pt-Seite ausliefern
+            serveFile('pt1.html', res);
          } else {
             // 404-Seite
             res.statusCode = 404;
