@@ -40,15 +40,16 @@
       display: flex;
       align-items: stretch;
       justify-content: center;
-      padding: 16px 12px;
+      padding: 24px 16px;
+      line-height: 1.5;
     }
 
     .page {
       width: 100%;
-      max-width: 1180px;
+      max-width: 1200px;
       background: linear-gradient(135deg, rgba(14, 18, 40, 0.96), rgba(5, 6, 17, 0.92));
-      border-radius: 28px;
-      padding: 20px 22px 22px 22px;
+      border-radius: 32px;
+      padding: 26px 26px 24px 26px;
       border: 1px solid rgba(255, 255, 255, 0.06);
       box-shadow: var(--shadow-soft);
       position: relative;
@@ -88,19 +89,19 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 20px;
+      gap: 18px;
+      margin-bottom: 28px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
     }
 
     .brand-logo {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border-radius: 18px;
       background: radial-gradient(circle at 30% 20%, #ffffff 0, #00ffcc 40%, #011b16 70%);
       position: relative;
@@ -116,7 +117,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
       color: #020612;
       text-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
@@ -129,7 +130,7 @@
     }
 
     .brand-name {
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -145,7 +146,7 @@
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.16em;
-      padding: 7px 12px;
+      padding: 8px 14px;
       border-radius: var(--radius-full);
       border: 1px solid rgba(255, 255, 255, 0.12);
       background: rgba(2, 5, 16, 0.86);
@@ -193,40 +194,41 @@
     main {
       display: flex;
       flex-direction: column;
-      gap: 22px;
+      gap: 28px;
     }
 
     @media (max-width: 880px) {
       .page {
-        padding: 18px;
-        border-radius: 22px;
+        padding: 20px;
+        border-radius: 26px;
       }
 
       header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
+        gap: 12px;
       }
 
       .header-right {
         align-self: stretch;
-        justify-content: space-between;
+        justify-content: flex-start;
       }
     }
 
     .hero {
-      padding: 10px 4px 6px 4px;
+      padding: 14px 6px 12px 6px;
+      max-width: 620px;
     }
 
     .hero-kicker {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 4px 10px 4px 4px;
+      padding: 5px 12px 5px 5px;
       border-radius: var(--radius-full);
       border: 1px solid rgba(255, 255, 255, 0.14);
       background: rgba(1, 6, 16, 0.88);
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       backdrop-filter: blur(12px);
       font-size: 11px;
       color: var(--text-soft);
@@ -249,9 +251,9 @@
     }
 
     h1 {
-      font-size: clamp(30px, 3.6vw, 40px);
-      line-height: 1.05;
-      margin-bottom: 10px;
+      font-size: clamp(32px, 4vw, 44px);
+      line-height: 1.08;
+      margin-bottom: 14px;
     }
 
     h1 span.highlight {
@@ -265,23 +267,23 @@
     }
 
     .hero-subtitle {
-      font-size: 14px;
+      font-size: 15px;
       color: var(--text-soft);
-      max-width: 26rem;
-      line-height: 1.45;
-      margin-bottom: 18px;
+      max-width: 32rem;
+      line-height: 1.5;
+      margin-bottom: 22px;
     }
 
     .hero-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 18px;
+      gap: 10px;
+      margin-bottom: 22px;
     }
 
     .meta-tag {
-      font-size: 11px;
-      padding: 6px 10px;
+      font-size: 12px;
+      padding: 7px 12px;
       border-radius: var(--radius-full);
       border: 1px solid rgba(255, 255, 255, 0.14);
       background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.14), rgba(1, 3, 10, 0.98));
@@ -293,13 +295,13 @@
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 4px;
+      gap: 12px;
+      margin-bottom: 8px;
     }
 
     .btn-main {
       border-radius: var(--radius-full);
-      padding: 10px 18px;
+      padding: 11px 20px;
       border: none;
       background: radial-gradient(circle at 20% 0, #ffffff 0, var(--accent-strong) 35%, #0de1b4 60%, #06745e 100%);
       box-shadow:
@@ -332,7 +334,7 @@
     }
 
     .btn-secondary {
-      padding: 9px 15px;
+      padding: 9px 16px;
       border-radius: var(--radius-full);
       border: 1px solid rgba(255, 255, 255, 0.18);
       background: rgba(1, 6, 16, 0.9);
@@ -366,12 +368,14 @@
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+      gap: 18px;
+      align-items: stretch;
     }
 
     @media (max-width: 880px) {
       .cards-grid {
         grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
       }
     }
 
@@ -380,7 +384,7 @@
       border-radius: var(--radius-lg);
       border: 1px solid rgba(255, 255, 255, 0.14);
       background: radial-gradient(circle at top, rgba(34, 41, 88, 0.9), rgba(7, 9, 24, 0.98));
-      padding: 14px 14px 12px 14px;
+      padding: 18px 18px 14px 18px;
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
       overflow: hidden;
     }
@@ -411,7 +415,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .card-label {
@@ -444,26 +448,27 @@
     }
 
     .card-title {
-      font-size: 17px;
-      margin-bottom: 3px;
+      font-size: 18px;
+      margin-bottom: 5px;
     }
 
     .card-subtitle {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text-soft);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      line-height: 1.5;
     }
 
     .badge-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 2px;
+      gap: 8px;
+      margin-top: 4px;
     }
 
     .mini-badge {
       font-size: 10px;
-      padding: 4px 7px;
+      padding: 4px 8px;
       border-radius: 999px;
       border: 1px solid rgba(255, 255, 255, 0.18);
       background: rgba(2, 8, 21, 0.96);
@@ -471,8 +476,8 @@
     }
 
     .status-strip {
-      margin-top: 10px;
-      padding: 7px 8px;
+      margin-top: 12px;
+      padding: 8px 10px;
       border-radius: var(--radius-md);
       border: 1px dashed rgba(255, 255, 255, 0.22);
       background: rgba(3, 9, 23, 0.9);
@@ -503,8 +508,8 @@
     }
 
     .card-footer {
-      margin-top: 10px;
-      font-size: 11px;
+      margin-top: 12px;
+      font-size: 12px;
       color: rgba(191, 199, 238, 0.98);
       opacity: 0.9;
     }
@@ -537,7 +542,6 @@
       <div class="header-right">
         <div class="pill">
           <span class="pill-dot"></span>
-          <span>Teacher. Hacker. Runner.</span>
         </div>
       </div>
     </header>
@@ -555,7 +559,7 @@
         </h1>
 
         <p class="hero-subtitle">
-          Ein Einstieg für alles, was ich als Informatiklehrer, Fachberater und Security Nerd aufbaue: CyberDefense Lab, Unterrichtsmaterial und Fortbildungen.
+          Ein Einstieg für alles, was ich als Informatiklehrer, Fachberater und Security Nerd aufbaue:
         </p>
 
         <div class="hero-meta">
@@ -641,7 +645,7 @@
             </div>
 
             <div class="card-footer">
-              Für Kolleginnen, Fachkonferenzen, Fortbildner und Schulleitungen. Materialzugang oben über den Button.
+              Für Kolleg*innen, Fachkonferenzen, Fortbildner*innen und Schulleitungen. Materialzugang oben über den Button.
             </div>
           </div>
         </article>
@@ -650,4 +654,5 @@
   </div>
 </body>
 </html>
+
 
