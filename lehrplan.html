@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Informatik – Schulinterner Lehrplan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #f4f5f7;
+      --card-bg: #ffffff;
+      --accent: #273f6b;
+      --accent-light: #e0e6f5;
+      --text-main: #222222;
+      --text-muted: #555555;
+      --line: #c0c4cf;
+      --radius: 10px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    header {
+      background: var(--accent);
+      color: white;
+      padding: 16px 24px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    header p {
+      margin: 4px 0 0;
+      font-size: 0.9rem;
+      color: #dde3f5;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 24px 16px;
+      background: var(--accent-light);
+      border-bottom: 1px solid var(--line);
+    }
+
+    nav a {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: white;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    nav a:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      background: #fff;
+      border-radius: 8px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .grade-section {
+      margin-bottom: 40px;
+    }
+
+    .grade-header {
+      margin-bottom: 16px;
+    }
+
+    .grade-header h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+
+    .grade-header p {
+      margin: 4px 0 0;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .halfyear-title {
+      font-weight: 600;
+      margin: 12px 0 4px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 26px;
+      margin-top: 8px;
+      margin-bottom: 18px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--line);
+    }
+
+    details.card {
+      position: relative;
+      margin-bottom: 18px;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 0;
+      border: none;
+    }
+
+    details.card::before {
+      content: "";
+      position: absolute;
+      left: -18px;
+      top: 18px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--card-bg);
+      box-shadow: 0 0 0 2px var(--accent-light);
+    }
+
+    details.card summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    details.card summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 1.05rem;
+      color: var(--accent);
+    }
+
+    .meta {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .meta span {
+      display: inline-block;
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-right: 4px;
+    }
+
+    .toggle-hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .card-body {
+      padding: 0 16px 12px 16px;
+      border-top: 1px solid #e2e4ec;
+    }
+
+    .block-title {
+      font-weight: 600;
+      margin-top: 8px;
+      margin-bottom: 2px;
+      font-size: 0.95rem;
+    }
+
+    ul {
+      margin: 0 0 4px 18px;
+      padding: 0;
+      font-size: 0.93rem;
+    }
+
+    li {
+      margin-bottom: 2px;
+    }
+
+    .repertoire {
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .repertoire span {
+      display: inline-block;
+      background: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 999px;
+      margin: 2px 4px 0 0;
+    }
+
+    .example,
+    .outcome {
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .example strong,
+    .outcome strong {
+      font-weight: 600;
+    }
+
+    @media (min-width: 900px) {
+      .card-body {
+        padding: 0 20px 14px 20px;
+      }
+      details.card summary {
+        padding: 14px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Informatik – Schulinterner Lehrplan</h1>
+  <p>Übersicht nach Jahrgängen, Themenbereichen und Kompetenzen</p>
+</header>
+
+<nav>
+  <a href="#j6">Jahrgang 6</a>
+  <a href="#j7">Jahrgang 7</a>
+  <a href="#j8">Jahrgang 8</a>
+  <a href="#j9">Jahrgang 9</a>
+  <a href="#j10">Jahrgang 10</a>
+</nav>
+
+<main>
+
+  <div class="note">
+    <strong>Hinweis:</strong> Jahrgang 6–8: Wahlpflichtkurs (WPK, ca. 2 Stunden pro Woche). Jahrgang 9–10: Pflichtfach Informatik (ca. 1 Stunde pro Woche, ggf. 2 Stunden in einem Halbjahr).
+  </div>
+
+  <!-- Jahrgang 6 -->
+  <section id="j6" class="grade-section">
+    <div class="grade-header">
+      <h2>Jahrgang 6 (WPK)</h2>
+      <p>Digitale Grundlagen, erstes Arbeiten mit Texten und Präsentationen, einfache Internetsicherheit.</p>
+    </div>
+
+    <div class="halfyear-title">1. Halbjahr – Einstieg, Arbeiten am PC und Internetsicherheit (ca. 15 Doppelstunden)</div>
+
+    <div class="timeline">
+
+      <!-- J6 H1 Karte 1 -->
+      <details class="card" open>
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Einstieg und Arbeiten am Computer</h3>
+            <div class="meta">
+              <span>ca. 4 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Regeln im Computerraum, ergonomischer Arbeitsplatz</li>
+            <li>Anmeldung am Server (Benutzername und Passwort)</li>
+            <li>Dateien speichern, öffnen und benennen</li>
+            <li>Einfache Ordnerstrukturen anlegen (z. B. Home-Ordner, Tauschordner)</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Sich am Computer anmelden und sicher abmelden</li>
+            <li>Dateien speichern, wiederfinden und in Ordnern verwalten</li>
+            <li>Einfache Verzeichnisbäume verstehen</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Login</span>
+            <span>Passwort</span>
+            <span>Ordner</span>
+            <span>Verzeichnis</span>
+            <span>Speichern</span>
+            <span>Laden</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Lege einen Ordner „Informatik 6“ mit Unterordnern an (z. B. Texte, Bilder, Projekte) und speichere dort eine Testdatei.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler können ihren Arbeitsplatz und ihre Dateien selbstständig organisieren.
+          </p>
+        </div>
+      </details>
+
+      <!-- J6 H1 Karte 2 -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Erste Schritte mit Textverarbeitung</h3>
+            <div class="meta">
+              <span>ca. 5 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Einen kurzen Text eingeben, speichern und öffnen</li>
+            <li>Schriftart, -größe und einfache Absatzformate einstellen</li>
+            <li>Einfache Aufzählungen und Überschriften gestalten</li>
+            <li>Einen kleinen Text mit Bild kombinieren (z. B. Steckbrief)</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Textdokumente mit Grundfunktionen gestalten</li>
+            <li>Strukturierungsprinzipien wie Überschrift, Absatz und Aufzählung anwenden</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Absatz</span>
+            <span>Überschrift</span>
+            <span>Schriftart</span>
+            <span>Schriftgröße</span>
+            <span>Aufzählung</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Erstelle einen Steckbrief über dich mit Überschrift, Absätzen, Aufzählung und einem eingefügten Bild.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler können einfache Texte am Computer erstellen und lesbar formatieren.
+          </p>
+        </div>
+      </details>
+
+      <!-- J6 H1 Karte 3 -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Internetführerschein und Basisschutz</h3>
+            <div class="meta">
+              <span>ca. 6 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Suchmaschinen nutzen und geeignete Suchbegriffe wählen</li>
+            <li>Seriosität von Webseiten grob einschätzen</li>
+            <li>Grundregeln für Chats und soziale Netzwerke (Netiquette)</li>
+            <li>Einfache Gefahren: Cybermobbing, Datenweitergabe, unsichere Passwörter</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Gezielte Suchanfragen formulieren</li>
+            <li>Zwischen eher seriösen und unsicheren Quellen unterscheiden</li>
+            <li>Grundregeln für sicheres Verhalten im Netz nennen und anwenden</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Suchmaschine</span>
+            <span>Link</span>
+            <span>Soziale Netzwerke</span>
+            <span>Cybermobbing</span>
+            <span>Passwort</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Erstelle eine Klassenregel-Liste „Sicher unterwegs im Netz“ mit fünf konkreten Regeln.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler kennen grundlegende Chancen und Risiken der Internetnutzung.
+          </p>
+        </div>
+      </details>
+
+    </div>
+
+    <div class="halfyear-title">2. Halbjahr – Texte, Präsentationen und erste Bildbearbeitung (ca. 15 Doppelstunden)</div>
+
+    <div class="timeline">
+
+      <!-- J6 H2 Karte 1 -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Texte gestalten – von der Seite zum Dokument</h3>
+            <div class="meta">
+              <span>ca. 6 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Längere Texte strukturieren (Abschnitte, Überschriftenebenen)</li>
+            <li>Seitenränder, Ausrichtung, Zeilenabstand</li>
+            <li>Einfache Tabellen einfügen und gestalten</li>
+            <li>Texte für andere Fächer (Bericht oder Brief) erstellen</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Textdokumente übersichtlich und adressatengerecht gestalten</li>
+            <li>Textverarbeitung in anderen Fächern nutzen</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Seitenrand</span>
+            <span>Ausrichtung</span>
+            <span>Zeilenabstand</span>
+            <span>Tabelle</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Schreibe einen kurzen Bericht über einen Ausflug und gestalte ihn mit Überschrift, Abschnitten und einer kleinen Tabelle.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler können einfache Dokumente für schulische Zwecke erstellen.
+          </p>
+        </div>
+      </details>
+
+      <!-- J6 H2 Karte 2 -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Präsentationen – Inhalte zeigen</h3>
+            <div class="meta">
+              <span>ca. 5 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Folienstruktur: Titelfolie, Inhaltsfolien, Schlussfolie</li>
+            <li>Kurztexte, Bilder und einfache Diagramme einbinden</li>
+            <li>Grundregeln guter Präsentationen (wenig Text, große Schrift, Kontrast)</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Informationen auswählen und auf Folien übertragen</li>
+            <li>Einfache Präsentation zu einem vertrauten Thema halten</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Folie</span>
+            <span>Layout</span>
+            <span>Präsentation</span>
+            <span>Diagramm</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Erstelle eine Präsentation mit 3–4 Folien über dein Lieblingshobby und stelle sie kurz vor.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler können Inhalte in einer einfachen Präsentation darstellen.
+          </p>
+        </div>
+      </details>
+
+      <!-- J6 H2 Karte 3 -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Bildbearbeitung – erste Schritte</h3>
+            <div class="meta">
+              <span>ca. 4 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Pixelgrafik und Auflösung grob verstehen</li>
+            <li>Einfache Auswahl- und Zuschneidewerkzeuge</li>
+            <li>Helligkeit und Kontrast anpassen</li>
+            <li>Kleine Bildkorrekturen vornehmen</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Einfache Werkzeuge der Bildbearbeitung anwenden</li>
+            <li>Ein Bild für ein Textdokument oder eine Präsentation vorbereiten</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Pixel</span>
+            <span>Auflösung</span>
+            <span>Zuschneiden</span>
+            <span>Helligkeit</span>
+            <span>Kontrast</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Bearbeite ein Foto so, dass es zugeschnitten ist und Helligkeit und Kontrast verbessert wurden, und nutze es in einem Text oder einer Präsentation.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler können einfache Bildkorrekturen vornehmen.
+          </p>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- Jahrgang 7 -->
+  <section id="j7" class="grade-section">
+    <div class="grade-header">
+      <h2>Jahrgang 7 (WPK)</h2>
+      <p>Texte und Präsentationen vertiefen, Einstieg in Tabellenkalkulation, einfache Netzwerkkonzepte.</p>
+    </div>
+
+    <div class="halfyear-title">1. Halbjahr – Texte und Präsentationen vertiefen (ca. 15 Doppelstunden)</div>
+
+    <div class="timeline">
+
+      <!-- J7 H1 Karte 1 -->
+      <details class="card" open>
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Texte professioneller gestalten</h3>
+            <div class="meta">
+              <span>ca. 7 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Kopf- und Fußzeilen, Seitenzahlen</li>
+            <li>Tabstopps und einfache Layouts</li>
+            <li>Formale Schreiben (z. B. Bewerbung, Brief nach DIN)</li>
+            <li>Vorlagen nutzen und anpassen</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Längere Dokumente strukturieren und einheitlich gestalten</li>
+            <li>Formale Schreiben korrekt aufbauen</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Kopfzeile</span>
+            <span>Fußzeile</span>
+            <span>Tabstopp</span>
+            <span>Formbrief</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Erstelle ein Bewerbungsanschreiben mit passendem Layout und füge einen einfachen Lebenslauf an.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler können Texte für reale Anlässe erstellen.
+          </p>
+        </div>
+      </details>
+
+      <!-- J7 H1 Karte 2 -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Präsentationen wirkungsvoll einsetzen</h3>
+            <div class="meta">
+              <span>ca. 8 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Präsentationen planen (Ziel, Zielgruppe, Kernaussagen)</li>
+            <li>Folienlayout und einheitliches Design (Masterfolie)</li>
+            <li>Bilder, Diagramme und einfache SmartArt-Elemente einsetzen</li>
+            <li>Animationen sparsam und zielgerichtet nutzen</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Präsentationen inhaltlich und optisch durchdacht gestalten</li>
+            <li>Eine Präsentation vor der Klasse adressatengerecht halten</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Masterfolie</span>
+            <span>Design</span>
+            <span>Animation</span>
+            <span>Visualisierung</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Gestalte eine Präsentation zu einem Thema aus einem anderen Fach und präsentiere sie.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler setzen Präsentationen bewusst zur Unterstützung von Vorträgen ein.
+          </p>
+        </div>
+      </details>
+
+    </div>
+
+    <div class="halfyear-title">2. Halbjahr – Tabellenkalkulation und Netze im Alltag (ca. 15 Doppelstunden)</div>
+
+    <div class="timeline">
+
+      <!-- J7 H2 Karte 1 -->
+      <details class="card" open>
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Tabellenkalkulation – Einstieg</h3>
+            <div class="meta">
+              <span>ca. 8 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Oberfläche einer Tabellenkalkulation (z. B. Calc, Excel)</li>
+            <li>Eingabe und Formatierung von Daten in Zellen</li>
+            <li>Einfache Formeln (Grundrechenarten)</li>
+            <li>Grundfunktionen (SUMME, MIN, MAX, MITTELWERT)</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Daten in Tabellen strukturiert erfassen</li>
+            <li>Einfache Berechnungen mit Formeln und Funktionen durchführen</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Zelle</span>
+            <span>Formel</span>
+            <span>Funktion</span>
+            <span>SUMME</span>
+            <span>MITTELWERT</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Erstelle eine kleine Kostenübersicht mit automatischer Summen- und Durchschnittsberechnung.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler können einfache Rechenaufgaben mit Tabellenkalkulation lösen.
+          </p>
+        </div>
+      </details>
+
+      <!-- J7 H2 Karte 2 -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Daten grafisch darstellen</h3>
+            <div class="meta">
+              <span>ca. 4 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Diagramme aus Tabellen erzeugen</li>
+            <li>Diagrammtypen vergleichen (Balken, Kreis)</li>
+            <li>Achsenbeschriftungen und Legenden</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Daten mit passenden Diagrammen darstellen</li>
+            <li>Einfache Aussagen aus Diagrammen ableiten</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Diagramm</span>
+            <span>Balkendiagramm</span>
+            <span>Kreisdiagramm</span>
+            <span>Legende</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Erfasse eine Klassenumfrage in einer Tabelle und stelle sie als Diagramm dar.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler können Daten einfacher Umfragen auswerten und darstellen.
+          </p>
+        </div>
+      </details>
+
+      <!-- J7 H2 Karte 3 -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Netzwerke im Alltag verstehen</h3>
+            <div class="meta">
+              <span>ca. 3 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Beispiele für Netzwerke im Alltag (Heimnetz, Schulnetz)</li>
+            <li>Grundbegriffe: Server, Client, WLAN</li>
+            <li>Zuordnung von Geräten zu einem Netzwerk</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Einfache Netzwerkstrukturen beschreiben</li>
+            <li>Geräte in einem Netzwerk einordnen können</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Netzwerk</span>
+            <span>Server</span>
+            <span>Client</span>
+            <span>WLAN</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Zeichne ein einfaches Heimnetz mit Router, Smartphone, Laptop und Spielkonsole und beschrifte die Geräte.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler ordnen typische Geräte in Netzwerken ein.
+          </p>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- Jahrgang 8 -->
+  <section id="j8" class="grade-section">
+    <div class="grade-header">
+      <h2>Jahrgang 8 (WPK)</h2>
+      <p>Tabellenkalkulation und Datenanalyse vertiefen, lokale Netzwerke und Datensicherheit.</p>
+    </div>
+
+    <div class="halfyear-title">1. Halbjahr – Tabellenkalkulation und Datenanalyse vertieft (ca. 15 Doppelstunden)</div>
+
+    <div class="timeline">
+
+      <!-- J8 H1 Karte 1 -->
+      <details class="card" open>
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Tabellenkalkulation – Funktionen und Logik</h3>
+            <div class="meta">
+              <span>ca. 7 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Komplexere Formeln mit mehreren Operatoren</li>
+            <li>Ausgewählte Funktionen (z. B. WENN-Funktion)</li>
+            <li>Größere Datenbereiche gestalten und übersichtlich halten</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Daten mithilfe von Funktionen komfortabel auswerten</li>
+            <li>Fehler in Formeln finden und korrigieren</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>WENN-Funktion</span>
+            <span>Argument</span>
+            <span>Bereich</span>
+            <span>relativer Bezug</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Erstelle eine Notentabelle, die automatisch Durchschnitt und „bestanden/nicht bestanden“ ausgibt.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler nutzen Funktionen zur Lösung anspruchsvollerer Aufgaben.
+          </p>
+        </div>
+      </details>
+
+      <!-- J8 H1 Karte 2 -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Daten auswerten und interpretieren</h3>
+            <div class="meta">
+              <span>ca. 8 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Daten sortieren und filtern</li>
+            <li>Einfacher Kennwerte wie Minimum, Maximum, Mittelwert</li>
+            <li>Diagramme zur Auswertung und Präsentation von Daten nutzen</li>
+            <li>Unterschied zwischen Daten und Informationen thematisieren</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Datenbestände systematisch auswerten</li>
+            <li>Aus Daten begründete Aussagen ableiten</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Sortieren</span>
+            <span>Filtern</span>
+            <span>Datensatz</span>
+            <span>Information</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Analysiere einen Datensatz (z. B. Wetterdaten oder Sportleistungen) und formuliere einige Erkenntnisse.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler können mit Hilfe von Tabellenkalkulation Informationen gewinnen.
+          </p>
+        </div>
+      </details>
+
+    </div>
+
+    <div class="halfyear-title">2. Halbjahr – Lokale Netzwerke und Datensicherheit (ca. 15 Doppelstunden)</div>
+
+    <div class="timeline">
+
+      <!-- J8 H2 Karte 1 -->
+      <details class="card" open>
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Aufbau von lokalen Netzwerken (LAN)</h3>
+            <div class="meta">
+              <span>ca. 7 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Aufbau eines lokalen Netzwerks in Schule oder Zuhause</li>
+            <li>Rollen von Server, Client, Router und Switch</li>
+            <li>Verkabelung und Funknetz (WLAN) im lokalen Bereich</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Einfache lokale Netzwerke grafisch darstellen und erläutern</li>
+            <li>Zusammenhänge zwischen Geräten im Heim- oder Schulnetz erklären</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>LAN</span>
+            <span>Server</span>
+            <span>Client</span>
+            <span>Router</span>
+            <span>Switch</span>
+            <span>WLAN</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Zeichne das Schulnetz mit Server, Switch, Access-Points und einigen Endgeräten und erkläre die Verbindungen.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler verstehen grundlegende Strukturen lokaler Netzwerke.
+          </p>
+        </div>
+      </details>
+
+      <!-- J8 H2 Karte 2 -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Datenschutz und Datensicherheit in lokalen Netzen</h3>
+            <div class="meta">
+              <span>ca. 8 Doppelstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Gefahren in vernetzten Systemen (z. B. schwache Passwörter, ungesicherte Zugänge)</li>
+            <li>Grundprinzipien von Verschlüsselung auf alltagsnaher Ebene</li>
+            <li>Schutzmaßnahmen für eigene Geräte im Heim- oder Schulnetz</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Gefährdungen in lokalen Netzen erkennen</li>
+            <li>Schutzmaßnahmen für den eigenen Alltag formulieren</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Datenmissbrauch</span>
+            <span>Verschlüsselung</span>
+            <span>Passwortsicherheit</span>
+            <span>Update</span>
+            <span>Datenschutz</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Entwickle ein Info-Plakat „Sicher im WLAN“ mit fünf konkreten Tipps.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler kennen zentrale Gefahren und Schutzmöglichkeiten in lokalen Netzen.
+          </p>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- Jahrgang 9 – Pflichtfach, 1 Stunde pro Woche -->
+  <section id="j9" class="grade-section">
+    <div class="grade-header">
+      <h2>Jahrgang 9 (Pflichtfach)</h2>
+      <p>Grundlagen der Datenverarbeitung und Einstieg in algorithmisches Denken, ca. 1 Stunde pro Woche.</p>
+    </div>
+
+    <div class="halfyear-title">1. Halbjahr – Datenverarbeitung und automatisierte Prozesse (ca. 8–9 Unterrichtsstunden)</div>
+
+    <div class="timeline">
+
+      <!-- J9 H1 Karte 1 -->
+      <details class="card" open>
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Grundlagen der Datenverarbeitung</h3>
+            <div class="meta">
+              <span>ca. 4 Unterrichtsstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>EVA-Prinzip (Eingabe – Verarbeitung – Ausgabe)</li>
+            <li>Wichtige Hardwarekomponenten eines Computers</li>
+            <li>Grundzüge von Speicherarten (z. B. Hauptspeicher, Massenspeicher)</li>
+            <li>Bit und Byte als Maßeinheiten</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Informatiksysteme mit dem EVA-Prinzip beschreiben</li>
+            <li>Hardwarebestandteile ihren Funktionen zuordnen</li>
+            <li>Grundlegende Speicherkonzepte benennen</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Eingabe</span>
+            <span>Verarbeitung</span>
+            <span>Ausgabe</span>
+            <span>Hardware</span>
+            <span>Speicher</span>
+            <span>Bit</span>
+            <span>Byte</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Ordne verschiedenen Geräten (Tastatur, Monitor, Festplatte) Eingabe, Verarbeitung oder Ausgabe zu.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler verstehen grundlegende Abläufe der Datenverarbeitung im Computer.
+          </p>
+        </div>
+      </details>
+
+      <!-- J9 H1 Karte 2 -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Informatiksysteme und automatisierte Prozesse im Alltag</h3>
+            <div class="meta">
+              <span>ca. 4–5 Unterrichtsstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Beispiele für automatisierte Prozesse (z. B. Fahrkartenautomat, Pfandautomat)</li>
+            <li>Sensoren und Aktoren kennenlernen</li>
+            <li>Automatisierte Abläufe mit dem EVA-Prinzip beschreiben</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Automatisierte Prozesse im Alltag erkennen und erklären</li>
+            <li>Sensoren und Aktoren Geräten zuordnen</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Sensor</span>
+            <span>Aktor</span>
+            <span>EVA-Prinzip</span>
+            <span>automatisierter Prozess</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Beschreibe den Ablauf an einem Pfandautomaten mit Hilfe des EVA-Prinzips und benenne Sensoren und Aktoren.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler können alltägliche Informatiksysteme strukturiert erklären.
+          </p>
+        </div>
+      </details>
+
+    </div>
+
+    <div class="halfyear-title">2. Halbjahr – Einstieg in das algorithmische Problemlösen (ca. 8–9 Unterrichtsstunden)</div>
+
+    <div class="timeline">
+
+      <!-- J9 H2 Karte 1 -->
+      <details class="card" open>
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Algorithmisches Denken mit Alltagsbeispielen</h3>
+            <div class="meta">
+              <span>ca. 4 Unterrichtsstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Alltagsalgorithmen beschreiben (z. B. Rezept, Wegbeschreibung)</li>
+            <li>Handlungsanweisungen in sinnvolle Einzelschritte zerlegen</li>
+            <li>Begriffe: Wiederholung, Verzweigung, Bedingung</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Alltagsabläufe strukturiert und eindeutig beschreiben</li>
+            <li>Bestandteile von Algorithmen benennen</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Algorithmus</span>
+            <span>Schrittfolge</span>
+            <span>Schleife</span>
+            <span>Verzweigung</span>
+            <span>Bedingung</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Beschreibe einen Alltagsvorgang (z. B. SIM-Karte wechseln) als klar nummerierten Algorithmus.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler erfassen Algorithmen als präzise Handlungsanweisungen.
+          </p>
+        </div>
+      </details>
+
+      <!-- J9 H2 Karte 2 -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Grafische Programmierung – erste Programme</h3>
+            <div class="meta">
+              <span>ca. 4–5 Unterrichtsstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Einstieg in eine grafische Programmierumgebung (z. B. Scratch)</li>
+            <li>Ereignissteuerung, Schleifen und Bedingungen praktisch nutzen</li>
+            <li>Kleines Projekt (Minispiel oder Quiz)</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Einfache Programme planen und umsetzen</li>
+            <li>Algorithmen mit Wiederholungen und Bedingungen realisieren</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Ereignis</span>
+            <span>Programmablauf</span>
+            <span>Variable</span>
+            <span>Schleife</span>
+            <span>Bedingung</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Entwickle ein kleines Spiel, bei dem eine Figur gesteuert wird und Punkte sammelt.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler setzen erste eigene Algorithmen praktisch um.
+          </p>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- Jahrgang 10 – Pflichtfach, 1 Stunde pro Woche -->
+  <section id="j10" class="grade-section">
+    <div class="grade-header">
+      <h2>Jahrgang 10 (Pflichtfach)</h2>
+      <p>Aufbau des Internets, algorithmische Projekte und Dateninterpretation, kurzer Cybersecurity-Block am Ende.</p>
+    </div>
+
+    <div class="halfyear-title">1. Halbjahr – Aufbau und Funktionsweise des Internets (ca. 8–9 Unterrichtsstunden)</div>
+
+    <div class="timeline">
+
+      <!-- J10 H1 Karte 1 -->
+      <details class="card" open>
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Aufbau und Funktionsweise des Internets</h3>
+            <div class="meta">
+              <span>ca. 8–9 Unterrichtsstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Internet als Netz von Netzen</li>
+            <li>Datenpakete, IP-Adressen in Grundzügen</li>
+            <li>Rolle von Providern, Servern und Endgeräten</li>
+            <li>Einfache Wege eines Datenpakets vom eigenen Gerät zum Server und zurück</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Einen einfachen Weg eines Datenpakets beschreiben</li>
+            <li>Zentrale Komponenten des Internets und ihre Aufgaben benennen</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>IP-Adresse</span>
+            <span>Datenpaket</span>
+            <span>Protokoll</span>
+            <span>Router</span>
+            <span>Provider</span>
+            <span>Server</span>
+            <span>Client</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Erkläre mit einer Skizze, wie eine Anfrage aus dem Browser zu einem Webserver gelangt und wie die Antwort zurückkommt.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler besitzen ein Grundverständnis über den technischen Aufbau des Internets.
+          </p>
+        </div>
+      </details>
+
+    </div>
+
+    <div class="halfyear-title">2. Halbjahr – Algorithmische Projekte, Daten interpretieren, kurzer Cybersecurity-Block (ca. 8–9 Unterrichtsstunden)</div>
+
+    <div class="timeline">
+
+      <!-- J10 H2 Karte 1 -->
+      <details class="card" open>
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Algorithmisches Problemlösen – kleines Projekt</h3>
+            <div class="meta">
+              <span>ca. 5–6 Unterrichtsstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Algorithmen mit Variablen, Schleifen und Verzweigungen planen</li>
+            <li>Umsetzung in einer geeigneten Programmiersprache oder Umgebung</li>
+            <li>Kleines Projekt (Minispiel, Textverarbeitungshilfe oder Verschlüsselungswerkzeug)</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Algorithmisches Denken auf eine konkrete Problemstellung übertragen</li>
+            <li>Programme systematisch testen und verbessern</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Variable</span>
+            <span>Schleife</span>
+            <span>Verzweigung</span>
+            <span>Operator</span>
+            <span>Zeichenkette</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Entwickle ein kleines Programm, das einen Text nach einem einfachen Verfahren verschlüsselt und wieder entschlüsselt.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler setzen einen selbst geplanten Algorithmus in einem kleinen Projekt um.
+          </p>
+        </div>
+      </details>
+
+      <!-- J10 H2 Karte 2 -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Daten interpretieren und Informationen gewinnen</h3>
+            <div class="meta">
+              <span>ca. 2–3 Unterrichtsstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Größere Datentabellen oder einfache Datenbanken zur Informationssuche nutzen</li>
+            <li>Daten filtern und auswählen</li>
+            <li>Grafische Darstellungen erstellen und kritisch bewerten</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Informationen gezielt aus Datenbeständen gewinnen</li>
+            <li>Darstellungen und Statistiken kritisch hinterfragen</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Datenbank</span>
+            <span>Abfrage</span>
+            <span>Filter</span>
+            <span>Interpretation</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Nutze einen Datensatz (z. B. Bevölkerungszahlen oder Klimadaten), erstelle passende Diagramme und formuliere deine wichtigsten Erkenntnisse.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler können Daten systematisch auswerten und interpretieren.
+          </p>
+        </div>
+      </details>
+
+      <!-- J10 H2 Karte 3 – kurzer Cybersecurity-Block am Ende -->
+      <details class="card">
+        <summary>
+          <div class="summary-row">
+            <h3 class="card-title">Kurzblock: Cybersecurity und Datenschutz im Netz</h3>
+            <div class="meta">
+              <span>ca. 1–2 Unterrichtsstunden</span>
+            </div>
+          </div>
+          <div class="toggle-hint">Details ein- oder ausklappen</div>
+        </summary>
+        <div class="card-body">
+          <div class="block-title">Inhalte</div>
+          <ul>
+            <li>Kurze Wiederholung zu Passwörtern und Verschlüsselung aus den WPK-Jahren</li>
+            <li>Beispiele für aktuelle Gefahren (Phishing, unsichere Links) auf einfachen Fallbeispielen</li>
+            <li>Eigene Schutzregeln für den Alltag formulieren</li>
+          </ul>
+
+          <div class="block-title">Kompetenzen</div>
+          <ul>
+            <li>Typische Gefährdungssituationen im Netz erkennen</li>
+            <li>Konkrete Verhaltensregeln zum eigenen Schutz benennen</li>
+          </ul>
+
+          <div class="block-title">Sprachliches Repertoire</div>
+          <div class="repertoire">
+            <span>Phishing</span>
+            <span>Malware</span>
+            <span>Verschlüsselung</span>
+            <span>Datenschutz</span>
+          </div>
+
+          <p class="example">
+            <strong>Beispielaufgabe:</strong>
+            Analysiere ein Fallbeispiel zu einer gefälschten Nachricht und notiere drei Warnsignale und drei Schutzmaßnahmen.
+          </p>
+
+          <p class="outcome">
+            <strong>Ergebnis:</strong>
+            Die Schülerinnen und Schüler können zentrale Risiken benennen und einfache Schutzmaßnahmen formulieren.
+          </p>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
