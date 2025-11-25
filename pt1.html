@@ -391,12 +391,17 @@
           <details>
             <summary><span class="bullet"></span> Verzeichnisse und versteckte Pfade</summary>
             <div class="details-body">
-              <div class="mini-label">Gobuster (HTTP)</div>
-              <pre><code data-template="gobuster dir -u http://{{IP}}/ -w /usr/share/wordlists/dirb/common.txt">gobuster dir -u http://{{IP}}/ -w /usr/share/wordlists/dirb/common.txt</code></pre>
-              <div class="mini-label">Gobuster (HTTPS)</div>
-              <pre><code data-template="gobuster dir -k -u https://{{IP}}/ -w /usr/share/wordlists/dirb/big.txt">gobuster dir -k -u https://{{IP}}/ -w /usr/share/wordlists/dirb/big.txt</code></pre>
+              <div class="mini-label">Gobuster (empfohlen: erst HTTP versuchen)</div>
+              <pre><code data-template="gobuster dir -u http://{{IP}}/ -w /usr/share/wordlists/dirb/big.txt">
+              gobuster dir -u http://{{IP}}/ -w /usr/share/wordlists/dirb/big.txt
+              </code></pre>
+
+              <div class="mini-label">Optional: HTTPS, wenn der Dienst wirklich nur über TLS erreichbar ist</div>
+              <pre><code data-template="gobuster dir -k -u https://{{IP}}/ -w /usr/share/wordlists/dirb/big.txt">
+              gobuster dir -k -u https://{{IP}}/ -w /usr/share/wordlists/dirb/big.txt
+              </code></pre>
               <p class="if-then">
-                401/403 heißt nicht „nicht existent“, sondern „Zugriff verweigert“. Diese Pfade sind später für Logins / Rollenwechsel interessant.
+              Wenn HTTPS dir ständig Fehler beschert, zuerst HTTP prüfen – viele CTF-Boxen antworten primär dort.
               </p>
             </div>
           </details>
