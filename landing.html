@@ -8,413 +8,129 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg: #050611;
-      --bg-panel: #101323;
-      --bg-soft: #171a2a;
-      --accent: #36d6a3;
-      --accent-soft: rgba(54, 214, 163, 0.12);
-      --accent-strong: #00cfa0;
-      --text: #f5f7ff;
-      --text-soft: #a3aac4;
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --danger: #ff5c7a;
+      --bg-body: #020617;
+      --text: #f9fafb;
+      --text-soft: #9ca3af;
+      --text-muted: #6b7280;
+      --border-soft: rgba(148, 163, 184, 0.35);
+      --accent: #22c55e;
+      --radius-lg: 18px;
       --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.6);
-      --radius-lg: 24px;
-      --radius-md: 14px;
-      --radius-full: 999px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * {box-sizing: border-box; margin: 0; padding: 0;}
 
     body {
-      font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #181b33 0, #050611 55%);
+      font-family: "Space Grotesk", sans-serif;
+      background: radial-gradient(circle at top, #0b1120 0, #020617 55%);
       color: var(--text);
       min-height: 100vh;
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
       padding: 24px 16px;
-      line-height: 1.5;
+      display: flex;
+      justify-content: center;
     }
 
     .page {
       width: 100%;
-      max-width: 1200px;
-      background: linear-gradient(135deg, rgba(14, 18, 40, 0.98), rgba(5, 6, 17, 0.96));
-      border-radius: 28px;
-      padding: 26px 26px 24px 26px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      max-width: 1080px;
+      background: #020617;
+      border-radius: 20px;
+      border: 1px solid var(--border-soft);
+      padding: 24px;
       box-shadow: var(--shadow-soft);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .page::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background:
-        radial-gradient(circle at 10% 0, rgba(0, 207, 160, 0.12) 0, transparent 55%),
-        radial-gradient(circle at 80% 0, rgba(86, 120, 255, 0.14) 0, transparent 55%);
-      opacity: 0.7;
-      pointer-events: none;
-      z-index: -2;
-    }
-
-    .page::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.06) 1px,
-        transparent 1px
-      );
-      background-size: 100% 72px;
-      opacity: 0.04;
-      pointer-events: none;
-      z-index: -1;
     }
 
     header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 18px;
-      margin-bottom: 26px;
+      border-bottom: 1px solid var(--border-soft);
+      padding-bottom: 14px;
+      margin-bottom: 22px;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    .brand {display: flex; align-items: center; gap: 14px;}
 
     .brand-logo {
-      width: 44px;
-      height: 44px;
-      border-radius: 16px;
-      background: radial-gradient(circle at 30% 20%, #ffffff 0, #00cfa0 40%, #021813 75%);
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      background: radial-gradient(circle at 30% 20%, #ffffff 0, #22c55e 40%, #022c22 75%);
       position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: 0 0 18px rgba(0, 207, 160, 0.55);
+      border: 1px solid rgba(255,255,255,0.2);
     }
 
     .brand-logo::after {
       content: "</>";
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #020617;
       font-weight: 700;
-      color: #020612;
-      text-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
     }
 
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+    .brand-text {display: flex; flex-direction: column;}
+    .brand-name {font-size: 18px; font-weight: 600;}
+    .brand-role {font-size: 12px; color: var(--text-soft);}
+
+    .header-right {font-size: 12px; color: var(--text-muted); text-align: right;}
+    .header-right strong {color: var(--text-soft);}
+
+    /* Intro */
+    .intro {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr;
+      margin-bottom: 26px;
+      gap: 18px;
     }
 
-    .brand-name {
-      font-size: 19px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
+    .intro-main h1 {
+      font-size: 32px;
+      margin-bottom: 6px;
     }
 
-    .brand-role {
-      font-size: 12px;
-      color: var(--text-soft);
+    .intro-main h1 span {color: var(--accent);}
+    .intro-main p {font-size: 14px; color: var(--text-soft);}
+
+    .intro-meta {
+      font-size: 13px; color: var(--text-muted);
+      border-left: 2px solid var(--border-soft);
+      padding-left: 12px;
     }
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .pill {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      padding: 7px 13px;
-      border-radius: var(--radius-full);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      background: rgba(2, 6, 18, 0.9);
-      color: var(--text-soft);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .pill-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--accent-strong);
-      box-shadow: 0 0 8px rgba(0, 207, 160, 0.9);
-    }
-
-    main {
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    @media (max-width: 880px) {
-      .page {
-        padding: 20px;
-        border-radius: 22px;
-      }
-
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-
-      .header-right {
-        align-self: stretch;
-        justify-content: flex-start;
-      }
-    }
-
-    .hero {
-      padding: 10px 4px 6px 4px;
-      max-width: 640px;
-    }
-
-    .hero-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 11px 4px 4px;
-      border-radius: var(--radius-full);
-      border: 1px solid rgba(255, 255, 255, 0.13);
-      background: rgba(3, 7, 18, 0.92);
-      margin-bottom: 16px;
-      backdrop-filter: blur(12px);
-      font-size: 11px;
-      color: var(--text-soft);
-    }
-
-    .hero-kicker-badge {
-      padding: 4px 9px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-      color: #020308;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 10px;
-    }
-
-    .hero-kicker-text {
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-
-    h1 {
-      font-size: clamp(30px, 3.6vw, 40px);
-      line-height: 1.1;
-      margin-bottom: 12px;
-    }
-
-    h1 span.highlight {
-      background: linear-gradient(120deg, var(--accent-strong), #82ffe0);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .hero-subtitle {
-      font-size: 15px;
-      color: var(--text-soft);
-      max-width: 34rem;
-      line-height: 1.5;
-      margin-bottom: 18px;
-    }
-
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .meta-tag {
-      font-size: 11px;
-      padding: 6px 11px;
-      border-radius: var(--radius-full);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(8, 11, 26, 0.96);
-      color: var(--text-soft);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 4px;
-    }
-
-    .btn-main {
-      border-radius: var(--radius-full);
-      padding: 10px 18px;
-      border: none;
-      background: radial-gradient(circle at 20% 0, #ffffff 0, var(--accent-strong) 36%, #0bc194 60%, #066955 100%);
-      box-shadow:
-        0 10px 24px rgba(0, 0, 0, 0.8),
-        0 0 26px rgba(0, 207, 160, 0.6);
-      color: #041013;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      font-size: 12px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      transform: translateY(0);
-      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
-    }
-
-    .btn-main:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.04);
-      box-shadow:
-        0 16px 32px rgba(0, 0, 0, 0.92),
-        0 0 42px rgba(0, 207, 160, 0.85);
-    }
-
-    .btn-secondary {
-      padding: 9px 16px;
-      border-radius: var(--radius-full);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(5, 8, 21, 0.96);
-      color: var(--text-soft);
-      text-decoration: none;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.13em;
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      cursor: pointer;
-      transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
-      backdrop-filter: blur(12px);
-    }
-
-    .btn-secondary span.dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: var(--danger);
-      box-shadow: 0 0 8px rgba(255, 92, 122, 0.9);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(11, 14, 33, 0.98);
-      border-color: rgba(255, 255, 255, 0.26);
-      transform: translateY(-1px);
-    }
-
+    /* Cards */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      align-items: stretch;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
     }
 
-    @media (max-width: 1024px) {
-      .cards-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 780px) {
-      .cards-grid {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 14px;
-      }
-    }
-
-    .card {
-      position: relative;
+    .card-link {
+      display: block;
+      padding: 14px;
+      text-decoration: none;
+      border: 1px solid var(--border-soft);
       border-radius: var(--radius-lg);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: radial-gradient(circle at top, rgba(32, 37, 88, 0.9), rgba(8, 10, 26, 0.98));
-      padding: 18px 18px 14px 18px;
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.65);
-      overflow: hidden;
+      color: inherit;
+      background: #020617;
+      transition: border 0.15s, transform 0.15s;
     }
 
-    .card.secondary-card {
-      background: radial-gradient(circle at top, rgba(24, 30, 76, 0.9), rgba(7, 9, 26, 0.98));
+    .card-link:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
     }
 
-    .card.tertiary-card {
-      background: radial-gradient(circle at top, rgba(24, 46, 68, 0.9), rgba(6, 11, 24, 0.98));
-    }
-
-    .card-inner {
-      position: relative;
-      z-index: 1;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .card-label {
+    .card-header-line {
       font-size: 11px;
       text-transform: uppercase;
+      color: var(--text-muted);
       letter-spacing: 0.16em;
-      color: rgba(193, 203, 240, 0.96);
-    }
-
-    .card-chip {
-      font-size: 10px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(3, 10, 24, 0.98);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      color: rgba(178, 190, 232, 0.95);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.13em;
-    }
-
-    .card-chip-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--accent-strong);
-      box-shadow: 0 0 10px rgba(0, 207, 160, 0.9);
+      margin-bottom: 6px;
     }
 
     .card-title {
-      font-size: 17px;
+      font-size: 16px;
       margin-bottom: 4px;
     }
 
@@ -422,251 +138,166 @@
       font-size: 13px;
       color: var(--text-soft);
       margin-bottom: 10px;
-      line-height: 1.5;
+      min-height: 4em;
     }
 
-    .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-top: 2px;
+    .card-tags {
+      list-style: none;
+      padding: 0; margin: 0 0 12px;
+      display: flex; flex-wrap: wrap; gap: 6px;
     }
 
-    .mini-badge {
-      font-size: 10px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(2, 8, 21, 0.96);
-      color: rgba(166, 176, 222, 0.98);
-    }
-
-    .status-strip {
-      margin-top: 10px;
-      padding: 7px 9px;
-      border-radius: var(--radius-md);
-      border: 1px dashed rgba(255, 255, 255, 0.22);
-      background: rgba(3, 9, 23, 0.9);
+    .card-tags li {
       font-size: 11px;
-      color: rgba(174, 185, 230, 0.96);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .status-dot {
-      width: 9px;
-      height: 9px;
+      padding: 3px 8px;
+      border: 1px solid var(--border-soft);
       border-radius: 999px;
-      background: #23ff86;
-      box-shadow: 0 0 12px rgba(35, 255, 134, 0.9);
+      color: var(--text-muted);
     }
 
-    .status-strip span.label {
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      font-size: 10px;
-      opacity: 0.9;
-    }
-
-    .status-strip span.text {
-      opacity: 0.9;
-    }
-
-    .card-footer {
-      margin-top: 11px;
+    .card-footer-line {
       font-size: 12px;
-      color: rgba(191, 199, 238, 0.98);
-      opacity: 0.9;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .card-footer a {
+    .card-footer-line .cta {
       color: var(--accent);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .card-footer-line .cta::after {content: " →";}
+
+    /* Footer */
+    footer {
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-soft);
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+
+    footer a {
+      color: var(--text-soft);
       text-decoration: none;
-      border-bottom: 1px solid rgba(54, 214, 163, 0.4);
+      margin: 0 12px;
     }
 
-    .card-footer a:hover {
-      border-bottom-color: rgba(54, 214, 163, 0.8);
+    footer a:hover {
+      color: var(--accent);
     }
 
-    .glow-orb {
-      position: absolute;
-      bottom: -34px;
-      right: -18px;
-      width: 130px;
-      height: 130px;
-      border-radius: 999px;
-      background:
-        radial-gradient(circle at 35% 15%, rgba(255, 255, 255, 0.6) 0, transparent 40%),
-        radial-gradient(circle at 70% 90%, #36d6a3 0, #02463a 65%);
-      opacity: 0.18;
-      filter: blur(1px);
-      pointer-events: none;
-    }
   </style>
 </head>
+
 <body>
   <div class="page">
+
     <header>
       <div class="brand">
         <div class="brand-logo"></div>
         <div class="brand-text">
           <div class="brand-name">Ramon Berghorn</div>
-          <div class="brand-role">Pflichfach Informatik SEK 1 | CyberDefense Lab | Workshops</div>
+          <div class="brand-role">Pflichtfach Informatik Sek I · CyberDefense Lab · Workshops</div>
         </div>
       </div>
       <div class="header-right">
-        <div class="pill">
-          <span class="pill-dot"></span>
-          <span>Aktive Projekte</span>
-        </div>
+        <strong>Informatiklehrer & Fachberater</strong><br>
+        Fokus: informatische Bildung, Cybersecurity, praxisnahe Materialien
       </div>
     </header>
 
     <main>
-      <section class="hero">
-        <div class="hero-kicker">
-          <span class="hero-kicker-badge">Lab Access</span>
-          <span class="hero-kicker-text">Schule · Cybersecurity · Praxis</span>
+
+      <section class="intro">
+        <div class="intro-main">
+          <h1><span>Informatik</span> für Schule und Praxis</h1>
+          <p>
+            Drei Bereiche auf einer Seite: ein schulnahes CyberDefense Lab,
+            Unterrichtsmaterial für das Pflichtfach Informatik in der Sekundarstufe I
+            und ein Lernbuddy-Konzept für selbstreguliertes Lernen beim Programmieren.
+          </p>
         </div>
 
-        <h1>
-          <span class="highlight">Informatik zum Anfassen</span>
-        </h1>
-
-        <p class="hero-subtitle">
-          Unterrichtsmaterial, Ideen und Workshops für eine Informatik,
-          die im Schulalltag funktioniert.
-        </p>
-
-        <div class="hero-meta">
-          <div class="meta-tag">Sek I Informatik</div>
-          <div class="meta-tag">Ethical Hacking</div>
-          <div class="meta-tag">Workshops & Beratung</div>
-        </div>
-
-        <div class="hero-actions">
-          <a class="btn-main" href="https://node-xejd.onrender.com/index.html">
-            <span>Zum CyberDefense Lab</span>
-          </a>
-
-          <a class="btn-secondary" href="https://node-xejd.onrender.com/lehrplan.html">
-            <span class="dot"></span>
-            <span>Unterrichtsmaterial Sek I</span>
-          </a>
-
-          <a class="btn-secondary" href="https://node-xejd.onrender.com/lernbuddy.html">
-            <span class="dot"></span>
-            <span>Lernbuddy Informatik</span>
-          </a>
+        <div class="intro-meta">
+          <div><span>Kontext:</span> Hauptschule / Sek I, Fortbildungen, Fachkonferenzen</div>
+          <div><span>Themen:</span> Netzwerke, Security, Programmieren, KI, Medienbildung</div>
+          <div><span>Zielgruppe:</span> Lehrkräfte, Hochschulen, Fortbildungskontexte</div>
         </div>
       </section>
 
       <section class="cards-grid">
-        <!-- CyberDefense Lab -->
-        <article class="card" id="lab">
-          <div class="card-inner">
-            <div class="card-header">
-              <div class="card-label">CyberDefense Lab</div>
-              <div class="card-chip">
-                <span class="card-chip-dot"></span>
-                <span>Angriff & Verteidigung</span>
-              </div>
-            </div>
 
-            <h2 class="card-title">Von TryHackMe zum Schul-Lab</h2>
-            <p class="card-subtitle">
-              Szenarien, in denen Lernende legitime Angriffe nachvollziehen, verteidigen und reflektieren.
-              Technisch robust, didaktisch reduziert und mit Blick auf Rechtssicherheit gedacht.
-            </p>
-
-            <div class="badge-row">
-              <div class="mini-badge">Netzwerkgrundlagen</div>
-              <div class="mini-badge">Linux & CLI</div>
-              <div class="mini-badge">Web Security</div>
-              <div class="mini-badge">Red-Team Perspektive</div>
-            </div>
-
-            <div class="status-strip">
-              <span class="status-dot"></span>
-              <span class="label">Status</span>
-              <span class="text">Aktiv im Aufbau. Neue Szenarien kommen schrittweise dazu.</span>
-            </div>
-
-            <div class="card-footer">
-              Geeignet für AGs, Profile, Projekttage und Fortbildungen. Zugriff auf das Lab über den Button oben.
-            </div>
+        <a class="card-link" href="https://node-xejd.onrender.com/index.html">
+          <div class="card-header-line">CyberDefense Lab</div>
+          <div class="card-title">Legitime Angriffe verstehen</div>
+          <p class="card-subtitle">
+            Realistische Szenarien, in denen Lernende Angriffe nachvollziehen,
+            verteidigen und dokumentieren – technisch reduziert & schulgeeignet.
+          </p>
+          <ul class="card-tags">
+            <li>Netzwerke</li>
+            <li>Linux & CLI</li>
+            <li>Web Security</li>
+            <li>Red-Team Perspektive</li>
+          </ul>
+          <div class="card-footer-line">
+            <span>Für AGs, Profile & Projekttage.</span>
+            <span class="cta">Zum Lab</span>
           </div>
-          <div class="glow-orb"></div>
-        </article>
+        </a>
 
-        <!-- Unterrichtsmaterial -->
-        <article class="card secondary-card" id="material">
-          <div class="card-inner">
-            <div class="card-header">
-              <div class="card-label">Informatikunterricht & Fachberatung</div>
-              <div class="card-chip">
-                <span class="card-chip-dot" style="background:#ffcc66; box-shadow:0 0 10px rgba(127,208,255,0.9);"></span>
-                <span>Material & Konzepte</span>
-              </div>
-            </div>
-
-            <h2 class="card-title">Bausteine für Informatik in der Sekundarstufe I</h2>
-            <p class="card-subtitle">
-              Klar strukturierte Reihen und Bausteine mit Fokus auf Kompetenzen und belastbare Praxis:
-              von Algorithmik über Programmieren bis hin zu KI und Medienbildung - weiterhin im Aufbau!
-            </p>
-
-            <div class="badge-row">
-              <div class="mini-badge">Algorithmik & Datenstrukturen</div>
-              <div class="mini-badge">Programmieren im Unterricht</div>
-              <div class="mini-badge">Künstliche Intelligenz</div>
-              <div class="mini-badge">Medienbildung</div>
-            </div>
-
-            <div class="card-footer">
-              Für Kolleginnen und Kollegen, Fachkonferenzen, Fortbildungen und Schulleitungen.
-              Materialzugang über den Button <strong>Unterrichtsmaterial Sek I</strong> oben.
-            </div>
+        <a class="card-link" href="https://node-xejd.onrender.com/lehrplan.html">
+          <div class="card-header-line">Unterrichtsmaterial Sek I</div>
+          <div class="card-title">Bausteine für Informatik</div>
+          <p class="card-subtitle">
+            Materialien, die direkt im Unterricht funktionieren:
+            Algorithmik, Programmieren, KI, Medienbildung – fortlaufend im Aufbau.
+          </p>
+          <ul class="card-tags">
+            <li>Algorithmik</li>
+            <li>Programmieren</li>
+            <li>KI</li>
+            <li>Medienbildung</li>
+          </ul>
+          <div class="card-footer-line">
+            <span>Für Kollegien & Fachkonferenzen.</span>
+            <span class="cta">Zum Material</span>
           </div>
-        </article>
+        </a>
 
-        <!-- Lernbuddy / Selbstreguliertes Lernen -->
-        <article class="card tertiary-card" id="lernbuddy">
-          <div class="card-inner">
-            <div class="card-header">
-              <div class="card-label">Lernbuddy Informatik</div>
-              <div class="card-chip">
-                <span class="card-chip-dot" style="background:#7fd0ff; box-shadow:0 0 10px rgba(127,208,255,0.9);"></span>
-                <span>Selbstreguliertes Lernen</span>
-              </div>
-            </div>
-
-            <h2 class="card-title">Planen, Programmieren, Reflektieren</h2>
-            <p class="card-subtitle">
-              Digitales Arbeitsblatt zum Programmieren mit Scratch: Lernende planen ihr Vorgehen, dokumentieren ihre
-              Entscheidungen und reflektieren am Ende ihren Lernweg. Entwickelt für einfache Sprache und den Einsatz
-              direkt im Unterricht.
-            </p>
-
-            <div class="badge-row">
-              <div class="mini-badge">Ziele setzen</div>
-              <div class="mini-badge">Arbeitsschritte festhalten</div>
-              <div class="mini-badge">Reflexion am Ende</div>
-              <div class="mini-badge">PDF für die Mappe</div>
-            </div>
-
-            <div class="card-footer">
-              Der Lernbuddy orientiert sich an Konzepten des selbstregulierten Lernens nach
-              Prof. Dr. Ferdinand Stebner. Zugang über den Button <strong>Lernbuddy Informatik</strong> oben.
-            </div>
+        <a class="card-link" href="https://node-xejd.onrender.com/lernbuddy.html">
+          <div class="card-header-line">Lernbuddy Informatik</div>
+          <div class="card-title">Selbstreguliertes Lernen</div>
+          <p class="card-subtitle">
+            Planen, programmieren, reflektieren – digitales Arbeitsblatt für einfache Sprache,
+            Scratch-Aufgaben & Dokumentation. Orientierung an Prof. Dr. Stebner.
+          </p>
+          <ul class="card-tags">
+            <li>Ziele setzen</li>
+            <li>Arbeitsschritte sichtbar</li>
+            <li>Reflexion</li>
+            <li>PDF-Export</li>
+          </ul>
+          <div class="card-footer-line">
+            <span>Für Unterricht & Mappenführung.</span>
+            <span class="cta">Zum Lernbuddy</span>
           </div>
-        </article>
+        </a>
+
       </section>
+
     </main>
+
+    <footer>
+      <a href="https://node-xejd.onrender.com/impressum.html">Impressum</a>
+      <a href="https://node-xejd.onrender.com/datenschutz.html">Datenschutz</a>
+    </footer>
+
   </div>
 </body>
 </html>
-
-
