@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Informatik Lernbuddy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * {
       box-sizing: border-box;
@@ -34,7 +35,7 @@
 
     main {
       max-width: 1200px;
-      margin: 16px auto 24px;
+      margin: 16px auto 8px;
       padding: 0 12px;
     }
 
@@ -209,6 +210,7 @@
       font-size: 0.85rem;
       color: #388e3c;
       margin-top: 4px;
+      min-height: 1.2em;
     }
 
     .small-note {
@@ -284,6 +286,16 @@
       gap: 4px;
     }
 
+    .source-note {
+      max-width: 1200px;
+      margin: 0 auto 16px;
+      padding: 0 12px 8px;
+      font-size: 0.8rem;
+      color: #555;
+      text-align: right;
+      font-style: italic;
+    }
+
     @media (max-width: 900px) {
       .grid {
         grid-template-columns: 1fr;
@@ -295,6 +307,10 @@
 
       .inline-grid {
         grid-template-columns: 1fr;
+      }
+
+      .source-note {
+        text-align: left;
       }
     }
 
@@ -325,6 +341,10 @@
       #intro-overlay {
         display: none !important;
       }
+      .source-note {
+        text-align: left;
+        font-style: normal;
+      }
     }
   </style>
 </head>
@@ -335,7 +355,7 @@
 </header>
 
 <!-- Intro-Overlay -->
-<div id="intro-overlay" class="hidden">
+<div id="intro-overlay" class="hidden" aria-modal="true" role="dialog">
   <div id="intro-modal">
     <h2>Warum nutzen wir diesen Lernbuddy?</h2>
     <p>In Informatik geht es nicht nur darum, dass dein Programm funktioniert.</p>
@@ -583,14 +603,19 @@
       <button type="button" class="btn-primary" id="save-btn">Speichern (auf diesem Gerät)</button>
       <button type="button" class="btn-secondary" id="reset-btn">Alles löschen</button>
       <button type="button" class="btn-secondary" id="print-btn">Drucken oder als PDF speichern</button>
-      <div class="status" id="status-msg"></div>
+      <div class="status" id="status-msg" aria-live="polite"></div>
     </div>
   </section>
 </main>
 
+<div class="source-note">
+  Quelle/Idee von: Xenia Weber-Reuter, Joachim Wirth und Ferdinand Stebner
+</div>
+
 <script>
   const STORAGE_KEY = "informatikLernbuddyV1";
   const INTRO_KEY = "informatikLernbuddyHideIntro";
+  let statusTimeoutId = null;
 
   function getSelectedRadio(name) {
     const radios = document.querySelectorAll("input[name='" + name + "']");
@@ -612,14 +637,22 @@
 
   function setStatus(message, isError) {
     const el = document.getElementById("status-msg");
+    if (!el) return;
     el.textContent = message;
     el.style.color = isError ? "#d32f2f" : "#388e3c";
+
+    if (statusTimeoutId) {
+      clearTimeout(statusTimeoutId);
+    }
+    statusTimeoutId = setTimeout(function () {
+      el.textContent = "";
+    }, 4000);
   }
 
   function updateScratchFrameFromUrl() {
     const input = document.getElementById("scratch-url");
     const wrapper = document.getElementById("scratch-frame-wrapper");
-    if (!input) return;
+    if (!input || !wrapper) return;
 
     const url = input.value.trim();
     if (!url || !url.includes("scratch.mit.edu/projects")) {
@@ -664,8 +697,8 @@
     window.open(editorUrl, "_blank");
   }
 
-  function saveData() {
-    const data = {
+  function collectData() {
+    return {
       studentName: document.getElementById("student-name").value,
       studentClass: document.getElementById("student-class").value,
       studentDate: document.getElementById("student-date").value,
@@ -686,10 +719,15 @@
       satisfaction: document.getElementById("satisfaction").value,
       nextTime: document.getElementById("next-time").value
     };
+  }
 
+  function saveData(showStatus = true) {
+    const data = collectData();
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      setStatus("Gespeichert.", false);
+      if (showStatus) {
+        setStatus("Gespeichert.", false);
+      }
     } catch (e) {
       setStatus("Konnte nicht speichern. (localStorage nicht verfügbar)", true);
     }
@@ -698,37 +736,44 @@
   function loadData() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      const data = JSON.parse(raw);
+      if (raw) {
+        const data = JSON.parse(raw);
 
-      document.getElementById("student-name").value = data.studentName || "";
-      document.getElementById("student-class").value = data.studentClass || "";
-      document.getElementById("student-date").value = data.studentDate || "";
+        document.getElementById("student-name").value = data.studentName || "";
+        document.getElementById("student-class").value = data.studentClass || "";
+        document.getElementById("student-date").value = data.studentDate || "";
 
-      document.getElementById("goal-what").value = data.goalWhat || "";
-      document.getElementById("goal-how").value = data.goalHow || "";
-      document.getElementById("distractions").value = data.distractions || "";
-      document.getElementById("motivation").value = data.motivation || "";
+        document.getElementById("goal-what").value = data.goalWhat || "";
+        document.getElementById("goal-how").value = data.goalHow || "";
+        document.getElementById("distractions").value = data.distractions || "";
+        document.getElementById("motivation").value = data.motivation || "";
 
-      document.getElementById("scratch-url").value = data.scratchUrl || "";
-      updateScratchFrameFromUrl();
+        document.getElementById("scratch-url").value = data.scratchUrl || "";
+        updateScratchFrameFromUrl();
 
-      document.getElementById("plan-notes").value = data.planNotes || "";
-      document.getElementById("debug-notes").value = data.debugNotes || "";
+        document.getElementById("plan-notes").value = data.planNotes || "";
+        document.getElementById("debug-notes").value = data.debugNotes || "";
 
-      document.getElementById("check-tested").checked = !!data.checkTested;
-      document.getElementById("check-errors").checked = !!data.checkErrors;
-      document.getElementById("check-steps").checked = !!data.checkSteps;
-      document.getElementById("check-help").checked = !!data.checkHelp;
-      document.getElementById("check-focus").checked = !!data.checkFocus;
+        document.getElementById("check-tested").checked = !!data.checkTested;
+        document.getElementById("check-errors").checked = !!data.checkErrors;
+        document.getElementById("check-steps").checked = !!data.checkSteps;
+        document.getElementById("check-help").checked = !!data.checkHelp;
+        document.getElementById("check-focus").checked = !!data.checkFocus;
 
-      setSelectedRadio("goal-what-result", data.goalWhatResult);
-      setSelectedRadio("goal-how-result", data.goalHowResult);
+        setSelectedRadio("goal-what-result", data.goalWhatResult);
+        setSelectedRadio("goal-how-result", data.goalHowResult);
 
-      document.getElementById("satisfaction").value = data.satisfaction || "";
-      document.getElementById("next-time").value = data.nextTime || "";
+        document.getElementById("satisfaction").value = data.satisfaction || "";
+        document.getElementById("next-time").value = data.nextTime || "";
 
-      setStatus("Gespeicherte Daten wurden geladen.", false);
+        setStatus("Gespeicherte Daten wurden geladen.", false);
+      }
+
+      const dateInput = document.getElementById("student-date");
+      if (dateInput && dateInput.value.trim() === "") {
+        const today = new Date().toLocaleDateString("de-DE");
+        dateInput.value = today;
+      }
     } catch (e) {
       setStatus("Konnte gespeicherte Daten nicht laden.", true);
     }
@@ -773,8 +818,58 @@
     overlay.classList.add("hidden");
   }
 
+  function autoSaveOnChange() {
+    const watchedSelectors = [
+      "#student-name",
+      "#student-class",
+      "#student-date",
+      "#goal-what",
+      "#goal-how",
+      "#distractions",
+      "#motivation",
+      "#scratch-url",
+      "#plan-notes",
+      "#debug-notes",
+      "#satisfaction",
+      "#next-time",
+      "#check-tested",
+      "#check-errors",
+      "#check-steps",
+      "#check-help",
+      "#check-focus"
+    ];
+
+    watchedSelectors.forEach(sel => {
+      const el = document.querySelector(sel);
+      if (el) {
+        el.addEventListener("input", function () {
+          saveData(false);
+        });
+        el.addEventListener("change", function () {
+          saveData(false);
+        });
+      }
+    });
+
+    const goalWhatRadios = document.querySelectorAll("input[name='goal-what-result']");
+    goalWhatRadios.forEach(r => {
+      r.addEventListener("change", function () {
+        saveData(false);
+      });
+    });
+
+    const goalHowRadios = document.querySelectorAll("input[name='goal-how-result']");
+    goalHowRadios.forEach(r => {
+      r.addEventListener("change", function () {
+        saveData(false);
+      });
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("save-btn").addEventListener("click", saveData);
+    document.getElementById("save-btn").addEventListener("click", function () {
+      saveData(true);
+    });
     document.getElementById("reset-btn").addEventListener("click", resetData);
     document.getElementById("print-btn").addEventListener("click", function () {
       window.print();
@@ -789,7 +884,9 @@
 
     loadData();
     showIntroIfNeeded();
+    autoSaveOnChange();
   });
 </script>
 </body>
 </html>
+
