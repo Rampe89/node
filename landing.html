@@ -11,18 +11,18 @@
   <style>
     :root {
       --bg: #050611;
-      --bg-soft: #0c0f1f;
-      --bg-softer: #15182a;
-      --accent: #40e9b2;
-      --accent-soft: rgba(64, 233, 178, 0.08);
-      --accent-strong: #00ffcc;
+      --bg-panel: #101323;
+      --bg-soft: #171a2a;
+      --accent: #36d6a3;
+      --accent-soft: rgba(54, 214, 163, 0.12);
+      --accent-strong: #00cfa0;
       --text: #f5f7ff;
-      --text-soft: #a0a6c0;
-      --border-subtle: rgba(255, 255, 255, 0.06);
+      --text-soft: #a3aac4;
+      --border-subtle: rgba(255, 255, 255, 0.08);
       --danger: #ff5c7a;
-      --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.65);
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.6);
       --radius-lg: 24px;
-      --radius-md: 16px;
+      --radius-md: 14px;
       --radius-full: 999px;
     }
 
@@ -34,7 +34,7 @@
 
     body {
       font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #151932 0, #050611 55%);
+      background: radial-gradient(circle at top, #181b33 0, #050611 55%);
       color: var(--text);
       min-height: 100vh;
       display: flex;
@@ -47,8 +47,8 @@
     .page {
       width: 100%;
       max-width: 1200px;
-      background: linear-gradient(135deg, rgba(14, 18, 40, 0.96), rgba(5, 6, 17, 0.92));
-      border-radius: 32px;
+      background: linear-gradient(135deg, rgba(14, 18, 40, 0.98), rgba(5, 6, 17, 0.96));
+      border-radius: 28px;
       padding: 26px 26px 24px 26px;
       border: 1px solid rgba(255, 255, 255, 0.06);
       box-shadow: var(--shadow-soft);
@@ -61,10 +61,9 @@
       position: absolute;
       inset: -40%;
       background:
-        radial-gradient(circle at 10% 0, rgba(0, 255, 204, 0.14) 0, transparent 55%),
-        radial-gradient(circle at 80% 0, rgba(255, 92, 122, 0.16) 0, transparent 50%),
-        radial-gradient(circle at 50% 110%, rgba(68, 109, 255, 0.22) 0, transparent 55%);
-      opacity: 0.9;
+        radial-gradient(circle at 10% 0, rgba(0, 207, 160, 0.12) 0, transparent 55%),
+        radial-gradient(circle at 80% 0, rgba(86, 120, 255, 0.14) 0, transparent 55%);
+      opacity: 0.7;
       pointer-events: none;
       z-index: -2;
     }
@@ -75,12 +74,11 @@
       inset: 0;
       background-image: linear-gradient(
         to bottom,
-        rgba(255, 255, 255, 0.08) 1px,
+        rgba(255, 255, 255, 0.06) 1px,
         transparent 1px
       );
-      background-size: 100% 64px;
-      opacity: 0.05;
-      mix-blend-mode: soft-light;
+      background-size: 100% 72px;
+      opacity: 0.04;
       pointer-events: none;
       z-index: -1;
     }
@@ -90,24 +88,24 @@
       align-items: center;
       justify-content: space-between;
       gap: 18px;
-      margin-bottom: 28px;
+      margin-bottom: 26px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
 
     .brand-logo {
       width: 44px;
       height: 44px;
-      border-radius: 18px;
-      background: radial-gradient(circle at 30% 20%, #ffffff 0, #00ffcc 40%, #011b16 70%);
+      border-radius: 16px;
+      background: radial-gradient(circle at 30% 20%, #ffffff 0, #00cfa0 40%, #021813 75%);
       position: relative;
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: 0 0 24px rgba(0, 255, 204, 0.4);
+      box-shadow: 0 0 18px rgba(0, 207, 160, 0.55);
     }
 
     .brand-logo::after {
@@ -132,8 +130,12 @@
     .brand-name {
       font-size: 19px;
       font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-role {
+      font-size: 12px;
+      color: var(--text-soft);
     }
 
     .header-right {
@@ -146,10 +148,10 @@
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.16em;
-      padding: 8px 14px;
+      padding: 7px 13px;
       border-radius: var(--radius-full);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(2, 5, 16, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(2, 6, 18, 0.9);
       color: var(--text-soft);
       display: inline-flex;
       align-items: center;
@@ -161,34 +163,7 @@
       height: 8px;
       border-radius: 999px;
       background: var(--accent-strong);
-      box-shadow: 0 0 10px rgba(0, 255, 204, 0.9);
-    }
-
-    .btn-ghost {
-      font-size: 13px;
-      padding: 7px 14px;
-      border-radius: var(--radius-full);
-      border: 1px solid var(--border-subtle);
-      background: rgba(10, 12, 27, 0.85);
-      color: var(--text);
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      backdrop-filter: blur(10px);
-    }
-
-    .btn-ghost span.chevron {
-      font-size: 16px;
-      transform: translateY(0.5px);
-    }
-
-    .btn-ghost:hover {
-      transform: translateY(-1px);
-      border-color: rgba(255, 255, 255, 0.25);
-      background: rgba(18, 21, 42, 0.95);
+      box-shadow: 0 0 8px rgba(0, 207, 160, 0.9);
     }
 
     main {
@@ -200,13 +175,13 @@
     @media (max-width: 880px) {
       .page {
         padding: 20px;
-        border-radius: 26px;
+        border-radius: 22px;
       }
 
       header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
+        gap: 10px;
       }
 
       .header-right {
@@ -216,19 +191,19 @@
     }
 
     .hero {
-      padding: 14px 6px 12px 6px;
-      max-width: 620px;
+      padding: 10px 4px 6px 4px;
+      max-width: 640px;
     }
 
     .hero-kicker {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 5px 12px 5px 5px;
+      padding: 4px 11px 4px 4px;
       border-radius: var(--radius-full);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(1, 6, 16, 0.88);
-      margin-bottom: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      background: rgba(3, 7, 18, 0.92);
+      margin-bottom: 16px;
       backdrop-filter: blur(12px);
       font-size: 11px;
       color: var(--text-soft);
@@ -251,42 +226,39 @@
     }
 
     h1 {
-      font-size: clamp(32px, 4vw, 44px);
-      line-height: 1.08;
-      margin-bottom: 14px;
+      font-size: clamp(30px, 3.6vw, 40px);
+      line-height: 1.1;
+      margin-bottom: 12px;
     }
 
     h1 span.highlight {
-      background: linear-gradient(120deg, var(--accent-strong), #88ffe6);
+      background: linear-gradient(120deg, var(--accent-strong), #82ffe0);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      text-shadow:
-        0 0 22px rgba(0, 255, 204, 0.45),
-        0 0 55px rgba(0, 0, 0, 0.9);
     }
 
     .hero-subtitle {
       font-size: 15px;
       color: var(--text-soft);
-      max-width: 32rem;
+      max-width: 34rem;
       line-height: 1.5;
-      margin-bottom: 22px;
+      margin-bottom: 18px;
     }
 
     .hero-meta {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 22px;
+      margin-bottom: 18px;
     }
 
     .meta-tag {
-      font-size: 12px;
-      padding: 7px 12px;
+      font-size: 11px;
+      padding: 6px 11px;
       border-radius: var(--radius-full);
       border: 1px solid rgba(255, 255, 255, 0.14);
-      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.14), rgba(1, 3, 10, 0.98));
+      background: rgba(8, 11, 26, 0.96);
       color: var(--text-soft);
       text-transform: uppercase;
       letter-spacing: 0.14em;
@@ -296,18 +268,18 @@
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
 
     .btn-main {
       border-radius: var(--radius-full);
-      padding: 11px 20px;
+      padding: 10px 18px;
       border: none;
-      background: radial-gradient(circle at 20% 0, #ffffff 0, var(--accent-strong) 35%, #0de1b4 60%, #06745e 100%);
+      background: radial-gradient(circle at 20% 0, #ffffff 0, var(--accent-strong) 36%, #0bc194 60%, #066955 100%);
       box-shadow:
-        0 10px 26px rgba(0, 0, 0, 0.8),
-        0 0 30px rgba(0, 255, 204, 0.6);
-      color: #051013;
+        0 10px 24px rgba(0, 0, 0, 0.8),
+        0 0 26px rgba(0, 207, 160, 0.6);
+      color: #041013;
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -315,29 +287,25 @@
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       text-decoration: none;
       transform: translateY(0);
       transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
     }
 
-    .btn-main span.icon {
-      font-size: 16px;
-    }
-
     .btn-main:hover {
       transform: translateY(-1px);
-      filter: brightness(1.05);
+      filter: brightness(1.04);
       box-shadow:
-        0 16px 38px rgba(0, 0, 0, 0.92),
-        0 0 54px rgba(0, 255, 204, 0.85);
+        0 16px 32px rgba(0, 0, 0, 0.92),
+        0 0 42px rgba(0, 207, 160, 0.85);
     }
 
     .btn-secondary {
       padding: 9px 16px;
       border-radius: var(--radius-full);
       border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(1, 6, 16, 0.9);
+      background: rgba(5, 8, 21, 0.96);
       color: var(--text-soft);
       text-decoration: none;
       font-size: 12px;
@@ -348,7 +316,7 @@
       align-items: center;
       cursor: pointer;
       transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(12px);
     }
 
     .btn-secondary span.dot {
@@ -356,23 +324,29 @@
       height: 6px;
       border-radius: 999px;
       background: var(--danger);
-      box-shadow: 0 0 8px rgba(255, 92, 122, 0.8);
+      box-shadow: 0 0 8px rgba(255, 92, 122, 0.9);
     }
 
     .btn-secondary:hover {
       background: rgba(11, 14, 33, 0.98);
-      border-color: rgba(255, 255, 255, 0.28);
+      border-color: rgba(255, 255, 255, 0.26);
       transform: translateY(-1px);
     }
 
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
       align-items: stretch;
     }
 
-    @media (max-width: 880px) {
+    @media (max-width: 1024px) {
+      .cards-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 780px) {
       .cards-grid {
         grid-template-columns: minmax(0, 1fr);
         gap: 14px;
@@ -382,27 +356,19 @@
     .card {
       position: relative;
       border-radius: var(--radius-lg);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: radial-gradient(circle at top, rgba(34, 41, 88, 0.9), rgba(7, 9, 24, 0.98));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: radial-gradient(circle at top, rgba(32, 37, 88, 0.9), rgba(8, 10, 26, 0.98));
       padding: 18px 18px 14px 18px;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.65);
       overflow: hidden;
     }
 
     .card.secondary-card {
-      background: radial-gradient(circle at top, rgba(28, 24, 62, 0.92), rgba(7, 10, 28, 0.98));
+      background: radial-gradient(circle at top, rgba(24, 30, 76, 0.9), rgba(7, 9, 26, 0.98));
     }
 
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background:
-        radial-gradient(circle at 0 0, rgba(0, 255, 204, 0.18) 0, transparent 50%),
-        radial-gradient(circle at 120% 0, rgba(68, 109, 255, 0.16) 0, transparent 50%);
-      opacity: 0.7;
-      mix-blend-mode: screen;
-      pointer-events: none;
+    .card.tertiary-card {
+      background: radial-gradient(circle at top, rgba(24, 46, 68, 0.9), rgba(6, 11, 24, 0.98));
     }
 
     .card-inner {
@@ -444,16 +410,16 @@
       height: 7px;
       border-radius: 999px;
       background: var(--accent-strong);
-      box-shadow: 0 0 10px rgba(0, 255, 204, 0.9);
+      box-shadow: 0 0 10px rgba(0, 207, 160, 0.9);
     }
 
     .card-title {
-      font-size: 18px;
-      margin-bottom: 5px;
+      font-size: 17px;
+      margin-bottom: 4px;
     }
 
     .card-subtitle {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-soft);
       margin-bottom: 10px;
       line-height: 1.5;
@@ -462,8 +428,8 @@
     .badge-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 4px;
+      gap: 7px;
+      margin-top: 2px;
     }
 
     .mini-badge {
@@ -476,8 +442,8 @@
     }
 
     .status-strip {
-      margin-top: 12px;
-      padding: 8px 10px;
+      margin-top: 10px;
+      padding: 7px 9px;
       border-radius: var(--radius-md);
       border: 1px dashed rgba(255, 255, 255, 0.22);
       background: rgba(3, 9, 23, 0.9);
@@ -508,23 +474,33 @@
     }
 
     .card-footer {
-      margin-top: 12px;
+      margin-top: 11px;
       font-size: 12px;
       color: rgba(191, 199, 238, 0.98);
       opacity: 0.9;
     }
 
+    .card-footer a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(54, 214, 163, 0.4);
+    }
+
+    .card-footer a:hover {
+      border-bottom-color: rgba(54, 214, 163, 0.8);
+    }
+
     .glow-orb {
       position: absolute;
-      bottom: -36px;
+      bottom: -34px;
       right: -18px;
-      width: 150px;
-      height: 150px;
+      width: 130px;
+      height: 130px;
       border-radius: 999px;
       background:
-        radial-gradient(circle at 30% 10%, rgba(255, 255, 255, 0.7) 0, transparent 40%),
-        radial-gradient(circle at 70% 90%, #40e9b2 0, #005247 65%);
-      opacity: 0.2;
+        radial-gradient(circle at 35% 15%, rgba(255, 255, 255, 0.6) 0, transparent 40%),
+        radial-gradient(circle at 70% 90%, #36d6a3 0, #02463a 65%);
+      opacity: 0.18;
       filter: blur(1px);
       pointer-events: none;
     }
@@ -537,21 +513,22 @@
         <div class="brand-logo"></div>
         <div class="brand-text">
           <div class="brand-name">Ramon Berghorn</div>
+          <div class="brand-role">Pflichfach Informatik SEK 1 | CyberDefense Lab | Workshops</div>
         </div>
       </div>
       <div class="header-right">
         <div class="pill">
           <span class="pill-dot"></span>
+          <span>Aktive Projekte</span>
         </div>
       </div>
     </header>
 
     <main>
-      <!-- Hero über die volle Breite -->
       <section class="hero">
         <div class="hero-kicker">
           <span class="hero-kicker-badge">Lab Access</span>
-          <span class="hero-kicker-text">Schule, Cybersecurity, echte Praxis</span>
+          <span class="hero-kicker-text">Schule · Cybersecurity · Praxis</span>
         </div>
 
         <h1>
@@ -559,33 +536,35 @@
         </h1>
 
         <p class="hero-subtitle">
-          Ein Einstieg für alles, was ich als Informatiklehrer, Fachberater und Security Nerd aufbaue:
+          CyberDefense Lab, Unterrichtsmaterial und Fortbildungen für eine Informatik,
+          die technisch sauber ist und im Schulalltag funktioniert.
         </p>
 
         <div class="hero-meta">
           <div class="meta-tag">Sek I Informatik</div>
           <div class="meta-tag">Ethical Hacking</div>
-          <div class="meta-tag">Workshops & Fortbildungen</div>
+          <div class="meta-tag">Workshops & Beratung</div>
         </div>
 
         <div class="hero-actions">
-          <!-- einziger Lab-Link -->
-          <a class="btn-main" href="/index.html">
-            <span class="icon">⚡</span>
+          <a class="btn-main" href="https://node-xejd.onrender.com/index.html">
             <span>Zum CyberDefense Lab</span>
           </a>
 
-          <!-- einziger Material-Link -->
           <a class="btn-secondary" href="https://node-xejd.onrender.com/lehrplan.html">
             <span class="dot"></span>
-            <span>Zum Unterrichtsmaterial</span>
+            <span>Unterrichtsmaterial Sek I</span>
+          </a>
+
+          <a class="btn-secondary" href="https://node-xejd.onrender.com/lernbuddy.html">
+            <span class="dot"></span>
+            <span>Lernbuddy Informatik</span>
           </a>
         </div>
       </section>
 
-      <!-- Kartenreihe: nur Einordnung, keine weiteren Links -->
       <section class="cards-grid">
-        <!-- CyberDefense Lab Karte -->
+        <!-- CyberDefense Lab -->
         <article class="card" id="lab">
           <div class="card-inner">
             <div class="card-header">
@@ -596,45 +575,47 @@
               </div>
             </div>
 
-            <h2 class="card-title">Von TryHackMe zum Schul Lab</h2>
+            <h2 class="card-title">Von TryHackMe zum Schul-Lab</h2>
             <p class="card-subtitle">
-              Szenarien, in denen Lernende legitime Angriffe nachvollziehen, verteidigen und reflektieren. Sauber dokumentiert, schulgeeignet und mit Blick auf Rechtssicherheit gedacht.
+              Szenarien, in denen Lernende legitime Angriffe nachvollziehen, verteidigen und reflektieren.
+              Technisch robust, didaktisch reduziert und mit Blick auf Rechtssicherheit gedacht.
             </p>
 
             <div class="badge-row">
-              <div class="mini-badge">Network Basics</div>
+              <div class="mini-badge">Netzwerkgrundlagen</div>
               <div class="mini-badge">Linux & CLI</div>
               <div class="mini-badge">Web Security</div>
-              <div class="mini-badge">Red Team Perspektive</div>
+              <div class="mini-badge">Red-Team Perspektive</div>
             </div>
 
             <div class="status-strip">
               <span class="status-dot"></span>
               <span class="label">Status</span>
-              <span class="text">Aktiv im Aufbau. Neue Szenarien kommen nach und nach dazu.</span>
+              <span class="text">Aktiv im Aufbau. Neue Szenarien kommen schrittweise dazu.</span>
             </div>
 
             <div class="card-footer">
-              Für AGs, Projekttage, Profile und Fortbildungen. Zugriff auf das Lab oben über den Button.
+              Geeignet für AGs, Profile, Projekttage und Fortbildungen. Zugriff auf das Lab über den Button oben.
             </div>
           </div>
           <div class="glow-orb"></div>
         </article>
 
-        <!-- Informatik / Fachberatung Karte -->
+        <!-- Unterrichtsmaterial -->
         <article class="card secondary-card" id="material">
           <div class="card-inner">
             <div class="card-header">
               <div class="card-label">Informatikunterricht & Fachberatung</div>
               <div class="card-chip">
-                <span class="card-chip-dot" style="background: #ffcc66; box-shadow: 0 0 10px rgba(255, 204, 102, 0.9);"></span>
+                <span class="card-chip-dot" style="background:#ffcc66; box-shadow:0 0 10px rgba(255,204,102,0.9);"></span>
                 <span>Material & Konzepte</span>
               </div>
             </div>
 
-            <h2 class="card-title">Bausteine für deinen Informatikunterricht in Sek I</h2>
+            <h2 class="card-title">Bausteine für Informatik in der Sekundarstufe I</h2>
             <p class="card-subtitle">
-              Klar strukturierte Reihen und Bausteine mit Fokus auf Kompetenzen und belastbare Praxis: von Algorithmik über Programmieren bis hin zu KI und Medienbildung.
+              Klar strukturierte Reihen und Bausteine mit Fokus auf Kompetenzen und belastbare Praxis:
+              von Algorithmik über Programmieren bis hin zu KI und Medienbildung - weiterhin im Aufbau!
             </p>
 
             <div class="badge-row">
@@ -645,7 +626,40 @@
             </div>
 
             <div class="card-footer">
-              Für Kolleg*innen, Fachkonferenzen, Fortbildner*innen und Schulleitungen. Materialzugang oben über den Button.
+              Für Kolleginnen und Kollegen, Fachkonferenzen, Fortbildungen und Schulleitungen.
+              Materialzugang über den Button <strong>Unterrichtsmaterial Sek I</strong> oben.
+            </div>
+          </div>
+        </article>
+
+        <!-- Lernbuddy / Selbstreguliertes Lernen -->
+        <article class="card tertiary-card" id="lernbuddy">
+          <div class="card-inner">
+            <div class="card-header">
+              <div class="card-label">Lernbuddy Informatik</div>
+              <div class="card-chip">
+                <span class="card-chip-dot" style="background:#7fd0ff; box-shadow:0 0 10px rgba(127,208,255,0.9);"></span>
+                <span>Selbstreguliertes Lernen</span>
+              </div>
+            </div>
+
+            <h2 class="card-title">Planen, Programmieren, Reflektieren</h2>
+            <p class="card-subtitle">
+              Digitales Arbeitsblatt zum Programmieren mit Scratch: Lernende planen ihr Vorgehen, dokumentieren ihre
+              Entscheidungen und reflektieren am Ende ihren Lernweg. Entwickelt für einfache Sprache und den Einsatz
+              direkt im Unterricht.
+            </p>
+
+            <div class="badge-row">
+              <div class="mini-badge">Ziele setzen</div>
+              <div class="mini-badge">Arbeitsschritte festhalten</div>
+              <div class="mini-badge">Reflexion am Ende</div>
+              <div class="mini-badge">PDF für die Mappe</div>
+            </div>
+
+            <div class="card-footer">
+              Der Lernbuddy orientiert sich an Konzepten des selbstregulierten Lernens nach
+              Prof. Dr. Ferdinand Stebner. Zugang über den Button <strong>Lernbuddy Informatik</strong> oben.
             </div>
           </div>
         </article>
