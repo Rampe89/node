@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Informatik Lernbuddy</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      background: #f0f4ff;
+      color: #222;
+    }
+
+    header {
+      background: linear-gradient(135deg, #4f8cff, #6dd5fa);
+      color: white;
+      padding: 16px 24px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      font-size: 1rem;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 16px auto 24px;
+      padding: 0 12px;
+    }
+
+    .section {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      padding: 16px 18px;
+      margin-bottom: 16px;
+      border: 1px solid #dde5ff;
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 12px;
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: #4f8cff;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .section-subtitle {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1.1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .field-group {
+      margin-bottom: 12px;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .field-group small {
+      display: block;
+      font-size: 0.8rem;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #ccd4ff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 36px;
+      background: #f8f9ff;
+    }
+
+    textarea {
+      min-height: 70px;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #4f8cff;
+      box-shadow: 0 0 0 2px rgba(79,140,255,0.2);
+      background: #ffffff;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #e8f0fe;
+      color: #1a73e8;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 0.8rem;
+      margin-bottom: 6px;
+    }
+
+    .checkbox-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .checkbox-list li {
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: #f8f9ff;
+    }
+
+    .checkbox-list input[type="checkbox"] {
+      margin-right: 6px;
+    }
+
+    #scratch-frame-wrapper {
+      width: 100%;
+      height: 800px;
+      margin-top: 10px;
+      background: #dde5ff;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid #c3cffc;
+    }
+
+    #scratch-frame-wrapper p {
+      padding: 10px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      align-items: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: #4f8cff;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #333;
+      border: 1px solid #c3cffc;
+    }
+
+    .status {
+      font-size: 0.85rem;
+      color: #388e3c;
+      margin-top: 4px;
+    }
+
+    .small-note {
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    .inline-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Intro-Overlay */
+    #intro-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    #intro-overlay.hidden {
+      display: none;
+    }
+
+    #intro-modal {
+      background: #ffffff;
+      max-width: 560px;
+      width: 90%;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+      padding: 18px 20px 16px;
+      border: 1px solid #dde5ff;
+    }
+
+    #intro-modal h2 {
+      margin: 0 0 8px;
+      font-size: 1.3rem;
+    }
+
+    #intro-modal p {
+      margin: 4px 0;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    #intro-modal ul {
+      margin: 8px 0 4px 20px;
+      padding: 0;
+      font-size: 0.95rem;
+    }
+
+    #intro-modal li {
+      margin-bottom: 4px;
+    }
+
+    #intro-modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    #intro-modal-footer label {
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      #scratch-frame-wrapper {
+        height: 500px;
+      }
+
+      .inline-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+      header {
+        background: white;
+        color: black;
+        border-bottom: 1px solid #ccc;
+        box-shadow: none;
+      }
+      .section {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .actions button {
+        display: none;
+      }
+      #status-msg {
+        display: none;
+      }
+      #scratch-frame-wrapper {
+        border: 1px solid #ccc;
+      }
+      #intro-overlay {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Informatik Lernbuddy</h1>
+  <p>Hilft dir beim Planen, Arbeiten und Nachdenken über deine Aufgabe</p>
+</header>
+
+<!-- Intro-Overlay -->
+<div id="intro-overlay" class="hidden">
+  <div id="intro-modal">
+    <h2>Warum nutzen wir diesen Lernbuddy?</h2>
+    <p>In Informatik geht es nicht nur darum, dass dein Programm funktioniert.</p>
+    <p>Wichtig ist auch, wie du lernst und arbeitest. Dieser Lernbuddy hilft dir dabei:</p>
+    <ul>
+      <li>du planst vorher, was du machen willst</li>
+      <li>du achtest beim Arbeiten auf dein Vorgehen</li>
+      <li>du denkst am Ende darüber nach, was gut war und was du ändern möchtest</li>
+    </ul>
+    <p>
+      Das nennt man auch „selbst reguliert lernen“. Das heißt:
+      Du überlegst selbst, wie du lernst, und passt dein Lernen an.
+    </p>
+    <p>
+      Nimm dir kurz Zeit für die Fragen. Sie sollen dir helfen,
+      dein Lernen Schritt für Schritt zu verbessern.
+    </p>
+    <div id="intro-modal-footer">
+      <label>
+        <input type="checkbox" id="intro-hide-next">
+        Diesen Hinweis beim nächsten Mal nicht mehr anzeigen
+      </label>
+      <button type="button" class="btn-primary" id="intro-ok-btn">Weiter zum Lernbuddy</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <!-- Kopfdaten -->
+  <section class="section" id="meta-section">
+    <h2>
+      Angaben zur Arbeit
+    </h2>
+    <div class="inline-grid">
+      <div class="field-group">
+        <label for="student-name">Name</label>
+        <input type="text" id="student-name" placeholder="Vorname Nachname">
+      </div>
+      <div class="field-group">
+        <label for="student-class">Klasse</label>
+        <input type="text" id="student-class" placeholder="z. B. 7b">
+      </div>
+      <div class="field-group">
+        <label for="student-date">Datum</label>
+        <input type="text" id="student-date" placeholder="z. B. 15.09.2025">
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. Vor dem Programmieren -->
+  <section class="section" id="before-section">
+    <h2>
+      <span class="step-badge">1</span>
+      Bevor du programmierst
+    </h2>
+    <p class="section-subtitle">Hier überlegst du kurz, was du heute machen willst.</p>
+
+    <div class="field-group">
+      <span class="tag">Ziele</span>
+    </div>
+
+    <div class="field-group">
+      <label for="goal-what">Mein WAS-Ziel</label>
+      <small>Was soll am Ende klappen? Schreibe es in einem einfachen Satz.</small>
+      <textarea id="goal-what" placeholder="Beispiel: Meine Figur kann sich mit den Pfeiltasten bewegen."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label for="goal-how">Mein WIE-Ziel</label>
+      <small>Was möchtest du heute üben? Zum Beispiel Schleifen, Bedingungen oder Variablen.</small>
+      <textarea id="goal-how" placeholder="Beispiel: Ich möchte eine Schleife und eine Wenn-Dann-Bedingung benutzen."></textarea>
+    </div>
+
+    <div class="field-group">
+      <span class="tag">Ablenkung und Motivation</span>
+    </div>
+
+    <div class="field-group">
+      <label for="distractions">Was lenkt mich ab? Was hilft mir?</label>
+      <small>Schreibe kurz auf, was du jetzt ändern kannst, damit du gut arbeiten kannst.</small>
+      <textarea id="distractions" placeholder="Beispiel: Handy weglegen, andere Tabs schließen."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label for="motivation">Warum lohnt sich das für mich?</label>
+      <small>Dein Grund. Er muss nicht perfekt sein.</small>
+      <textarea id="motivation" placeholder="Beispiel: Ich will besser programmieren können, weil mir Spiele Spaß machen."></textarea>
+    </div>
+  </section>
+
+  <!-- 2. Während des Programmierens -->
+  <div class="grid">
+    <!-- Scratch + Plan -->
+    <section class="section" id="middle-section">
+      <h2>
+        <span class="step-badge">2</span>
+        Während du arbeitest
+      </h2>
+      <p class="section-subtitle">Hier arbeitest du mit Scratch und schreibst dir wichtige Dinge auf.</p>
+
+      <div class="field-group">
+        <span class="tag">Scratch-Projekt</span>
+      </div>
+
+      <div class="field-group">
+        <label for="scratch-url">Link zu deinem Scratch-Projekt</label>
+        <small>Beispiel: https://scratch.mit.edu/projects/123456789</small>
+        <input type="text" id="scratch-url" placeholder="Scratch-Link hier einfügen">
+        <div class="actions" style="margin-top:6px;">
+          <button type="button" class="btn-secondary" id="open-editor-btn">Scratch-Editor in neuem Tab öffnen</button>
+          <span class="small-note">Hier im Fenster siehst du später die Vorschau. Den Code bearbeitest du im Editor im anderen Tab.</span>
+        </div>
+      </div>
+
+      <div id="scratch-frame-wrapper">
+        <p>
+          Hier siehst du dein Scratch-Projekt, wenn du oben einen gültigen Link einträgst.<br>
+          Du kannst das Ergebnis hier testen. Den Code änderst du im Editor im anderen Tab.
+        </p>
+      </div>
+
+      <div class="field-group" style="margin-top: 18px;">
+        <span class="tag">Plan</span>
+      </div>
+
+      <div class="field-group">
+        <label for="plan-notes">Mein Plan / Pseudocode</label>
+        <small>Schreibe kurz auf, was du zuerst und was du danach machen willst.</small>
+        <textarea id="plan-notes" placeholder="Beispiel: 1. Figur zeichnen  2. Steuerung mit Pfeiltasten  3. Hindernis einbauen"></textarea>
+      </div>
+
+      <div class="field-group">
+        <span class="tag">Fehler und Lösungen</span>
+      </div>
+
+      <div class="field-group">
+        <label for="debug-notes">Probleme und wie ich sie gelöst habe</label>
+        <small>Hier kannst du dir merken, was nicht geklappt hat und wie du es geschafft hast.</small>
+        <textarea id="debug-notes" placeholder="Beispiel: Figur hat sich nicht bewegt → Block an die richtige Figur gesetzt."></textarea>
+      </div>
+    </section>
+
+    <!-- Check währenddessen -->
+    <section class="section" id="during-check-section">
+      <h2>
+        <span class="step-badge">2½</span>
+        Mini-Check zwischendurch
+      </h2>
+      <p class="section-subtitle">Hake an, was du schon gut gemacht hast.</p>
+
+      <ul class="checkbox-list">
+        <li>
+          <label>
+            <input type="checkbox" id="check-tested">
+            Ich teste mein Projekt immer wieder.
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" id="check-errors">
+            Ich lese Probleme und Fehlermeldungen und versuche sie zu verstehen.
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" id="check-steps">
+            Ich ändere nur kleine Dinge auf einmal.
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" id="check-help">
+            Ich hole mir Hilfe, wenn ich feststecke.
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" id="check-focus">
+            Ich bleibe bei meiner Aufgabe und springe nicht dauernd hin und her.
+          </label>
+        </li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- 3. Nach dem Programmieren -->
+  <section class="section" id="after-section">
+    <h2>
+      <span class="step-badge">3</span>
+      Wenn du fertig bist
+    </h2>
+    <p class="section-subtitle">Zum Schluss schaust du kurz auf dein Ziel und deine Arbeit.</p>
+
+    <div class="field-group">
+      <span class="tag">Rückblick</span>
+    </div>
+
+    <div class="field-group">
+      <label>Habe ich mein WAS-Ziel geschafft?</label>
+      <small>Wie gut passt dein Ergebnis zu deinem Ziel von oben?</small>
+      <label>
+        <input type="radio" name="goal-what-result" value="nein">
+        Nein, noch nicht.
+      </label><br>
+      <label>
+        <input type="radio" name="goal-what-result" value="teilweise">
+        So halb.
+      </label><br>
+      <label>
+        <input type="radio" name="goal-what-result" value="ja">
+        Ja, das passt.
+      </label>
+    </div>
+
+    <div class="field-group">
+      <label>Habe ich mein WIE-Ziel benutzt?</label>
+      <small>Hast du die Sachen genutzt, die du üben wolltest?</small>
+      <label>
+        <input type="radio" name="goal-how-result" value="nein">
+        Nein.
+      </label><br>
+      <label>
+        <input type="radio" name="goal-how-result" value="teilweise">
+        Ein bisschen.
+      </label><br>
+      <label>
+        <input type="radio" name="goal-how-result" value="ja">
+        Ja, auf jeden Fall.
+      </label>
+    </div>
+
+    <div class="field-group">
+      <label for="satisfaction">Worauf bin ich heute stolz?</label>
+      <small>Schreibe mindestens eine Sache, die du gut findest.</small>
+      <textarea id="satisfaction" placeholder="Beispiel: Ich habe das Problem mit der Steuerung alleine gelöst."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label for="next-time">Was möchte ich beim nächsten Mal anders machen?</label>
+      <small>Nur ein oder zwei Punkte. Kleine Schritte reichen.</small>
+      <textarea id="next-time" placeholder="Beispiel: Nächstes Mal plane ich zuerst alles und frage früher, wenn ich nicht weiterkomme."></textarea>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn-primary" id="save-btn">Speichern (auf diesem Gerät)</button>
+      <button type="button" class="btn-secondary" id="reset-btn">Alles löschen</button>
+      <button type="button" class="btn-secondary" id="print-btn">Drucken oder als PDF speichern</button>
+      <div class="status" id="status-msg"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+  const STORAGE_KEY = "informatikLernbuddyV1";
+  const INTRO_KEY = "informatikLernbuddyHideIntro";
+
+  function getSelectedRadio(name) {
+    const radios = document.querySelectorAll("input[name='" + name + "']");
+    for (const r of radios) {
+      if (r.checked) {
+        return r.value;
+      }
+    }
+    return "";
+  }
+
+  function setSelectedRadio(name, value) {
+    if (!value) return;
+    const radios = document.querySelectorAll("input[name='" + name + "']");
+    radios.forEach(r => {
+      r.checked = (r.value === value);
+    });
+  }
+
+  function setStatus(message, isError) {
+    const el = document.getElementById("status-msg");
+    el.textContent = message;
+    el.style.color = isError ? "#d32f2f" : "#388e3c";
+  }
+
+  function updateScratchFrameFromUrl() {
+    const input = document.getElementById("scratch-url");
+    const wrapper = document.getElementById("scratch-frame-wrapper");
+    if (!input) return;
+
+    const url = input.value.trim();
+    if (!url || !url.includes("scratch.mit.edu/projects")) {
+      wrapper.innerHTML = "<p>Hier siehst du dein Scratch-Projekt, wenn du oben einen gültigen Link einträgst.</p>";
+      return;
+    }
+
+    const match = url.match(/projects\/(\d+)/);
+    if (!match) {
+      wrapper.innerHTML = "<p>Der Link passt nicht. Bitte prüfe die Adresse.</p>";
+      return;
+    }
+
+    const id = match[1];
+    wrapper.innerHTML = `
+      <iframe
+        src="https://scratch.mit.edu/projects/${id}/embed"
+        allowtransparency="true"
+        frameborder="0"
+        scrolling="no"
+        allowfullscreen
+        style="width:100%; height:100%; border:none;"
+      ></iframe>
+    `;
+  }
+
+  function openScratchEditor() {
+    const input = document.getElementById("scratch-url");
+    if (!input) return;
+    const url = input.value.trim();
+    if (!url || !url.includes("scratch.mit.edu/projects")) {
+      alert("Bitte gib zuerst einen gültigen Scratch-Link ein.");
+      return;
+    }
+
+    const match = url.match(/projects\/(\d+)/);
+    let editorUrl = url;
+    if (match) {
+      const id = match[1];
+      editorUrl = "https://scratch.mit.edu/projects/" + id + "/editor";
+    }
+    window.open(editorUrl, "_blank");
+  }
+
+  function saveData() {
+    const data = {
+      studentName: document.getElementById("student-name").value,
+      studentClass: document.getElementById("student-class").value,
+      studentDate: document.getElementById("student-date").value,
+      goalWhat: document.getElementById("goal-what").value,
+      goalHow: document.getElementById("goal-how").value,
+      distractions: document.getElementById("distractions").value,
+      motivation: document.getElementById("motivation").value,
+      scratchUrl: document.getElementById("scratch-url").value,
+      planNotes: document.getElementById("plan-notes").value,
+      debugNotes: document.getElementById("debug-notes").value,
+      checkTested: document.getElementById("check-tested").checked,
+      checkErrors: document.getElementById("check-errors").checked,
+      checkSteps: document.getElementById("check-steps").checked,
+      checkHelp: document.getElementById("check-help").checked,
+      checkFocus: document.getElementById("check-focus").checked,
+      goalWhatResult: getSelectedRadio("goal-what-result"),
+      goalHowResult: getSelectedRadio("goal-how-result"),
+      satisfaction: document.getElementById("satisfaction").value,
+      nextTime: document.getElementById("next-time").value
+    };
+
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      setStatus("Gespeichert.", false);
+    } catch (e) {
+      setStatus("Konnte nicht speichern. (localStorage nicht verfügbar)", true);
+    }
+  }
+
+  function loadData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+
+      document.getElementById("student-name").value = data.studentName || "";
+      document.getElementById("student-class").value = data.studentClass || "";
+      document.getElementById("student-date").value = data.studentDate || "";
+
+      document.getElementById("goal-what").value = data.goalWhat || "";
+      document.getElementById("goal-how").value = data.goalHow || "";
+      document.getElementById("distractions").value = data.distractions || "";
+      document.getElementById("motivation").value = data.motivation || "";
+
+      document.getElementById("scratch-url").value = data.scratchUrl || "";
+      updateScratchFrameFromUrl();
+
+      document.getElementById("plan-notes").value = data.planNotes || "";
+      document.getElementById("debug-notes").value = data.debugNotes || "";
+
+      document.getElementById("check-tested").checked = !!data.checkTested;
+      document.getElementById("check-errors").checked = !!data.checkErrors;
+      document.getElementById("check-steps").checked = !!data.checkSteps;
+      document.getElementById("check-help").checked = !!data.checkHelp;
+      document.getElementById("check-focus").checked = !!data.checkFocus;
+
+      setSelectedRadio("goal-what-result", data.goalWhatResult);
+      setSelectedRadio("goal-how-result", data.goalHowResult);
+
+      document.getElementById("satisfaction").value = data.satisfaction || "";
+      document.getElementById("next-time").value = data.nextTime || "";
+
+      setStatus("Gespeicherte Daten wurden geladen.", false);
+    } catch (e) {
+      setStatus("Konnte gespeicherte Daten nicht laden.", true);
+    }
+  }
+
+  function resetData() {
+    if (!confirm("Willst du wirklich alles löschen?")) return;
+
+    localStorage.removeItem(STORAGE_KEY);
+
+    const inputs = document.querySelectorAll("input[type='text'], textarea");
+    inputs.forEach(i => i.value = "");
+
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+    checkboxes.forEach(c => c.checked = false);
+
+    const radios = document.querySelectorAll("input[type='radio']");
+    radios.forEach(r => r.checked = false);
+
+    updateScratchFrameFromUrl();
+    setStatus("Alles wurde gelöscht.", false);
+  }
+
+  function showIntroIfNeeded() {
+    const hideIntro = localStorage.getItem(INTRO_KEY);
+    const overlay = document.getElementById("intro-overlay");
+    if (!overlay) return;
+
+    if (hideIntro === "1") {
+      overlay.classList.add("hidden");
+    } else {
+      overlay.classList.remove("hidden");
+    }
+  }
+
+  function handleIntroOk() {
+    const overlay = document.getElementById("intro-overlay");
+    const hideCheckbox = document.getElementById("intro-hide-next");
+    if (hideCheckbox && hideCheckbox.checked) {
+      localStorage.setItem(INTRO_KEY, "1");
+    }
+    overlay.classList.add("hidden");
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("save-btn").addEventListener("click", saveData);
+    document.getElementById("reset-btn").addEventListener("click", resetData);
+    document.getElementById("print-btn").addEventListener("click", function () {
+      window.print();
+    });
+    document.getElementById("scratch-url").addEventListener("input", updateScratchFrameFromUrl);
+    document.getElementById("open-editor-btn").addEventListener("click", openScratchEditor);
+
+    const introOkBtn = document.getElementById("intro-ok-btn");
+    if (introOkBtn) {
+      introOkBtn.addEventListener("click", handleIntroOk);
+    }
+
+    loadData();
+    showIntroIfNeeded();
+  });
+</script>
+</body>
+</html>
