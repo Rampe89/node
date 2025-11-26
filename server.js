@@ -91,6 +91,10 @@ const server = http.createServer((req, res) => {
         } else if (req.url === '/pt1.html') {
             // pt-Seite ausliefern
             serveFile('pt1.html', res);
+        } else if (req.url === '/lernbuddy.html') {
+            // pt-Seite ausliefern
+            serveFile('lernbuddy.html', res);
+            
          } else {
             // 404-Seite
             res.statusCode = 404;
