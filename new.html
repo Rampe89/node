@@ -25,11 +25,13 @@
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         background: var(--bg);
         color: var(--text);
-        height: 100vh;
+        min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
     }
+
+    /* ========= POPUP WIZARD ========= */
 
     .overlay {
         position: fixed;
@@ -205,9 +207,465 @@
             font-size: 0.9rem;
         }
     }
+
+    /* ========= MISSION BOARD ========= */
+
+    .missions-wrapper {
+        display: none;
+        min-height: 100vh;
+        width: 100%;
+    }
+
+    .missions-wrapper.active {
+        display: flex;
+        padding: 1.5rem 1rem;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .missions-inner {
+        max-width: 1100px;
+        width: 100%;
+    }
+
+    .missions-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .missions-title {
+        font-size: 2rem;
+        margin: 0 0 0.4rem;
+    }
+
+    .missions-subtitle {
+        font-size: 1.05rem;
+        color: var(--muted);
+        margin: 0;
+    }
+
+    .missions-subtitle span {
+        color: #e5e7eb;
+        font-weight: 500;
+    }
+
+    .missions-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .mission-card {
+        background: var(--card);
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        padding: 1.2rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+        cursor: pointer;
+        transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, border-color 0.12s;
+    }
+
+    .mission-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 30px rgba(0, 0, 0, 0.55);
+        border-color: var(--accent);
+    }
+
+    .mission-icon {
+        font-size: 1.6rem;
+        margin-bottom: 0.1rem;
+    }
+
+    .mission-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .mission-text {
+        font-size: 0.98rem;
+        color: var(--muted);
+    }
+
+    .mission-list {
+        font-size: 0.98rem;
+        text-align: left;
+        margin: 0.2rem 0 0;
+        padding-left: 1.1rem;
+        color: #e5e7eb;
+    }
+
+    .mission-list li {
+        margin: 0.12rem 0;
+    }
+
+    .missions-footer {
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        font-size: 0.95rem;
+        color: var(--muted);
+    }
+
+    .missions-note span {
+        color: #e5e7eb;
+        font-weight: 500;
+    }
+
+    .btn-small {
+        width: auto;
+        font-size: 1rem;
+        padding: 0.6rem 1rem;
+    }
+
+    @media (max-width: 900px) {
+        .missions-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 640px) {
+        .missions-grid {
+            grid-template-columns: 1fr;
+        }
+        .missions-title {
+            font-size: 1.6rem;
+        }
+    }
+
+    /* ========= MISSION DETAIL POPUPS ========= */
+
+    .mission-modal .instructions {
+        font-size: 1.2rem;
+    }
+
+    .mission-steps {
+        font-size: 1.1rem;
+        text-align: left;
+        margin: 0.2rem 0 0;
+        padding-left: 1.1rem;
+    }
+
+    .mission-steps li {
+        margin: 0.25rem 0;
+    }
+
 </style>
 </head>
 <body>
+
+<!-- ========== MISSION BOARD (NACH DEM WIZARD) ========== -->
+<div class="missions-wrapper" id="missions">
+  <div class="missions-inner">
+    <div class="missions-header">
+      <h2 class="missions-title">Kiosk-Roboter – Missionen</h2>
+      <p class="missions-subtitle">
+        Dein Kiosk läuft. Jetzt kannst du ihn <span>weiterentwickeln</span>. 
+        Wähle dir eine oder mehrere Missionen aus und baue deine Ideen in Scratch ein.
+      </p>
+    </div>
+
+    <div class="missions-grid">
+      <!-- Mission 1 -->
+      <div class="mission-card" onclick="openMission('m1')">
+        <div class="mission-icon">🛍️</div>
+        <h3 class="mission-title">Mission 1 – Eigenes Sortiment</h3>
+        <p class="mission-text">
+          Baue dein eigenes Angebot mit mehreren Produkten.
+        </p>
+        <ul class="mission-list">
+          <li>Mindestens 4 Produkte (2 Getränke, 2 Snacks).</li>
+          <li>Jedes Produkt mit eigenem Bestand.</li>
+        </ul>
+      </div>
+
+      <!-- Mission 2 -->
+      <div class="mission-card" onclick="openMission('m2')">
+        <div class="mission-icon">📋</div>
+        <h3 class="mission-title">Mission 2 – Produkt-Anzeige</h3>
+        <p class="mission-text">
+          Mach klar sichtbar, was dein Kiosk verkauft.
+        </p>
+        <ul class="mission-list">
+          <li>Preistafel / Anzeige für Produkte und Bestände.</li>
+        </ul>
+      </div>
+
+      <!-- Mission 3 -->
+      <div class="mission-card" onclick="openMission('m3')">
+        <div class="mission-icon">💰</div>
+        <h3 class="mission-title">Mission 3 – Geld & Preise</h3>
+        <p class="mission-text">
+          Dein Kiosk bekommt ein einfaches Geldsystem.
+        </p>
+        <ul class="mission-list">
+          <li>Geld, Preise, „nicht genug Geld“-Fälle.</li>
+        </ul>
+      </div>
+
+      <!-- Mission 4 -->
+      <div class="mission-card" onclick="openMission('m4')">
+        <div class="mission-icon">🧑‍🤝‍🧑</div>
+        <h3 class="mission-title">Mission 4 – Kundentypen & Rabatte</h3>
+        <p class="mission-text">
+          Unterschiedliche Kunden, unterschiedliche Preise.
+        </p>
+        <ul class="mission-list">
+          <li>Kind, Erwachsener, VIP – alle bezahlen anders.</li>
+        </ul>
+      </div>
+
+      <!-- Mission 5 -->
+      <div class="mission-card" onclick="openMission('m5')">
+        <div class="mission-icon">⚠️</div>
+        <h3 class="mission-title">Mission 5 – Fehlermeldungen & Freundlichkeit</h3>
+        <p class="mission-text">
+          Dein Kiosk wird benutzerfreundlich und robust.
+        </p>
+        <ul class="mission-list">
+          <li>Falsche Tasten, fast leer, alles ausverkauft.</li>
+        </ul>
+      </div>
+
+      <!-- Mission 6 -->
+      <div class="mission-card" onclick="openMission('m6')">
+        <div class="mission-icon">📊</div>
+        <h3 class="mission-title">Mission 6 – Statistik & Auswertung</h3>
+        <p class="mission-text">
+          Lass deinen Kiosk mitzählen, was passiert.
+        </p>
+        <ul class="mission-list">
+          <li>Verkäufe zählen, Lieblingsprodukt finden.</li>
+        </ul>
+      </div>
+
+      <!-- Mission 7 -->
+      <div class="mission-card" onclick="openMission('m7')">
+        <div class="mission-icon">🎨</div>
+        <h3 class="mission-title">Mission 7 – Freestyle-Kiosk</h3>
+        <p class="mission-text">
+          Mach deinen Kiosk besonders – deine Idee zählt.
+        </p>
+        <ul class="mission-list">
+          <li>Happy Hour, Nachtmodus, Überraschungsprodukt …</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="missions-footer">
+      <div class="missions-note">
+        Tipp: Starte mit <span>einer Mission</span>, teste sie gut und nimm dann die nächste dazu.
+      </div>
+      <div>
+        <button class="btn-secondary btn-small" onclick="openWizardAgain()">
+          🔄 Wizard nochmal ansehen
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MISSION DETAIL POPUPS ========== -->
+
+<!-- Mission 1 Detail -->
+<div class="overlay" id="mission-m1">
+  <div class="modal mission-modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Mission 1</div>
+        <h1>Eigenes Sortiment</h1>
+      </div>
+    </div>
+    <div class="icon">🛍️</div>
+    <div class="instructions">
+      <p><strong>Ziel:</strong> Dein Kiosk verkauft nicht nur 1 Getränk und 1 Snack, sondern <strong>mindestens 4 verschiedene Produkte</strong>.</p>
+      <ul class="mission-steps">
+        <li><strong>Step 1:</strong> Lege deine Produkte fest (z.B. Wasser, Cola, Chips, Schokoriegel). Schreibe sie in dein Heft.</li>
+        <li><strong>Step 2:</strong> Erstelle für jedes Produkt eine eigene Variable für den Bestand (z.B. <code>Bestand_Wasser</code>, <code>Bestand_Cola</code> …) und gib ihnen Startwerte.</li>
+        <li><strong>Step 3:</strong> Entscheide, welche Taste welches Produkt kauft (z.B. 1 = Wasser, 2 = Cola, 3 = Chips, 4 = Schoko) und baue für jede Taste eine Kauf-Logik wie bisher.</li>
+        <li><strong>Step 4:</strong> Teste: Kannst du jedes Produkt einzeln kaufen? Wird der richtige Bestand heruntergezählt?</li>
+        <li><strong>Extra-Idee:</strong> Markiere im Code, welche Teile du von einem Produkt kopiert und für ein anderes angepasst hast.</li>
+      </ul>
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeMission('m1')">
+        ✔️ Zurück zur Missions-Übersicht
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Mission 2 Detail -->
+<div class="overlay" id="mission-m2">
+  <div class="modal mission-modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Mission 2</div>
+        <h1>Produkt-Anzeige</h1>
+      </div>
+    </div>
+    <div class="icon">📋</div>
+    <div class="instructions">
+      <p><strong>Ziel:</strong> Jeder sieht sofort, was dein Kiosk anbietet und wie viel es noch gibt.</p>
+      <ul class="mission-steps">
+        <li><strong>Step 1:</strong> Lasse deinen Roboter beim Start alle Produkte in einem Satz ansagen (z.B. „Ich habe: 1=Wasser (5x), 2=Cola (3x), …“).</li>
+        <li><strong>Step 2:</strong> Gestalte auf der Bühne eine „Preistafel“: Nutze Figuren oder Text-Blöcke, um Produktnamen und Bestände darzustellen.</li>
+        <li><strong>Step 3:</strong> Versuche, die Texte aus Variablen zusammenzubauen (z.B. „Wasser: “ + Bestand_Wasser).</li>
+        <li><strong>Step 4:</strong> Teste: Ändert sich die Anzeige, wenn jemand etwas kauft?</li>
+      </ul>
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeMission('m2')">
+        ✔️ Zurück zur Missions-Übersicht
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Mission 3 Detail -->
+<div class="overlay" id="mission-m3">
+  <div class="modal mission-modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Mission 3</div>
+        <h1>Geld & Preise</h1>
+      </div>
+    </div>
+    <div class="icon">💰</div>
+    <div class="instructions">
+      <p><strong>Ziel:</strong> Dein Kiosk arbeitet mit Geld. Der Kunde kann sich nur leisten, was er bezahlen kann.</p>
+      <ul class="mission-steps">
+        <li><strong>Step 1:</strong> Lege eine Variable <code>Geld</code> an und gib einen Startwert (z.B. 10).</li>
+        <li><strong>Step 2:</strong> Gib jedem Produkt einen Preis (z.B. zusätzliche Variablen <code>Preis_Wasser</code>, <code>Preis_Cola</code> …).</li>
+        <li><strong>Step 3:</strong> Beim Kauf: Prüfe zuerst <strong>Geld &gt;= Preis_Produkt</strong> UND <strong>Bestand_Produkt &gt; 0</strong>. Nur dann wird gekauft, Geld verringert und Bestand verringert.</li>
+        <li><strong>Step 4:</strong> Wenn nicht genug Geld da ist: Lass den Roboter freundlich sagen, dass es nicht reicht.</li>
+        <li><strong>Extra:</strong> Lass dein Geld auf der Bühne anzeigen und beobachte, wie es sich verändert.</li>
+      </ul>
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeMission('m3')">
+        ✔️ Zurück zur Missions-Übersicht
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Mission 4 Detail -->
+<div class="overlay" id="mission-m4">
+  <div class="modal mission-modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Mission 4</div>
+        <h1>Kundentypen & Rabatte</h1>
+      </div>
+    </div>
+    <div class="icon">🧑‍🤝‍🧑</div>
+    <div class="instructions">
+      <p><strong>Ziel:</strong> Verschiedene Kunden bezahlen unterschiedliche Preise.</p>
+      <ul class="mission-steps">
+        <li><strong>Step 1:</strong> Lege eine Variable <code>Kunde</code> an (z.B. „Kind“, „Erwachsen“, „VIP“).</li>
+        <li><strong>Step 2:</strong> Erlaube dem Spieler, den Kundentyp zu wählen (z.B. Taste K = Kind, Taste E = Erwachsen, Taste V = VIP).</li>
+        <li><strong>Step 3:</strong> Beim Kauf: Wenn <code>Kunde = "Kind"</code>, mache Getränke günstiger; wenn <code>Kunde = "VIP"</code>, gib Rabatt auf alles.</li>
+        <li><strong>Step 4:</strong> Lass den Roboter sagen, welcher Kundentyp gerade aktiv ist.</li>
+        <li><strong>Diskussions-Extra:</strong> Schreibe auf: Findest du dein Rabattsystem fair? Warum / warum nicht?</li>
+      </ul>
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeMission('m4')">
+        ✔️ Zurück zur Missions-Übersicht
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Mission 5 Detail -->
+<div class="overlay" id="mission-m5">
+  <div class="modal mission-modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Mission 5</div>
+        <h1>Fehlermeldungen & Freundlichkeit</h1>
+      </div>
+    </div>
+    <div class="icon">⚠️</div>
+    <div class="instructions">
+      <p><strong>Ziel:</strong> Dein Kiosk reagiert klar und freundlich, auch wenn etwas schiefgeht.</p>
+      <ul class="mission-steps">
+        <li><strong>Step 1:</strong> Reagiere auf falsche Tasten (z.B. 9 oder 0): Lass den Roboter sagen „Das Produkt gibt es nicht“.</li>
+        <li><strong>Step 2:</strong> Wenn ein Produkt nur noch 1x da ist, gib einen Hinweis wie „Nur noch 1 Stück von ...!“.</li>
+        <li><strong>Step 3:</strong> Prüfe: Wenn alle Bestände 0 sind, soll der Roboter sagen „Kiosk schließt, alles ausverkauft“ und das Spiel stoppen.</li>
+        <li><strong>Step 4:</strong> Überlege dir mindestens einen weiteren „freundlichen“ Text für eine typische Situation.</li>
+      </ul>
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeMission('m5')">
+        ✔️ Zurück zur Missions-Übersicht
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Mission 6 Detail -->
+<div class="overlay" id="mission-m6">
+  <div class="modal mission-modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Mission 6</div>
+        <h1>Statistik & Auswertung</h1>
+      </div>
+    </div>
+    <div class="icon">📊</div>
+    <div class="instructions">
+      <p><strong>Ziel:</strong> Dein Kiosk sammelt Daten: Wie viel wurde verkauft? Was ist beliebt?</p>
+      <ul class="mission-steps">
+        <li><strong>Step 1:</strong> Lege eine Variable <code>Verkaufte_Gesamt</code> an und erhöhe sie bei jedem erfolgreichen Kauf um 1.</li>
+        <li><strong>Step 2:</strong> Lege für jedes Produkt eine Zähl-Variable an (z.B. <code>Verkauft_Wasser</code>) und erhöhe sie beim Kauf.</li>
+        <li><strong>Step 3:</strong> Baue eine Taste (z.B. T), bei der der Roboter eine kurze Auswertung sagt („Heute wurden X Produkte verkauft …“).</li>
+        <li><strong>Step 4:</strong> Versuche zu bestimmen, welches Produkt am meisten verkauft wurde (z.B. mit mehreren „wenn … sonst“-Blöcken).</li>
+      </ul>
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeMission('m6')">
+        ✔️ Zurück zur Missions-Übersicht
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Mission 7 Detail -->
+<div class="overlay" id="mission-m7">
+  <div class="modal mission-modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Mission 7</div>
+        <h1>Freestyle-Kiosk</h1>
+      </div>
+    </div>
+    <div class="icon">🎨</div>
+    <div class="instructions">
+      <p><strong>Ziel:</strong> Dein Kiosk hat eine besondere Funktion, die du selbst erfindest.</p>
+      <ul class="mission-steps">
+        <li><strong>Step 1:</strong> Überlege dir eine eigene Idee (z.B. Happy Hour, Nachtmodus, Überraschungsprodukt, Stammkunden-Bonus).</li>
+        <li><strong>Step 2:</strong> Schreibe in 3–4 Sätzen in dein Heft: Was kann dein Kiosk dadurch? Welche Variablen brauchst du?</li>
+        <li><strong>Step 3:</strong> Setze deine Idee in Scratch um. Nutze mindestens eine Variable, eine Schleife und eine Bedingung.</li>
+        <li><strong>Step 4:</strong> Markiere im Code (z.B. mit Kommentaren oder Farben), wo deine neue Funktion eingebaut ist.</li>
+      </ul>
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeMission('m7')">
+        ✔️ Zurück zur Missions-Übersicht
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== POPUP WIZARD (GRUND-KIOSK) ========== -->
 
 <!-- STEP 1: Scratch öffnen -->
 <div class="overlay active" id="step1">
@@ -386,9 +844,9 @@
     <div class="instructions">
       <p>1️⃣ Klicke deinen Roboter an.</p>
       <p>2️⃣ Baue diese Blöcke für die Auswahl:</p>
-      <p>🔸 <strong>wenn Taste 1 gedrückt</strong> → <strong>rufe „Getränk verkaufen“ auf</strong> (oder sage erst „Du willst ein Getränk!“)</p>
-      <p>🔸 <strong>wenn Taste 2 gedrückt</strong> → <strong>rufe „Snack verkaufen“ auf</strong> (oder sage „Du willst einen Snack!“)</p>
-      <p>(Wenn ihr noch keine Blöcke „Nachricht senden“ benutzt, kannst du zuerst direkt im Roboter alles machen.)</p>
+      <p>🔸 <strong>wenn Taste 1 gedrückt</strong> → Getränke-Kauf starten</p>
+      <p>🔸 <strong>wenn Taste 2 gedrückt</strong> → Snack-Kauf starten</p>
+      <p>Du kannst dafür direkt im Roboter arbeiten (wie im Modul 1).</p>
       <p>3️⃣ Teste: Drücke 1 und 2. Reagiert der Roboter?</p>
     </div>
 
@@ -512,29 +970,31 @@
       <p>&nbsp;&nbsp;&nbsp;• <strong>setze Bestand_Getränk auf 5</strong></p>
       <p>&nbsp;&nbsp;&nbsp;• <strong>setze Bestand_Snack auf 3</strong></p>
       <p>&nbsp;&nbsp;&nbsp;• <strong>sagen „Lager nachgefüllt!“</strong></p>
-      <p>3️⃣ Gestalte deinen Kiosk schöner:</p>
-      <p>➤ andere Farben, Schilder („Kiosk“, „Getränke“, „Snacks“)</p>
-      <p>➤ Roboter-Text anpassen („Möchtest du noch etwas?“)</p>
+      <p>3️⃣ Gestalte deinen Kiosk schöner: Schilder, Farben, Texte.</p>
       <p>4️⃣ Teste alles: Kaufen, ausverkauft, nachfüllen, wieder verkaufen.</p>
     </div>
 
     <div class="btn-row">
-      <button class="btn-primary" onclick="restart()">
-        🎉 Ich bin fertig mit dem Kiosk-Projekt – Noch einmal von vorne
+      <button class="btn-primary" onclick="goToMissions()">
+        🎯 Zu den Missionen (Kiosk erweitern)
+      </button>
+      <button class="btn-secondary" onclick="restartWizardOnly()">
+        🔄 Wizard noch einmal von vorne
       </button>
       <button class="btn-ghost" onclick="prevStep(8)">⬅ Zurück zu Step 7</button>
     </div>
 
     <div class="bottom-row">
       <div class="small-info">
-        Du hast jetzt einen Kiosk-Roboter gebaut,<br>
-        der mit Lagerbestand arbeitet und ausverkauft sein kann. Zeig ihn deiner Lehrkraft! 🤖🛒
+        Du hast jetzt einen Kiosk-Roboter mit Bestand. <br>
+        Als Nächstes kannst du ihn mit Missionen ausbauen.
       </div>
     </div>
   </div>
 </div>
 
 <script>
+  // Wizard Navigation
   function nextStep(current) {
     const now = document.getElementById("step" + current);
     const next = document.getElementById("step" + (current + 1));
@@ -549,11 +1009,39 @@
     if (prev) prev.classList.add("active");
   }
 
-  function restart() {
+  function restartWizardOnly() {
     const all = document.querySelectorAll(".overlay");
     all.forEach(o => o.classList.remove("active"));
     document.getElementById("step1").classList.add("active");
+    document.getElementById("missions").classList.remove("active");
     window.scrollTo(0, 0);
+  }
+
+  function goToMissions() {
+    // Wizard ausblenden
+    const all = document.querySelectorAll(".overlay[id^='step']");
+    all.forEach(o => o.classList.remove("active"));
+    // Missions-Board einblenden
+    document.getElementById("missions").classList.add("active");
+    window.scrollTo(0, 0);
+  }
+
+  function openWizardAgain() {
+    const missions = document.getElementById("missions");
+    missions.classList.remove("active");
+    document.getElementById("step1").classList.add("active");
+    window.scrollTo(0, 0);
+  }
+
+  // Mission Detail Popups
+  function openMission(id) {
+    const overlay = document.getElementById("mission-" + id);
+    if (overlay) overlay.classList.add("active");
+  }
+
+  function closeMission(id) {
+    const overlay = document.getElementById("mission-" + id);
+    if (overlay) overlay.classList.remove("active");
   }
 </script>
 
