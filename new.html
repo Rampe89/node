@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Kiosk-Roboter – Scratch Projekt</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    :root {
+        --bg: #0d1117;
+        --card: #161b22;
+        --border: #30363d;
+        --accent: #2ea043;
+        --accent-soft: #238636;
+        --text: #ffffff;
+        --muted: #9ca3af;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        z-index: 10;
+    }
+
+    .overlay.active {
+        display: flex;
+    }
+
+    .modal {
+        width: 100%;
+        max-width: 720px;
+        background: var(--card);
+        border-radius: 20px;
+        border: 2px solid var(--border);
+        padding: 2.2rem 2rem 2rem;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+        animation: fadein 0.2s ease-out;
+    }
+
+    @keyframes fadein {
+        from { opacity: 0; transform: scale(0.95); }
+        to   { opacity: 1; transform: scale(1); }
+    }
+
+    .step-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.2rem;
+        gap: 0.75rem;
+    }
+
+    .step-title-main {
+        text-align: left;
+    }
+
+    .step-label {
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        margin-bottom: 0.25rem;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 1.9rem;
+    }
+
+    .step-progress {
+        font-size: 1rem;
+        color: var(--muted);
+    }
+
+    .icon {
+        font-size: 3.2rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .instructions {
+        font-size: 1.4rem;
+        line-height: 1.7;
+        margin-bottom: 1.8rem;
+        text-align: left;
+    }
+
+    .instructions p {
+        margin: 0.2rem 0;
+    }
+
+    .instructions strong {
+        color: #f9fafb;
+    }
+
+    .btn-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        margin-top: 0.5rem;
+    }
+
+    button {
+        border: none;
+        border-radius: 14px;
+        font-size: 1.3rem;
+        padding: 0.95rem 1.2rem;
+        cursor: pointer;
+        font-weight: 600;
+        width: 100%;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+        color: #ffffff;
+    }
+
+    .btn-secondary {
+        background: #30363d;
+        color: #ffffff;
+    }
+
+    .btn-ghost {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 1rem;
+        padding: 0.5rem 0.8rem;
+        width: auto;
+        align-self: flex-start;
+        margin-top: 0.3rem;
+    }
+
+    .btn-primary:active,
+    .btn-secondary:active,
+    .btn-ghost:active {
+        transform: scale(0.98);
+    }
+
+    .bottom-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .small-info {
+        font-size: 1rem;
+        color: var(--muted);
+        text-align: left;
+    }
+
+    .keywords {
+        font-size: 1.05rem;
+        margin-top: 0.4rem;
+        text-align: left;
+    }
+
+    .keywords span {
+        background: rgba(55, 65, 81, 0.6);
+        padding: 0.15rem 0.5rem;
+        border-radius: 999px;
+        margin-right: 0.3rem;
+        display: inline-block;
+        margin-top: 0.15rem;
+    }
+
+    @media (max-width: 600px) {
+        .modal {
+            padding: 1.6rem 1.3rem 1.4rem;
+        }
+        h1 {
+            font-size: 1.6rem;
+        }
+        .instructions {
+            font-size: 1.2rem;
+        }
+        button {
+            font-size: 1.1rem;
+        }
+        .step-label,
+        .step-progress {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- STEP 1: Scratch öffnen -->
+<div class="overlay active" id="step1">
+  <div class="modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Kiosk-Projekt – Roboter verkauft Sachen</div>
+        <h1>Step 1 – Scratch öffnen</h1>
+      </div>
+      <div class="step-progress">1 / 8</div>
+    </div>
+
+    <div class="icon">🤖</div>
+
+    <div class="instructions">
+      <p>1️⃣ Klicke auf den grünen Button unten.</p>
+      <p>2️⃣ Scratch öffnet sich in einem neuen Tab.</p>
+      <p>3️⃣ Klicke dort auf <strong>„Erstellen“</strong>, um ein neues Projekt zu starten.</p>
+      <p>4️⃣ Nenne dein Projekt oben links <strong>„Kiosk-Roboter“</strong>.</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary"
+              onclick="window.open('https://scratch.mit.edu/projects/editor/', '_blank')">
+        🚀 Scratch in neuem Tab öffnen
+      </button>
+
+      <button class="btn-secondary" onclick="nextStep(1)">
+        ✔️ Ich habe Scratch geöffnet und „Kiosk-Roboter“ erstellt
+      </button>
+    </div>
+
+    <div class="bottom-row">
+      <div class="small-info">
+        Tipp: Wenn Scratch schon offen ist,<br>kannst du den ersten Button ignorieren.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 2: Roboter & Hintergrund -->
+<div class="overlay" id="step2">
+  <div class="modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Kiosk-Projekt – Roboter verkauft Sachen</div>
+        <h1>Step 2 – Roboter & Kiosk-Hintergrund</h1>
+      </div>
+      <div class="step-progress">2 / 8</div>
+    </div>
+
+    <div class="icon">🛒</div>
+
+    <div class="instructions">
+      <p>1️⃣ Wähle eine Figur, die dein <strong>Kiosk-Roboter</strong> sein soll.</p>
+      <p>➤ Du kannst eine Roboter-Figur wählen oder selbst malen.</p>
+      <p>2️⃣ Wähle einen passenden <strong>Hintergrund</strong> (z.B. Laden, Straße, Markt).</p>
+      <p>3️⃣ Stelle den Roboter an eine passende Stelle auf der Bühne (z.B. hinter die Theke).</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="nextStep(2)">
+        ✔️ Ich habe einen Roboter und einen Kiosk-Hintergrund
+      </button>
+      <button class="btn-ghost" onclick="prevStep(2)">⬅ Zurück zu Step 1</button>
+    </div>
+
+    <div class="bottom-row">
+      <div class="keywords">
+        Begriffe:
+        <span>Figur</span>
+        <span>Bühne</span>
+        <span>Hintergrund</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3: Begrüßung & Menü anzeigen -->
+<div class="overlay" id="step3">
+  <div class="modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Kiosk-Projekt – Roboter verkauft Sachen</div>
+        <h1>Step 3 – Roboter begrüßt & zeigt Menü</h1>
+      </div>
+      <div class="step-progress">3 / 8</div>
+    </div>
+
+    <div class="icon">📋</div>
+
+    <div class="instructions">
+      <p>1️⃣ Klicke deine Roboter-Figur an.</p>
+      <p>2️⃣ Baue dieses Programm:</p>
+      <p>🔸 <strong>wenn „grüne Flagge“ angeklickt</strong></p>
+      <p>🔸 <strong>sagen „Willkommen am Kiosk!“ für 2 Sekunden</strong></p>
+      <p>🔸 <strong>sagen „Drücke 1 für Getränk, 2 für Snack“ für 3 Sekunden</strong></p>
+      <p>3️⃣ Klicke auf die grüne Flagge und teste die Begrüßung.</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="nextStep(3)">
+        ✔️ Mein Roboter begrüßt und zeigt „1 = Getränk, 2 = Snack“
+      </button>
+      <button class="btn-ghost" onclick="prevStep(3)">⬅ Zurück zu Step 2</button>
+    </div>
+
+    <div class="bottom-row">
+      <div class="keywords">
+        Begriffe:
+        <span>Ereignis</span>
+        <span>Dialog</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 4: Variablen für Lagerbestand -->
+<div class="overlay" id="step4">
+  <div class="modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Kiosk-Projekt – Roboter verkauft Sachen</div>
+        <h1>Step 4 – Lagerbestand anlegen</h1>
+      </div>
+      <div class="step-progress">4 / 8</div>
+    </div>
+
+    <div class="icon">📦</div>
+
+    <div class="instructions">
+      <p>1️⃣ Klicke links auf <strong>„Variablen“</strong>.</p>
+      <p>2️⃣ Erstelle diese Variablen (für alle Figuren):</p>
+      <p>🔸 <strong>Bestand_Getränk</strong></p>
+      <p>🔸 <strong>Bestand_Snack</strong></p>
+      <p>3️⃣ Baue beim Start (z.B. beim Roboter):</p>
+      <p>🔸 <strong>wenn „grüne Flagge“ angeklickt</strong></p>
+      <p>🔸 <strong>setze Bestand_Getränk auf 5</strong></p>
+      <p>🔸 <strong>setze Bestand_Snack auf 3</strong></p>
+      <p>4️⃣ Achte darauf, dass die Anzeigen für beide Variablen auf der Bühne sichtbar sind.</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="nextStep(4)">
+        ✔️ Ich habe Bestand_Getränk und Bestand_Snack angelegt und gestartet
+      </button>
+      <button class="btn-ghost" onclick="prevStep(4)">⬅ Zurück zu Step 3</button>
+    </div>
+
+    <div class="bottom-row">
+      <div class="keywords">
+        Begriffe:
+        <span>Variable</span>
+        <span>Lagerbestand</span>
+      </div>
+      <div class="small-info">
+        Du kannst später andere Startzahlen ausprobieren (z.B. 10 und 8).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 5: Auswahl per Taste 1/2 -->
+<div class="overlay" id="step5">
+  <div class="modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Kiosk-Projekt – Roboter verkauft Sachen</div>
+        <h1>Step 5 – Auswahl: Taste 1 oder 2</h1>
+      </div>
+      <div class="step-progress">5 / 8</div>
+    </div>
+
+    <div class="icon">⌨️</div>
+
+    <div class="instructions">
+      <p>1️⃣ Klicke deinen Roboter an.</p>
+      <p>2️⃣ Baue diese Blöcke für die Auswahl:</p>
+      <p>🔸 <strong>wenn Taste 1 gedrückt</strong> → <strong>rufe „Getränk verkaufen“ auf</strong> (oder sage erst „Du willst ein Getränk!“)</p>
+      <p>🔸 <strong>wenn Taste 2 gedrückt</strong> → <strong>rufe „Snack verkaufen“ auf</strong> (oder sage „Du willst einen Snack!“)</p>
+      <p>(Wenn ihr noch keine Blöcke „Nachricht senden“ benutzt, kannst du zuerst direkt im Roboter alles machen.)</p>
+      <p>3️⃣ Teste: Drücke 1 und 2. Reagiert der Roboter?</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="nextStep(5)">
+        ✔️ Mein Roboter reagiert auf Taste 1 und 2
+      </button>
+      <button class="btn-ghost" onclick="prevStep(5)">⬅ Zurück zu Step 4</button>
+    </div>
+
+    <div class="bottom-row">
+      <div class="keywords">
+        Begriffe:
+        <span>Ereignis</span>
+        <span>Eingabe</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 6: Getränk verkaufen mit Bestand -->
+<div class="overlay" id="step6">
+  <div class="modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Kiosk-Projekt – Roboter verkauft Sachen</div>
+        <h1>Step 6 – Getränk verkaufen (mit Bestand)</h1>
+      </div>
+      <div class="step-progress">6 / 8</div>
+    </div>
+
+    <div class="icon">🥤</div>
+
+    <div class="instructions">
+      <p>1️⃣ Klicke deine Roboter-Figur an.</p>
+      <p>2️⃣ Baue folgendes unter <strong>wenn Taste 1 gedrückt</strong>:</p>
+      <p>🔸 <strong>wenn Bestand_Getränk &gt; 0 dann</strong></p>
+      <p>&nbsp;&nbsp;&nbsp;• <strong>ändere Bestand_Getränk um -1</strong></p>
+      <p>&nbsp;&nbsp;&nbsp;• <strong>sagen „Hier ist dein Getränk!“ für 2 Sekunden</strong></p>
+      <p>🔸 <strong>sonst</strong></p>
+      <p>&nbsp;&nbsp;&nbsp;• <strong>sagen „Getränke ausverkauft!“ für 2 Sekunden</strong></p>
+      <p>3️⃣ Teste: Drücke öfter Taste 1, bis Bestand_Getränk 0 ist. Kommt „ausverkauft“?</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="nextStep(6)">
+        ✔️ Getränke werden verkauft und können ausverkauft sein
+      </button>
+      <button class="btn-ghost" onclick="prevStep(6)">⬅ Zurück zu Step 5</button>
+    </div>
+
+    <div class="bottom-row">
+      <div class="keywords">
+        Begriffe:
+        <span>Bedingung</span>
+        <span>&gt; 0</span>
+        <span>ausverkauft</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 7: Snack verkaufen mit Bestand -->
+<div class="overlay" id="step7">
+  <div class="modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Kiosk-Projekt – Roboter verkauft Sachen</div>
+        <h1>Step 7 – Snack verkaufen (mit Bestand)</h1>
+      </div>
+      <div class="step-progress">7 / 8</div>
+    </div>
+
+    <div class="icon">🍫</div>
+
+    <div class="instructions">
+      <p>1️⃣ Klicke deine Roboter-Figur an.</p>
+      <p>2️⃣ Baue ähnlichen Code bei <strong>wenn Taste 2 gedrückt</strong>:</p>
+      <p>🔸 <strong>wenn Bestand_Snack &gt; 0 dann</strong></p>
+      <p>&nbsp;&nbsp;&nbsp;• <strong>ändere Bestand_Snack um -1</strong></p>
+      <p>&nbsp;&nbsp;&nbsp;• <strong>sagen „Hier ist dein Snack!“ für 2 Sekunden</strong></p>
+      <p>🔸 <strong>sonst</strong></p>
+      <p>&nbsp;&nbsp;&nbsp;• <strong>sagen „Snacks ausverkauft!“ für 2 Sekunden</strong></p>
+      <p>3️⃣ Teste: Drücke öfter Taste 2, bis Bestand_Snack 0 ist. Kommt „ausverkauft“?</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="nextStep(7)">
+        ✔️ Snacks werden verkauft und können ausverkauft sein
+      </button>
+      <button class="btn-ghost" onclick="prevStep(7)">⬅ Zurück zu Step 6</button>
+    </div>
+
+    <div class="bottom-row">
+      <div class="keywords">
+        Begriffe:
+        <span>Bedingung</span>
+        <span>Bestand</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 8: Feinschliff & Nachfüllen -->
+<div class="overlay" id="step8">
+  <div class="modal">
+    <div class="step-header">
+      <div class="step-title-main">
+        <div class="step-label">Kiosk-Projekt – Roboter verkauft Sachen</div>
+        <h1>Step 8 – Kiosk verbessern & nachfüllen</h1>
+      </div>
+      <div class="step-progress">8 / 8</div>
+    </div>
+
+    <div class="icon">🏁</div>
+
+    <div class="instructions">
+      <p>1️⃣ Überlege dir eine „Geheim-Taste“ zum Nachfüllen, z.B. <strong>Taste N</strong>.</p>
+      <p>2️⃣ Baue beim Roboter:</p>
+      <p>🔸 <strong>wenn Taste N gedrückt</strong></p>
+      <p>&nbsp;&nbsp;&nbsp;• <strong>setze Bestand_Getränk auf 5</strong></p>
+      <p>&nbsp;&nbsp;&nbsp;• <strong>setze Bestand_Snack auf 3</strong></p>
+      <p>&nbsp;&nbsp;&nbsp;• <strong>sagen „Lager nachgefüllt!“</strong></p>
+      <p>3️⃣ Gestalte deinen Kiosk schöner:</p>
+      <p>➤ andere Farben, Schilder („Kiosk“, „Getränke“, „Snacks“)</p>
+      <p>➤ Roboter-Text anpassen („Möchtest du noch etwas?“)</p>
+      <p>4️⃣ Teste alles: Kaufen, ausverkauft, nachfüllen, wieder verkaufen.</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="restart()">
+        🎉 Ich bin fertig mit dem Kiosk-Projekt – Noch einmal von vorne
+      </button>
+      <button class="btn-ghost" onclick="prevStep(8)">⬅ Zurück zu Step 7</button>
+    </div>
+
+    <div class="bottom-row">
+      <div class="small-info">
+        Du hast jetzt einen Kiosk-Roboter gebaut,<br>
+        der mit Lagerbestand arbeitet und ausverkauft sein kann. Zeig ihn deiner Lehrkraft! 🤖🛒
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function nextStep(current) {
+    const now = document.getElementById("step" + current);
+    const next = document.getElementById("step" + (current + 1));
+    if (now) now.classList.remove("active");
+    if (next) next.classList.add("active");
+  }
+
+  function prevStep(current) {
+    const now = document.getElementById("step" + current);
+    const prev = document.getElementById("step" + (current - 1));
+    if (now) now.classList.remove("active");
+    if (prev) prev.classList.add("active");
+  }
+
+  function restart() {
+    const all = document.querySelectorAll(".overlay");
+    all.forEach(o => o.classList.remove("active"));
+    document.getElementById("step1").classList.add("active");
+    window.scrollTo(0, 0);
+  }
+</script>
+
+</body>
+</html>
