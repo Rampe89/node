@@ -4,77 +4,163 @@
   <meta charset="UTF-8">
   <title>Informatik Lernbuddy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
   <style>
+    :root {
+      --bg: #eef1f6;
+      --surface: #ffffff;
+      --surface-soft: #f9fafb;
+      --text-main: #0f172a;
+      --text-soft: #6b7280;
+      --border: #e5e7eb;
+      --border-soft: #e1e5ee;
+      --radius-lg: 18px;
+      --radius-full: 999px;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.08);
+
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --accent-strong: #1d4ed8;
+    }
+
     * {
       box-sizing: border-box;
     }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       margin: 0;
-      background: #f0f4ff;
-      color: #222;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, #e0ecff 0, transparent 45%),
+        radial-gradient(circle at bottom right, #fee2e2 0, transparent 40%),
+        var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+      display: flex;
+      justify-content: center;
+      padding: 24px 16px;
+      min-height: 100vh;
     }
 
+    .page {
+      width: 100%;
+      max-width: 1100px;
+      background: var(--surface);
+      border-radius: 26px;
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-soft);
+      padding: 22px 24px 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.08) 0, transparent 50%),
+        radial-gradient(circle at 100% 20%, rgba(244, 114, 182, 0.06) 0, transparent 50%),
+        radial-gradient(circle at 0% 100%, rgba(45, 212, 191, 0.06) 0, transparent 55%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @media (max-width: 768px) {
+      .page {
+        padding: 18px 14px 22px;
+        border-radius: 20px;
+      }
+    }
+
+    /* Header */
+
     header {
-      background: linear-gradient(135deg, #4f8cff, #6dd5fa);
-      color: white;
-      padding: 16px 24px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+      margin-bottom: 14px;
     }
 
     header h1 {
-      margin: 0;
-      font-size: 1.6rem;
+      margin: 0 0 4px;
+      font-size: clamp(22px, 2.5vw, 26px);
+      font-weight: 600;
+      letter-spacing: -0.01em;
     }
 
     header p {
-      margin: 6px 0 0;
-      font-size: 1rem;
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--text-soft);
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(15, 23, 42, 0.04);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: #4b5563;
+      margin-bottom: 10px;
+    }
+
+    .hero-tag-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #10b981);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.9);
     }
 
     main {
-      max-width: 1200px;
-      margin: 16px auto 8px;
-      padding: 0 12px;
+      margin-top: 4px;
     }
 
     .section {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-      padding: 16px 18px;
+      background: var(--surface-soft);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      padding: 16px 16px 16px;
       margin-bottom: 16px;
-      border: 1px solid #dde5ff;
+      border: 1px solid var(--border);
     }
 
     .section h2 {
       margin-top: 0;
-      font-size: 1.2rem;
+      font-size: 1.05rem;
       display: flex;
       align-items: center;
       gap: 8px;
       padding-bottom: 6px;
-      border-bottom: 1px solid #e0e0e0;
-      margin-bottom: 12px;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 8px;
     }
 
     .step-badge {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       border-radius: 999px;
-      background: #4f8cff;
+      background: var(--accent);
       color: white;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 600;
     }
 
     .section-subtitle {
       font-size: 0.9rem;
-      color: #555;
+      color: var(--text-soft);
       margin-bottom: 8px;
     }
 
@@ -85,21 +171,28 @@
       margin-bottom: 16px;
     }
 
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .field-group {
       margin-bottom: 12px;
     }
 
     .field-group label {
       display: block;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 600;
       margin-bottom: 4px;
+      color: var(--text-main);
     }
 
     .field-group small {
       display: block;
       font-size: 0.8rem;
-      color: #555;
+      color: var(--text-soft);
       margin-bottom: 4px;
     }
 
@@ -107,13 +200,14 @@
     textarea {
       width: 100%;
       padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid #ccd4ff;
+      border-radius: 10px;
+      border: 1px solid var(--border-soft);
       font-size: 0.95rem;
       font-family: inherit;
       resize: vertical;
       min-height: 36px;
-      background: #f8f9ff;
+      background: #f8fafc;
+      color: var(--text-main);
     }
 
     textarea {
@@ -123,19 +217,21 @@
     input[type="text"]:focus,
     textarea:focus {
       outline: none;
-      border-color: #4f8cff;
-      box-shadow: 0 0 0 2px rgba(79,140,255,0.2);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.18);
       background: #ffffff;
     }
 
     .tag {
       display: inline-block;
-      background: #e8f0fe;
-      color: #1a73e8;
-      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      border-radius: var(--radius-full);
       padding: 3px 10px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
     }
 
     .checkbox-list {
@@ -148,8 +244,9 @@
       margin-bottom: 8px;
       font-size: 0.95rem;
       padding: 6px 8px;
-      border-radius: 8px;
-      background: #f8f9ff;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
     }
 
     .checkbox-list input[type="checkbox"] {
@@ -158,21 +255,28 @@
 
     #scratch-frame-wrapper {
       width: 100%;
-      height: 800px;
+      height: 460px;
       margin-top: 10px;
-      background: #dde5ff;
-      border-radius: 12px;
+      background: #eff4ff;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      border: 1px solid #c3cffc;
+      border: 1px solid #cbd5f5;
     }
 
     #scratch-frame-wrapper p {
       padding: 10px;
       text-align: center;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
+      color: var(--text-soft);
+    }
+
+    @media (max-width: 900px) {
+      #scratch-frame-wrapper {
+        height: 380px;
+      }
     }
 
     .actions {
@@ -185,7 +289,7 @@
 
     button {
       border: none;
-      border-radius: 999px;
+      border-radius: var(--radius-full);
       padding: 8px 16px;
       font-size: 0.95rem;
       cursor: pointer;
@@ -193,29 +297,46 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      transition:
+        background 0.12s ease,
+        box-shadow 0.12s ease,
+        transform 0.12s ease,
+        border-color 0.12s ease;
     }
 
     .btn-primary {
-      background: #4f8cff;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
       color: white;
+      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 30px rgba(37, 99, 235, 0.45);
     }
 
     .btn-secondary {
-      background: white;
-      color: #333;
-      border: 1px solid #c3cffc;
+      background: #ffffff;
+      color: var(--text-main);
+      border: 1px solid var(--border-soft);
+    }
+
+    .btn-secondary:hover {
+      background: #f9fafb;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(148, 163, 184, 0.4);
     }
 
     .status {
       font-size: 0.85rem;
-      color: #388e3c;
+      color: #16a34a;
       margin-top: 4px;
       min-height: 1.2em;
     }
 
     .small-note {
       font-size: 0.8rem;
-      color: #555;
+      color: var(--text-soft);
     }
 
     .inline-grid {
@@ -224,11 +345,18 @@
       gap: 12px;
     }
 
-    /* Intro-Overlay */
+    @media (max-width: 900px) {
+      .inline-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Intro-Overlay im neuen Stil */
+
     #intro-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.45);
+      background: rgba(15, 23, 42, 0.45);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -243,27 +371,30 @@
       background: #ffffff;
       max-width: 560px;
       width: 90%;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+      border-radius: 18px;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.55);
       padding: 18px 20px 16px;
-      border: 1px solid #dde5ff;
+      border: 1px solid var(--border-soft);
     }
 
     #intro-modal h2 {
       margin: 0 0 8px;
-      font-size: 1.3rem;
+      font-size: 1.25rem;
+      letter-spacing: -0.01em;
     }
 
     #intro-modal p {
       margin: 4px 0;
       font-size: 0.95rem;
-      line-height: 1.4;
+      line-height: 1.45;
+      color: var(--text-soft);
     }
 
     #intro-modal ul {
       margin: 8px 0 4px 20px;
       padding: 0;
       font-size: 0.95rem;
+      color: var(--text-soft);
     }
 
     #intro-modal li {
@@ -284,45 +415,46 @@
       display: flex;
       align-items: center;
       gap: 4px;
+      color: var(--text-soft);
     }
 
     .source-note {
-      max-width: 1200px;
-      margin: 0 auto 16px;
-      padding: 0 12px 8px;
-      font-size: 0.8rem;
-      color: #555;
+      max-width: 1100px;
+      margin: 6px auto 0;
+      padding: 0 4px 0;
+      font-size: 0.78rem;
+      color: var(--text-soft);
       text-align: right;
       font-style: italic;
     }
 
     @media (max-width: 900px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      #scratch-frame-wrapper {
-        height: 500px;
-      }
-
-      .inline-grid {
-        grid-template-columns: 1fr;
-      }
-
       .source-note {
         text-align: left;
+        padding: 0 2px 0;
       }
     }
 
     @media print {
       body {
         background: white;
+        padding: 0;
+      }
+      .page {
+        box-shadow: none;
+        border-radius: 0;
+        border: none;
+        padding: 0 12px 12px;
       }
       header {
         background: white;
         color: black;
         border-bottom: 1px solid #ccc;
         box-shadow: none;
+      }
+      .hero-tag {
+        border: 1px solid #ccc;
+        background: #f9fafb;
       }
       .section {
         box-shadow: none;
@@ -349,264 +481,269 @@
   </style>
 </head>
 <body>
-<header>
-  <h1>Informatik Lernbuddy</h1>
-  <p>Hilft dir beim Planen, Arbeiten und Nachdenken über deine Aufgabe</p>
-</header>
 
-<!-- Intro-Overlay -->
-<div id="intro-overlay" class="hidden" aria-modal="true" role="dialog">
-  <div id="intro-modal">
-    <h2>Warum nutzen wir diesen Lernbuddy?</h2>
-    <p>In Informatik geht es nicht nur darum, dass dein Programm funktioniert.</p>
-    <p>Wichtig ist auch, wie du lernst und arbeitest. Dieser Lernbuddy hilft dir dabei:</p>
-    <ul>
-      <li>Du planst vorher, was du machen willst</li>
-      <li>Du achtest beim Arbeiten auf dein Vorgehen</li>
-      <li>Du denkst am Ende darüber nach, was gut war und was du ändern möchtest</li>
-    </ul>
-    <p>
-      Das nennt man auch „selbstreguliertes Lernen“. Das heißt:
-      Du überlegst selbst, wie du lernst, und passt dein Lernen an.
-    </p>
-    <p>
-      Nimm dir kurz Zeit für die Fragen. Sie sollen dir helfen,
-      dein Lernen Schritt für Schritt zu verbessern.
-    </p>
-    <div id="intro-modal-footer">
-      <label>
-        <input type="checkbox" id="intro-hide-next">
-        Diesen Hinweis beim nächsten Mal nicht mehr anzeigen
-      </label>
-      <button type="button" class="btn-primary" id="intro-ok-btn">Weiter zum Lernbuddy</button>
+<div class="page">
+  <header>
+    <div class="hero-tag">
+      <span class="hero-tag-dot"></span>
+      <span>Informatik · Lernbuddy</span>
+    </div>
+    <h1>Informatik Lernbuddy</h1>
+    <p>Hilft dir beim Planen, Arbeiten und Nachdenken über deine Aufgabe.</p>
+  </header>
+
+  <!-- Intro-Overlay -->
+  <div id="intro-overlay" class="hidden" aria-modal="true" role="dialog">
+    <div id="intro-modal">
+      <h2>Warum nutzen wir diesen Lernbuddy?</h2>
+      <p>In Informatik geht es nicht nur darum, dass dein Programm funktioniert.</p>
+      <p>Wichtig ist auch, wie du lernst und arbeitest. Dieser Lernbuddy hilft dir dabei:</p>
+      <ul>
+        <li>Du planst vorher, was du machen willst</li>
+        <li>Du achtest beim Arbeiten auf dein Vorgehen</li>
+        <li>Du denkst am Ende darüber nach, was gut war und was du ändern möchtest</li>
+      </ul>
+      <p>
+        Das nennt man auch „selbstreguliertes Lernen“. Das heißt:
+        Du überlegst selbst, wie du lernst, und passt dein Lernen an.
+      </p>
+      <p>
+        Nimm dir kurz Zeit für die Fragen. Sie sollen dir helfen,
+        dein Lernen Schritt für Schritt zu verbessern.
+      </p>
+      <div id="intro-modal-footer">
+        <label>
+          <input type="checkbox" id="intro-hide-next">
+          Diesen Hinweis beim nächsten Mal nicht mehr anzeigen
+        </label>
+        <button type="button" class="btn-primary" id="intro-ok-btn">Weiter zum Lernbuddy</button>
+      </div>
     </div>
   </div>
-</div>
 
-<main>
-  <!-- Kopfdaten -->
-  <section class="section" id="meta-section">
-    <h2>
-      Angaben zur Arbeit
-    </h2>
-    <div class="inline-grid">
-      <div class="field-group">
-        <label for="student-name">Name</label>
-        <input type="text" id="student-name" placeholder="Vorname Nachname">
-      </div>
-      <div class="field-group">
-        <label for="student-class">Klasse</label>
-        <input type="text" id="student-class" placeholder="z. B. 7b">
-      </div>
-      <div class="field-group">
-        <label for="student-date">Datum</label>
-        <input type="text" id="student-date" placeholder="z. B. 15.09.2025">
-      </div>
-    </div>
-  </section>
-
-  <!-- 1. Vor dem Programmieren -->
-  <section class="section" id="before-section">
-    <h2>
-      <span class="step-badge">1</span>
-      Bevor du programmierst
-    </h2>
-    <p class="section-subtitle">Hier überlegst du kurz, was du heute machen willst.</p>
-
-    <div class="field-group">
-      <span class="tag">Ziele</span>
-    </div>
-
-    <div class="field-group">
-      <label for="goal-what">Mein WAS-Ziel</label>
-      <small>Was soll am Ende klappen? Schreibe es in einem einfachen Satz.</small>
-      <textarea id="goal-what" placeholder="Beispiel: Meine Figur kann sich mit den Pfeiltasten bewegen."></textarea>
-    </div>
-
-    <div class="field-group">
-      <label for="goal-how">Mein WIE-Ziel</label>
-      <small>Was möchtest du heute üben? Zum Beispiel Schleifen, Bedingungen oder Variablen.</small>
-      <textarea id="goal-how" placeholder="Beispiel: Ich möchte eine Schleife und eine Wenn-Dann-Bedingung benutzen."></textarea>
-    </div>
-
-    <div class="field-group">
-      <span class="tag">Ablenkung und Motivation</span>
-    </div>
-
-    <div class="field-group">
-      <label for="distractions">Was lenkt mich ab? Was hilft mir?</label>
-      <small>Schreibe kurz auf, was du jetzt ändern kannst, damit du gut arbeiten kannst.</small>
-      <textarea id="distractions" placeholder="Beispiel: Handy weglegen, andere Tabs schließen."></textarea>
-    </div>
-
-    <div class="field-group">
-      <label for="motivation">Warum lohnt sich das für mich?</label>
-      <small>Dein Grund. Er muss nicht perfekt sein.</small>
-      <textarea id="motivation" placeholder="Beispiel: Ich will besser programmieren können, weil mir Spiele Spaß machen."></textarea>
-    </div>
-  </section>
-
-  <!-- 2. Während des Programmierens -->
-  <div class="grid">
-    <!-- Scratch + Plan -->
-    <section class="section" id="middle-section">
-      <h2>
-        <span class="step-badge">2</span>
-        Während du arbeitest
-      </h2>
-      <p class="section-subtitle">Hier arbeitest du mit Scratch und schreibst dir wichtige Dinge auf.</p>
-
-      <div class="field-group">
-        <span class="tag">Scratch-Projekt</span>
-      </div>
-
-      <div class="field-group">
-        <label for="scratch-url">Link zu deinem Scratch-Projekt</label>
-        <small>Beispiel: https://scratch.mit.edu/projects/123456789</small>
-        <input type="text" id="scratch-url" placeholder="Scratch-Link hier einfügen">
-        <div class="actions" style="margin-top:6px;">
-          <button type="button" class="btn-secondary" id="open-editor-btn">Scratch-Editor in neuem Tab öffnen</button>
-          <span class="small-note">Hier im Fenster siehst du später die Vorschau. Den Code bearbeitest du im Editor im anderen Tab.</span>
+  <main>
+    <!-- Kopfdaten -->
+    <section class="section" id="meta-section">
+      <h2>Angaben zur Arbeit</h2>
+      <div class="inline-grid">
+        <div class="field-group">
+          <label for="student-name">Name</label>
+          <input type="text" id="student-name" placeholder="Vorname Nachname">
+        </div>
+        <div class="field-group">
+          <label for="student-class">Klasse</label>
+          <input type="text" id="student-class" placeholder="z. B. 7b">
+        </div>
+        <div class="field-group">
+          <label for="student-date">Datum</label>
+          <input type="text" id="student-date" placeholder="z. B. 15.09.2025">
         </div>
       </div>
-
-      <div id="scratch-frame-wrapper">
-        <p>
-          Hier siehst du dein Scratch-Projekt, wenn du oben einen gültigen Link einträgst.<br>
-          Du kannst das Ergebnis hier testen. Den Code änderst du im Editor im anderen Tab.
-        </p>
-      </div>
-
-      <div class="field-group" style="margin-top: 18px;">
-        <span class="tag">Plan</span>
-      </div>
-
-      <div class="field-group">
-        <label for="plan-notes">Mein Plan / Pseudocode</label>
-        <small>Schreibe kurz auf, was du zuerst und was du danach machen willst.</small>
-        <textarea id="plan-notes" placeholder="Beispiel: 1. Figur zeichnen  2. Steuerung mit Pfeiltasten  3. Hindernis einbauen"></textarea>
-      </div>
-
-      <div class="field-group">
-        <span class="tag">Fehler und Lösungen</span>
-      </div>
-
-      <div class="field-group">
-        <label for="debug-notes">Probleme und wie ich sie gelöst habe</label>
-        <small>Hier kannst du dir merken, was nicht geklappt hat und wie du es geschafft hast.</small>
-        <textarea id="debug-notes" placeholder="Beispiel: Figur hat sich nicht bewegt → Block an die richtige Figur gesetzt."></textarea>
-      </div>
     </section>
 
-    <!-- Check währenddessen -->
-    <section class="section" id="during-check-section">
+    <!-- 1. Vor dem Programmieren -->
+    <section class="section" id="before-section">
       <h2>
-        <span class="step-badge">2½</span>
-        Mini-Check zwischendurch
+        <span class="step-badge">1</span>
+        Bevor du programmierst
       </h2>
-      <p class="section-subtitle">Hake an, was du schon gut gemacht hast.</p>
+      <p class="section-subtitle">Hier überlegst du kurz, was du heute machen willst.</p>
 
-      <ul class="checkbox-list">
-        <li>
-          <label>
-            <input type="checkbox" id="check-tested">
-            Ich teste mein Projekt immer wieder.
-          </label>
-        </li>
-        <li>
-          <label>
-            <input type="checkbox" id="check-errors">
-            Ich lese Probleme und Fehlermeldungen und versuche sie zu verstehen.
-          </label>
-        </li>
-        <li>
-          <label>
-            <input type="checkbox" id="check-steps">
-            Ich ändere nur kleine Dinge auf einmal.
-          </label>
-        </li>
-        <li>
-          <label>
-            <input type="checkbox" id="check-help">
-            Ich hole mir Hilfe, wenn ich feststecke.
-          </label>
-        </li>
-        <li>
-          <label>
-            <input type="checkbox" id="check-focus">
-            Ich bleibe bei meiner Aufgabe und springe nicht dauernd hin und her.
-          </label>
-        </li>
-      </ul>
+      <div class="field-group">
+        <span class="tag">Ziele</span>
+      </div>
+
+      <div class="field-group">
+        <label for="goal-what">Mein WAS-Ziel</label>
+        <small>Was soll am Ende klappen? Schreibe es in einem einfachen Satz.</small>
+        <textarea id="goal-what" placeholder="Beispiel: Meine Figur kann sich mit den Pfeiltasten bewegen."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label for="goal-how">Mein WIE-Ziel</label>
+        <small>Was möchtest du heute üben? Zum Beispiel Schleifen, Bedingungen oder Variablen.</small>
+        <textarea id="goal-how" placeholder="Beispiel: Ich möchte eine Schleife und eine Wenn-Dann-Bedingung benutzen."></textarea>
+      </div>
+
+      <div class="field-group">
+        <span class="tag">Ablenkung und Motivation</span>
+      </div>
+
+      <div class="field-group">
+        <label for="distractions">Was lenkt mich ab? Was hilft mir?</label>
+        <small>Schreibe kurz auf, was du jetzt ändern kannst, damit du gut arbeiten kannst.</small>
+        <textarea id="distractions" placeholder="Beispiel: Handy weglegen, andere Tabs schließen."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label for="motivation">Warum lohnt sich das für mich?</label>
+        <small>Dein Grund. Er muss nicht perfekt sein.</small>
+        <textarea id="motivation" placeholder="Beispiel: Ich will besser programmieren können, weil mir Spiele Spaß machen."></textarea>
+      </div>
     </section>
-  </div>
 
-  <!-- 3. Nach dem Programmieren -->
-  <section class="section" id="after-section">
-    <h2>
-      <span class="step-badge">3</span>
-      Wenn du fertig bist
-    </h2>
-    <p class="section-subtitle">Zum Schluss schaust du kurz auf dein Ziel und deine Arbeit.</p>
+    <!-- 2. Während des Programmierens -->
+    <div class="grid">
+      <!-- Scratch + Plan -->
+      <section class="section" id="middle-section">
+        <h2>
+          <span class="step-badge">2</span>
+          Während du arbeitest
+        </h2>
+        <p class="section-subtitle">Hier arbeitest du mit Scratch und schreibst dir wichtige Dinge auf.</p>
 
-    <div class="field-group">
-      <span class="tag">Rückblick</span>
+        <div class="field-group">
+          <span class="tag">Scratch-Projekt</span>
+        </div>
+
+        <div class="field-group">
+          <label for="scratch-url">Link zu deinem Scratch-Projekt</label>
+          <small>Beispiel: https://scratch.mit.edu/projects/123456789</small>
+          <input type="text" id="scratch-url" placeholder="Scratch-Link hier einfügen">
+          <div class="actions" style="margin-top:6px;">
+            <button type="button" class="btn-secondary" id="open-editor-btn">Scratch-Editor in neuem Tab öffnen</button>
+            <span class="small-note">Hier im Fenster siehst du später die Vorschau. Den Code bearbeitest du im Editor im anderen Tab.</span>
+          </div>
+        </div>
+
+        <div id="scratch-frame-wrapper">
+          <p>
+            Hier siehst du dein Scratch-Projekt, wenn du oben einen gültigen Link einträgst.<br>
+            Du kannst das Ergebnis hier testen. Den Code änderst du im Editor im anderen Tab.
+          </p>
+        </div>
+
+        <div class="field-group" style="margin-top: 18px;">
+          <span class="tag">Plan</span>
+        </div>
+
+        <div class="field-group">
+          <label for="plan-notes">Mein Plan / Pseudocode</label>
+          <small>Schreibe kurz auf, was du zuerst und was du danach machen willst.</small>
+          <textarea id="plan-notes" placeholder="Beispiel: 1. Figur zeichnen  2. Steuerung mit Pfeiltasten  3. Hindernis einbauen"></textarea>
+        </div>
+
+        <div class="field-group">
+          <span class="tag">Fehler und Lösungen</span>
+        </div>
+
+        <div class="field-group">
+          <label for="debug-notes">Probleme und wie ich sie gelöst habe</label>
+          <small>Hier kannst du dir merken, was nicht geklappt hat und wie du es geschafft hast.</small>
+          <textarea id="debug-notes" placeholder="Beispiel: Figur hat sich nicht bewegt → Block an die richtige Figur gesetzt."></textarea>
+        </div>
+      </section>
+
+      <!-- Check währenddessen -->
+      <section class="section" id="during-check-section">
+        <h2>
+          <span class="step-badge">2½</span>
+          Mini-Check zwischendurch
+        </h2>
+        <p class="section-subtitle">Hake an, was du schon gut gemacht hast.</p>
+
+        <ul class="checkbox-list">
+          <li>
+            <label>
+              <input type="checkbox" id="check-tested">
+              Ich teste mein Projekt immer wieder.
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" id="check-errors">
+              Ich lese Probleme und Fehlermeldungen und versuche sie zu verstehen.
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" id="check-steps">
+              Ich ändere nur kleine Dinge auf einmal.
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" id="check-help">
+              Ich hole mir Hilfe, wenn ich feststecke.
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" id="check-focus">
+              Ich bleibe bei meiner Aufgabe und springe nicht dauernd hin und her.
+            </label>
+          </li>
+        </ul>
+      </section>
     </div>
 
-    <div class="field-group">
-      <label>Habe ich mein WAS-Ziel geschafft?</label>
-      <small>Wie gut passt dein Ergebnis zu deinem Ziel von oben?</small>
-      <label>
-        <input type="radio" name="goal-what-result" value="nein">
-        Nein, noch nicht.
-      </label><br>
-      <label>
-        <input type="radio" name="goal-what-result" value="teilweise">
-        So halb.
-      </label><br>
-      <label>
-        <input type="radio" name="goal-what-result" value="ja">
-        Ja, das passt.
-      </label>
-    </div>
+    <!-- 3. Nach dem Programmieren -->
+    <section class="section" id="after-section">
+      <h2>
+        <span class="step-badge">3</span>
+        Wenn du fertig bist
+      </h2>
+      <p class="section-subtitle">Zum Schluss schaust du kurz auf dein Ziel und deine Arbeit.</p>
 
-    <div class="field-group">
-      <label>Habe ich mein WIE-Ziel benutzt?</label>
-      <small>Hast du die Sachen genutzt, die du üben wolltest?</small>
-      <label>
-        <input type="radio" name="goal-how-result" value="nein">
-        Nein.
-      </label><br>
-      <label>
-        <input type="radio" name="goal-how-result" value="teilweise">
-        Ein bisschen.
-      </label><br>
-      <label>
-        <input type="radio" name="goal-how-result" value="ja">
-        Ja, auf jeden Fall.
-      </label>
-    </div>
+      <div class="field-group">
+        <span class="tag">Rückblick</span>
+      </div>
 
-    <div class="field-group">
-      <label for="satisfaction">Worauf bin ich heute stolz?</label>
-      <small>Schreibe mindestens eine Sache, die du gut findest.</small>
-      <textarea id="satisfaction" placeholder="Beispiel: Ich habe das Problem mit der Steuerung alleine gelöst."></textarea>
-    </div>
+      <div class="field-group">
+        <label>Habe ich mein WAS-Ziel geschafft?</label>
+        <small>Wie gut passt dein Ergebnis zu deinem Ziel von oben?</small>
+        <label>
+          <input type="radio" name="goal-what-result" value="nein">
+          Nein, noch nicht.
+        </label><br>
+        <label>
+          <input type="radio" name="goal-what-result" value="teilweise">
+          So halb.
+        </label><br>
+        <label>
+          <input type="radio" name="goal-what-result" value="ja">
+          Ja, das passt.
+        </label>
+      </div>
 
-    <div class="field-group">
-      <label for="next-time">Was möchte ich beim nächsten Mal anders machen?</label>
-      <small>Nur ein oder zwei Punkte. Kleine Schritte reichen.</small>
-      <textarea id="next-time" placeholder="Beispiel: Nächstes Mal plane ich zuerst alles und frage früher, wenn ich nicht weiterkomme."></textarea>
-    </div>
+      <div class="field-group">
+        <label>Habe ich mein WIE-Ziel benutzt?</label>
+        <small>Hast du die Sachen genutzt, die du üben wolltest?</small>
+        <label>
+          <input type="radio" name="goal-how-result" value="nein">
+          Nein.
+        </label><br>
+        <label>
+          <input type="radio" name="goal-how-result" value="teilweise">
+          Ein bisschen.
+        </label><br>
+        <label>
+          <input type="radio" name="goal-how-result" value="ja">
+          Ja, auf jeden Fall.
+        </label>
+      </div>
 
-    <div class="actions">
-      <button type="button" class="btn-primary" id="save-btn">Speichern (auf diesem Gerät)</button>
-      <button type="button" class="btn-secondary" id="reset-btn">Alles löschen</button>
-      <button type="button" class="btn-secondary" id="print-btn">Drucken oder als PDF speichern</button>
-      <div class="status" id="status-msg" aria-live="polite"></div>
-    </div>
-  </section>
-</main>
+      <div class="field-group">
+        <label for="satisfaction">Worauf bin ich heute stolz?</label>
+        <small>Schreibe mindestens eine Sache, die du gut findest.</small>
+        <textarea id="satisfaction" placeholder="Beispiel: Ich habe das Problem mit der Steuerung alleine gelöst."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label for="next-time">Was möchte ich beim nächsten Mal anders machen?</label>
+        <small>Nur ein oder zwei Punkte. Kleine Schritte reichen.</small>
+        <textarea id="next-time" placeholder="Beispiel: Nächstes Mal plane ich zuerst alles und frage früher, wenn ich nicht weiterkomme."></textarea>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn-primary" id="save-btn">Speichern (auf diesem Gerät)</button>
+        <button type="button" class="btn-secondary" id="reset-btn">Alles löschen</button>
+        <button type="button" class="btn-secondary" id="print-btn">Drucken oder als PDF speichern</button>
+        <div class="status" id="status-msg" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+</div>
 
 <div class="source-note">
   Quelle/Idee von: Xenia Weber-Reuter, Joachim Wirth und Ferdinand Stebner
@@ -639,7 +776,7 @@
     const el = document.getElementById("status-msg");
     if (!el) return;
     el.textContent = message;
-    el.style.color = isError ? "#d32f2f" : "#388e3c";
+    el.style.color = isError ? "#d32f2f" : "#16a34a";
 
     if (statusTimeoutId) {
       clearTimeout(statusTimeoutId);
