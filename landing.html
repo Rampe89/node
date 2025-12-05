@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Ramon Berghorn | CyberDefense Lab & Informatik</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CyberDefense Lab, Unterrichtsmaterial und Fortbildungen von Ramon Berghorn">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ramon Berghorn | Informatik & CyberDefense Lab</title>
+  <meta name="description" content="CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy Informatik von Ramon Berghorn.">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --bg: #050611;
-      --bg-panel: #101323;
-      --bg-soft: #171a2a;
-      --accent: #36d6a3;
-      --accent-soft: rgba(54, 214, 163, 0.12);
-      --accent-strong: #00cfa0;
-      --text: #f5f7ff;
-      --text-soft: #a3aac4;
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --danger: #ff5c7a;
-      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.6);
-      --radius-lg: 24px;
-      --radius-md: 14px;
+      --bg: #eef1f6;
+      --surface: #ffffff;
+      --surface-soft: #f9fafb;
+      --text-main: #0f172a;
+      --text-soft: #6b7280;
+      --border: #e5e7eb;
+      --border-soft: #e1e5ee;
+      --radius-lg: 20px;
       --radius-full: 999px;
-      --status-size: 8px;
-      --status-glow: 0 0 10px rgba(0, 207, 160, 0.9);
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.08);
+
+      /* Tile accents */
+      --accent-lab: #2563eb;
+      --accent-lab-soft: #dbeafe;
+      --accent-unterricht: #a855f7;
+      --accent-unterricht-soft: #f3e8ff;
+      --accent-lehrplan: #22c55e;
+      --accent-lehrplan-soft: #dcfce7;
+      --accent-lernbuddy: #fb923c;
+      --accent-lernbuddy-soft: #ffedd5;
     }
 
     * {
@@ -37,25 +41,26 @@
     }
 
     body {
-      font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #181b33 0, #050611 55%);
-      color: var(--text);
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, #e0ecff 0, transparent 45%),
+        radial-gradient(circle at bottom right, #fee2e2 0, transparent 40%),
+        var(--bg);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
-      align-items: stretch;
       justify-content: center;
       padding: 24px 16px;
-      line-height: 1.5;
     }
 
     .page {
       width: 100%;
-      max-width: 1200px;
-      background: linear-gradient(135deg, rgba(14, 18, 40, 0.98), rgba(5, 6, 17, 0.96));
-      border-radius: 28px;
-      padding: 26px;
-      border: 1px solid var(--border-subtle);
+      max-width: 1100px;
+      background: var(--surface);
+      border-radius: 26px;
+      border: 1px solid var(--border-soft);
       box-shadow: var(--shadow-soft);
+      padding: 26px 30px 26px;
       position: relative;
       overflow: hidden;
     }
@@ -65,64 +70,44 @@
       position: absolute;
       inset: -40%;
       background:
-        radial-gradient(circle at 10% 0, rgba(0, 207, 160, 0.12) 0, transparent 55%),
-        radial-gradient(circle at 80% 0, rgba(86, 120, 255, 0.14) 0, transparent 55%);
-      opacity: 0.7;
-      pointer-events: none;
-      z-index: -2;
-    }
-
-    .page::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.06) 1px,
-        transparent 1px
-      );
-      background-size: 100% 72px;
-      opacity: 0.04;
+        radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.08) 0, transparent 50%),
+        radial-gradient(circle at 100% 20%, rgba(244, 114, 182, 0.06) 0, transparent 50%),
+        radial-gradient(circle at 0% 100%, rgba(45, 212, 191, 0.06) 0, transparent 55%);
       pointer-events: none;
       z-index: -1;
     }
 
+    @media (max-width: 768px) {
+      .page {
+        padding: 20px 18px 22px;
+        border-radius: 20px;
+      }
+    }
+
+    /* Header */
+
     header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      margin-bottom: 26px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
       gap: 14px;
+      margin-bottom: 20px;
     }
 
-    .brand-logo {
-      width: 44px;
-      height: 44px;
-      border-radius: 16px;
-      background: radial-gradient(circle at 30% 20%, #ffffff 0, #00cfa0 40%, #021813 75%);
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: 0 0 18px rgba(0, 207, 160, 0.55);
-    }
-
-    .brand-logo::after {
-      content: "</>";
-      position: absolute;
-      inset: 0;
+    .brand-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: var(--radius-full);
+      background:
+        radial-gradient(circle at 30% 0%, #ffffff 0, #e0f2fe 35%, transparent 60%),
+        linear-gradient(135deg, #2563eb, #22c55e);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 15px;
+      color: #0f172a;
       font-weight: 700;
-      color: #020612;
-      text-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
+      font-size: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.25);
     }
 
     .brand-text {
@@ -132,551 +117,452 @@
     }
 
     .brand-name {
-      font-size: 19px;
+      font-size: 20px;
       font-weight: 600;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.01em;
     }
 
     .brand-role {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-soft);
     }
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .pill {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      padding: 7px 13px;
-      border-radius: var(--radius-full);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      background: rgba(2, 6, 18, 0.9);
-      color: var(--text-soft);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* Einheitliche Status-Leuchten */
-    .pill-dot,
-    .card-chip-dot,
-    .status-dot,
-    .btn-secondary .dot {
-      width: var(--status-size);
-      height: var(--status-size);
-      border-radius: var(--radius-full);
-      background: var(--accent-strong);
-      box-shadow: var(--status-glow);
-      flex-shrink: 0;
-    }
-
-    main {
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    @media (max-width: 880px) {
-      .page {
-        padding: 20px;
-        border-radius: 22px;
-      }
-
+    @media (max-width: 520px) {
       header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
-      }
-
-      .header-right {
-        align-self: stretch;
-        justify-content: flex-start;
       }
     }
 
+    /* Hero */
+
     .hero {
-      padding: 10px 4px 6px;
-      max-width: 640px;
+      margin: 4px 0 22px;
+      padding: 24px 22px 24px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      background:
+        radial-gradient(circle at top right, rgba(59, 130, 246, 0.12) 0, transparent 55%),
+        radial-gradient(circle at bottom left, rgba(34, 197, 94, 0.1) 0, transparent 55%),
+        rgba(248, 250, 252, 0.9);
+      backdrop-filter: blur(18px);
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: 18px 16px 18px;
+      }
     }
 
     .hero-kicker {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 4px 11px 4px 4px;
+      gap: 6px;
+      padding: 4px 12px;
       border-radius: var(--radius-full);
-      border: 1px solid rgba(255, 255, 255, 0.13);
-      background: rgba(3, 7, 18, 0.92);
-      margin-bottom: 16px;
-      backdrop-filter: blur(12px);
+      background: rgba(15, 23, 42, 0.04);
+      border: 1px solid rgba(148, 163, 184, 0.4);
       font-size: 11px;
-      color: var(--text-soft);
-    }
-
-    .hero-kicker-badge {
-      padding: 4px 9px;
-      border-radius: var(--radius-full);
-      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-      color: #020308;
-      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 10px;
-    }
-
-    .hero-kicker-text {
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-
-    h1 {
-      font-size: clamp(30px, 3.6vw, 40px);
-      line-height: 1.1;
+      letter-spacing: 0.14em;
+      color: #4b5563;
       margin-bottom: 12px;
     }
 
-    h1 span.highlight {
-      background: linear-gradient(120deg, var(--accent-strong), #82ffe0);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+    .hero-kicker-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #10b981);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.9);
+    }
+
+    .hero-title {
+      font-size: clamp(28px, 3.1vw, 36px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .hero-title .highlight {
+      color: #111827;
     }
 
     .hero-subtitle {
-      font-size: 15px;
+      font-size: 14px;
       color: var(--text-soft);
-      max-width: 34rem;
-      line-height: 1.5;
-      margin-bottom: 18px;
+      max-width: 640px;
+      line-height: 1.6;
+      margin-bottom: 6px;
     }
 
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .meta-tag {
-      font-size: 11px;
-      padding: 6px 11px;
-      border-radius: var(--radius-full);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(8, 11, 26, 0.96);
-      color: var(--text-soft);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 4px;
-    }
-
-    .btn-main,
-    .btn-secondary {
-      border-radius: var(--radius-full);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.13em;
+    .hero-note {
       font-size: 12px;
-      transition:
-        transform 0.12s ease,
-        box-shadow 0.12s ease,
-        filter 0.12s ease,
-        background 0.12s ease,
-        border-color 0.12s ease;
+      color: #6b7280;
     }
 
-    .btn-main {
-      padding: 10px 18px;
-      border: none;
-      background: radial-gradient(circle at 20% 0, #ffffff 0, var(--accent-strong) 36%, #0bc194 60%, #066955 100%);
-      box-shadow:
-        0 10px 24px rgba(0, 0, 0, 0.8),
-        0 0 26px rgba(0, 207, 160, 0.6);
-      color: #041013;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-    }
+    /* Grid */
 
-    .btn-main:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.04);
-      box-shadow:
-        0 16px 32px rgba(0, 0, 0, 0.92),
-        0 0 42px rgba(0, 207, 160, 0.85);
-    }
-
-    .btn-secondary {
-      padding: 9px 16px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(5, 8, 21, 0.96);
-      color: var(--text-soft);
-      backdrop-filter: blur(12px);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(11, 14, 33, 0.98);
-      border-color: rgba(255, 255, 255, 0.26);
-      transform: translateY(-1px);
-    }
-
-    .cards-grid {
+    .grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 18px;
-      align-items: stretch;
-    }
-
-    @media (max-width: 1024px) {
-      .cards-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 780px) {
-      .cards-grid {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 14px;
-      }
-    }
-
-    .card {
-      position: relative;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-subtle);
-      padding: 18px 18px 14px;
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.65);
-      overflow: hidden;
-      background: radial-gradient(circle at top, rgba(32, 37, 88, 0.9), rgba(8, 10, 26, 0.98));
-    }
-
-    .card.secondary-card {
-      background: radial-gradient(circle at top, rgba(24, 30, 76, 0.9), rgba(7, 9, 26, 0.98));
-    }
-
-    .card.tertiary-card {
-      background: radial-gradient(circle at top, rgba(24, 46, 68, 0.9), rgba(6, 11, 24, 0.98));
-    }
-
-    .card-inner {
-      position: relative;
-      z-index: 1;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .card-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: rgba(193, 203, 240, 0.96);
-    }
-
-    .card-chip {
-      font-size: 10px;
-      padding: 4px 8px;
-      border-radius: var(--radius-full);
-      background: rgba(3, 10, 24, 0.98);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      color: rgba(178, 190, 232, 0.95);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.13em;
-    }
-
-    .card-title {
-      font-size: 17px;
-      margin-bottom: 4px;
-    }
-
-    .card-subtitle {
-      font-size: 13px;
-      color: var(--text-soft);
-      margin-bottom: 10px;
-      line-height: 1.5;
-    }
-
-    .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-top: 2px;
-    }
-
-    .mini-badge {
-      font-size: 10px;
-      padding: 4px 8px;
-      border-radius: var(--radius-full);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(2, 8, 21, 0.96);
-      color: rgba(166, 176, 222, 0.98);
-    }
-
-    .status-strip {
       margin-top: 10px;
-      padding: 7px 9px;
-      border-radius: var(--radius-md);
-      border: 1px dashed rgba(255, 255, 255, 0.22);
-      background: rgba(3, 9, 23, 0.9);
-      font-size: 11px;
-      color: rgba(174, 185, 230, 0.96);
+    }
+
+    @media (max-width: 720px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .tile {
+      position: relative;
+      background: var(--surface-soft);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      padding: 14px 16px 14px;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       gap: 8px;
+      overflow: hidden;
+      transition:
+        transform 0.16s ease,
+        box-shadow 0.16s ease,
+        border-color 0.16s ease,
+        background 0.16s ease;
     }
 
-    .status-strip span.label {
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      font-size: 10px;
-      opacity: 0.9;
-    }
-
-    .status-strip span.text {
-      opacity: 0.9;
-    }
-
-    .card-footer {
-      margin-top: 11px;
-      font-size: 12px;
-      color: rgba(191, 199, 238, 0.98);
-      opacity: 0.9;
-    }
-
-    .card-footer a {
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(54, 214, 163, 0.4);
-    }
-
-    .card-footer a:hover {
-      border-bottom-color: rgba(54, 214, 163, 0.8);
-    }
-
-    .glow-orb {
+    .tile::before {
+      content: "";
       position: absolute;
-      bottom: -34px;
-      right: -18px;
-      width: 130px;
-      height: 130px;
-      border-radius: var(--radius-full);
-      background:
-        radial-gradient(circle at 35% 15%, rgba(255, 255, 255, 0.6) 0, transparent 40%),
-        radial-gradient(circle at 70% 90%, #36d6a3 0, #02463a 65%);
-      opacity: 0.18;
-      filter: blur(1px);
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.2s ease;
       pointer-events: none;
     }
 
-    .site-footer {
-      margin-top: 26px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255, 255, 255, 0.16);
-      text-align: center;
+    .tile:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.12);
+      background: #ffffff;
+      border-color: rgba(148, 163, 184, 0.6);
+    }
+
+    .tile:hover::before {
+      opacity: 1;
+    }
+
+    .tile-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .tile-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+    }
+
+    .tile-header-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .tile-header-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-soft);
+    }
+
+    .tile-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .tile-text {
+      font-size: 14px;
+      color: var(--text-soft);
+      line-height: 1.5;
+      margin-top: 2px;
+    }
+
+    .tile-list {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin: 4px 0 2px 0;
+      padding-left: 14px;
+      border-left: 2px solid #e5e7eb;
+      line-height: 1.5;
+    }
+
+    .tile-list li + li {
+      margin-top: 3px;
+    }
+
+    .tile-footer {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .btn-link {
+      padding: 7px 11px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      background: #ffffff;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      color: var(--text-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition:
+        background 0.12s ease,
+        border-color 0.12s ease,
+        color 0.12s ease,
+        transform 0.12s ease,
+        box-shadow 0.12s ease;
+    }
+
+    .btn-link::after {
+      content: "↗";
+      font-size: 10px;
+    }
+
+    .btn-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
+    }
+
+    /* Tile-specific Colors / Hover */
+
+    .tile--lab::before {
+      background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.14) 0, transparent 60%);
+    }
+
+    .tile--unterricht::before {
+      background: radial-gradient(circle at top right, rgba(168, 85, 247, 0.14) 0, transparent 60%);
+    }
+
+    .tile--lehrplan::before {
+      background: radial-gradient(circle at top right, rgba(34, 197, 94, 0.14) 0, transparent 60%);
+    }
+
+    .tile--lernbuddy::before {
+      background: radial-gradient(circle at top right, rgba(251, 146, 60, 0.17) 0, transparent 60%);
+    }
+
+    .tile--lab .tile-icon {
+      background: var(--accent-lab-soft);
+      border-color: var(--accent-lab-soft);
+    }
+
+    .tile--unterricht .tile-icon {
+      background: var(--accent-unterricht-soft);
+      border-color: var(--accent-unterricht-soft);
+    }
+
+    .tile--lehrplan .tile-icon {
+      background: var(--accent-lehrplan-soft);
+      border-color: var(--accent-lehrplan-soft);
+    }
+
+    .tile--lernbuddy .tile-icon {
+      background: var(--accent-lernbuddy-soft);
+      border-color: var(--accent-lernbuddy-soft);
+    }
+
+    .tile--lab .btn-link:hover {
+      background: var(--accent-lab-soft);
+      border-color: var(--accent-lab);
+      color: #1d4ed8;
+    }
+
+    .tile--unterricht .btn-link:hover {
+      background: var(--accent-unterricht-soft);
+      border-color: var(--accent-unterricht);
+      color: #7c3aed;
+    }
+
+    .tile--lehrplan .btn-link:hover {
+      background: var(--accent-lehrplan-soft);
+      border-color: var(--accent-lehrplan);
+      color: #15803d;
+    }
+
+    .tile--lernbuddy .btn-link:hover {
+      background: var(--accent-lernbuddy-soft);
+      border-color: var(--accent-lernbuddy);
+      color: #c2410c;
+    }
+
+    footer.site-footer {
+      margin-top: 24px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-soft);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
       font-size: 12px;
       color: var(--text-soft);
+      gap: 6px;
     }
 
-    .site-footer a {
+    footer.site-footer a {
       color: var(--text-soft);
       text-decoration: none;
-      margin: 0 10px;
     }
 
-    .site-footer a:hover {
-      color: var(--accent);
+    footer.site-footer a:hover {
+      color: #2563eb;
     }
   </style>
 </head>
-
 <body>
   <div class="page">
     <header>
-      <div class="brand">
-        <div class="brand-logo"></div>
-        <div class="brand-text">
-          <div class="brand-name">Ramon Berghorn</div>
-          <div class="brand-role">Pflichfach Informatik SEK 1 | CyberDefense Lab | Workshops</div>
-        </div>
-      </div>
-      <div class="header-right">
-        <div class="pill">
-          <span class="pill-dot"></span>
-          <span>Aktive Projekte</span>
-        </div>
+      <div class="brand-avatar">RB</div>
+      <div class="brand-text">
+        <div class="brand-name">Ramon Berghorn</div>
+        <div class="brand-role">Informatik Sek I · CyberDefense Lab</div>
       </div>
     </header>
 
-    <main>
-      <section class="hero">
-        <div class="hero-kicker">
-          <span class="hero-kicker-badge">Lab Access</span>
-          <span class="hero-kicker-text">Schule · Cybersecurity · Praxis</span>
+    <section class="hero">
+      <div class="hero-kicker">
+        <span class="hero-kicker-dot"></span>
+        <span>Unterricht · Informatik · Praxis</span>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="highlight">Informatik</span> für den Schulalltag.
+      </h1>
+
+      <p class="hero-subtitle">
+        CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy –
+        Materialien, die im Unterricht und in Fortbildungen tatsächlich genutzt werden können.
+      </p>
+
+      <p class="hero-note">
+        Für Kolleg:innen, Fachkonferenzen und Schulleitung – im Aufbau, aber dauerhaft nutzbar.
+      </p>
+    </section>
+
+    <section class="grid">
+      <!-- CyberDefense Lab -->
+      <article class="tile tile--lab" id="tile-lab">
+        <div class="tile-header">
+          <div class="tile-icon">🛡️</div>
+          <div class="tile-header-main">
+            <div class="tile-header-label">CyberDefense Lab</div>
+            <h2 class="tile-title">Angriff und Verteidigung im Unterricht</h2>
+          </div>
         </div>
+        <p class="tile-text">
+          Technische Umgebung für legale Angriffs- und Verteidigungsszenarien,
+          angelehnt an TryHackMe und auf Schulbetrieb angepasst.
+        </p>
+        <div class="tile-footer">
+          <a class="btn-link" href="https://node-xejd.onrender.com/index.html">Zum CyberDefense Lab</a>
+        </div>
+      </article>
 
-        <h1>
-          <span class="highlight">Informatik zum Anfassen</span>
-        </h1>
-
-        <p class="hero-subtitle">
-          Unterrichtsmaterial, Ideen und Workshops für eine Informatik,
-          die im Schulalltag funktioniert.
+      <!-- Unterrichtsbeispiele -->
+      <article class="tile tile--unterricht" id="tile-unterricht">
+        <div class="tile-header">
+          <div class="tile-icon">💡</div>
+          <div class="tile-header-main">
+            <div class="tile-header-label">Unterrichtsbeispiele</div>
+            <h2 class="tile-title">Konkrete Stunden & Reihen</h2>
+          </div>
+        </div>
+        <p class="tile-text">
+          Beispiele, die direkt im Unterricht funktionieren. Du kannst hier nach und nach eigene
+          Materialien verlinken.
         </p>
 
-        <div class="hero-meta">
-          <div class="meta-tag">Sek I Informatik</div>
-          <div class="meta-tag">Ethical Hacking</div>
-          <div class="meta-tag">Workshops &amp; Beratung</div>
+        <ul class="tile-list">
+          <li><strong>Scratch – Einstieg:</strong> erste Bewegungen &amp; Ereignisse</li>
+          <li><strong>Daten &amp; Algorithmen:</strong> Sortieren in der Sek I</li>
+          <li><strong>Medien &amp; KI:</strong> Bilderkennung im Alltag</li>
+        </ul>
+
+        <div class="tile-footer">
+          <a class="btn-link" href="https://node-xejd.onrender.com/unterrichtsbeispiele.html">
+            Alle Unterrichtsbeispiele
+          </a>
+          <!-- Dummies: hier später echte Links eintragen -->
+          <a class="btn-link" href="#">Beispiel&nbsp;1 ansehen</a>
+          <a class="btn-link" href="#">Beispiel&nbsp;2 ansehen</a>
+          <a class="btn-link" href="#">Beispiel&nbsp;3 ansehen</a>
         </div>
+      </article>
 
-        <div class="hero-actions">
-          <a class="btn-main" href="https://node-xejd.onrender.com/index.html">
-            <span>Zum CyberDefense Lab</span>
-          </a>
-
-          <a class="btn-secondary" href="https://node-xejd.onrender.com/lehrplan.html">
-            <span class="dot"></span>
-            <span>Unterrichtsmaterial Sek I</span>
-          </a>
-
-          <a class="btn-secondary" href="https://node-xejd.onrender.com/lernbuddy.html">
-            <span class="dot"></span>
-            <span>Lernbuddy Informatik</span>
-          </a>
+      <!-- Lehrplan -->
+      <article class="tile tile--lehrplan" id="tile-lehrplan">
+        <div class="tile-header">
+          <div class="tile-icon">📘</div>
+          <div class="tile-header-main">
+            <div class="tile-header-label">Lehrplan</div>
+            <h2 class="tile-title">Schulinterner Lehrplan Informatik</h2>
+          </div>
         </div>
-      </section>
+        <p class="tile-text">
+          Vorschlag für einen schulinternen Lehrplan für das Pflichtfach Informatik Sek I
+          mit Jahrgangsstruktur und Kompetenzbezug.
+        </p>
+        <div class="tile-footer">
+          <a class="btn-link" href="https://node-xejd.onrender.com/lehrplan.html">Zum Lehrplan</a>
+        </div>
+      </article>
 
-      <section class="cards-grid">
-        <!-- CyberDefense Lab -->
-        <article class="card" id="lab">
-          <div class="card-inner">
-            <div class="card-header">
-              <div class="card-label">CyberDefense Lab</div>
-              <div class="card-chip">
-                <span class="card-chip-dot"></span>
-                <span>Angriff &amp; Verteidigung</span>
-              </div>
-            </div>
-
-            <h2 class="card-title">Von TryHackMe zum Schul-Lab</h2>
-            <p class="card-subtitle">
-              Szenarien, in denen Lernende legitime Angriffe nachvollziehen, verteidigen und reflektieren.
-              Technisch robust, didaktisch reduziert und mit Blick auf Rechtssicherheit gedacht.
-            </p>
-
-            <div class="badge-row">
-              <div class="mini-badge">Netzwerkgrundlagen</div>
-              <div class="mini-badge">Linux &amp; CLI</div>
-              <div class="mini-badge">Web Security</div>
-              <div class="mini-badge">Red-Team Perspektive</div>
-            </div>
-
-            <div class="status-strip">
-              <span class="status-dot"></span>
-              <span class="label">Status</span>
-              <span class="text">Aktiv im Aufbau. Neue Szenarien kommen schrittweise dazu.</span>
-            </div>
-
-            <div class="card-footer">
-              Geeignet für AGs, Profile, Projekttage und Fortbildungen.
-              Zugriff auf das Lab über den Button oben.
-            </div>
+      <!-- Lernbuddy -->
+      <article class="tile tile--lernbuddy" id="tile-lernbuddy">
+        <div class="tile-header">
+          <div class="tile-icon">✨</div>
+          <div class="tile-header-main">
+            <div class="tile-header-label">Lernbuddy</div>
+            <h2 class="tile-title">Begleitung beim Programmieren</h2>
           </div>
-          <div class="glow-orb"></div>
-        </article>
-
-        <!-- Unterrichtsmaterial -->
-        <article class="card secondary-card" id="material">
-          <div class="card-inner">
-            <div class="card-header">
-              <div class="card-label">Informatikunterricht &amp; Fachberatung</div>
-              <div class="card-chip">
-                <span class="card-chip-dot"></span>
-                <span>Material &amp; Konzepte</span>
-              </div>
-            </div>
-
-            <h2 class="card-title">Bausteine für Informatik in der Sekundarstufe I</h2>
-            <p class="card-subtitle">
-              Klar strukturierte Reihen und Bausteine mit Fokus auf Kompetenzen und belastbare Praxis:
-              von Algorithmik über Programmieren bis hin zu KI und Medienbildung – weiterhin im Aufbau!
-            </p>
-
-            <div class="badge-row">
-              <div class="mini-badge">Algorithmik &amp; Datenstrukturen</div>
-              <div class="mini-badge">Programmieren im Unterricht</div>
-              <div class="mini-badge">Künstliche Intelligenz</div>
-              <div class="mini-badge">Medienbildung</div>
-            </div>
-
-            <div class="card-footer">
-              Für Kolleginnen und Kollegen, Fachkonferenzen, Fortbildungen und Schulleitungen.
-              Materialzugang über den Button <strong>Unterrichtsmaterial Sek I</strong> oben.
-            </div>
-          </div>
-        </article>
-
-        <!-- Lernbuddy / Selbstreguliertes Lernen -->
-        <article class="card tertiary-card" id="lernbuddy">
-          <div class="card-inner">
-            <div class="card-header">
-              <div class="card-label">Lernbuddy Informatik</div>
-              <div class="card-chip">
-                <span class="card-chip-dot"></span>
-                <span>Selbstreguliertes Lernen</span>
-              </div>
-            </div>
-
-            <h2 class="card-title">Planen, Programmieren, Reflektieren</h2>
-            <p class="card-subtitle">
-              Digitales Arbeitsblatt zum Programmieren mit Scratch: Lernende planen ihr Vorgehen,
-              dokumentieren ihre Entscheidungen und reflektieren am Ende ihren Lernweg.
-              Entwickelt für einfache Sprache und den Einsatz direkt im Unterricht.
-            </p>
-
-            <div class="badge-row">
-              <div class="mini-badge">Ziele setzen</div>
-              <div class="mini-badge">Arbeitsschritte festhalten</div>
-              <div class="mini-badge">Reflexion am Ende</div>
-              <div class="mini-badge">PDF für die Mappe</div>
-            </div>
-
-            <div class="card-footer">
-              Der Lernbuddy orientiert sich an Konzepten des selbstregulierten Lernens nach Xenia Weber-Reuter, Joachim Wirth
-              und Ferdinand Stebner.
-              <strong>Lernbuddy Informatik</strong> oben.
-            </div>
-          </div>
-        </article>
-      </section>
-    </main>
+        </div>
+        <p class="tile-text">
+          Digitales Arbeitsblatt für selbstgesteuertes Lernen beim Programmieren
+          (z.&nbsp;B. mit Scratch): Planung, Zwischenschritte und Reflexion.
+        </p>
+        <div class="tile-footer">
+          <a class="btn-link" href="https://node-xejd.onrender.com/lernbuddy.html">Zum Lernbuddy</a>
+        </div>
+      </article>
+    </section>
 
     <footer class="site-footer">
-      <a href="https://node-xejd.onrender.com/impressum.html">Impressum</a>
-      <a href="https://node-xejd.onrender.com/datenschutz.html">Datenschutz</a>
+      <span>&copy; <span id="year"></span> Ramon Berghorn</span>
+      <span>
+        <a href="https://node-xejd.onrender.com/impressum.html">Impressum</a> ·
+        <a href="https://node-xejd.onrender.com/datenschutz.html">Datenschutz</a>
+      </span>
     </footer>
   </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
 
