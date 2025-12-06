@@ -97,7 +97,9 @@ const server = http.createServer((req, res) => {
          } else if (req.url === '/new.html') {
             // -kiosk Seite ausliefern
             serveFile('new.html', res);
-            
+        } else if (req.url === '/coach.html') {
+            // -ttdr Seite ausliefern
+            serveFile('coach.html', res);
          } else {
             // 404-Seite
             res.statusCode = 404;
