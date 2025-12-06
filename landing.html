@@ -432,8 +432,173 @@
     footer.site-footer a:hover {
       color: #2563eb;
     }
+
+    /* ---------------------------
+       Changelog – Console / Python-Style
+       --------------------------- */
+
+    .changelog {
+      margin-top: 26px;
+    }
+
+    .changelog-panel {
+      border-radius: 18px;
+      border: 1px solid rgba(15, 23, 42, 0.7);
+      background: radial-gradient(circle at top left, #020617 0, #020617 55%, #020617 100%);
+      color: #e5e7eb;
+      box-shadow: 0 22px 45px rgba(15, 23, 42, 0.9);
+      overflow: hidden;
+    }
+
+    .changelog-panel summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.8rem;
+      background: linear-gradient(90deg, #020617, #020617 60%, #020617 100%);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .changelog-panel summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .changelog-summary-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .changelog-pill {
+      font-size: 0.72rem;
+      padding: 2px 9px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.6);
+      color: #bbf7d0;
+    }
+
+    .changelog-path {
+      color: #9ca3af;
+    }
+
+    .changelog-chevron {
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    .changelog-panel[open] .changelog-chevron {
+      transform: rotate(90deg);
+    }
+
+    .changelog-body {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      padding: 10px 14px 12px;
+      font-size: 0.8rem;
+      background: #020617;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    .changelog-shell-line {
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow-x: auto;
+    }
+
+    .cl-prompt {
+      color: #22c55e;
+    }
+
+    .cl-kw {
+      color: #a855f7;
+    }
+
+    .cl-ident {
+      color: #38bdf8;
+    }
+
+    .cl-op {
+      color: #f97316;
+    }
+
+    .cl-num {
+      color: #facc15;
+    }
+
+    .cl-str {
+      color: #fbbf24;
+    }
+
+    .cl-comment {
+      color: #6b7280;
+    }
+
+    .changelog-list {
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+      border-top: 1px dashed rgba(55, 65, 81, 0.9);
+      padding-top: 6px;
+    }
+
+    .changelog-entry {
+      padding: 6px 0 5px;
+      border-bottom: 1px dashed rgba(31, 41, 55, 0.9);
+    }
+
+    .changelog-entry:last-child {
+      border-bottom: none;
+    }
+
+    .changelog-meta {
+      margin-bottom: 2px;
+    }
+
+    .log-date {
+      color: #a5b4fc;
+      margin-right: 8px;
+    }
+
+    .log-tag {
+      display: inline-block;
+      margin-right: 6px;
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      color: #22c55e;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .log-code-line {
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 640px) {
+      .changelog-panel summary {
+        align-items: flex-start;
+      }
+      .changelog-summary-left {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
+
 <body>
   <div class="page">
     <header>
@@ -549,6 +714,92 @@
           <a class="btn-link" href="https://node-xejd.onrender.com/lernbuddy.html">Zum Lernbuddy</a>
         </div>
       </article>
+    </section>
+
+    <!-- CHANGELOG – Console / Python Style -->
+    <section class="changelog" aria-label="Änderungsprotokoll">
+      <details class="changelog-panel" open>
+        <summary>
+          <div class="changelog-summary-left">
+            <span class="changelog-pill">Changelog</span>
+            <span class="changelog-path">ramon@school-lab:~/cyberdefense-site$ python changelog.py</span>
+          </div>
+          <span class="changelog-chevron">▸</span>
+        </summary>
+        <div class="changelog-body">
+          <div class="changelog-shell-line">
+            <span class="cl-prompt">&gt;&gt;&gt; </span>
+            <span class="cl-kw">from</span> <span class="cl-ident">ramon_site</span> <span class="cl-kw">import</span> <span class="cl-ident">changelog</span>
+          </div>
+          <div class="changelog-shell-line">
+            <span class="cl-prompt">&gt;&gt;&gt; </span>
+            <span class="cl-ident">changelog</span><span class="cl-op">.tail</span>(<span class="cl-num">6</span>)
+          </div>
+
+          <ul class="changelog-list">
+            <li class="changelog-entry">
+              <div class="changelog-meta">
+                <span class="log-date">2025-12-06</span>
+                <span class="log-tag">lernbuddy</span>
+              </div>
+              <div class="log-code-line">
+                <span class="cl-ident">changelog</span><span class="cl-op">.append</span>(
+                <span class="cl-str">"Layout für Smartphones und Tablets überarbeitet – Abschnitte neu strukturiert, bessere Lesbarkeit auf kleinen Screens."</span>
+                )
+              </div>
+            </li>
+
+            <li class="changelog-entry">
+              <div class="changelog-meta">
+                <span class="log-date">2025-12-06</span>
+                <span class="log-tag">lernbuddy</span>
+              </div>
+              <div class="log-code-line">
+                <span class="cl-ident">changelog</span><span class="cl-op">.append</span>(
+                <span class="cl-str">"Scratch-Preview mit Projekt-Embed, Editor-Link und lokalem Autosave (localStorage) ergänzt."</span>
+                )
+              </div>
+            </li>
+
+            <li class="changelog-entry">
+              <div class="changelog-meta">
+                <span class="log-date">2025-12-05</span>
+                <span class="log-tag">lehrplan</span>
+              </div>
+              <div class="log-code-line">
+                <span class="cl-ident">changelog</span><span class="cl-op">.append</span>(
+                <span class="cl-str">"Schulinterner Lehrplan in Karten-/Timeline-Ansicht aufgebaut und optisch an die Landing Page angepasst."</span>
+                )
+              </div>
+            </li>
+
+            <li class="changelog-entry">
+              <div class="changelog-meta">
+                <span class="log-date">2025-12-05</span>
+                <span class="log-tag">landing</span>
+              </div>
+              <div class="log-code-line">
+                <span class="cl-ident">changelog</span><span class="cl-op">.append</span>(
+                <span class="cl-str">"Startseite mit vier Hauptkacheln (CyberDefense Lab, Unterrichtsbeispiele, Lehrplan, Lernbuddy) neu gestaltet."</span>
+                )
+              </div>
+            </li>
+
+            <li class="changelog-entry">
+              <div class="changelog-meta">
+                <span class="log-date">2025-12-05</span>
+                <span class="log-tag">unterricht</span>
+              </div>
+              <div class="log-code-line">
+                <span class="cl-ident">changelog</span><span class="cl-op">.append</span>(
+                <span class="cl-str">"Unterrichtsbeispiele-Kachel mit Dummy-Links für einzelne Beispiele vorbereitet."</span>
+                )
+              </div>
+            </li>
+
+          </ul>
+        </div>
+      </details>
     </section>
 
     <footer class="site-footer">
