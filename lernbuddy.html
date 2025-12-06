@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -28,9 +27,7 @@
       --accent-strong: #1d4ed8;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -41,20 +38,18 @@
         var(--bg);
       color: var(--text-main);
       line-height: 1.5;
-      display: flex;
-      justify-content: center;
       padding: 24px 16px;
-      min-height: 100vh;
     }
 
     .page {
       width: 100%;
       max-width: 1100px;
+      margin: 0 auto;
       background: var(--surface);
       border-radius: 26px;
       border: 1px solid var(--border-soft);
       box-shadow: var(--shadow-soft);
-      padding: 22px 24px 26px;
+      padding: 20px 22px 24px;
       position: relative;
       overflow: hidden;
     }
@@ -73,13 +68,16 @@
 
     @media (max-width: 768px) {
       body {
-        padding: 14px 10px;
+        padding: 0;
+        background: var(--bg);
       }
-
       .page {
-        padding: 16px 12px 20px;
-        border-radius: 18px;
-        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        max-width: 100%;
+        padding: 14px 12px 18px;
+        box-shadow: none;
       }
     }
 
@@ -89,6 +87,55 @@
       padding-bottom: 10px;
       border-bottom: 1px solid rgba(226, 232, 240, 0.9);
       margin-bottom: 14px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-main {
+      max-width: 560px;
+    }
+
+    .header-source {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      font-style: italic;
+      text-align: right;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-source {
+        text-align: left;
+      }
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(15, 23, 42, 0.04);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: #4b5563;
+      margin-bottom: 8px;
+    }
+
+    .hero-tag-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #10b981);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.9);
     }
 
     header h1 {
@@ -104,32 +151,7 @@
       color: var(--text-soft);
     }
 
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: var(--radius-full);
-      background: rgba(15, 23, 42, 0.04);
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.13em;
-      color: #4b5563;
-      margin-bottom: 10px;
-    }
-
-    .hero-tag-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #22c55e, #10b981);
-      box-shadow: 0 0 8px rgba(16, 185, 129, 0.9);
-    }
-
-    main {
-      margin-top: 4px;
-    }
+    main { margin-top: 4px; }
 
     .section {
       background: var(--surface-soft);
@@ -145,6 +167,7 @@
         padding: 12px 10px 13px;
         margin-bottom: 12px;
         border-radius: 14px;
+        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
       }
     }
 
@@ -200,9 +223,7 @@
       }
     }
 
-    .field-group {
-      margin-bottom: 12px;
-    }
+    .field-group { margin-bottom: 12px; }
 
     .field-group label {
       display: block;
@@ -233,9 +254,7 @@
       color: var(--text-main);
     }
 
-    textarea {
-      min-height: 70px;
-    }
+    textarea { min-height: 70px; }
 
     input[type="text"]:focus,
     textarea:focus {
@@ -278,9 +297,7 @@
       gap: 8px;
     }
 
-    .checkbox-list input[type="checkbox"] {
-      margin: 0;
-    }
+    .checkbox-list input[type="checkbox"] { margin: 0; }
 
     #scratch-frame-wrapper {
       width: 100%;
@@ -302,17 +319,8 @@
       color: var(--text-soft);
     }
 
-    @media (max-width: 900px) {
-      #scratch-frame-wrapper {
-        height: 320px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      #scratch-frame-wrapper {
-        height: 260px;
-      }
-    }
+    @media (max-width: 900px) { #scratch-frame-wrapper { height: 320px; } }
+    @media (max-width: 600px) { #scratch-frame-wrapper { height: 260px; } }
 
     .actions {
       display: flex;
@@ -395,7 +403,6 @@
       }
     }
 
-    /* Radio-Group mobile besser klickbar */
     .field-group .radio-group label {
       display: flex;
       align-items: center;
@@ -408,11 +415,9 @@
       cursor: pointer;
     }
 
-    .field-group .radio-group input[type="radio"] {
-      margin: 0;
-    }
+    .field-group .radio-group input[type="radio"] { margin: 0; }
 
-    /* Intro-Overlay im neuen Stil */
+    /* Intro-Overlay */
 
     #intro-overlay {
       position: fixed;
@@ -424,9 +429,7 @@
       z-index: 1000;
     }
 
-    #intro-overlay.hidden {
-      display: none;
-    }
+    #intro-overlay.hidden { display: none; }
 
     #intro-modal {
       background: #ffffff;
@@ -458,9 +461,7 @@
       color: var(--text-soft);
     }
 
-    #intro-modal li {
-      margin-bottom: 4px;
-    }
+    #intro-modal li { margin-bottom: 4px; }
 
     #intro-modal-footer {
       display: flex;
@@ -477,23 +478,6 @@
       align-items: center;
       gap: 4px;
       color: var(--text-soft);
-    }
-
-    .source-note {
-      max-width: 1100px;
-      margin: 6px auto 0;
-      padding: 0 4px 0;
-      font-size: 0.78rem;
-      color: var(--text-soft);
-      text-align: right;
-      font-style: italic;
-    }
-
-    @media (max-width: 900px) {
-      .source-note {
-        text-align: left;
-        padding: 0 2px 0;
-      }
     }
 
     @media print {
@@ -522,22 +506,10 @@
         border: 1px solid #ddd;
         border-radius: 8px;
       }
-      .actions button {
-        display: none;
-      }
-      #status-msg {
-        display: none;
-      }
-      #scratch-frame-wrapper {
-        border: 1px solid #ccc;
-      }
-      #intro-overlay {
-        display: none !important;
-      }
-      .source-note {
-        text-align: left;
-        font-style: normal;
-      }
+      .actions button { display: none; }
+      #status-msg { display: none; }
+      #scratch-frame-wrapper { border: 1px solid #ccc; }
+      #intro-overlay { display: none !important; }
     }
   </style>
 </head>
@@ -545,12 +517,18 @@
 
 <div class="page">
   <header>
-    <div class="hero-tag">
-      <span class="hero-tag-dot"></span>
-      <span>Informatik · Lernbuddy</span>
+    <div class="header-main">
+      <div class="hero-tag">
+        <span class="hero-tag-dot"></span>
+        <span>Informatik · Lernbuddy</span>
+      </div>
+      <h1>Informatik Lernbuddy</h1>
+      <p>Hilft dir beim Planen, Arbeiten und Nachdenken über deine Aufgabe.</p>
     </div>
-    <h1>Informatik Lernbuddy</h1>
-    <p>Hilft dir beim Planen, Arbeiten und Nachdenken über deine Aufgabe.</p>
+    <div class="header-source">
+      Quelle/Idee von:<br>
+      Xenia Weber-Reuter, Joachim Wirth und Ferdinand Stebner
+    </div>
   </header>
 
   <!-- Intro-Overlay -->
@@ -810,10 +788,6 @@
   </main>
 </div>
 
-<div class="source-note">
-  Quelle/Idee von: Xenia Weber-Reuter, Joachim Wirth und Ferdinand Stebner
-</div>
-
 <script>
   const STORAGE_KEY = "informatikLernbuddyV1";
   const INTRO_KEY = "informatikLernbuddyHideIntro";
@@ -822,9 +796,7 @@
   function getSelectedRadio(name) {
     const radios = document.querySelectorAll("input[name='" + name + "']");
     for (const r of radios) {
-      if (r.checked) {
-        return r.value;
-      }
+      if (r.checked) return r.value;
     }
     return "";
   }
@@ -832,9 +804,7 @@
   function setSelectedRadio(name, value) {
     if (!value) return;
     const radios = document.querySelectorAll("input[name='" + name + "']");
-    radios.forEach(r => {
-      r.checked = (r.value === value);
-    });
+    radios.forEach(r => { r.checked = (r.value === value); });
   }
 
   function setStatus(message, isError) {
@@ -843,12 +813,8 @@
     el.textContent = message;
     el.style.color = isError ? "#d32f2f" : "#16a34a";
 
-    if (statusTimeoutId) {
-      clearTimeout(statusTimeoutId);
-    }
-    statusTimeoutId = setTimeout(function () {
-      el.textContent = "";
-    }, 4000);
+    if (statusTimeoutId) clearTimeout(statusTimeoutId);
+    statusTimeoutId = setTimeout(() => { el.textContent = ""; }, 4000);
   }
 
   function updateScratchFrameFromUrl() {
@@ -927,9 +893,7 @@
     const data = collectData();
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      if (showStatus) {
-        setStatus("Gespeichert.", false);
-      }
+      if (showStatus) setStatus("Gespeichert.", false);
     } catch (e) {
       setStatus("Konnte nicht speichern. (localStorage nicht verfügbar)", true);
     }
@@ -1044,45 +1008,31 @@
     watchedSelectors.forEach(sel => {
       const el = document.querySelector(sel);
       if (el) {
-        el.addEventListener("input", function () {
-          saveData(false);
-        });
-        el.addEventListener("change", function () {
-          saveData(false);
-        });
+        el.addEventListener("input", () => saveData(false));
+        el.addEventListener("change", () => saveData(false));
       }
     });
 
     const goalWhatRadios = document.querySelectorAll("input[name='goal-what-result']");
     goalWhatRadios.forEach(r => {
-      r.addEventListener("change", function () {
-        saveData(false);
-      });
+      r.addEventListener("change", () => saveData(false));
     });
 
     const goalHowRadios = document.querySelectorAll("input[name='goal-how-result']");
     goalHowRadios.forEach(r => {
-      r.addEventListener("change", function () {
-        saveData(false);
-      });
+      r.addEventListener("change", () => saveData(false));
     });
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("save-btn").addEventListener("click", function () {
-      saveData(true);
-    });
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("save-btn").addEventListener("click", () => saveData(true));
     document.getElementById("reset-btn").addEventListener("click", resetData);
-    document.getElementById("print-btn").addEventListener("click", function () {
-      window.print();
-    });
+    document.getElementById("print-btn").addEventListener("click", () => window.print());
     document.getElementById("scratch-url").addEventListener("input", updateScratchFrameFromUrl);
     document.getElementById("open-editor-btn").addEventListener("click", openScratchEditor);
 
     const introOkBtn = document.getElementById("intro-ok-btn");
-    if (introOkBtn) {
-      introOkBtn.addEventListener("click", handleIntroOk);
-    }
+    if (introOkBtn) introOkBtn.addEventListener("click", handleIntroOk);
 
     loadData();
     showIntroIfNeeded();
