@@ -419,33 +419,6 @@
       margin-top: 6px;
     }
 
-    .chart-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-top: 8px;
-    }
-
-    .chart-card {
-      background: rgba(15,23,42,0.9);
-      border-radius: 10px;
-      padding: 10px;
-      border: 1px solid rgba(30,64,175,0.9);
-    }
-
-    .chart-card-title {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    canvas {
-      width: 100%;
-      height: 180px;
-    }
-
     .coach-text {
       font-size: 0.8rem;
       line-height: 1.4;
@@ -710,29 +683,6 @@
       </p>
     </section>
 
-    <!-- Visualisierung -->
-    <section class="card" style="margin-top:20px;">
-      <h2>Visualisierung <span>Trends · Belastung · Progress</span></h2>
-      <div class="chart-grid">
-        <div class="chart-card">
-          <div class="chart-card-title">Wochenkilometer (Laufen) vs. Ziel</div>
-          <canvas id="weeklyKmChart"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-card-title">Belastung (TRIMP-light, 7-Tage-Summe)</div>
-          <canvas id="trimpChart"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-card-title">Schlaf & Flüssigkeit (letzte 14 Tage)</div>
-          <canvas id="sleepHydrationChart"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-card-title">Gewicht über die Zeit</div>
-          <canvas id="weightChart"></canvas>
-        </div>
-      </div>
-    </section>
-
     <!-- Rohdaten -->
     <section class="card" style="margin-top: 20px;">
       <h2>Alle Einträge <span>Project-230-Log – scroll- & filterbar</span></h2>
@@ -768,8 +718,6 @@
       </div>
     </section>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
     function parseNumber(value) {
@@ -849,11 +797,6 @@
     var dailyCoachTextEl = document.getElementById("dailyCoachText");
     var weeklyCoachTitleEl = document.getElementById("weeklyCoachTitle");
     var weeklyCoachTextEl = document.getElementById("weeklyCoachText");
-
-    var weeklyKmChart = null;
-    var trimpChart = null;
-    var sleepHydrationChart = null;
-    var weightChart = null;
 
     function initSettingsUI() {
       if (settings.raceDate) raceDateInput.value = settings.raceDate;
@@ -1232,7 +1175,6 @@
             '<div class="tag-warn">Ein paar Tage loggen, dann gibt es Score, Fortschritt & Coaching.</div>' +
           '</div>';
         entriesTableBody.innerHTML = "";
-        updateCharts({});
         updateCoaching({}, {});
         return;
       }
@@ -1648,15 +1590,6 @@
       }
       entriesTableBody.innerHTML = rowsHtml;
 
-      updateCharts({
-        weeklyKmMap: weeklyKmMap,
-        dailyTrimpMap: dailyTrimpMap,
-        sleepMap: sleepMap,
-        fluidsMap: fluidsMap,
-        weightSeries: weightSeries,
-        targetKm: targetKm
-      });
-
       updateCoaching({
         sumKm: sumKm,
         targetKm: targetKm,
@@ -1675,176 +1608,6 @@
         weightScore: weightScore,
         loadScore: loadScore,
         overallScore: overallScore
-      });
-    }
-
-    function updateCharts(data) {
-      var ctxWeekly = document.getElementById("weeklyKmChart");
-      var ctxTrimp = document.getElementById("trimpChart");
-      var ctxSleepHydration = document.getElementById("sleepHydrationChart");
-      var ctxWeight = document.getElementById("weightChart");
-
-      var weeklyKmMap = data.weeklyKmMap || {};
-      var dailyTrimpMap = data.dailyTrimpMap || {};
-      var sleepMap = data.sleepMap || {};
-      var fluidsMap = data.fluidsMap || {};
-      var weightSeries = data.weightSeries || [];
-      var targetKm = data.targetKm;
-
-      var weekKeys = Object.keys(weeklyKmMap).sort();
-      var weekLabels = weekKeys.map(function(k){ return "KW ab " + formatDateShort(k); });
-      var weekValues = weekKeys.map(function(k){ return weeklyKmMap[k]; });
-      var targetLine = targetKm ? weekKeys.map(function(){ return targetKm; }) : null;
-
-      if (weeklyKmChart) weeklyKmChart.destroy();
-      weeklyKmChart = new Chart(ctxWeekly, {
-        type: "bar",
-        data: {
-          labels: weekLabels,
-          datasets: ([
-            {
-              label: "Wochenkilometer (Laufen)",
-              data: weekValues
-            }
-          ].concat(targetLine ? [{
-            type: "line",
-            label: "Ziel-Wochenkilometer",
-            data: targetLine,
-            borderWidth: 1,
-            borderDash: [4, 4],
-            pointRadius: 0
-          }] : []))
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { ticks: { autoSkip: true, maxTicksLimit: 6 } },
-            y: { beginAtZero: true }
-          }
-        }
-      });
-
-      var trimpDates = Object.keys(dailyTrimpMap).sort();
-      var trimpLabels = trimpDates.map(function(d){ return formatDateShort(d); });
-      var trimpValues = [];
-      for (var i = 0; i < trimpDates.length; i++) {
-        var d = new Date(trimpDates[i] + "T00:00:00");
-        var windowStart = new Date(d.getTime() - 6 * 24*60*60*1000);
-        var sum = 0;
-        for (var j = 0; j <= i; j++) {
-          var dj = new Date(trimpDates[j] + "T00:00:00");
-          if (dj >= windowStart && dj <= d) {
-            sum += dailyTrimpMap[trimpDates[j]];
-          }
-        }
-        trimpValues.push(sum);
-      }
-
-      if (trimpChart) trimpChart.destroy();
-      trimpChart = new Chart(ctxTrimp, {
-        type: "line",
-        data: {
-          labels: trimpLabels,
-          datasets: [
-            {
-              label: "TRIMP (7-Tage-Summe)",
-              data: trimpValues,
-              borderWidth: 1,
-              tension: 0.3,
-              pointRadius: 0
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { ticks: { autoSkip: true, maxTicksLimit: 6 } },
-            y: { beginAtZero: true }
-          }
-        }
-      });
-
-      var allDatesSet = {};
-      Object.keys(sleepMap).forEach(function(d){ allDatesSet[d] = true; });
-      Object.keys(fluidsMap).forEach(function(d){ allDatesSet[d] = true; });
-      var allDates = Object.keys(allDatesSet).sort();
-      var shLabels = allDates.map(function(d){ return formatDateShort(d); });
-      var sleepValues = allDates.map(function(d){ return sleepMap[d] != null ? sleepMap[d] : null; });
-      var fluidsValues = allDates.map(function(d){ return fluidsMap[d] != null ? fluidsMap[d] : null; });
-
-      if (sleepHydrationChart) sleepHydrationChart.destroy();
-      sleepHydrationChart = new Chart(ctxSleepHydration, {
-        type: "line",
-        data: {
-          labels: shLabels,
-          datasets: [
-            {
-              label: "Schlaf (h)",
-              data: sleepValues,
-              borderWidth: 1,
-              tension: 0.3,
-              pointRadius: 2,
-              yAxisID: "y"
-            },
-            {
-              label: "Flüssigkeit (L)",
-              data: fluidsValues,
-              borderWidth: 1,
-              tension: 0.3,
-              pointRadius: 2,
-              yAxisID: "y1"
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { ticks: { autoSkip: true, maxTicksLimit: 7 } },
-            y: {
-              position: "left",
-              beginAtZero: true
-            },
-            y1: {
-              position: "right",
-              beginAtZero: true,
-              grid: { drawOnChartArea: false }
-            }
-          }
-        }
-      });
-
-      var sortedWeight = weightSeries.slice().sort(function(a, b){
-        return a.date.localeCompare(b.date);
-      });
-      var weightLabels = sortedWeight.map(function(w){ return formatDateShort(w.date); });
-      var weightValues = sortedWeight.map(function(w){ return w.weight; });
-
-      if (weightChart) weightChart.destroy();
-      weightChart = new Chart(ctxWeight, {
-        type: "line",
-        data: {
-          labels: weightLabels,
-          datasets: [
-            {
-              label: "Gewicht (kg)",
-              data: weightValues,
-              borderWidth: 1,
-              tension: 0.3,
-              pointRadius: 2
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { ticks: { autoSkip: true, maxTicksLimit: 6 } },
-            y: { beginAtZero: false }
-          }
-        }
       });
     }
 
@@ -2105,3 +1868,4 @@
   </script>
 </body>
 </html>
+
