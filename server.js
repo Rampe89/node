@@ -100,6 +100,9 @@ const server = http.createServer((req, res) => {
         } else if (req.url === '/coach.html') {
             // -ttdr Seite ausliefern
             serveFile('coach.html', res);
+        } else if (req.url === '/marathon.html') {
+            // -marathon Seite ausliefern
+            serveFile('marathon.html', res);
          } else {
             // 404-Seite
             res.statusCode = 404;
