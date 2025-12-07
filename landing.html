@@ -137,8 +137,8 @@
     /* Hero */
 
     .hero {
-      margin: 4px 0 22px;
-      padding: 24px 22px 24px;
+      margin: 4px 0 18px;
+      padding: 24px 22px 22px;
       border-radius: 22px;
       border: 1px solid rgba(255, 255, 255, 0.8);
       background:
@@ -182,11 +182,19 @@
       font-weight: 600;
       letter-spacing: -0.02em;
       line-height: 1.25;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .hero-title .highlight {
       color: #111827;
+    }
+
+    .hero-expert {
+      font-size: 13px;
+      margin-top: -2px;
+      margin-bottom: 10px;
+      color: #4b5563;
+      letter-spacing: 0.02em;
     }
 
     .hero-subtitle {
@@ -200,6 +208,114 @@
     .hero-note {
       font-size: 12px;
       color: #6b7280;
+    }
+
+    /* Über mich / Fachberatung */
+
+    .about {
+      margin-bottom: 18px;
+    }
+
+    .about-panel {
+      border-radius: 18px;
+      border: 1px solid var(--border-soft);
+      background: var(--surface-soft);
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+    }
+
+    .about-panel summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .about-panel summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .about-summary-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .about-pill {
+      font-size: 0.72rem;
+      padding: 2px 9px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      background: #e0f2fe;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    .about-title {
+      font-size: 0.9rem;
+      color: #111827;
+    }
+
+    .about-chevron {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      transition: transform 0.15s ease;
+    }
+
+    .about-panel[open] .about-chevron {
+      transform: rotate(90deg);
+    }
+
+    .about-body {
+      padding: 8px 14px 12px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 0.88rem;
+      color: var(--text-soft);
+    }
+
+    .about-body strong {
+      color: #111827;
+      font-weight: 600;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .about-block-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+
+    .about-body p {
+      margin-bottom: 4px;
+    }
+
+    .about-body ul {
+      margin: 4px 0 0;
+      padding-left: 18px;
+    }
+
+    .about-body li {
+      margin-bottom: 3px;
+    }
+
+    @media (max-width: 720px) {
+      .about-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
 
     /* Grid */
@@ -412,30 +528,7 @@
       color: #c2410c;
     }
 
-    footer.site-footer {
-      margin-top: 24px;
-      padding-top: 10px;
-      border-top: 1px solid var(--border-soft);
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      font-size: 12px;
-      color: var(--text-soft);
-      gap: 6px;
-    }
-
-    footer.site-footer a {
-      color: var(--text-soft);
-      text-decoration: none;
-    }
-
-    footer.site-footer a:hover {
-      color: #2563eb;
-    }
-
-    /* ---------------------------
-       Changelog – Console / Python-Style
-       --------------------------- */
+    /* Changelog */
 
     .changelog {
       margin-top: 26px;
@@ -495,6 +588,7 @@
     .changelog-chevron {
       font-size: 0.85rem;
       color: #6b7280;
+      transition: transform 0.15s ease;
     }
 
     .changelog-panel[open] .changelog-chevron {
@@ -596,6 +690,27 @@
         align-items: flex-start;
       }
     }
+
+    footer.site-footer {
+      margin-top: 24px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-soft);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--text-soft);
+      gap: 6px;
+    }
+
+    footer.site-footer a {
+      color: var(--text-soft);
+      text-decoration: none;
+    }
+
+    footer.site-footer a:hover {
+      color: #2563eb;
+    }
   </style>
 </head>
 
@@ -619,6 +734,10 @@
         <span class="highlight">Informatik</span> für den Schulalltag.
       </h1>
 
+      <p class="hero-expert">
+        Fachberatung Informatik Sek I · Fortbildungen · Vorträge
+      </p>
+
       <p class="hero-subtitle">
         CyberDefense Lab, Unterrichtsbeispiele, schulinterner Lehrplan und Lernbuddy –
         Materialien, die im Unterricht und in Fortbildungen tatsächlich genutzt werden können.
@@ -627,6 +746,50 @@
       <p class="hero-note">
         Für Kolleg:innen, Fachkonferenzen und Schulleitung – im Aufbau, aber dauerhaft nutzbar.
       </p>
+    </section>
+
+    <!-- ÜBER MICH & FACHBERATUNG -->
+    <section class="about" aria-label="Über mich und Fachberatung">
+      <details class="about-panel">
+        <summary>
+          <div class="about-summary-left">
+            <span class="about-pill">Profil</span>
+            <span class="about-title">Über mich · Fachberatung &amp; Fortbildungen</span>
+          </div>
+          <span class="about-chevron">▸</span>
+        </summary>
+        <div class="about-body">
+          <div class="about-grid">
+            <div>
+              <div class="about-block-title">Rolle</div>
+              <p>
+                <strong>02/2022 – heute</strong><br>
+                Schulformbezogener Fachberater für Informatik (Sekundarbereich I)
+              </p>
+            </div>
+            <div>
+              <div class="about-block-title">Vorträge &amp; Fortbildungen (Auswahl)</div>
+              <p><strong>2022 – 2024</strong><br>
+                Mehrere Durchgänge der 2-tägigen Fortbildung „Erste-Hilfe-Informatik“.
+              </p>
+              <p><strong>2023</strong></p>
+              <ul>
+                <li>MNU-Tag 2023 (Hannover): Unterricht im Pflichtfach Informatik</li>
+                <li>Tag der Informatiklehrer/innen 2023: Informatik an Hauptschulen/Oberschulen – Herausforderungen, Chancen, Erfahrungen &amp; Umsetzungsvorschläge</li>
+              </ul>
+              <p><strong>2024</strong></p>
+              <ul>
+                <li>Herbsttagung der Fachberater/innen für berufliche Orientierung (Soltau): KI als Unterstützung für Lehrkräfte</li>
+              </ul>
+              <p><strong>2025</strong></p>
+              <ul>
+                <li>Mehrere Durchgänge schulinterner Lehrerfortbildungen: KI als Unterstützung für Lehrkräfte</li>
+                <li>Tag der Informatiklehrer/innen: CyberDefense Lab – technische Hintergründe &amp; praktische Einblicke</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
     </section>
 
     <section class="grid">
@@ -654,7 +817,7 @@
           <div class="tile-icon">💡</div>
           <div class="tile-header-main">
             <div class="tile-header-label">Unterrichtsbeispiele</div>
-            <h2 class="tile-title">Konkrete Stunden & Reihen</h2>
+            <h2 class="tile-title">Konkrete Stunden &amp; Reihen</h2>
           </div>
         </div>
         <p class="tile-text">
@@ -662,16 +825,15 @@
         </p>
 
         <ul class="tile-list">
-          <li><strong>Algorithmisches Problemlösen: Mission Schulkiosk :</strong> </li>
-          <li><strong>Von der Wenn-Dann-Regel zum lernenden System :</strong> </li>
+          <li><strong>Algorithmisches Problemlösen:</strong> Mission Schulkiosk</li>
+          <li><strong>Von der Wenn-Dann-Regel zum lernenden System:</strong> Einstieg in KI-Modelle</li>
         </ul>
 
         <div class="tile-footer">
           <a class="btn-link" href="https://node-xejd.onrender.com/unterrichtsbeispiele.html">
             Alle Unterrichtsbeispiele
           </a>
-          <!-- Dummies: hier später echte Links eintragen -->
-          <a class="https://node-xejd.onrender.com/new.html" href="#">Beispiel&nbsp;1 ansehen</a>
+          <a class="btn-link" href="https://node-xejd.onrender.com/new.html">Beispiel&nbsp;1 ansehen</a>
           <a class="btn-link" href="#">Beispiel&nbsp;2 ansehen</a>
         </div>
       </article>
@@ -793,7 +955,6 @@
                 )
               </div>
             </li>
-
           </ul>
         </div>
       </details>
@@ -813,5 +974,6 @@
   </script>
 </body>
 </html>
+
 
 
