@@ -2,22 +2,23 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Project 230 – TorTour Prep Dashboard</title>
+  <title>Project 230 – Trainingsdashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
       --bg: #020617;
-      --bg-alt: #020617;
-      --card: #02091a;
-      --accent: #38bdf8;
-      --accent2: #22c55e;
-      --accent-soft: rgba(56, 189, 248, 0.2);
+      --bg-grad-1: #020617;
+      --bg-grad-2: #0f172a;
+      --card: #020617;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.08);
+      --accent-strong: #4ade80;
       --text: #e5e7eb;
       --text-muted: #9ca3af;
-      --danger: #f97373;
-      --warning: #fb923c;
+      --danger: #ef4444;
+      --warning: #f97316;
       --radius: 14px;
-      --shadow: 0 22px 50px rgba(15,23,42,0.9);
+      --shadow-soft: 0 18px 40px rgba(15,23,42,0.55);
     }
 
     * {
@@ -29,7 +30,7 @@
       margin: 0;
       padding: 0;
       background:
-        radial-gradient(circle at top, #0f172a 0, #020617 55%),
+        radial-gradient(circle at top, #1d283a 0, #020617 55%),
         radial-gradient(circle at bottom, #020617 0, #000 65%);
       color: var(--text);
     }
@@ -46,13 +47,13 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 24px;
+      margin-bottom: 18px;
     }
 
     header h1 {
       margin: 0;
       font-size: 1.9rem;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -63,18 +64,17 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 38px;
-      height: 38px;
-      border-radius: 999px;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
       background:
-        radial-gradient(circle at 30% 20%, #38bdf8, #0ea5e9 40%, #4c1d95 100%);
-      color: #f9fafb;
-      font-size: 1.3rem;
+        linear-gradient(135deg, #4ade80, #22c55e);
+      color: #022c22;
+      font-size: 1.1rem;
       font-weight: 800;
       box-shadow:
-        0 0 25px rgba(56,189,248,0.8),
-        0 0 55px rgba(14,165,233,0.8);
-      border: 1px solid rgba(186,230,253,0.9);
+        0 0 0 3px #022c22,
+        0 12px 24px rgba(34,197,94,0.6);
     }
 
     header p {
@@ -84,22 +84,335 @@
     }
 
     .pill {
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.4);
+      border: 1px solid rgba(148,163,184,0.5);
       color: var(--text-muted);
       font-size: 0.8rem;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: radial-gradient(circle at top left, rgba(56,189,248,0.25), transparent 55%),
-                  rgba(15,23,42,0.95);
-      backdrop-filter: blur(12px);
+      background: rgba(2,6,23,0.9);
+      backdrop-filter: blur(10px);
     }
 
     .pill strong {
-      color: var(--accent);
+      color: var(--accent-strong);
     }
+
+    /* HERO / SHAREABLE AREA */
+
+    .hero {
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 2fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hero-card {
+      position: relative;
+      border-radius: 18px;
+      padding: 16px 16px 18px;
+      background:
+        linear-gradient(135deg, rgba(34,197,94,0.06), rgba(56,189,248,0.04)),
+        radial-gradient(circle at top, rgba(56,189,248,0.25), transparent 55%),
+        #020617;
+      box-shadow:
+        0 0 0 2px rgba(15,23,42,1),
+        var(--shadow-soft);
+      border: 1px solid rgba(51,65,85,0.9);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero-card::before {
+      /* „Pixel“-Rahmen-Effekt */
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(148,163,184,0.3);
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.9),
+        inset 0 0 0 1px rgba(15,23,42,0.9);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .hero-card::after {
+      /* leichter Pixel-Glow oben rechts */
+      content: "";
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      right: -40px;
+      top: -40px;
+      background:
+        conic-gradient(from 180deg, rgba(34,197,94,0.4), transparent 35%, transparent 65%, rgba(56,189,248,0.45));
+      opacity: 0.55;
+      filter: blur(4px);
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hero-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+    }
+
+    .hero-title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hero-level-number {
+      font-size: 2.6rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero-level-number span {
+      font-size: 1.2rem;
+      letter-spacing: 0.16em;
+      margin-right: 4px;
+      color: var(--text-muted);
+    }
+
+    .hero-tagline {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .hero-progress {
+      margin-top: 6px;
+    }
+
+    .progress-bar-hero {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #020617, #020617);
+      border: 1px solid rgba(148,163,184,0.8);
+      overflow: hidden;
+    }
+
+    .progress-fill-hero {
+      height: 100%;
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, #22c55e, #4ade80);
+      width: 0%;
+      transition: width 0.4s ease-out;
+      box-shadow:
+        0 0 16px rgba(34,197,94,0.85),
+        0 0 24px rgba(22,163,74,0.8);
+    }
+
+    .hero-progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .hero-progress-meta strong {
+      color: var(--accent-strong);
+      font-size: 0.84rem;
+    }
+
+    .hero-status-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .status-chip {
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(148,163,184,0.6);
+      color: var(--text-muted);
+      background: rgba(15,23,42,0.9);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 2px;
+      background: var(--accent);
+      box-shadow: 0 0 6px rgba(34,197,94,0.9);
+    }
+
+    .hero-badge {
+      font-size: 0.78rem;
+      margin-top: 8px;
+      color: var(--text-muted);
+    }
+
+    .hero-badge span {
+      color: var(--accent-strong);
+      font-weight: 600;
+    }
+
+    /* Mini-Kacheln neben dem Level (für Screenshots) */
+    .hero-mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 0.78rem;
+    }
+
+    .hero-mini-card {
+      border-radius: 10px;
+      padding: 6px 8px;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid rgba(30,64,175,0.7);
+    }
+
+    .hero-mini-label {
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .hero-mini-value {
+      font-weight: 600;
+      font-size: 0.86rem;
+    }
+
+    .hero-mini-pill {
+      margin-top: 2px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* Rechts im Hero: Gesamt-Status 7 Tage kompakt (Screenshot-tauglich) */
+
+    .hero-summary-card {
+      position: relative;
+      border-radius: 18px;
+      padding: 14px 14px 16px;
+      background:
+        linear-gradient(135deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(30,64,175,0.8);
+    }
+
+    .hero-summary-title {
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: baseline;
+    }
+
+    .hero-score-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+    }
+
+    .hero-score-chip {
+      font-size: 0.75rem;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      color: var(--text-muted);
+    }
+
+    .hero-score-chip span {
+      font-weight: 600;
+    }
+
+    .hero-summary-body {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .hero-summary-bars {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 4px;
+      margin-top: 10px;
+    }
+
+    .hero-bar-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .hero-bar {
+      width: 14px;
+      height: 26px;
+      border-radius: 4px;
+      background: rgba(15,23,42,1);
+      border: 1px solid rgba(30,64,175,0.8);
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .hero-bar-fill {
+      width: 100%;
+      height: 0%;
+      transition: height 0.35s ease-out;
+      background: linear-gradient(to top, #22c55e, #4ade80);
+    }
+
+    .hero-bar-fill.warn {
+      background: linear-gradient(to top, #f97316, #fdba74);
+    }
+
+    .hero-bar-fill.bad {
+      background: linear-gradient(to top, #ef4444, #fca5a5);
+    }
+
+    .hero-summary-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 6px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .hero-summary-tags span {
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(51,65,85,0.7);
+    }
+
+    /* RESTLICHES LAYOUT */
 
     .grid {
       display: grid;
@@ -115,50 +428,26 @@
     }
 
     .card {
-      background:
-        radial-gradient(circle at top left, rgba(56,189,248,0.12), transparent 55%),
-        radial-gradient(circle at bottom right, rgba(124,58,237,0.14), transparent 55%),
-        var(--card);
+      background: var(--card);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-soft);
       padding: 18px 18px 20px;
-      border: 1px solid rgba(30,64,175,0.8);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top right, rgba(56,189,248,0.08), transparent 60%);
-      opacity: 0.6;
-      pointer-events: none;
-    }
-
-    .card > * {
-      position: relative;
-      z-index: 1;
+      border: 1px solid rgba(30,64,175,0.5);
     }
 
     .card h2 {
       margin: 0 0 8px;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-weight: 600;
     }
 
     .card h2 span {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 400;
       color: var(--text-muted);
-      text-transform: none;
-      letter-spacing: normal;
     }
 
     .small {
@@ -185,8 +474,8 @@
       width: 100%;
       padding: 7px 9px;
       border-radius: 8px;
-      border: 1px solid rgba(30,64,175,0.9);
-      background: rgba(15,23,42,0.94);
+      border: 1px solid rgba(30,64,175,0.7);
+      background: #020617;
       color: var(--text);
       font-size: 0.85rem;
     }
@@ -194,7 +483,6 @@
     input:focus, select:focus, textarea:focus {
       outline: 1px solid var(--accent);
       border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(56,189,248,0.3);
     }
 
     textarea {
@@ -251,23 +539,20 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #38bdf8, #22c55e);
-      color: #020617;
-      box-shadow:
-        0 12px 22px rgba(56,189,248,0.5),
-        0 0 30px rgba(34,197,94,0.6);
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
     }
 
     .btn-secondary {
-      background: rgba(15,23,42,0.9);
+      background: #020617;
       color: var(--text-muted);
-      border: 1px solid rgba(30,64,175,0.9);
+      border: 1px solid rgba(148,163,184,0.7);
     }
 
     .btn-ghost {
       background: transparent;
       color: var(--text-muted);
-      border: 1px dashed rgba(148,163,184,0.4);
+      border: 1px dashed rgba(148,163,184,0.6);
     }
 
     .summary-grid {
@@ -280,16 +565,14 @@
     .summary-card {
       border-radius: 10px;
       padding: 10px 10px;
-      background: radial-gradient(circle at top, rgba(15,23,42,0.9), rgba(15,23,42,0.92));
-      border: 1px solid rgba(30,64,175,0.9);
+      background: #020617;
+      border: 1px solid rgba(30,64,175,0.5);
     }
 
     .summary-label {
       font-size: 0.78rem;
       color: var(--text-muted);
       margin-bottom: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
     }
 
     .summary-value {
@@ -311,7 +594,7 @@
       display: inline-flex;
       align-items: center;
       margin-top: 4px;
-      border: 1px solid rgba(56,189,248,0.6);
+      border: 1px solid rgba(34,197,94,0.6);
     }
 
     .tag-warn {
@@ -346,12 +629,12 @@
     }
 
     thead {
-      background: rgba(15,23,42,0.95);
+      background: #020617;
     }
 
     th, td {
       padding: 6px 6px;
-      border-bottom: 1px solid rgba(30,64,175,0.6);
+      border-bottom: 1px solid rgba(30,64,175,0.5);
       text-align: left;
       white-space: nowrap;
     }
@@ -359,12 +642,12 @@
     th {
       position: sticky;
       top: 0;
-      background: rgba(15,23,42,0.97);
+      background: #020617;
       z-index: 1;
     }
 
     tbody tr:nth-child(even) {
-      background: rgba(15,23,42,0.85);
+      background: rgba(15,23,42,0.7);
     }
 
     .table-wrapper {
@@ -372,8 +655,8 @@
       overflow: auto;
       margin-top: 4px;
       border-radius: 10px;
-      border: 1px solid rgba(30,64,175,0.8);
-      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(30,64,175,0.5);
+      background: #020617;
     }
 
     .chip {
@@ -392,7 +675,6 @@
       height: 7px;
       border-radius: 999px;
       background: var(--accent);
-      box-shadow: 0 0 8px rgba(56,189,248,0.8);
     }
 
     .hint {
@@ -419,36 +701,34 @@
       margin-top: 6px;
     }
 
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .chart-card {
+      background: #020617;
+      border-radius: 10px;
+      padding: 10px;
+      border: 1px solid rgba(30,64,175,0.5);
+    }
+
+    .chart-card-title {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 180px;
+    }
+
     .coach-text {
       font-size: 0.8rem;
       line-height: 1.4;
-      margin-top: 4px;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(15,23,42,0.9);
-      border: 1px solid rgba(30,64,175,0.9);
-      overflow: hidden;
-      margin-top: 6px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #38bdf8, #22c55e);
-      width: 0%;
-      transition: width 0.4s ease-out;
-      box-shadow:
-        0 0 14px rgba(56,189,248,0.9),
-        0 0 22px rgba(34,197,94,0.7);
-    }
-
-    .level-subtext {
-      font-size: 0.75rem;
-      color: var(--text-muted);
       margin-top: 4px;
     }
 
@@ -462,24 +742,128 @@
     <header>
       <div>
         <h1>
-          <span class="logo">P230</span>
-          Project 230 – TorTour Prep
+          <span class="logo">230</span>
+          Project 230
         </h1>
-        <p>Dein Project-230-Board: Training, Recovery, Alltag & TorTour-Vorbereitung – alles lokal, ohne Server.</p>
+        <p>Dein zentrales Dashboard für die Vorbereitung auf die TorTour de Ruhr – Training, Schlaf, Recovery & Fortschritt im Blick.</p>
       </div>
       <div>
         <div class="pill">
-          <span>Projekt:</span><strong>TorTour de Ruhr · 230 km</strong>
+          <span>Ziel:</span><strong>TorTour de Ruhr 2026 · 230 km</strong>
         </div>
       </div>
     </header>
 
+    <!-- SHAREBAR / HERO-BEREICH FÜR SCREENSHOTS -->
+    <section class="hero">
+      <div class="hero-card">
+        <div class="hero-content">
+          <div class="hero-label">Level & Fortschritt</div>
+          <div class="hero-title-row">
+            <div class="hero-level-number">
+              <span>LVL</span><span id="heroLevelNumber">–</span>
+            </div>
+            <div class="hero-tagline" id="heroLevelTagline">Project 230 Progress</div>
+          </div>
+
+          <div class="hero-progress">
+            <div class="progress-bar-hero">
+              <div class="progress-fill-hero" id="heroProgressFill"></div>
+            </div>
+            <div class="hero-progress-meta">
+              <span id="heroXPText">XP: –</span>
+              <span id="heroNextLevelText">bis nächstes Level</span>
+            </div>
+          </div>
+
+          <div class="hero-status-tags">
+            <div class="status-chip">
+              <span class="status-dot"></span>
+              <span id="heroStatusText">Status wird berechnet …</span>
+            </div>
+          </div>
+
+          <div class="hero-mini-grid">
+            <div class="hero-mini-card">
+              <div class="hero-mini-label">Ø Schlaf (7T)</div>
+              <div class="hero-mini-value" id="heroMiniSleep">–</div>
+              <div class="hero-mini-pill">h / Tag</div>
+            </div>
+            <div class="hero-mini-card">
+              <div class="hero-mini-label">Wochen-km (7T)</div>
+              <div class="hero-mini-value" id="heroMiniKm">–</div>
+              <div class="hero-mini-pill">km</div>
+            </div>
+            <div class="hero-mini-card">
+              <div class="hero-mini-label">Hydration (7T)</div>
+              <div class="hero-mini-value" id="heroMiniFluids">–</div>
+              <div class="hero-mini-pill">Ø L / Tag</div>
+            </div>
+          </div>
+
+          <div class="hero-badge">
+            Levelziel: <span>100</span> = Mindestanforderung für die TorTour-Vorbereitung.
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-summary-card">
+        <div class="hero-summary-title">
+          <div>Letzte 7 Tage</div>
+          <div class="hero-score-value" id="heroScoreValue">–</div>
+        </div>
+        <div class="hero-score-chip" id="heroScoreChip">
+          Gesamtstatus: <span>–</span>
+        </div>
+        <div class="hero-summary-body" id="heroSummaryBody">
+          Auswertung folgt, sobald ausreichend Daten vorhanden sind.
+        </div>
+
+        <div class="hero-summary-bars">
+          <div class="hero-bar-col">
+            <div class="hero-bar">
+              <div class="hero-bar-fill" id="heroBarTraining"></div>
+            </div>
+            <div>Training</div>
+          </div>
+          <div class="hero-bar-col">
+            <div class="hero-bar">
+              <div class="hero-bar-fill" id="heroBarSleep"></div>
+            </div>
+            <div>Schlaf</div>
+          </div>
+          <div class="hero-bar-col">
+            <div class="hero-bar">
+              <div class="hero-bar-fill" id="heroBarFluids"></div>
+            </div>
+            <div>Flüssigk.</div>
+          </div>
+          <div class="hero-bar-col">
+            <div class="hero-bar">
+              <div class="hero-bar-fill" id="heroBarWeight"></div>
+            </div>
+            <div>Gewicht</div>
+          </div>
+          <div class="hero-bar-col">
+            <div class="hero-bar">
+              <div class="hero-bar-fill" id="heroBarLoad"></div>
+            </div>
+            <div>Belastung</div>
+          </div>
+        </div>
+
+        <div class="hero-summary-tags" id="heroSummaryTags">
+          <!-- kleine Tags per JS -->
+        </div>
+      </div>
+    </section>
+
     <!-- Einstellungen & Check-in -->
     <div class="grid">
       <section class="card">
-        <h2>TorTour-Einstellungen <span>Race · Zielbereiche · Backup</span></h2>
+        <h2>Projekt-Einstellungen <span>Renn-Datum · Zielbereiche · Backup</span></h2>
         <p class="small">
-          Setze Renn-Datum & Zielbereiche – und sichere deine Daten per Export, falls der Browser mal leergeräumt wird.
+          Renn-Datum & Zielbereiche setzen, optional regelmäßige Backups anlegen (JSON/CSV).
         </p>
         <div class="settings-grid">
           <div>
@@ -487,7 +871,7 @@
             <input type="date" id="raceDate" />
           </div>
           <div>
-            <label for="targetKm">Ziel-Wochenkilometer (Laufen)</label>
+            <label for="targetKm">Ziel-Wochenkilometer</label>
             <input type="number" id="targetKm" min="0" step="1" placeholder="Standard: 90" />
           </div>
           <div>
@@ -512,15 +896,17 @@
           </div>
         </div>
 
-        <div class="summary-grid" id="raceSummary"></div>
+        <div class="summary-grid" id="raceSummary">
+          <!-- per JS -->
+        </div>
         <p class="hint">
-          Backup-Tipp: Alle paar Wochen JSON sichern, dann kannst du Project 230 auch auf anderen Geräten laden.
+          Hinweis: Alle Daten liegen im Browser (<code>localStorage</code>). JSON-Backup zusätzlich speichern = sicher.
         </p>
       </section>
 
       <section class="card">
-        <h2>Neuen Tag eintragen <span>Tägliches Log</span></h2>
-        <p class="small">Einmal kurz loggen – das Dashboard kümmert sich um Auswertung, Fortschritt & Empfehlungen.</p>
+        <h2>Neuen Tag eintragen <span>Daily Log</span></h2>
+        <p class="small">Kurz ausfüllen – der Coach evaluiert, berechnet Level & gibt Empfehlungen.</p>
 
         <div class="form-grid">
           <div>
@@ -543,8 +929,6 @@
               <option value="Locker">Lockerer Lauf</option>
               <option value="Kraft">Kraft / Stabi</option>
               <option value="Cross">Cross / Alternativ</option>
-              <option value="Indoor Rad">Indoor Rad</option>
-              <option value="Fitnessboxen">Fitnessboxen</option>
               <option value="Wettkampf">Wettkampf / Test</option>
             </select>
           </div>
@@ -609,40 +993,20 @@
             </div>
           </div>
 
-          <div>
-            <label>Supplements heute</label>
-            <div class="inline-row">
-              <input type="checkbox" id="suppOmega3" />
-              <span>Omega 3</span>
-            </div>
-            <div class="inline-row">
-              <input type="checkbox" id="suppZink" />
-              <span>Zink</span>
-            </div>
-            <div class="inline-row">
-              <input type="checkbox" id="suppMagnesium" />
-              <span>Magnesium</span>
-            </div>
-            <div class="inline-row">
-              <input type="checkbox" id="suppD3" />
-              <span>Vitamin D3</span>
-            </div>
-          </div>
-
           <div style="grid-column: 1 / -1;">
             <label for="painNote">Schmerz / Beschwerden (optional)</label>
-            <textarea id="painNote" placeholder="z.B. rechtes Knie, Achillessehne, Magen, mental müde …"></textarea>
+            <textarea id="painNote" placeholder="z.B. Knie, Achillessehne, Magen, mental müde …"></textarea>
           </div>
 
           <div style="grid-column: 1 / -1;">
             <label for="comments">Weitere Notizen</label>
-            <textarea id="comments" placeholder="Was lief gut? Was war schwer? Was hast du gelernt?"></textarea>
+            <textarea id="comments" placeholder="Was lief gut? Was war schwer? Was möchtest du festhalten?"></textarea>
           </div>
         </div>
 
         <div class="btn-row">
           <span class="hint">
-            Alles wird lokal im Browser gespeichert (<code>localStorage</code>). Kein Upload, kein Server.
+            Alles bleibt lokal im Browser gespeichert.
             <span class="danger-link" id="clearDataLink">Alle Daten löschen</span>
           </span>
           <div class="btn-group-right">
@@ -653,19 +1017,23 @@
       </section>
     </div>
 
-    <!-- Auswertung 7 Tage + Score -->
+    <!-- Auswertung 7 Tage + weitere Details -->
     <section class="card">
-      <h2>Auswertung letzte 7 Tage <span>Training · Recovery · Project-230-Status</span></h2>
-      <div class="summary-grid" id="statsSummary"></div>
+      <h2>Auswertung letzte 7 Tage <span>Training · Schlaf · Flüssigkeit · Details</span></h2>
+
+      <div class="summary-grid" id="statsSummary">
+        <!-- per JS -->
+      </div>
+
       <p class="hint">
-        Ziel: stabile Wochenstruktur, gute Recovery & kontinuierlicher Fortschritt Richtung TorTour-Tag.
+        Ziel: stabile Wochenstruktur, gute Regeneration und kontinuierlicher Aufbau Richtung Level&nbsp;100 (TorTour-Ready).
       </p>
       <div id="coachFeedback" class="hint"></div>
     </section>
 
     <!-- Coaching-Empfehlungen -->
     <section class="card" style="margin-top:20px;">
-      <h2>Coach-Empfehlungen <span>Tages- & Wochen-Fokus</span></h2>
+      <h2>Coach-Empfehlungen <span>Tages- & Wochenfokus</span></h2>
       <div class="summary-grid">
         <div class="summary-card">
           <div class="summary-label">Empfehlung für morgen</div>
@@ -679,16 +1047,39 @@
         </div>
       </div>
       <p class="hint">
-        Empfehlungen basieren auf Lauf-Wochenkilometern, Belastung, Schlaf, Flüssigkeit, Wohlbefinden, Schmerzen & Supplements.
+        Berechnung basiert auf Wochenkilometern, Belastung (TRIMP), Schlaf, Flüssigkeit, Wohlbefinden & Beschwerden.
       </p>
+    </section>
+
+    <!-- Visualisierung -->
+    <section class="card" style="margin-top:20px;">
+      <h2>Visualisierung <span>Trends & Belastung</span></h2>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-card-title">Wochenkilometer vs. Ziel</div>
+          <canvas id="weeklyKmChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-title">Belastung (TRIMP, 7-Tage-Summe)</div>
+          <canvas id="trimpChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-title">Schlaf & Flüssigkeit (letzte 14 Tage)</div>
+          <canvas id="sleepHydrationChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-title">Gewicht über die Zeit</div>
+          <canvas id="weightChart"></canvas>
+        </div>
+      </div>
     </section>
 
     <!-- Rohdaten -->
     <section class="card" style="margin-top: 20px;">
-      <h2>Alle Einträge <span>Project-230-Log – scroll- & filterbar</span></h2>
+      <h2>Alle Einträge <span>Rohdaten</span></h2>
       <div class="chip" style="margin-bottom: 6px;">
         <span class="chip-dot"></span>
-        <span>Datenbasis für deine TorTour-Vorbereitung & deinen Alltag</span>
+        <span>Grundlage für Auswertung, Level & Coaching</span>
       </div>
       <div class="table-wrapper">
         <table>
@@ -705,26 +1096,27 @@
               <th>Wohlbef.</th>
               <th>Nacht?</th>
               <th>Schmerz?</th>
-              <th>Omega 3</th>
-              <th>Zink</th>
-              <th>Magnesium</th>
-              <th>D3</th>
               <th>Schmerz-Notiz</th>
               <th>Weitere Notizen</th>
             </tr>
           </thead>
-          <tbody id="entriesTableBody"></tbody>
+          <tbody id="entriesTableBody">
+            <!-- per JS -->
+          </tbody>
         </table>
       </div>
     </section>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <script>
+    // --- Helper ---
     function parseNumber(value) {
       if (value === null || value === undefined) return null;
-      var v = String(value).replace(',', '.').trim();
+      const v = String(value).replace(',', '.').trim();
       if (v === '') return null;
-      var num = parseFloat(v);
+      const num = parseFloat(v);
       return isNaN(num) ? null : num;
     }
 
@@ -733,7 +1125,7 @@
     }
 
     function loadState(key, fallback) {
-      var raw = localStorage.getItem(key);
+      const raw = localStorage.getItem(key);
       if (!raw) return fallback;
       try {
         return JSON.parse(raw);
@@ -743,61 +1135,85 @@
       }
     }
 
-    var STORAGE_ENTRIES_KEY = "ttdr_entries_v3";
-    var STORAGE_SETTINGS_KEY = "ttdr_settings_v1";
+    const STORAGE_ENTRIES_KEY = "project230_entries_v1";
+    const STORAGE_SETTINGS_KEY = "project230_settings_v1";
 
-    var entries = loadState(STORAGE_ENTRIES_KEY, []);
-    var settings = loadState(STORAGE_SETTINGS_KEY, {
+    let entries = loadState(STORAGE_ENTRIES_KEY, []);
+    let settings = loadState(STORAGE_SETTINGS_KEY, {
       raceDate: "",
       targetKm: 90,
       targetSleep: 7.5,
       targetFluids: 2.5
     });
 
-    var raceDateInput = document.getElementById("raceDate");
-    var targetKmInput = document.getElementById("targetKm");
-    var targetSleepInput = document.getElementById("targetSleep");
-    var targetFluidsInput = document.getElementById("targetFluids");
-    var raceSummaryEl = document.getElementById("raceSummary");
+    // --- DOM ---
+    const raceDateInput = document.getElementById("raceDate");
+    const targetKmInput = document.getElementById("targetKm");
+    const targetSleepInput = document.getElementById("targetSleep");
+    const targetFluidsInput = document.getElementById("targetFluids");
+    const raceSummaryEl = document.getElementById("raceSummary");
 
-    var entryDateInput = document.getElementById("entryDate");
-    var weightInput = document.getElementById("weight");
-    var trainingTypeInput = document.getElementById("trainingType");
-    var distanceKmInput = document.getElementById("distanceKm");
-    var durationMinInput = document.getElementById("durationMin");
-    var rpeInput = document.getElementById("rpe");
-    var sleepHoursInput = document.getElementById("sleepHours");
-    var sleepQualityInput = document.getElementById("sleepQuality");
-    var fluidsLitersInput = document.getElementById("fluidsLiters");
-    var wellbeingInput = document.getElementById("wellbeing");
-    var nightRunInput = document.getElementById("nightRun");
-    var hasPainInput = document.getElementById("hasPain");
-    var painNoteInput = document.getElementById("painNote");
-    var commentsInput = document.getElementById("comments");
-    var suppOmega3Input = document.getElementById("suppOmega3");
-    var suppZinkInput = document.getElementById("suppZink");
-    var suppMagnesiumInput = document.getElementById("suppMagnesium");
-    var suppD3Input = document.getElementById("suppD3");
+    const entryDateInput = document.getElementById("entryDate");
+    const weightInput = document.getElementById("weight");
+    const trainingTypeInput = document.getElementById("trainingType");
+    const distanceKmInput = document.getElementById("distanceKm");
+    const durationMinInput = document.getElementById("durationMin");
+    const rpeInput = document.getElementById("rpe");
+    const sleepHoursInput = document.getElementById("sleepHours");
+    const sleepQualityInput = document.getElementById("sleepQuality");
+    const fluidsLitersInput = document.getElementById("fluidsLiters");
+    const wellbeingInput = document.getElementById("wellbeing");
+    const nightRunInput = document.getElementById("nightRun");
+    const hasPainInput = document.getElementById("hasPain");
+    const painNoteInput = document.getElementById("painNote");
+    const commentsInput = document.getElementById("comments");
 
-    var saveSettingsBtn = document.getElementById("saveSettingsBtn");
-    var fillTodayBtn = document.getElementById("fillTodayBtn");
-    var addEntryBtn = document.getElementById("addEntryBtn");
-    var clearDataLink = document.getElementById("clearDataLink");
+    const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+    const fillTodayBtn = document.getElementById("fillTodayBtn");
+    const addEntryBtn = document.getElementById("addEntryBtn");
+    const clearDataLink = document.getElementById("clearDataLink");
 
-    var exportJsonBtn = document.getElementById("exportJsonBtn");
-    var exportCsvBtn = document.getElementById("exportCsvBtn");
-    var importJsonBtn = document.getElementById("importJsonBtn");
-    var importJsonInput = document.getElementById("importJsonInput");
+    const exportJsonBtn = document.getElementById("exportJsonBtn");
+    const exportCsvBtn = document.getElementById("exportCsvBtn");
+    const importJsonBtn = document.getElementById("importJsonBtn");
+    const importJsonInput = document.getElementById("importJsonInput");
 
-    var statsSummaryEl = document.getElementById("statsSummary");
-    var entriesTableBody = document.getElementById("entriesTableBody");
-    var coachFeedbackEl = document.getElementById("coachFeedback");
+    const statsSummaryEl = document.getElementById("statsSummary");
+    const entriesTableBody = document.getElementById("entriesTableBody");
+    const coachFeedbackEl = document.getElementById("coachFeedback");
 
-    var dailyCoachTitleEl = document.getElementById("dailyCoachTitle");
-    var dailyCoachTextEl = document.getElementById("dailyCoachText");
-    var weeklyCoachTitleEl = document.getElementById("weeklyCoachTitle");
-    var weeklyCoachTextEl = document.getElementById("weeklyCoachText");
+    const dailyCoachTitleEl = document.getElementById("dailyCoachTitle");
+    const dailyCoachTextEl = document.getElementById("dailyCoachText");
+    const weeklyCoachTitleEl = document.getElementById("weeklyCoachTitle");
+    const weeklyCoachTextEl = document.getElementById("weeklyCoachText");
 
+    // HERO-Elemente (für Instagram / Screenshots)
+    const heroLevelNumberEl = document.getElementById("heroLevelNumber");
+    const heroLevelTaglineEl = document.getElementById("heroLevelTagline");
+    const heroProgressFillEl = document.getElementById("heroProgressFill");
+    const heroXPTextEl = document.getElementById("heroXPText");
+    const heroNextLevelTextEl = document.getElementById("heroNextLevelText");
+    const heroStatusTextEl = document.getElementById("heroStatusText");
+    const heroMiniSleepEl = document.getElementById("heroMiniSleep");
+    const heroMiniKmEl = document.getElementById("heroMiniKm");
+    const heroMiniFluidsEl = document.getElementById("heroMiniFluids");
+    const heroScoreValueEl = document.getElementById("heroScoreValue");
+    const heroScoreChipEl = document.getElementById("heroScoreChip");
+    const heroSummaryBodyEl = document.getElementById("heroSummaryBody");
+    const heroSummaryTagsEl = document.getElementById("heroSummaryTags");
+
+    const heroBarTrainingEl = document.getElementById("heroBarTraining");
+    const heroBarSleepEl = document.getElementById("heroBarSleep");
+    const heroBarFluidsEl = document.getElementById("heroBarFluids");
+    const heroBarWeightEl = document.getElementById("heroBarWeight");
+    const heroBarLoadEl = document.getElementById("heroBarLoad");
+
+    let weeklyKmChart = null;
+    let trimpChart = null;
+    let sleepHydrationChart = null;
+    let weightChart = null;
+
+    // --- Settings UI ---
     function initSettingsUI() {
       if (settings.raceDate) raceDateInput.value = settings.raceDate;
       if (settings.targetKm != null) targetKmInput.value = settings.targetKm;
@@ -807,15 +1223,9 @@
 
     function saveSettings() {
       settings.raceDate = raceDateInput.value || "";
-
-      var tk = parseNumber(targetKmInput.value);
-      settings.targetKm = tk != null ? tk : 90;
-
-      var ts = parseNumber(targetSleepInput.value);
-      settings.targetSleep = ts != null ? ts : 7.5;
-
-      var tf = parseNumber(targetFluidsInput.value);
-      settings.targetFluids = tf != null ? tf : 2.5;
+      settings.targetKm = parseNumber(targetKmInput.value) ?? 90;
+      settings.targetSleep = parseNumber(targetSleepInput.value) ?? 7.5;
+      settings.targetFluids = parseNumber(targetFluidsInput.value) ?? 2.5;
 
       saveState(STORAGE_SETTINGS_KEY, settings);
       updateRaceSummary();
@@ -825,27 +1235,27 @@
     function updateRaceSummary() {
       raceSummaryEl.innerHTML = "";
 
-      var today = new Date();
+      const today = new Date();
       today.setHours(0,0,0,0);
 
-      var raceDateStr = settings.raceDate;
-      var blocks = "";
+      const raceDateStr = settings.raceDate;
+      let blocks = "";
 
       if (raceDateStr) {
-        var raceDate = new Date(raceDateStr + "T00:00:00");
-        var diffMs = raceDate.getTime() - today.getTime();
-        var diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+        const raceDate = new Date(raceDateStr + "T00:00:00");
+        const diffMs = raceDate.getTime() - today.getTime();
+        const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
 
-        var statusText = "";
-        var tagClass = "tag-ok";
+        let statusText = "";
+        let tagClass = "tag-ok";
 
         if (diffDays > 0) {
           statusText = diffDays + " Tage bis zur TorTour";
-          if (diffDays < 7) {
+          if (diffDays < 30) {
+            tagClass = "tag-warn";
+          } else if (diffDays < 7) {
             tagClass = "tag-bad";
             statusText = "Race Week – " + diffDays + " Tage";
-          } else if (diffDays < 30) {
-            tagClass = "tag-warn";
           }
         } else if (diffDays === 0) {
           statusText = "HEUTE ist TorTour-Day!";
@@ -855,80 +1265,83 @@
           tagClass = "tag-warn";
         }
 
-        blocks +=
-          '<div class="summary-card">' +
-            '<div class="summary-label">Race-Countdown</div>' +
-            '<div class="summary-value">' + statusText + '</div>' +
-            '<div class="' + tagClass + '">Race Date: ' + raceDate.toLocaleDateString("de-DE") + '</div>' +
-          '</div>';
+        blocks += `
+          <div class="summary-card">
+            <div class="summary-label">Race-Countdown</div>
+            <div class="summary-value">${statusText}</div>
+            <div class="${tagClass}">Renn-Datum: ${raceDate.toLocaleDateString("de-DE")}</div>
+          </div>
+        `;
       } else {
-        blocks +=
-          '<div class="summary-card">' +
-            '<div class="summary-label">Race-Countdown</div>' +
-            '<div class="summary-value">Noch kein Datum gesetzt</div>' +
-            '<div class="tag-warn">Trage das Renn-Datum ein, um den Countdown zu aktivieren.</div>' +
-          '</div>';
+        blocks += `
+          <div class="summary-card">
+            <div class="summary-label">Race-Countdown</div>
+            <div class="summary-value">Noch kein Datum gesetzt</div>
+            <div class="tag-warn">Trage das Renn-Datum ein, um den Countdown zu aktivieren.</div>
+          </div>
+        `;
       }
 
-      blocks +=
-        '<div class="summary-card">' +
-          '<div class="summary-label">Ziel-Wochenkilometer</div>' +
-          '<div class="summary-value">' + (settings.targetKm != null ? settings.targetKm + ' km' : '90 km (Standard)') + '</div>' +
-          '<div class="tag-ok">Solider Ultra-Bereich für deine TorTour-Basis.</div>' +
-        '</div>' +
-        '<div class="summary-card">' +
-          '<div class="summary-label">Ziel-Schlaf</div>' +
-          '<div class="summary-value">' + (settings.targetSleep != null ? settings.targetSleep + ' h / Tag' : '7.5 h / Tag') + '</div>' +
-          '<div class="tag-ok">Recovery-Fokus – Schlaf ist dein wichtigster Regenerationsfaktor.</div>' +
-        '</div>' +
-        '<div class="summary-card">' +
-          '<div class="summary-label">Ziel-Flüssigkeit</div>' +
-          '<div class="summary-value">' + (settings.targetFluids != null ? settings.targetFluids + ' L / Tag' : '2.5 L / Tag') + '</div>' +
-          '<div class="tag-ok">Hydration als Grundlage für lange Sessions.</div>' +
-        '</div>';
+      blocks += `
+        <div class="summary-card">
+          <div class="summary-label">Ziel-Wochenkilometer</div>
+          <div class="summary-value">${settings.targetKm != null ? settings.targetKm + " km" : "90 km (Standard)"}</div>
+          <div class="tag-ok">Solider Ultra-Bereich für die TorTour-Basis.</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Ziel-Schlaf</div>
+          <div class="summary-value">${settings.targetSleep != null ? settings.targetSleep + " h / Tag" : "7.5 h / Tag"}</div>
+          <div class="tag-ok">Schlaf als zentrales Recovery-Element.</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Ziel-Flüssigkeit</div>
+          <div class="summary-value">${settings.targetFluids != null ? settings.targetFluids + " L / Tag" : "2.5 L / Tag"}</div>
+          <div class="tag-ok">Hydration als Grundlage für lange Einheiten.</div>
+        </div>
+      `;
 
       raceSummaryEl.innerHTML = blocks;
     }
 
     function getMonday(dateString) {
-      var d = new Date(dateString + "T00:00:00");
-      var day = d.getDay(); 
-      var diff = (day === 0 ? -6 : 1 - day);
+      const d = new Date(dateString + "T00:00:00");
+      const day = d.getDay(); // 0=So,1=Mo
+      const diff = (day === 0 ? -6 : 1 - day);
       d.setDate(d.getDate() + diff);
       d.setHours(0,0,0,0);
       return d;
     }
 
     function formatDateShort(dateString) {
-      var d = new Date(dateString + "T00:00:00");
+      const d = new Date(dateString + "T00:00:00");
       return d.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" });
     }
 
+    // --- Level / XP-Berechnung ---
     function computeDailyXP(entry, settings) {
-      var targetKm = settings.targetKm || 90;
-      var targetSleep = settings.targetSleep || 7.5;
-      var targetFluids = settings.targetFluids || 2.5;
+      const targetKm = settings.targetKm || 90;
+      const targetSleep = settings.targetSleep || 7.5;
+      const targetFluids = settings.targetFluids || 2.5;
 
-      var xp = 0;
+      let xp = 0;
 
-      var dist = parseNumber(entry.distanceKm);
-      var dur = parseNumber(entry.durationMin);
-      var rpe = parseNumber(entry.rpe);
-      var sleep = parseNumber(entry.sleepHours);
-      var fluids = parseNumber(entry.fluidsLiters);
-      var wb = parseNumber(entry.wellbeing);
-
-      var isTraining = dur != null && dur > 0;
+      const dist = parseNumber(entry.distanceKm);
+      const dur = parseNumber(entry.durationMin);
+      const rpe = parseNumber(entry.rpe);
+      const sleep = parseNumber(entry.sleepHours);
+      const fluids = parseNumber(entry.fluidsLiters);
+      const wb = parseNumber(entry.wellbeing);
+      const isTraining = dist != null && dist > 0 && dur != null && dur > 0;
 
       if (isTraining) {
         xp += 10;
       } else {
-        xp += 3;
+        xp += 3; // Restday zählt auch
       }
 
       if (dist != null && dist > 0 && targetKm > 0) {
-        var targetDailyKm = targetKm / 7;
-        var ratio = dist / targetDailyKm;
+        const targetDailyKm = targetKm / 7;
+        const ratio = dist / targetDailyKm;
         if (ratio >= 0.8 && ratio <= 1.5) {
           xp += 10;
         } else if (ratio > 0.3) {
@@ -939,17 +1352,17 @@
       }
 
       if (sleep != null) {
-        var rs = sleep / targetSleep;
-        if (rs >= 0.95) xp += 6;
-        else if (rs >= 0.8) xp += 4;
-        else if (rs >= 0.6) xp += 2;
+        const ratio = sleep / targetSleep;
+        if (ratio >= 0.95) xp += 6;
+        else if (ratio >= 0.8) xp += 4;
+        else if (ratio >= 0.6) xp += 2;
       }
 
       if (fluids != null) {
-        var rf = fluids / targetFluids;
-        if (rf >= 0.95) xp += 5;
-        else if (rf >= 0.8) xp += 3;
-        else if (rf >= 0.6) xp += 1;
+        const ratio = fluids / targetFluids;
+        if (ratio >= 0.95) xp += 5;
+        else if (ratio >= 0.8) xp += 3;
+        else if (ratio >= 0.6) xp += 1;
       }
 
       if (wb != null) {
@@ -969,10 +1382,6 @@
         xp += 5;
       }
 
-      if (entry.omega3 && entry.zink && entry.magnesium && entry.d3) {
-        xp += 3;
-      }
-
       if (xp < 3) xp = 3;
       if (xp > 35) xp = 35;
 
@@ -980,45 +1389,39 @@
     }
 
     function computeTotalXP(entries, settings) {
-      var total = 0;
-      for (var i = 0; i < entries.length; i++) {
-        var e = entries[i];
+      let total = 0;
+      for (const e of entries) {
         if (!e.date) continue;
         total += computeDailyXP(e, settings);
       }
       return Math.round(total);
     }
 
-    function getProgressFromXP(totalXP) {
-      var xpPerStep = 50;
-      var score = Math.floor(totalXP / xpPerStep);
-      if (score < 0) score = 0;
-      if (score > 100) score = 100;
-      var currScore = score;
-      var nextScore = score < 100 ? score + 1 : 100;
-      var xpIntoStep = totalXP - currScore * xpPerStep;
-      return {
-        score: score,
-        currScore: currScore,
-        nextScore: nextScore,
-        xpIntoStep: xpIntoStep,
-        xpPerStep: xpPerStep
-      };
+    function getLevelFromXP(totalXP) {
+      const maxLevel = 100;
+      const xpPerLevel = 50;
+      let level = Math.floor(totalXP / xpPerLevel) + 1;
+      if (level > maxLevel) level = maxLevel;
+      const currLevelXp = (level - 1) * xpPerLevel;
+      const nextLevelXp = level < maxLevel ? level * xpPerLevel : currLevelXp;
+      const xpIntoLevel = totalXP - currLevelXp;
+      return { level, currLevelXp, nextLevelXp, xpIntoLevel, xpPerLevel };
     }
 
+    // --- Export / Import ---
     function exportJSON() {
-      var data = {
-        version: 2,
+      const data = {
+        version: 1,
         exportedAt: new Date().toISOString(),
-        settings: settings,
-        entries: entries
+        settings,
+        entries
       };
-      var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      var dateStr = new Date().toISOString().slice(0,10);
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const dateStr = new Date().toISOString().slice(0,10);
       a.href = url;
-      a.download = "project230_backup_" + dateStr + ".json";
+      a.download = `project230_backup_${dateStr}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -1030,15 +1433,14 @@
         alert("Keine Einträge vorhanden, die exportiert werden könnten.");
         return;
       }
-      var header = [
+      const header = [
         "date","weight","trainingType","distanceKm","durationMin","rpe",
         "sleepHours","sleepQuality","fluidsLiters","wellbeing",
-        "nightRun","hasPain","omega3","zink","magnesium","d3","painNote","comments"
+        "nightRun","hasPain","painNote","comments"
       ];
-      var rows = [header];
+      const rows = [header];
 
-      for (var i = 0; i < entries.length; i++) {
-        var e = entries[i];
+      for (const e of entries) {
         rows.push([
           e.date || "",
           e.weight != null ? e.weight : "",
@@ -1052,31 +1454,27 @@
           e.wellbeing != null ? e.wellbeing : "",
           e.nightRun ? "1" : "0",
           e.hasPain ? "1" : "0",
-          e.omega3 ? "1" : "0",
-          e.zink ? "1" : "0",
-          e.magnesium ? "1" : "0",
-          e.d3 ? "1" : "0",
           (e.painNote || "").replace(/"/g, '""'),
           (e.comments || "").replace(/"/g, '""')
         ]);
       }
 
-      var csvContent = rows.map(function(r) {
-        return r.map(function(cell) {
-          var str = String(cell);
-          if (str.indexOf(",") !== -1 || str.indexOf("\"") !== -1 || str.indexOf("\n") !== -1) {
-            return "\"" + str.replace(/"/g, '""') + "\"";
+      const csvContent = rows.map(r =>
+        r.map(cell => {
+          const str = String(cell);
+          if (str.includes(",") || str.includes("\"") || str.includes("\n")) {
+            return `"${str.replace(/"/g, '""')}"`;
           }
           return str;
-        }).join(",");
-      }).join("\n");
+        }).join(",")
+      ).join("\n");
 
-      var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      var dateStr2 = new Date().toISOString().slice(0,10);
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const dateStr = new Date().toISOString().slice(0,10);
       a.href = url;
-      a.download = "project230_entries_" + dateStr2 + ".csv";
+      a.download = `project230_entries_${dateStr}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -1089,63 +1487,41 @@
     }
 
     function handleImportFile(event) {
-      var file = event.target.files[0];
+      const file = event.target.files[0];
       if (!file) return;
 
-      var reader = new FileReader();
+      const reader = new FileReader();
       reader.onload = function(ev) {
         try {
-          var text = ev.target.result;
-          var data = JSON.parse(text);
+          const text = ev.target.result;
+          const data = JSON.parse(text);
 
           if (!data || (!Array.isArray(data.entries) && !Array.isArray(data))) {
             alert("Die JSON-Datei enthält kein erwartetes Format.");
             return;
           }
 
-          var importedEntries;
-          var importedSettings;
+          let importedEntries;
+          let importedSettings;
 
           if (Array.isArray(data)) {
             importedEntries = data;
             importedSettings = settings;
           } else {
             importedEntries = Array.isArray(data.entries) ? data.entries : [];
-            importedSettings = data.settings || {};
+            importedSettings = data.settings || settings;
           }
 
-          if (!confirm("Backup mit " + importedEntries.length + " Einträgen laden und bestehende Daten überschreiben?")) {
+          if (!confirm(`Backup mit ${importedEntries.length} Einträgen laden und bestehende Daten überschreiben?`)) {
             return;
           }
 
-          entries = importedEntries.map(function(e) {
-            return {
-              date: e.date || "",
-              weight: e.weight != null ? e.weight : null,
-              trainingType: e.trainingType || "",
-              distanceKm: e.distanceKm != null ? e.distanceKm : null,
-              durationMin: e.durationMin != null ? e.durationMin : null,
-              rpe: e.rpe != null ? e.rpe : null,
-              sleepHours: e.sleepHours != null ? e.sleepHours : null,
-              sleepQuality: e.sleepQuality || "",
-              fluidsLiters: e.fluidsLiters != null ? e.fluidsLiters : null,
-              wellbeing: e.wellbeing != null ? e.wellbeing : null,
-              nightRun: !!e.nightRun,
-              hasPain: !!e.hasPain,
-              omega3: !!e.omega3,
-              zink: !!e.zink,
-              magnesium: !!e.magnesium,
-              d3: !!e.d3,
-              painNote: e.painNote || "",
-              comments: e.comments || ""
-            };
-          });
-
+          entries = importedEntries;
           settings = {
             raceDate: importedSettings.raceDate || "",
-            targetKm: importedSettings.targetKm != null ? importedSettings.targetKm : 90,
-            targetSleep: importedSettings.targetSleep != null ? importedSettings.targetSleep : 7.5,
-            targetFluids: importedSettings.targetFluids != null ? importedSettings.targetFluids : 2.5
+            targetKm: importedSettings.targetKm ?? settings.targetKm ?? 90,
+            targetSleep: importedSettings.targetSleep ?? settings.targetSleep ?? 7.5,
+            targetFluids: importedSettings.targetFluids ?? settings.targetFluids ?? 2.5
           };
 
           saveState(STORAGE_ENTRIES_KEY, entries);
@@ -1154,106 +1530,99 @@
           initSettingsUI();
           updateRaceSummary();
           updateStats();
-          alert("Backup erfolgreich importiert. Deine Project-230-Daten wurden geladen.");
+          alert("Backup erfolgreich importiert.");
         } catch (err) {
           console.error("Fehler beim Import:", err);
-          alert("Fehler beim Import der JSON-Datei. Prüfe, ob es ein gültiges Backup ist.");
+          alert("Fehler beim Import der JSON-Datei. Bitte prüfen, ob es ein gültiges Backup ist.");
         }
       };
       reader.readAsText(file);
     }
 
+    // --- Stats, Score, Charts & Coaching ---
     function updateStats() {
       statsSummaryEl.innerHTML = "";
       if (coachFeedbackEl) coachFeedbackEl.textContent = "";
 
       if (!entries || entries.length === 0) {
-        statsSummaryEl.innerHTML =
-          '<div class="summary-card">' +
-            '<div class="summary-label">Noch keine Daten</div>' +
-            '<div class="summary-value">Starte mit deinem ersten Eintrag 👣</div>' +
-            '<div class="tag-warn">Ein paar Tage loggen, dann gibt es Score, Fortschritt & Coaching.</div>' +
-          '</div>';
+        statsSummaryEl.innerHTML = `
+          <div class="summary-card">
+            <div class="summary-label">Noch keine Daten</div>
+            <div class="summary-value">Starte mit deinem ersten Eintrag.</div>
+            <div class="tag-warn">Ein paar Tage loggen, dann gibt es Score, Level & Coaching.</div>
+          </div>
+        `;
         entriesTableBody.innerHTML = "";
+        updateCharts({});
         updateCoaching({}, {});
+        updateHero({}, {}, {}, {});
         return;
       }
 
-      var sorted = entries.slice().sort(function(a, b) {
-        return (a.date || "").localeCompare(b.date || "");
-      });
+      const sorted = [...entries].sort((a, b) => (a.date || "").localeCompare(b.date || ""));
 
-      var today = new Date();
+      const today = new Date();
       today.setHours(0,0,0,0);
-      var sevenDaysAgo = new Date(today.getTime() - 6 * 24*60*60*1000);
-      var threeDaysAgo = new Date(today.getTime() - 2 * 24*60*60*1000);
-      var fourteenDaysAgo = new Date(today.getTime() - 13 * 24*60*60*1000);
-      var thirtyDaysAgo = new Date(today.getTime() - 30 * 24*60*60*1000);
-      var thirtyDaysAgoStr = thirtyDaysAgo.toISOString().substring(0,10);
+      const sevenDaysAgo = new Date(today.getTime() - 6 * 24*60*60*1000);
+      const threeDaysAgo = new Date(today.getTime() - 2 * 24*60*60*1000);
+      const fourteenDaysAgo = new Date(today.getTime() - 13 * 24*60*60*1000);
 
-      var sumKm = 0;
-      var sumSleep = 0;
-      var sumFluids = 0;
-      var countSleep = 0;
-      var countFluids = 0;
+      let sumKm = 0;
+      let sumSleep = 0;
+      let sumFluids = 0;
+      let countSleep = 0;
+      let countFluids = 0;
 
-      var trimp7 = 0;
-      var trimp3 = 0;
+      let trimp7 = 0;
+      let trimp3 = 0;
 
-      var latestWeight = null;
-      var weight30days = null;
+      const thirtyDaysAgo = new Date(today.getTime() - 30 * 24*60*60*1000);
+      const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().substring(0,10);
 
-      var weeklyKmMap = {};
-      var dailyTrimpMap = {};
-      var sleepMap = {};
-      var fluidsMap = {};
-      var weightSeries = [];
-      var suppMap = {};
+      let latestWeight = null;
+      let weight30days = null;
 
-      var last7WellbeingSum = 0;
-      var last7WellbeingCount = 0;
-      var painCountLast7 = 0;
+      const weeklyKmMap = {};
+      const dailyTrimpMap = {};
+      const sleepMap = {};
+      const fluidsMap = {};
+      const weightSeries = [];
 
-      for (var i = 0; i < sorted.length; i++) {
-        var e = sorted[i];
+      let last7WellbeingSum = 0;
+      let last7WellbeingCount = 0;
+      let painCountLast7 = 0;
+
+      for (const e of sorted) {
         if (!e.date) continue;
-        var d = new Date(e.date + "T00:00:00");
-        var dateStr = e.date;
+        const d = new Date(e.date + "T00:00:00");
+        const dateStr = e.date;
 
         if (d >= sevenDaysAgo && d <= today) {
-          var dist = parseNumber(e.distanceKm);
+          const dist = parseNumber(e.distanceKm);
           if (dist != null) sumKm += dist;
 
-          var sleep = parseNumber(e.sleepHours);
+          const sleep = parseNumber(e.sleepHours);
           if (sleep != null) { sumSleep += sleep; countSleep++; }
 
-          var fluids = parseNumber(e.fluidsLiters);
+          const fluids = parseNumber(e.fluidsLiters);
           if (fluids != null) { sumFluids += fluids; countFluids++; }
 
-          var wb = parseNumber(e.wellbeing);
+          const wb = parseNumber(e.wellbeing);
           if (wb != null) { last7WellbeingSum += wb; last7WellbeingCount++; }
 
           if (e.hasPain === true) painCountLast7++;
-
-          if (!suppMap[dateStr]) {
-            suppMap[dateStr] = { omega3: false, zink: false, magnesium: false, d3: false };
-          }
-          if (e.omega3) suppMap[dateStr].omega3 = true;
-          if (e.zink) suppMap[dateStr].zink = true;
-          if (e.magnesium) suppMap[dateStr].magnesium = true;
-          if (e.d3) suppMap[dateStr].d3 = true;
         }
 
-        var dur = parseNumber(e.durationMin);
-        var rpeVal = parseNumber(e.rpe);
-        var trimp = 0;
+        const dur = parseNumber(e.durationMin);
+        const rpeVal = parseNumber(e.rpe);
+        let trimp = 0;
         if (dur != null && rpeVal != null) {
           trimp = dur * rpeVal;
         }
         if (d >= sevenDaysAgo && d <= today) trimp7 += trimp;
         if (d >= threeDaysAgo && d <= today) trimp3 += trimp;
 
-        var w = parseNumber(e.weight);
+        const w = parseNumber(e.weight);
         if (w != null) {
           if (!latestWeight || e.date > latestWeight.date) {
             latestWeight = { date: e.date, weight: w };
@@ -1266,10 +1635,10 @@
           weightSeries.push({ date: e.date, weight: w });
         }
 
-        var distForWeekly = parseNumber(e.distanceKm);
+        const distForWeekly = parseNumber(e.distanceKm);
         if (distForWeekly != null && distForWeekly > 0) {
-          var monday = getMonday(e.date);
-          var mondayStr = monday.toISOString().substring(0,10);
+          const monday = getMonday(e.date);
+          const mondayStr = monday.toISOString().substring(0,10);
           if (!weeklyKmMap[mondayStr]) weeklyKmMap[mondayStr] = 0;
           weeklyKmMap[mondayStr] += distForWeekly;
         }
@@ -1278,67 +1647,40 @@
         dailyTrimpMap[dateStr] += trimp;
 
         if (d >= fourteenDaysAgo && d <= today) {
-          var s14 = parseNumber(e.sleepHours);
-          var f14 = parseNumber(e.fluidsLiters);
-          if (s14 != null) sleepMap[dateStr] = s14;
-          if (f14 != null) fluidsMap[dateStr] = f14;
+          const s = parseNumber(e.sleepHours);
+          const f = parseNumber(e.fluidsLiters);
+          if (s != null) sleepMap[dateStr] = s;
+          if (f != null) fluidsMap[dateStr] = f;
         }
       }
 
-      var avgSleep = countSleep > 0 ? (sumSleep / countSleep) : null;
-      var avgFluids = countFluids > 0 ? (sumFluids / countFluids) : null;
-      var avgWellbeing = last7WellbeingCount > 0 ? last7WellbeingSum / last7WellbeingCount : null;
+      const avgSleep = countSleep > 0 ? (sumSleep / countSleep) : null;
+      const avgFluids = countFluids > 0 ? (sumFluids / countFluids) : null;
+      const avgWellbeing = last7WellbeingCount > 0 ? last7WellbeingSum / last7WellbeingCount : null;
 
-      var suppDates = Object.keys(suppMap);
-      var suppDaysAll = 0;
-      var suppTrackedDays = suppDates.length;
-      for (var j = 0; j < suppDates.length; j++) {
-        var dStr = suppDates[j];
-        var daySupp = suppMap[dStr];
-        if (daySupp.omega3 && daySupp.zink && daySupp.magnesium && daySupp.d3) {
-          suppDaysAll++;
-        }
-      }
-
-      function buildTag(current, target, unit, direction) {
-        if (direction === undefined) direction = "higher-better";
+      function buildTag(current, target, unit, direction = "higher-better") {
         if (target == null || current == null) {
           return '<div class="tag-warn">Noch zu wenige Daten oder kein Ziel gesetzt.</div>';
         }
-        var diff = current - target;
-        var diffAbs = Math.abs(diff).toFixed(1);
+        let diff = current - target;
+        const diffAbs = Math.abs(diff).toFixed(1);
 
         if (direction === "higher-better") {
           if (current >= target * 0.95 && current <= target * 1.1) {
-            return '<div class="tag-ok">Sehr nah am Ziel (' + (diff >= 0 ? "+" : "–") + diffAbs + ' ' + unit + ')</div>';
+            return `<div class="tag-ok">Sehr nah am Ziel (${diff >= 0 ? "+" : "–"}${diffAbs} ${unit})</div>`;
           } else if (current >= target * 0.7) {
-            return '<div class="tag-warn">Okay, aber noch Luft nach oben (' + (diff >= 0 ? "+" : "–") + diffAbs + ' ' + unit + ')</div>';
+            return `<div class="tag-warn">Okay, aber noch Luft nach oben (${diff >= 0 ? "+" : "–"}${diffAbs} ${unit})</div>`;
           } else {
-            return '<div class="tag-bad">Deutlich unter Ziel (' + (diff >= 0 ? "+" : "–") + diffAbs + ' ' + unit + ')</div>';
+            return `<div class="tag-bad">Deutlich unter Ziel (${diff >= 0 ? "+" : "–"}${diffAbs} ${unit})</div>`;
           }
         } else {
           if (current <= target * 1.05) {
-            return '<div class="tag-ok">Im Zielbereich (' + (diff >= 0 ? "+" : "–") + diffAbs + ' ' + unit + ')</div>';
+            return `<div class="tag-ok">Im Zielbereich (${diff >= 0 ? "+" : "–"}${diffAbs} ${unit})</div>`;
           } else if (current <= target * 1.2) {
-            return '<div class="tag-warn">Etwas drüber (' + diffAbs + ' ' + unit + ') – beobachten.</div>';
+            return `<div class="tag-warn">Etwas drüber (${diffAbs} ${unit}) – beobachten.</div>`;
           } else {
-            return '<div class="tag-bad">Deutlich drüber (' + diffAbs + ' ' + unit + ') – Belastung prüfen.</div>';
+            return `<div class="tag-bad">Deutlich drüber (${diffAbs} ${unit}) – Belastung prüfen.</div>`;
           }
-        }
-      }
-
-      function buildSuppTag(suppDaysAll, suppTrackedDays) {
-        if (suppTrackedDays === 0) {
-          return '<div class="tag-warn">Noch keine Tage mit Eintrag in den letzten 7 Tagen.</div>';
-        }
-        var ratio = suppDaysAll / suppTrackedDays;
-        var percent = Math.round(ratio * 100);
-        if (ratio >= 0.8) {
-          return '<div class="tag-ok">Sehr stabil: an ' + percent + '% der erfassten Tage alle Supplements genommen.</div>';
-        } else if (ratio >= 0.5) {
-          return '<div class="tag-warn">Okay, aber ausbaufähig: an ' + percent + '% der erfassten Tage komplett.</div>';
-        } else {
-          return '<div class="tag-bad">Erinnerung: Supplements nur an ' + percent + '% der erfassten Tage komplett – wenn sie Teil deiner Strategie sind, gern konstanter.</div>';
         }
       }
 
@@ -1348,62 +1690,62 @@
         return { label: "Rot", className: "tag-bad" };
       }
 
-      var kmScore = 50;
-      var sleepScore = 50;
-      var fluidsScore = 50;
-      var weightScore = 50;
-      var loadScore = 50;
+      let kmScore = 50;
+      let sleepScore = 50;
+      let fluidsScore = 50;
+      let weightScore = 50;
+      let loadScore = 50;
 
-      var targetKm = settings.targetKm || 90;
+      const targetKm = settings.targetKm || 90;
 
       if (targetKm > 0 && sumKm > 0) {
-        var ratioKm = sumKm / targetKm;
-        if (ratioKm >= 0.8 && ratioKm <= 1.1) kmScore = 90;
-        else if (ratioKm >= 0.6 && ratioKm <= 1.3) kmScore = 75;
-        else if (ratioKm >= 0.4 && ratioKm <= 1.6) kmScore = 55;
+        const ratio = sumKm / targetKm;
+        if (ratio >= 0.8 && ratio <= 1.1) kmScore = 90;
+        else if (ratio >= 0.6 && ratio <= 1.3) kmScore = 75;
+        else if (ratio >= 0.4 && ratio <= 1.6) kmScore = 55;
         else kmScore = 35;
       } else if (sumKm > 0) {
         kmScore = 70;
       }
 
-      var targetSleep = settings.targetSleep || 7.5;
+      const targetSleep = settings.targetSleep || 7.5;
       if (avgSleep != null) {
-        var ratioSl = avgSleep / targetSleep;
-        if (ratioSl >= 0.95 && ratioSl <= 1.1) sleepScore = 90;
-        else if (ratioSl >= 0.8 && ratioSl <= 1.2) sleepScore = 75;
-        else if (ratioSl >= 0.6 && ratioSl <= 1.4) sleepScore = 55;
+        const ratio = avgSleep / targetSleep;
+        if (ratio >= 0.95 && ratio <= 1.1) sleepScore = 90;
+        else if (ratio >= 0.8 && ratio <= 1.2) sleepScore = 75;
+        else if (ratio >= 0.6 && ratio <= 1.4) sleepScore = 55;
         else sleepScore = 35;
       }
 
-      var targetFluids = settings.targetFluids || 2.5;
+      const targetFluids = settings.targetFluids || 2.5;
       if (avgFluids != null) {
-        var ratioFl = avgFluids / targetFluids;
-        if (ratioFl >= 0.95 && ratioFl <= 1.1) fluidsScore = 90;
-        else if (ratioFl >= 0.8 && ratioFl <= 1.2) fluidsScore = 75;
-        else if (ratioFl >= 0.6 && ratioFl <= 1.4) fluidsScore = 55;
+        const ratio = avgFluids / targetFluids;
+        if (ratio >= 0.95 && ratio <= 1.1) fluidsScore = 90;
+        else if (ratio >= 0.8 && ratio <= 1.2) fluidsScore = 75;
+        else if (ratio >= 0.6 && ratio <= 1.4) fluidsScore = 55;
         else fluidsScore = 35;
       }
 
       if (latestWeight && weight30days) {
-        var diffW = latestWeight.weight - weight30days.weight;
-        var diffAbsW = Math.abs(diffW);
-        if (diffAbsW < 0.5) weightScore = 90;
-        else if (diffAbsW < 1.5) weightScore = 75;
-        else if (diffAbsW < 3) weightScore = 55;
+        const diff = latestWeight.weight - weight30days.weight;
+        const diffAbs = Math.abs(diff);
+        if (diffAbs < 0.5) weightScore = 90;
+        else if (diffAbs < 1.5) weightScore = 75;
+        else if (diffAbs < 3) weightScore = 55;
         else weightScore = 35;
       } else if (latestWeight && !weight30days) {
         weightScore = 65;
       }
 
       if (trimp7 > 0) {
-        var ratioLoad = trimp3 / trimp7;
-        if (ratioLoad >= 0.35 && ratioLoad <= 0.55) loadScore = 90;
-        else if (ratioLoad >= 0.25 && ratioLoad <= 0.65) loadScore = 75;
-        else if (ratioLoad >= 0.15 && ratioLoad <= 0.75) loadScore = 55;
+        const ratio = trimp3 / trimp7;
+        if (ratio >= 0.35 && ratio <= 0.55) loadScore = 90;
+        else if (ratio >= 0.25 && ratio <= 0.65) loadScore = 75;
+        else if (ratio >= 0.15 && ratio <= 0.75) loadScore = 55;
         else loadScore = 35;
       }
 
-      var overallScore = Math.round(
+      const overallScore = Math.round(
         kmScore * 0.4 +
         sleepScore * 0.25 +
         fluidsScore * 0.15 +
@@ -1411,379 +1753,578 @@
         loadScore * 0.1
       );
 
-      var overallText;
+      let overallText = "";
       if (overallScore >= 85) {
-        overallText = "Sehr gut im Plan – deine Vorbereitung auf die 230 km wirkt stabil und durchdacht.";
+        overallText = "Sehr gut im Plan – Vorbereitung wirkt stabil und durchdacht.";
       } else if (overallScore >= 70) {
-        overallText = "Gut unterwegs – ein paar Stellschrauben (v.a. Schlaf/Struktur) bringen dich noch ruhiger Richtung Race-Day.";
+        overallText = "Gut unterwegs – ein paar Stellschrauben (Schlaf/Struktur) verbessern die Stabilität weiter.";
       } else if (overallScore >= 55) {
         overallText = "Solide Basis, aber noch nicht richtig stabil. Fokus auf Routine, Recovery & klare Wochenstruktur.";
       } else {
-        overallText = "Achtung: Vorbereitung wirkt wackelig. Umfang, Schlaf & Hydration bewusst prüfen, bevor du weiter hochdrehst.";
+        overallText = "Achtung: Vorbereitung wirkt wackelig. Umfang, Schlaf & Hydration bewusst prüfen und ggf. anpassen.";
       }
 
-      var kmLevel = levelFromScore(kmScore);
-      var sleepLevel = levelFromScore(sleepScore);
-      var fluidsLevel = levelFromScore(fluidsScore);
-      var weightLevel = levelFromScore(weightScore);
-      var loadLevel = levelFromScore(loadScore);
+      const kmLevel = levelFromScore(kmScore);
+      const sleepLevel = levelFromScore(sleepScore);
+      const fluidsLevel = levelFromScore(fluidsScore);
+      const weightLevel = levelFromScore(weightScore);
+      const loadLevel = levelFromScore(loadScore);
 
-      var totalXP = computeTotalXP(sorted, settings);
-      var progress = getProgressFromXP(totalXP);
-      var levelPercent = Math.min(100, Math.max(0, progress.score));
+      const totalXP = computeTotalXP(sorted, settings);
+      const progress = getLevelFromXP(totalXP);
+      const levelPercent = progress.xpPerLevel > 0
+        ? Math.min(100, Math.max(0, (progress.xpIntoLevel / progress.xpPerLevel) * 100))
+        : 0;
 
-      var summaryHtml = "";
+      let summaryHtml = "";
 
-      summaryHtml +=
-        '<div class="summary-card">' +
-          '<div class="summary-label">Project 230 – Gesamtfortschritt</div>' +
-          '<div class="summary-value-big">' + progress.score + ' / 100</div>' +
-          '<div class="progress-bar">' +
-            '<div class="progress-fill" style="width: ' + levelPercent.toFixed(1) + '%;"></div>' +
-          '</div>' +
-          '<div class="level-subtext">' +
-            'Trainingspunkte gesamt: ' + totalXP + ' · basiert auf allen eingetragenen Tagen (Training, Recovery & Supplements).' +
-          '</div>' +
-          '<div class="' +
-            (progress.score >= 80 ? 'tag-ok' : (progress.score >= 60 ? 'tag-warn' : 'tag-bad')) +
-          '">' +
-            (progress.score >= 80
-              ? 'Hoher Vorbereitungsstatus – halte Struktur & Gesundheit im Fokus, dann passt Project 230 sehr gut.'
-              : progress.score >= 60
-                ? 'Gute Basis – mit etwas mehr Konstanz bei Schlaf/Umfang kannst du den Status weiter ausbauen.'
-                : 'Aufbauphase – jede saubere Woche bringt deinen Project-230-Fortschritt deutlich nach vorn.') +
-          '</div>' +
-        '</div>';
+      // Die restlichen Detailkarten wie bisher
+      summaryHtml += `
+        <div class="summary-card">
+          <div class="summary-label">Wochenkilometer (letzte 7 Tage)</div>
+          <div class="summary-value">${sumKm.toFixed(1)} km</div>
+          ${buildTag(sumKm, targetKm, "km/Woche", "higher-better")}
+        </div>
+      `;
 
-      summaryHtml +=
-        '<div class="summary-card">' +
-          '<div class="summary-label">Gesamt-Status Vorbereitung (letzte 7 Tage)</div>' +
-          '<div class="summary-value-big">' + overallScore + ' / 100</div>' +
-          '<div class="' + (overallScore >= 80 ? "tag-ok" : overallScore >= 60 ? "tag-warn" : "tag-bad") + '">' + overallText + '</div>' +
-          '<div class="ampel-row">' +
-            '<span class="' + kmLevel.className + '">Training (' + kmLevel.label + ')</span>' +
-            '<span class="' + sleepLevel.className + '">Schlaf (' + sleepLevel.label + ')</span>' +
-            '<span class="' + fluidsLevel.className + '">Flüssigkeit (' + fluidsLevel.label + ')</span>' +
-            '<span class="' + weightLevel.className + '">Gewicht (' + weightLevel.label + ')</span>' +
-            '<span class="' + loadLevel.className + '">Belastung (' + loadLevel.label + ')</span>' +
-          '</div>' +
-        '</div>';
+      summaryHtml += `
+        <div class="summary-card">
+          <div class="summary-label">Ø Schlaf (letzte 7 Tage)</div>
+          <div class="summary-value">${avgSleep != null ? avgSleep.toFixed(2) + " h" : "–"}</div>
+          ${buildTag(avgSleep, targetSleep, "h/Tag", "higher-better")}
+        </div>
+      `;
 
-      summaryHtml +=
-        '<div class="summary-card">' +
-          '<div class="summary-label">Wochenkilometer (Laufen, letzte 7 Tage)</div>' +
-          '<div class="summary-value">' + sumKm.toFixed(1) + ' km</div>' +
-          buildTag(sumKm, targetKm, 'km/Woche', 'higher-better') +
-        '</div>';
+      summaryHtml += `
+        <div class="summary-card">
+          <div class="summary-label">Ø Flüssigkeit (letzte 7 Tage)</div>
+          <div class="summary-value">${avgFluids != null ? avgFluids.toFixed(2) + " L" : "–"}</div>
+          ${buildTag(avgFluids, targetFluids, "L/Tag", "higher-better")}
+        </div>
+      `;
 
-      summaryHtml +=
-        '<div class="summary-card">' +
-          '<div class="summary-label">Ø Schlaf (letzte 7 Tage)</div>' +
-          '<div class="summary-value">' + (avgSleep != null ? avgSleep.toFixed(2) + ' h' : '–') + '</div>' +
-          buildTag(avgSleep, targetSleep, 'h/Tag', 'higher-better') +
-        '</div>';
-
-      summaryHtml +=
-        '<div class="summary-card">' +
-          '<div class="summary-label">Ø Flüssigkeit (letzte 7 Tage)</div>' +
-          '<div class="summary-value">' + (avgFluids != null ? avgFluids.toFixed(2) + ' L' : '–') + '</div>' +
-          buildTag(avgFluids, targetFluids, 'L/Tag', 'higher-better') +
-        '</div>';
-
-      var weightLine = "–";
-      var trendTag = '<div class="tag-warn">Noch zu wenige Daten für einen Trend.</div>';
+      let weightLine = "–";
+      let trendTag = '<div class="tag-warn">Noch zu wenige Daten für einen Trend.</div>';
 
       if (latestWeight) {
         weightLine = latestWeight.weight.toFixed(1) + " kg";
         if (weight30days) {
-          var diffW2 = latestWeight.weight - weight30days.weight;
-          var diffAbs2 = Math.abs(diffW2).toFixed(1);
-          if (Math.abs(diffW2) < 0.5) {
-            trendTag = '<div class="tag-ok">Gewicht stabil (±' + diffAbs2 + ' kg in 30 Tagen)</div>';
-          } else if (diffW2 < 0) {
-            trendTag = '<div class="tag-warn">Gewichtsabnahme (' + diffAbs2 + ' kg in 30 Tagen) – passt das zu deinem Plan?</div>';
+          const diff = latestWeight.weight - weight30days.weight;
+          const diffAbs = Math.abs(diff).toFixed(1);
+
+          if (Math.abs(diff) < 0.5) {
+            trendTag = `<div class="tag-ok">Gewicht stabil (±${diffAbs} kg in 30 Tagen)</div>`;
+          } else if (diff < 0) {
+            trendTag = `<div class="tag-warn">Gewichtsabnahme (${diffAbs} kg in 30 Tagen) – passt das zu deinem Plan?</div>`;
           } else {
-            trendTag = '<div class="tag-warn">Gewichtszunahme (' + diffAbs2 + ' kg in 30 Tagen) – bewusst so geplant?</div>';
+            trendTag = `<div class="tag-warn">Gewichtszunahme (${diffAbs} kg in 30 Tagen) – bewusst so geplant?</div>`;
           }
         }
       }
 
-      summaryHtml +=
-        '<div class="summary-card">' +
-          '<div class="summary-label">Aktuelles Gewicht</div>' +
-          '<div class="summary-value">' + weightLine + '</div>' +
-          trendTag +
-        '</div>';
-
-      summaryHtml +=
-        '<div class="summary-card">' +
-          '<div class="summary-label">Supplements (letzte 7 Tage)</div>' +
-          '<div class="summary-value">' +
-            (suppTrackedDays > 0 ? (suppDaysAll + ' / ' + suppTrackedDays + ' Tage komplett') : '–') +
-          '</div>' +
-          buildSuppTag(suppDaysAll, suppTrackedDays) +
-        '</div>';
+      summaryHtml += `
+        <div class="summary-card">
+          <div class="summary-label">Aktuelles Gewicht</div>
+          <div class="summary-value">${weightLine}</div>
+          ${trendTag}
+        </div>
+      `;
 
       statsSummaryEl.innerHTML = summaryHtml;
 
+      // Coach-Fazit
       if (coachFeedbackEl) {
-        var hints = [];
+        const hints = [];
 
-        if (kmScore < 60) hints.push("Trainingsumfang langsam, aber stetig steigern – max. ~10 % mehr Wochen-km als in der Vorwoche.");
-        else if (kmScore >= 80) hints.push("Training: Wochenkilometer liegen sehr gut im Zielbereich – Konstanz > Heldentaten.");
+        if (kmScore < 60) hints.push("Trainingsumfang langsam, aber stetig steigern (max. ~10 % mehr Wochen-km als in der Vorwoche).");
+        else if (kmScore >= 80) hints.push("Training: Wochenkilometer liegen gut im Zielbereich – Konstanz ist entscheidend.");
 
-        if (sleepScore < 60) hints.push("Schlaf: 1–2 Abende bewusst früher ins Bett, v.a. nach langen oder intensiven Einheiten.");
-        else if (sleepScore >= 80) hints.push("Schlaf: Erholung sieht stark aus – weiter so, das gibt viele stille Bonuspunkte.");
+        if (sleepScore < 60) hints.push("Schlaf: 1–2 Abende bewusst früher ins Bett, vor allem nach langen oder intensiven Einheiten.");
+        else if (sleepScore >= 80) hints.push("Schlaf: Erholung sieht stark aus – sehr gute Grundlage.");
 
-        if (fluidsScore < 60) hints.push("Hydration: Trinkmenge leicht erhöhen (z.B. +0,5 L/Tag), besonders an langen Lauf- oder Indoor-Rad-Tagen.");
-        else if (fluidsScore >= 80) hints.push("Hydration: Flüssigkeitszufuhr stabil – sehr gut für Ultra-Belastung.");
+        if (fluidsScore < 60) hints.push("Hydration: Trinkmenge leicht erhöhen (z.B. +0,5 L/Tag), besonders an langen Lauftagen.");
+        else if (fluidsScore >= 80) hints.push("Hydration: Flüssigkeitszufuhr wirkt stabil.");
 
         if (weightScore < 60 && latestWeight && weight30days) {
           hints.push("Gewichtstrend auffällig – Energiezufuhr vs. Trainingsbelastung bewusst checken.");
         }
 
         if (loadScore < 60 && trimp7 > 0) {
-          hints.push("Belastung: nicht zu viele harte Tage nacheinander – maximal 2 sehr intensive Sessions in 3 Tagen.");
+          hints.push("Belastung: nicht zu viele harte Tage nacheinander – maximal 2 sehr intensive Tage in 3 Tagen.");
         }
 
         if (avgWellbeing != null && avgWellbeing <= 2.5) {
-          hints.push("Wohlbefinden eher niedrig – eventuell Stress / Schlaf / Umfang etwas reduzieren, bevor du in ein echtes Defizit läufst.");
+          hints.push("Wohlbefinden eher niedrig – ggf. Stress, Schlaf und Umfang etwas reduzieren.");
         }
 
         if (painCountLast7 >= 3) {
-          hints.push("Mehrere Tage mit Schmerzen – Umfang/Intensität anpassen, ggf. Physio/Arzt im Hinterkopf behalten.");
+          hints.push("Mehrere Tage mit Schmerzen – Umfang/Intensität anpassen, ggf. ärztliche/physiotherapeutische Abklärung im Hinterkopf behalten.");
         }
 
-        if (suppTrackedDays > 0 && suppDaysAll < suppTrackedDays * 0.6) {
-          hints.push("Supplements: Wenn sie bewusst Teil deiner Strategie sind, versuch sie mit einer festen Routine (z.B. Frühstück) zu koppeln.");
-        }
-
-        coachFeedbackEl.innerHTML =
-          "<strong>Coach-Fazit:</strong> " + overallText + "<br>" +
-          (hints.length > 0 ? hints.map(function(h){ return "• " + h; }).join("<br>") :
-            "• Aktuell kein akuter Handlungsbedarf – weiter strukturiert trainieren und auf deinen Körper hören.");
+        const feedbackText = `
+          <strong>Coach-Fazit:</strong> ${overallText}<br>
+          ${hints.length > 0 ? hints.map(h => "• " + h).join("<br>") : "• Aktuell kein akuter Handlungsbedarf – sauber weiter dokumentieren und auf den Körper hören."}
+        `;
+        coachFeedbackEl.innerHTML = feedbackText;
       }
 
-      var rowsHtml = "";
-      for (var k = 0; k < sorted.length; k++) {
-        var e2 = sorted[k];
-        rowsHtml +=
-          "<tr>" +
-            '<td class="nowrap">' + (e2.date || "") + "</td>" +
-            "<td>" + (e2.weight != null ? e2.weight : "") + "</td>" +
-            "<td>" + (e2.trainingType || "") + "</td>" +
-            "<td>" + (e2.distanceKm != null ? e2.distanceKm : "") + "</td>" +
-            "<td>" + (e2.durationMin != null ? e2.durationMin : "") + "</td>" +
-            "<td>" + (e2.rpe != null ? e2.rpe : "") + "</td>" +
-            "<td>" + (e2.sleepHours != null ? e2.sleepHours : "") + "</td>" +
-            "<td>" + (e2.fluidsLiters != null ? e2.fluidsLiters : "") + "</td>" +
-            "<td>" + (e2.wellbeing != null ? e2.wellbeing : "") + "</td>" +
-            "<td>" + (e2.nightRun ? "Ja" : "") + "</td>" +
-            "<td>" + (e2.hasPain ? "Ja" : "") + "</td>" +
-            "<td>" + (e2.omega3 ? "✓" : "") + "</td>" +
-            "<td>" + (e2.zink ? "✓" : "") + "</td>" +
-            "<td>" + (e2.magnesium ? "✓" : "") + "</td>" +
-            "<td>" + (e2.d3 ? "✓" : "") + "</td>" +
-            "<td>" + (e2.painNote || "") + "</td>" +
-            "<td>" + (e2.comments || "") + "</td>" +
-          "</tr>";
+      // Tabelle
+      let rowsHtml = "";
+      for (const e of sorted) {
+        rowsHtml += `
+          <tr>
+            <td class="nowrap">${e.date || ""}</td>
+            <td>${e.weight != null ? e.weight : ""}</td>
+            <td>${e.trainingType || ""}</td>
+            <td>${e.distanceKm != null ? e.distanceKm : ""}</td>
+            <td>${e.durationMin != null ? e.durationMin : ""}</td>
+            <td>${e.rpe != null ? e.rpe : ""}</td>
+            <td>${e.sleepHours != null ? e.sleepHours : ""}</td>
+            <td>${e.fluidsLiters != null ? e.fluidsLiters : ""}</td>
+            <td>${e.wellbeing != null ? e.wellbeing : ""}</td>
+            <td>${e.nightRun ? "Ja" : ""}</td>
+            <td>${e.hasPain ? "Ja" : ""}</td>
+            <td>${e.painNote || ""}</td>
+            <td>${e.comments || ""}</td>
+          </tr>
+        `;
       }
       entriesTableBody.innerHTML = rowsHtml;
 
-      updateCoaching({
-        sumKm: sumKm,
-        targetKm: targetKm,
-        trimp7: trimp7,
-        trimp3: trimp3,
-        avgSleep: avgSleep,
-        avgFluids: avgFluids,
-        avgWellbeing: avgWellbeing,
-        painCountLast7: painCountLast7,
-        suppDaysAll: suppDaysAll,
-        suppTrackedDays: suppTrackedDays
-      }, {
-        kmScore: kmScore,
-        sleepScore: sleepScore,
-        fluidsScore: fluidsScore,
-        weightScore: weightScore,
-        loadScore: loadScore,
-        overallScore: overallScore
+      updateCharts({ weeklyKmMap, dailyTrimpMap, sleepMap, fluidsMap, weightSeries, targetKm });
+      updateCoaching(
+        { sumKm, targetKm, trimp7, trimp3, avgSleep, avgFluids, avgWellbeing, painCountLast7 },
+        { kmScore, sleepScore, fluidsScore, weightScore, loadScore, overallScore }
+      );
+
+      // HERO-Update für Screenshots/Sharing
+      updateHero(
+        { totalXP, progress, levelPercent },
+        { sumKm, avgSleep, avgFluids },
+        { kmScore, sleepScore, fluidsScore, weightScore, loadScore, overallScore },
+        { kmLevel, sleepLevel, fluidsLevel, weightLevel, loadLevel, avgWellbeing, painCountLast7 }
+      );
+    }
+
+    // --- Charts ---
+    function updateCharts(data) {
+      const ctxWeekly = document.getElementById("weeklyKmChart");
+      const ctxTrimp = document.getElementById("trimpChart");
+      const ctxSleepHydration = document.getElementById("sleepHydrationChart");
+      const ctxWeight = document.getElementById("weightChart");
+
+      const weeklyKmMap = data.weeklyKmMap || {};
+      const dailyTrimpMap = data.dailyTrimpMap || {};
+      const sleepMap = data.sleepMap || {};
+      const fluidsMap = data.fluidsMap || {};
+      const weightSeries = data.weightSeries || [];
+      const targetKm = data.targetKm;
+
+      const weekKeys = Object.keys(weeklyKmMap).sort();
+      const weekLabels = weekKeys.map(k => "KW ab " + formatDateShort(k));
+      const weekValues = weekKeys.map(k => weeklyKmMap[k]);
+      const targetLine = targetKm ? weekKeys.map(() => targetKm) : null;
+
+      if (weeklyKmChart) weeklyKmChart.destroy();
+      weeklyKmChart = new Chart(ctxWeekly, {
+        type: "bar",
+        data: {
+          labels: weekLabels,
+          datasets: [
+            {
+              label: "Wochenkilometer",
+              data: weekValues
+            }
+          ].concat(targetLine ? [{
+            type: "line",
+            label: "Ziel-Wochenkilometer",
+            data: targetLine,
+            borderWidth: 1,
+            borderDash: [4, 4],
+            pointRadius: 0
+          }] : [])
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ticks: { autoSkip: true, maxTicksLimit: 6 } },
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+      const trimpDates = Object.keys(dailyTrimpMap).sort();
+      const trimpLabels = trimpDates.map(d => formatDateShort(d));
+      const trimpValues = [];
+      for (let i = 0; i < trimpDates.length; i++) {
+        const d = new Date(trimpDates[i] + "T00:00:00");
+        const windowStart = new Date(d.getTime() - 6 * 24*60*60*1000);
+        let sum = 0;
+        for (let j = 0; j <= i; j++) {
+          const dj = new Date(trimpDates[j] + "T00:00:00");
+          if (dj >= windowStart && dj <= d) {
+            sum += dailyTrimpMap[trimpDates[j]];
+          }
+        }
+        trimpValues.push(sum);
+      }
+
+      if (trimpChart) trimpChart.destroy();
+      trimpChart = new Chart(ctxTrimp, {
+        type: "line",
+        data: {
+          labels: trimpLabels,
+          datasets: [
+            {
+              label: "TRIMP (7-Tage-Summe)",
+              data: trimpValues,
+              borderWidth: 1,
+              tension: 0.3,
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ticks: { autoSkip: true, maxTicksLimit: 6 } },
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+      const allDatesSet = new Set([...Object.keys(sleepMap), ...Object.keys(fluidsMap)]);
+      const allDates = Array.from(allDatesSet).sort();
+      const shLabels = allDates.map(d => formatDateShort(d));
+      const sleepValues = allDates.map(d => sleepMap[d] != null ? sleepMap[d] : null);
+      const fluidsValues = allDates.map(d => fluidsMap[d] != null ? fluidsMap[d] : null);
+
+      if (sleepHydrationChart) sleepHydrationChart.destroy();
+      sleepHydrationChart = new Chart(ctxSleepHydration, {
+        type: "line",
+        data: {
+          labels: shLabels,
+          datasets: [
+            {
+              label: "Schlaf (h)",
+              data: sleepValues,
+              borderWidth: 1,
+              tension: 0.3,
+              pointRadius: 2,
+              yAxisID: "y"
+            },
+            {
+              label: "Flüssigkeit (L)",
+              data: fluidsValues,
+              borderWidth: 1,
+              tension: 0.3,
+              pointRadius: 2,
+              yAxisID: "y1"
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ticks: { autoSkip: true, maxTicksLimit: 7 } },
+            y: {
+              position: "left",
+              beginAtZero: true
+            },
+            y1: {
+              position: "right",
+              beginAtZero: true,
+              grid: { drawOnChartArea: false }
+            }
+          }
+        }
+      });
+
+      const sortedWeight = [...weightSeries].sort((a, b) => a.date.localeCompare(b.date));
+      const weightLabels = sortedWeight.map(w => formatDateShort(w.date));
+      const weightValues = sortedWeight.map(w => w.weight);
+
+      if (weightChart) weightChart.destroy();
+      weightChart = new Chart(ctxWeight, {
+        type: "line",
+        data: {
+          labels: weightLabels,
+          datasets: [
+            {
+              label: "Gewicht (kg)",
+              data: weightValues,
+              borderWidth: 1,
+              tension: 0.3,
+              pointRadius: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ticks: { autoSkip: true, maxTicksLimit: 6 } },
+            y: { beginAtZero: false }
+          }
+        }
       });
     }
 
+    // --- Coaching: Tages- & Wochenempfehlung ---
     function updateCoaching(metrics, scores) {
-      var sumKm = metrics.sumKm || 0;
-      var targetKm = metrics.targetKm || 90;
-      var trimp7 = metrics.trimp7 || 0;
-      var trimp3 = metrics.trimp3 || 0;
-      var avgSleep = metrics.avgSleep;
-      var avgFluids = metrics.avgFluids;
-      var avgWellbeing = metrics.avgWellbeing;
-      var painCountLast7 = metrics.painCountLast7 || 0;
-      var suppDaysAll = metrics.suppDaysAll || 0;
-      var suppTrackedDays = metrics.suppTrackedDays || 0;
+      const {
+        sumKm = 0,
+        targetKm = 90,
+        trimp7 = 0,
+        trimp3 = 0,
+        avgSleep = null,
+        avgFluids = null,
+        avgWellbeing = null,
+        painCountLast7 = 0
+      } = metrics;
 
-      var kmScore = scores.kmScore || 50;
-      var sleepScore = scores.sleepScore || 50;
-      var fluidsScore = scores.fluidsScore || 50;
-      var weightScore = scores.weightScore || 50;
-      var loadScore = scores.loadScore || 50;
-      var overallScore = scores.overallScore || 50;
+      const {
+        kmScore = 50,
+        sleepScore = 50,
+        fluidsScore = 50,
+        weightScore = 50,
+        loadScore = 50
+      } = scores;
 
-      var loadRatio = trimp7 > 0 ? trimp3 / trimp7 : 0;
-      var loadFlag = "mittel";
-      if (trimp7 > 0 && loadRatio > 0.65) loadFlag = "hoch";
-      else if (trimp7 > 0 && loadRatio < 0.25) loadFlag = "niedrig";
+      let loadRatio = trimp7 > 0 ? trimp3 / trimp7 : 0;
+      let loadFlag = "mittel";
+      if (loadRatio > 0.65) loadFlag = "hoch";
+      else if (loadRatio < 0.25 && trimp7 > 0) loadFlag = "niedrig";
 
-      var sleepFlag = "okay";
+      let sleepFlag = "okay";
       if (avgSleep != null) {
         if (avgSleep >= 7) sleepFlag = "gut";
         else if (avgSleep < 6) sleepFlag = "schlecht";
       }
 
-      var fluidsFlag = "okay";
-      if (avgFluids != null) {
-        if (avgFluids >= 2.5) fluidsFlag = "gut";
-        else if (avgFluids < 1.8) fluidsFlag = "schlecht";
-      }
-
-      var wellbeingFlag = "neutral";
+      let wellbeingFlag = "neutral";
       if (avgWellbeing != null) {
         if (avgWellbeing >= 4) wellbeingFlag = "gut";
         else if (avgWellbeing <= 2.5) wellbeingFlag = "niedrig";
       }
 
-      var suppFlag = "neutral";
-      if (suppTrackedDays > 0) {
-        var sr = suppDaysAll / suppTrackedDays;
-        if (sr >= 0.8) suppFlag = "gut";
-        else if (sr <= 0.4) suppFlag = "niedrig";
-      }
-
-      var kmRatio = targetKm > 0 ? sumKm / targetKm : 0;
-      var trainingState = "unter";
+      const kmRatio = targetKm > 0 ? sumKm / targetKm : 0;
+      let trainingState = "unter";
       if (kmRatio >= 0.8 && kmRatio <= 1.1) trainingState = "imPlan";
       else if (kmRatio > 1.1) trainingState = "drüber";
 
-      var dailyTitle = "Empfehlung für morgen";
-      var dailyText = "";
+      let dailyTitle = "Empfehlung für morgen";
+      let dailyText = "";
 
       if (painCountLast7 >= 3 || wellbeingFlag === "niedrig" || sleepFlag === "schlecht") {
         dailyTitle = "Morgen: Erholung priorisieren";
         dailyText =
           "Die letzten Tage waren von Schmerzen, niedrigem Wohlbefinden oder wenig Schlaf geprägt. " +
-          "Empfehlung: Restday oder maximal 30–45 Min sehr locker (z.B. lockeres Joggen, Indoor-Rad easy, leichte Stabi), RPE 2–3, " +
-          "dazu Fokus auf Schlaf & Ernährung – Vorbereitung auf 230 km läuft über Gesundheit, nicht über Sturheit.";
+          "Empfehlung: Restday oder maximal 30–45 Minuten sehr locker (RPE 2–3), Fokus auf Schlaf & Ernährung.";
       } else if (loadFlag === "hoch") {
         dailyTitle = "Morgen: sehr ruhiger Tag";
         dailyText =
-          "Die Belastung der letzten 3 Tage ist im Vergleich zur Wochenbelastung hoch. " +
-          "Empfehlung: 40–60 Min lockerer Lauf (RPE 3–4), easy Indoor-Rad oder kompletter Restday, " +
-          "keine Tempo-/Intervallblöcke. Qualität verschiebst du bewusst – dein Körper dankt es dir.";
+          "Die Belastung der letzten 3 Tage ist hoch. " +
+          "Empfehlung: 40–60 Minuten locker (RPE 3–4) oder kompletter Restday, keine intensiven Einheiten.";
       } else if (trainingState === "unter") {
-        dailyTitle = "Morgen: solider Aufbau-Tag";
+        dailyTitle = "Morgen: Aufbau-Tag";
         dailyText =
           "Deine Wochenkilometer liegen aktuell unter dem Zielbereich. " +
-          "Wenn du dich gut fühlst: z.B. 10–14 km lockerer Dauerlauf (RPE 4–5) " +
-          "oder 60–75 Min Indoor-Rad im Grundlagenbereich. " +
-          "Fokus: stabile Struktur, nicht heroische Einzeltage – so wird Project 230 entspannt stärker.";
+          "Wenn du dich gut fühlst: 10–14 km lockerer Dauerlauf (RPE 4–5). Fokus auf Struktur, nicht auf Heldentaten.";
       } else if (trainingState === "drüber") {
         dailyTitle = "Morgen: Umfang halten, Intensität runter";
         dailyText =
           "Du liegst diese Woche bereits über deinem Zielumfang. " +
-          "Empfehlung: 8–10 km sehr entspannt (RPE 3–4) oder lockeres Indoor-Rad, " +
-          "keine intensiven Passagen. Ziel: System nicht überladen – der lange Tag kommt früh genug.";
+          "Empfehlung: 8–10 km sehr entspannt (RPE 3–4), keine härteren Blöcke.";
       } else {
         dailyTitle = "Morgen: kontrollierter Trainingsreiz";
         dailyText =
           "Belastung, Schlaf & Hydration sehen solide aus. " +
-          "Empfehlung: z.B. 10–12 km, davon 4–6 km etwas zügiger (RPE 6), Rest locker, " +
-          "oder eine moderat fordernde Box-/Athletik-Session mit gutem Warm-up & Cool-down. " +
-          "Keine Vollgas-Orgie, eher kontrolliert flott – so sammelst du Trainingspunkte ohne überzudrehen.";
-      }
-
-      if (suppFlag === "niedrig") {
-        dailyText +=
-          "<br><br>Bonus: Wenn Omega 3, Zink, Magnesium & D3 Teil deines Setups sein sollen, " +
-          "koppel die Einnahme an eine feste Routine (z.B. Frühstück oder Zähneputzen), damit es automatisch mitläuft.";
+          "Empfehlung: 10–12 km, davon 4–6 km etwas zügiger (RPE 6), Rest locker.";
       }
 
       if (!entries || entries.length < 3) {
         dailyTitle = "Morgen: Datenbasis noch dünn";
         dailyText =
-          "Trage ein paar Tage Training, Schlaf, Flüssigkeit & Supplements ein. " +
-          "Sobald mindestens 3–5 Einträge da sind, werden Score & Empfehlungen deutlich genauer.";
+          "Erst ein paar Tage Training, Schlaf & Flüssigkeit loggen. " +
+          "Sobald 3–5 Einträge da sind, werden Empfehlungen genauer.";
       }
 
       dailyCoachTitleEl.textContent = dailyTitle;
       dailyCoachTextEl.innerHTML = dailyText;
 
-      var weeklyTitle = "Wochenplan basierend auf letzter Woche";
-      var weeklyText = "";
+      let weeklyTitle = "Wochenplan basierend auf letzter Woche";
+      let weeklyText = "";
 
       if (!entries || entries.length < 7) {
         weeklyText =
           "Noch nicht genug Daten für eine verlässliche Wochenanalyse. " +
-          "Sobald 1–2 Wochen voll getrackt sind, bekommst du einen strukturierten Wochenplan " +
-          "(inkl. langem Lauf, evtl. Back-to-back, Indoor-Rad & Box-/Kraftanteilen), der dich Schritt für Schritt Richtung TorTour schiebt.";
+          "Sobald 1–2 Wochen voll getrackt sind, gibt es einen konkreten Wochenfokus.";
         weeklyCoachTitleEl.textContent = weeklyTitle;
         weeklyCoachTextEl.innerHTML = weeklyText;
         return;
       }
 
       if (kmRatio < 0.6) {
-        weeklyText =
-          "Deine letzte Woche lag klar unter deinem Zielumfang (~" + (kmRatio*100).toFixed(0) + " % vom Ziel, bezogen auf Laufen).<br>" +
-          "<strong>Empfohlener Fokus für diese Woche:</strong><br>" +
-          "• Ziel: ca. " + (targetKm * 0.7).toFixed(0) + "–" + (targetKm * 0.85).toFixed(0) + " Lauf-km<br>" +
-          "• 3–4 lockere Läufe (RPE 3–5) à 8–12 km<br>" +
-          "• 1 Langer Lauf um 22–26 km<br>" +
-          "• 1–2 Einheiten Indoor-Rad oder Fitnessboxen als ergänzendes Ausdauer-/Stabi-Training<br>" +
-          "• Keine brutalen Intervalle – erst Routine & solide Basis aufbauen.";
+        weeklyText = `
+          Deine letzte Woche lag klar unter deinem Zielumfang (~${(kmRatio*100).toFixed(0)} % vom Ziel).<br>
+          <strong>Empfohlener Fokus:</strong><br>
+          • Ziel: ca. ${(targetKm * 0.7).toFixed(0)}–${(targetKm * 0.85).toFixed(0)} km<br>
+          • 3–4 lockere Läufe (RPE 3–5) à 8–12 km<br>
+          • 1 langer Lauf um 22–26 km<br>
+          • Keine harten Intervalle – zuerst Routine stabil aufbauen.<br>
+        `;
       } else if (kmRatio >= 0.6 && kmRatio <= 1.1 && loadScore >= 60) {
-        weeklyText =
-          "Deine letzte Woche liegt im sinnvollen Bereich und die Belastungssteuerung sieht brauchbar aus.<br>" +
-          "<strong>Empfohlener Wochenplan:</strong><br>" +
-          "• Ziel: ca. " + targetKm.toFixed(0) + " Lauf-km<br>" +
-          "• 3 lockere Läufe à 10–12 km (RPE 3–5)<br>" +
-          "• 1 Qualitätseinheit (z.B. 6×3 Min zügig, RPE 6–7, mit lockerem Ein-/Auslaufen)<br>" +
-          "• 1 Langer Lauf: 26–34 km<br>" +
-          "• 1–2 ergänzende Sessions: Indoor-Rad (Grundlagenbereich) oder Fitnessboxen / Kraft<br>" +
-          "• Alle 2–3 Wochen: Langer Lauf als Nachtlauf (Checkbox „Nachtlauf“) + bewusst ruhigere Tage danach.";
+        weeklyText = `
+          Deine letzte Woche liegt in einem sinnvollen Bereich.<br>
+          <strong>Empfohlener Wochenplan:</strong><br>
+          • Ziel: ca. ${targetKm.toFixed(0)} km<br>
+          • 3 lockere Läufe à 10–12 km (RPE 3–5)<br>
+          • 1 Qualitätseinheit (z.B. 6×3 Min zügig, RPE 6–7)<br>
+          • 1 langer Lauf: 26–34 km<br>
+        `;
       } else if (kmRatio > 1.1 && loadScore >= 60) {
-        weeklyText =
-          "Du warst letzte Woche eher im oberen Bereich (~" + (kmRatio*100).toFixed(0) + " % vom Zielumfang).<br>" +
-          "<strong>Empfohlene Woche (leicht gebremst):</strong><br>" +
-          "• Ziel: " + (targetKm*0.8).toFixed(0) + "–" + (targetKm*0.9).toFixed(0) + " Lauf-km<br>" +
-          "• 3 lockere Läufe à 8–12 km<br>" +
-          "• 1 moderater Langer Lauf: 22–28 km<br>" +
-          "• Qualität sehr gezielt: max. 1 kürzere Tempoeinheit, ansonsten Fokus auf frische Beine & Schlaf<br>" +
-          "• Ergänzend: lockeres Indoor-Rad statt zusätzlicher harter Laufeinheiten.";
+        weeklyText = `
+          Du warst letzte Woche eher am oberen Ende (~${(kmRatio*100).toFixed(0)} % vom Zielumfang).<br>
+          <strong>Empfohlener Fokus:</strong><br>
+          • Ziel: ${(targetKm*0.8).toFixed(0)}–${(targetKm*0.9).toFixed(0)} km<br>
+          • 3 lockere Läufe à 8–12 km<br>
+          • 1 mittellanger Lauf: 22–28 km<br>
+          • Qualität sehr dosiert (max. 1 kurze Tempoeinheit).<br>
+        `;
       } else {
-        weeklyText =
-          "Die Kombination aus Umfang & Belastung ist etwas unausgeglichen.<br>" +
-          "<strong>Empfehlung:</strong><br>" +
-          "• Umfang leicht reduzieren, Schlaf & Hydration hochziehen.<br>" +
-          "• 3–4 Einheiten locker, 1 Langer Lauf, maximal 1 wirklich harter Tag.<br>" +
-          "• Alternativ: harte Laufeinheiten gelegentlich durch fordernde, aber gelenkschonendere Sessions (Indoor-Rad / Boxen) ersetzen.";
+        weeklyText = `
+          Umfang und Belastung sind etwas unausgeglichen.<br>
+          <strong>Empfehlung:</strong><br>
+          • Umfang leicht reduzieren, Schlaf & Flüssigkeit optimieren.<br>
+          • 3–4 Einheiten locker, 1 langer Lauf, maximal 1 harter Tag.<br>
+        `;
       }
 
       if (painCountLast7 >= 3) {
-        weeklyText += "<br><strong>Zusatz:</strong> Mehrere Tage mit Schmerzen → eher eine Deload-Woche (50–60 % Umfang, kein High-Intensity). Vorbereitung auf 230 km funktioniert nur mit einem Körper, der mitmacht.";
-      }
-
-      if (suppTrackedDays > 0 && suppDaysAll < suppTrackedDays * 0.6) {
-        weeklyText += "<br><br><strong>Supplements:</strong> Wenn Omega 3, Zink, Magnesium & D3 bewusst Teil deiner Strategie sind, lohnt sich eine simple Routine (z.B. Wochenbox + fester Tageszeitpunkt).";
+        weeklyText += "<br><strong>Zusatz:</strong> Mehrere Tage mit Schmerzen – eine Deload-Woche (50–60 % Umfang, keine High-Intensity) ist sinnvoll.";
       }
 
       weeklyCoachTitleEl.textContent = weeklyTitle;
       weeklyCoachTextEl.innerHTML = weeklyText;
     }
 
-    function addEntry() {
-      var dateVal = entryDateInput.value || new Date().toISOString().substring(0,10);
+    // --- HERO: Instagram-/Screenshot-Bereich updaten ---
+    function updateHero(levelData, miniData, scoreData, labelData) {
+      const { totalXP = 0, progress = { level: 1, xpIntoLevel: 0, xpPerLevel: 50 }, levelPercent = 0 } = levelData;
+      const { sumKm = null, avgSleep = null, avgFluids = null } = miniData;
+      const {
+        kmScore = 50,
+        sleepScore = 50,
+        fluidsScore = 50,
+        weightScore = 50,
+        loadScore = 50,
+        overallScore = null
+      } = scoreData;
+      const {
+        kmLevel, sleepLevel, fluidsLevel, weightLevel, loadLevel,
+        avgWellbeing = null, painCountLast7 = 0
+      } = labelData;
 
-      var entry = {
+      // Level / XP
+      heroLevelNumberEl.textContent = progress.level || 1;
+      heroProgressFillEl.style.width = `${levelPercent.toFixed(1)}%`;
+      heroXPTextEl.textContent = `XP: ${totalXP}`;
+      if (progress.level >= 100) {
+        heroNextLevelTextEl.textContent = "Max-Level erreicht";
+        heroLevelTaglineEl.textContent = "TorTour-Minimum erfüllt";
+      } else {
+        heroNextLevelTextEl.textContent = `${progress.xpIntoLevel}/${progress.xpPerLevel} XP bis Level ${progress.level + 1}`;
+        heroLevelTaglineEl.textContent = "Project 230 · Aufbauphase";
+      }
+
+      // kleiner Status-Text
+      let statusLine = "";
+      if (!overallScore || !entries || entries.length === 0) {
+        statusLine = "Noch zu wenige Daten – einfach weiter loggen.";
+      } else if (overallScore >= 85) {
+        statusLine = "Sehr stabiler Vorbereitungsstand.";
+      } else if (overallScore >= 70) {
+        statusLine = "Gute Basis, punktuell optimierbar.";
+      } else if (overallScore >= 55) {
+        statusLine = "Solide Grundlage, aber noch ausbaufähig.";
+      } else {
+        statusLine = "Aufbau noch wackelig – Struktur & Recovery nachschärfen.";
+      }
+      heroStatusTextEl.textContent = statusLine;
+
+      // Mini-Kacheln
+      heroMiniSleepEl.textContent = avgSleep != null ? avgSleep.toFixed(1) : "–";
+      heroMiniKmEl.textContent = sumKm != null ? sumKm.toFixed(1) : "–";
+      heroMiniFluidsEl.textContent = avgFluids != null ? avgFluids.toFixed(1) : "–";
+
+      // Score & Body
+      if (!overallScore || !entries || entries.length === 0) {
+        heroScoreValueEl.textContent = "–";
+        heroScoreChipEl.innerHTML = 'Gesamtstatus: <span>noch offen</span>';
+        heroSummaryBodyEl.textContent = "Sobald die erste Woche gefüllt ist, erscheint hier eine kompakte Bewertung der letzten 7 Tage.";
+        heroBarTrainingEl.style.height = "0%";
+        heroBarSleepEl.style.height = "0%";
+        heroBarFluidsEl.style.height = "0%";
+        heroBarWeightEl.style.height = "0%";
+        heroBarLoadEl.style.height = "0%";
+        heroSummaryTagsEl.innerHTML = "";
+        return;
+      }
+
+      heroScoreValueEl.textContent = overallScore;
+      let chipLabel = "";
+      if (overallScore >= 85) chipLabel = "stabil";
+      else if (overallScore >= 70) chipLabel = "gut";
+      else if (overallScore >= 55) chipLabel = "ausbaufähig";
+      else chipLabel = "kritisch";
+      heroScoreChipEl.innerHTML = `Gesamtstatus: <span>${chipLabel}</span>`;
+
+      let shortText = "";
+      if (overallScore >= 85) shortText = "Sehr gute Grundlage – Training, Schlaf und Belastungssteuerung wirken stimmig.";
+      else if (overallScore >= 70) shortText = "Gute Vorbereitung – wenige Stellschrauben (v.a. Schlaf & Struktur) bringen zusätzliche Stabilität.";
+      else if (overallScore >= 55) shortText = "Solider Start, aber noch nicht wirklich stabil. Fokus auf Routine und Erholung lohnt sich.";
+      else shortText = "Aktuell eher wackelige Basis – Umfang, Schlaf und Flüssigkeitszufuhr im Blick behalten.";
+      heroSummaryBodyEl.textContent = shortText;
+
+      function scoreToBarHeight(score) {
+        if (score >= 85) return 90;
+        if (score >= 70) return 70;
+        if (score >= 55) return 50;
+        return 30;
+      }
+
+      function applyBar(barEl, score, level) {
+        const h = scoreToBarHeight(score);
+        barEl.style.height = h + "%";
+        barEl.classList.remove("warn", "bad");
+        if (level && level.className === "tag-warn") barEl.classList.add("warn");
+        if (level && level.className === "tag-bad") barEl.classList.add("bad");
+      }
+
+      applyBar(heroBarTrainingEl, kmScore, kmLevel);
+      applyBar(heroBarSleepEl, sleepScore, sleepLevel);
+      applyBar(heroBarFluidsEl, fluidsScore, fluidsLevel);
+      applyBar(heroBarWeightEl, weightScore, weightLevel);
+      applyBar(heroBarLoadEl, loadScore, loadLevel);
+
+      const tags = [];
+      if (avgWellbeing != null && avgWellbeing <= 2.5) tags.push("Wohlbefinden niedrig");
+      if (painCountLast7 >= 3) tags.push("Mehrere Tage mit Schmerzen");
+      if ((avgSleep ?? 0) < 6) tags.push("Schlafdefizit möglich");
+      if ((avgFluids ?? 0) < 2) tags.push("Hydration ausbaufähig");
+      if (!tags.length) tags.push("Keine akuten Red-Flags");
+
+      heroSummaryTagsEl.innerHTML = tags.map(t => `<span>${t}</span>`).join("");
+    }
+
+    function addEntry() {
+      const dateVal = entryDateInput.value || new Date().toISOString().substring(0,10);
+
+      const entry = {
         date: dateVal,
         weight: weightInput.value ? parseNumber(weightInput.value) : null,
         trainingType: trainingTypeInput.value || "",
@@ -1796,10 +2337,6 @@
         wellbeing: wellbeingInput.value ? parseNumber(wellbeingInput.value) : null,
         nightRun: nightRunInput.checked,
         hasPain: hasPainInput.checked,
-        omega3: suppOmega3Input.checked,
-        zink: suppZinkInput.checked,
-        magnesium: suppMagnesiumInput.checked,
-        d3: suppD3Input.checked,
         painNote: painNoteInput.value || "",
         comments: commentsInput.value || ""
       };
@@ -1814,10 +2351,6 @@
       wellbeingInput.value = "";
       nightRunInput.checked = false;
       hasPainInput.checked = false;
-      suppOmega3Input.checked = false;
-      suppZinkInput.checked = false;
-      suppMagnesiumInput.checked = false;
-      suppD3Input.checked = false;
       painNoteInput.value = "";
       commentsInput.value = "";
 
@@ -1825,7 +2358,7 @@
     }
 
     function fillToday() {
-      var todayStr = new Date().toISOString().substring(0,10);
+      const todayStr = new Date().toISOString().substring(0,10);
       entryDateInput.value = todayStr;
     }
 
@@ -1868,4 +2401,5 @@
   </script>
 </body>
 </html>
+
 
