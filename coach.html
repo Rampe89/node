@@ -207,8 +207,8 @@
 
     .hero-title-row {
       display: flex;
-      align-items: baseline;
-      gap: 8px;
+      align-items: flex-end;
+      gap: 10px;
       flex-wrap: wrap;
       margin-top: 2px;
     }
@@ -235,9 +235,22 @@
         0 0 18px rgba(22,163,74,0.9);
     }
 
+    .hero-rank-inline {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      color: var(--text-muted);
+      background: rgba(15,23,42,0.96);
+      margin-bottom: 4px;
+    }
+
     .hero-tagline {
       font-size: 0.82rem;
       color: var(--text-muted);
+      flex-basis: 100%;
     }
 
     .hero-progress {
@@ -836,6 +849,7 @@
             <div class="hero-level-number">
               <span class="label">LVL</span><span class="value" id="heroLevelNumber">–</span>
             </div>
+            <div class="hero-rank-inline" id="heroRankInline">RANG –</div>
             <div class="hero-tagline" id="heroLevelTagline">Vorbereitung wird geladen …</div>
           </div>
 
@@ -1264,6 +1278,7 @@
     const heroRankPillEl = document.getElementById("heroRankPill");
     const heroSummaryBodyEl = document.getElementById("heroSummaryBody");
     const heroSummaryTagsEl = document.getElementById("heroSummaryTags");
+    const heroRankInlineEl = document.getElementById("heroRankInline");
 
     const heroBarTrainingEl = document.getElementById("heroBarTraining");
     const heroBarSleepEl = document.getElementById("heroBarSleep");
@@ -2133,6 +2148,7 @@
       let statusLine = "";
       if (!overallScore || !entries || entries.length === 0) {
         statusLine = "Noch zu wenige Daten – einfach weiter loggen.";
+        heroRankInlineEl.textContent = "RANG –";
       } else if (overallScore >= 90) {
         statusLine = "Sehr stabiler Vorbereitungsstand.";
       } else if (overallScore >= 75) {
@@ -2184,6 +2200,7 @@
       heroScoreChipEl.innerHTML =
         `<span class="hero-rank-pill" id="heroRankPill">RANG ${rank}</span>` +
         `<span>Status: ${rankLabel}</span>`;
+      heroRankInlineEl.textContent = `RANG ${rank}`;
 
       let shortText = "";
       if (overallScore >= 90) shortText = "Sehr gute Grundlage – Training, Schlaf und Belastungssteuerung wirken stimmig.";
