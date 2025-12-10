@@ -27,8 +27,7 @@
     body {
       margin: 0;
       padding: 0;
-      background:
-        radial-gradient(circle at top, #020617 0, #000 60%);
+      background: radial-gradient(circle at top, #020617 0, #000 60%);
       color: var(--text);
     }
 
@@ -36,6 +35,44 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 24px 16px 48px;
+    }
+
+    /* STORY-MODE: nur Hero sichtbar, perfekt für Screenshot / Story */
+
+    body.story-mode {
+      background: radial-gradient(circle at top, #020617 0, #000 80%);
+    }
+
+    body.story-mode .app {
+      max-width: 430px;
+      padding-top: 32px;
+      padding-bottom: 32px;
+    }
+
+    body.story-mode header,
+    body.story-mode .grid,
+    body.story-mode section.card:not(.keep-in-story) {
+      display: none;
+    }
+
+    body.story-mode .hero {
+      grid-template-columns: 1fr;
+      margin-top: 0;
+    }
+
+    body.story-mode .hero-summary-card {
+      display: none;
+    }
+
+    body.story-mode .hero-card {
+      margin: 0 auto;
+    }
+
+    body.story-mode #storyModeBtn {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 20;
     }
 
     header {
@@ -63,15 +100,15 @@
       justify-content: center;
       width: 40px;
       height: 40px;
-      border-radius: 8px;
-      background:
-        linear-gradient(135deg, #4ade80, #22c55e);
+      border-radius: 4px;
+      background: linear-gradient(135deg, #4ade80, #22c55e);
       color: #022c22;
       font-size: 1.1rem;
       font-weight: 800;
       box-shadow:
-        0 0 0 3px #022c22,
-        0 12px 24px rgba(34,197,94,0.6);
+        0 0 0 2px #020617,
+        0 0 0 4px #16a34a,
+        0 14px 26px rgba(34,197,94,0.7);
     }
 
     header p {
@@ -97,7 +134,7 @@
       color: var(--accent-strong);
     }
 
-    /* --- HERO / INSTAGRAM-BEREICH (minimal neon) --- */
+    /* --- HERO / INSTAGRAM-PANEL mit Pixel-Optik --- */
 
     .hero {
       margin-bottom: 24px;
@@ -114,43 +151,60 @@
 
     .hero-card {
       position: relative;
-      border-radius: 20px;
+      border-radius: 16px;
       padding: 18px 18px 20px;
       background:
-        linear-gradient(145deg, rgba(15,23,42,1), rgba(15,23,42,0.96));
+        linear-gradient(145deg, #020617, #020617);
       box-shadow:
         0 0 0 1px rgba(15,23,42,1),
-        0 18px 40px rgba(0,0,0,0.95);
-      border: 1px solid rgba(51,65,85,0.9);
+        0 22px 42px rgba(0,0,0,0.95);
       overflow: hidden;
       isolation: isolate;
     }
 
+    /* Pixel-Gitter im Hintergrund */
     .hero-card::before {
-      /* dezente Neonlinie */
       content: "";
       position: absolute;
       inset: 0;
-      border-radius: 20px;
-      border: 1px solid rgba(34,197,94,0.25);
-      opacity: 0.8;
-      mix-blend-mode: screen;
+      background-image:
+        linear-gradient(rgba(15,23,42,0.9) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15,23,42,0.9) 1px, transparent 1px);
+      background-size: 6px 6px;
+      opacity: 0.35;
+      mix-blend-mode: soft-light;
       pointer-events: none;
     }
 
+    /* Neon-Streifen oben */
     .hero-card::after {
-      /* minimaler Glow-Punkt */
       content: "";
       position: absolute;
-      width: 160px;
-      height: 160px;
-      right: -60px;
-      top: -60px;
-      background: radial-gradient(circle, rgba(34,197,94,0.5), transparent 60%);
-      opacity: 0.45;
-      mix-blend-mode: screen;
-      pointer-events: none;
+      top: 0;
+      left: 0;
+      right: -40px;
+      height: 4px;
+      background:
+        linear-gradient(90deg, #22c55e, #0ea5e9, #22c55e);
+      box-shadow:
+        0 0 8px rgba(34,197,94,0.7),
+        0 0 18px rgba(14,165,233,0.7);
+      opacity: 0.9;
     }
+
+    /* Pixel-Ecken */
+    .pixel-corner {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: transparent;
+      box-shadow: 0 0 0 2px rgba(148,163,184,0.7);
+    }
+
+    .pixel-corner-tl { top: 10px; left: 10px; }
+    .pixel-corner-tr { top: 10px; right: 10px; }
+    .pixel-corner-bl { bottom: 10px; left: 10px; }
+    .pixel-corner-br { bottom: 10px; right: 10px; }
 
     .hero-content {
       position: relative;
@@ -172,12 +226,13 @@
       align-items: baseline;
       gap: 8px;
       flex-wrap: wrap;
+      margin-top: 2px;
     }
 
     .hero-level-number {
-      font-size: 2.8rem;
+      font-size: 2.9rem;
       font-weight: 900;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
@@ -192,38 +247,82 @@
     .hero-level-number span.value {
       color: var(--accent-strong);
       text-shadow:
-        0 0 12px rgba(34,197,94,0.7),
-        0 0 24px rgba(22,163,74,0.85);
+        0 0 8px rgba(34,197,94,0.8),
+        0 0 18px rgba(22,163,74,0.9);
     }
 
     .hero-tagline {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--text-muted);
     }
 
+    .hero-rank-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+      font-size: 0.8rem;
+    }
+
+    .hero-rank-label {
+      padding: 2px 8px;
+      border-radius: 2px;
+      border: 1px solid rgba(148,163,184,0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      background: #020617;
+    }
+
+    .hero-stars {
+      display: flex;
+      gap: 2px;
+      font-size: 0.9rem;
+    }
+
+    .hero-star {
+      opacity: 0.15;
+      filter: grayscale(1);
+      transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+    }
+
+    .hero-star.active {
+      opacity: 1;
+      filter: none;
+      transform: translateY(-1px);
+    }
+
+    .hero-star.bronze { color: #b45309; }
+    .hero-star.silver { color: #e5e7eb; }
+    .hero-star.gold { color: #facc15; }
+    .hero-star.red { color: #f97316; }
+    .hero-star.purple { color: #a855f7; }
+
     .hero-progress {
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
     .progress-bar-hero {
       width: 100%;
-      height: 12px;
-      border-radius: 999px;
+      height: 14px;
+      border-radius: 3px;
       background: #020617;
       border: 1px solid rgba(31,41,55,0.9);
       overflow: hidden;
       position: relative;
+      box-shadow: inset 0 0 0 1px rgba(15,23,42,0.8);
     }
 
     .progress-fill-hero {
       height: 100%;
-      border-radius: 999px;
+      border-radius: 0;
       background:
-        linear-gradient(90deg, #22c55e, #bbf7d0);
+        linear-gradient(90deg, #22c55e, #a3e635);
       width: 0%;
       transition: width 0.4s ease-out;
+      image-rendering: pixelated;
       box-shadow:
-        0 0 18px rgba(34,197,94,0.85),
+        0 0 16px rgba(34,197,94,0.9),
         0 0 26px rgba(190,242,100,0.6);
     }
 
@@ -232,7 +331,7 @@
       justify-content: space-between;
       align-items: baseline;
       margin-top: 6px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
       font-family: "JetBrains Mono", ui-monospace;
     }
@@ -250,23 +349,24 @@
     }
 
     .status-chip {
-      border-radius: 999px;
-      padding: 3px 9px;
-      font-size: 0.75rem;
+      border-radius: 2px;
+      padding: 4px 10px;
+      font-size: 0.76rem;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      border: 1px solid rgba(148,163,184,0.6);
+      border: 1px solid rgba(148,163,184,0.7);
       color: var(--text-muted);
-      background: rgba(15,23,42,0.95);
+      background: rgba(15,23,42,0.96);
+      box-shadow: 0 0 0 2px rgba(15,23,42,1);
     }
 
     .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 2px;
+      width: 8px;
+      height: 8px;
+      border-radius: 0;
       background: var(--accent);
-      box-shadow: 0 0 6px rgba(34,197,94,0.9);
+      box-shadow: 0 0 8px rgba(34,197,94,0.9);
     }
 
     .hero-mini-grid {
@@ -278,10 +378,11 @@
     }
 
     .hero-mini-card {
-      border-radius: 10px;
+      border-radius: 4px;
       padding: 6px 8px;
       background: rgba(15,23,42,0.96);
       border: 1px solid rgba(31,41,55,0.9);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.9);
     }
 
     .hero-mini-label {
@@ -302,7 +403,7 @@
 
     .hero-badge {
       font-size: 0.78rem;
-      margin-top: 8px;
+      margin-top: 10px;
       color: var(--text-muted);
     }
 
@@ -315,10 +416,9 @@
 
     .hero-summary-card {
       position: relative;
-      border-radius: 20px;
+      border-radius: 16px;
       padding: 14px 14px 16px;
-      background:
-        linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+      background: linear-gradient(145deg, #020617, #020617);
       box-shadow: var(--shadow-soft);
       border: 1px solid rgba(37,99,235,0.7);
       overflow: hidden;
@@ -328,9 +428,9 @@
       content: "";
       position: absolute;
       inset: 1px;
-      border-radius: 18px;
-      border: 1px solid rgba(37,99,235,0.35);
-      opacity: 0.8;
+      border-radius: 12px;
+      border: 1px dashed rgba(55,65,81,0.8);
+      opacity: 0.6;
       pointer-events: none;
     }
 
@@ -357,7 +457,7 @@
     .hero-score-chip {
       font-size: 0.78rem;
       padding: 3px 9px;
-      border-radius: 999px;
+      border-radius: 2px;
       border: 1px solid rgba(148,163,184,0.5);
       color: var(--text-muted);
       display: inline-flex;
@@ -370,7 +470,7 @@
       font-size: 0.8rem;
       font-weight: 700;
       padding: 2px 8px;
-      border-radius: 999px;
+      border-radius: 2px;
       border: 1px solid rgba(250,250,250,0.4);
       background: #020617;
     }
@@ -404,7 +504,7 @@
     .hero-bar {
       width: 14px;
       height: 26px;
-      border-radius: 4px;
+      border-radius: 2px;
       background: rgba(15,23,42,1);
       border: 1px solid rgba(30,64,175,0.8);
       overflow: hidden;
@@ -417,6 +517,7 @@
       height: 0%;
       transition: height 0.35s ease-out;
       background: linear-gradient(to top, #22c55e, #4ade80);
+      image-rendering: pixelated;
     }
 
     .hero-bar-fill.warn {
@@ -734,16 +835,23 @@
         </h1>
         <p>Dein zentrales Dashboard für die Vorbereitung auf die TorTour de Ruhr – Training, Schlaf, Recovery & Fortschritt im Blick.</p>
       </div>
-      <div>
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
         <div class="pill">
           <span>Ziel:</span><strong>TorTour de Ruhr 2026 · 230 km</strong>
         </div>
+        <button class="btn-secondary" id="storyModeBtn">Story-Ansicht</button>
       </div>
     </header>
 
     <!-- HERO-BEREICH / SHARE-CARD -->
-    <section class="hero">
+    <section class="hero keep-in-story">
       <div class="hero-card">
+        <!-- Pixel-Ecken -->
+        <div class="pixel-corner pixel-corner-tl"></div>
+        <div class="pixel-corner pixel-corner-tr"></div>
+        <div class="pixel-corner pixel-corner-bl"></div>
+        <div class="pixel-corner pixel-corner-br"></div>
+
         <div class="hero-content">
           <div class="hero-label">Project 230 · Level</div>
           <div class="hero-title-row">
@@ -751,6 +859,17 @@
               <span class="label">LVL</span><span class="value" id="heroLevelNumber">–</span>
             </div>
             <div class="hero-tagline" id="heroLevelTagline">Vorbereitung wird geladen …</div>
+          </div>
+
+          <div class="hero-rank-row">
+            <span class="hero-rank-label" id="heroRankMain">RANG –</span>
+            <div class="hero-stars" id="heroStars">
+              <span class="hero-star">★</span>
+              <span class="hero-star">★</span>
+              <span class="hero-star">★</span>
+              <span class="hero-star">★</span>
+              <span class="hero-star">★</span>
+            </div>
           </div>
 
           <div class="hero-progress">
@@ -777,9 +896,9 @@
               <div class="hero-mini-pill">h / Tag</div>
             </div>
             <div class="hero-mini-card">
-              <div class="hero-mini-label">Wochen-km (7T)</div>
+              <div class="hero-mini-label">Wochen-km (eq., 7T)</div>
               <div class="hero-mini-value" id="heroMiniKm">–</div>
-              <div class="hero-mini-pill">km</div>
+              <div class="hero-mini-pill">km (Laufäquivalent)</div>
             </div>
             <div class="hero-mini-card">
               <div class="hero-mini-label">Hydration (7T)</div>
@@ -801,7 +920,7 @@
             <div class="hero-score-value" id="heroScoreValue">–</div>
           </div>
           <div class="hero-score-chip" id="heroScoreChip">
-            <span class="hero-rank-pill" id="heroRankPill">RANK –</span>
+            <span class="hero-rank-pill" id="heroRankPill">RANG –</span>
             <span>Status: –</span>
           </div>
           <div class="hero-summary-body" id="heroSummaryBody">
@@ -1039,7 +1158,7 @@
         </div>
       </div>
       <p class="hint">
-        Berechnung basiert auf Wochenkilometern, Belastung (TRIMP), Schlaf, Flüssigkeit, Wohlbefinden & Beschwerden.
+        Berechnung basiert auf Wochenkilometern (Laufäquivalent), Belastung (TRIMP), Schlaf, Flüssigkeit, Wohlbefinden, Ruhetagen & Beschwerden.
       </p>
     </section>
 
@@ -1102,6 +1221,25 @@
       }
     }
 
+    // Distanz in Laufäquivalent umrechnen (Rad weniger wert etc.)
+    function getEquivalentDistance(entry) {
+      const dist = parseNumber(entry.distanceKm);
+      if (!dist || dist <= 0) return 0;
+      const type = entry.trainingType || "";
+
+      switch (type) {
+        case "Indoor-Rad":
+          return dist * 0.4; // Rad zählt schwächer
+        case "Cross":
+          return dist * 0.7; // Cross/Alternativ etwas reduziert
+        case "Kraft":
+        case "Fitnessboxen":
+          return 0; // keine km-Relevanz
+        default:
+          return dist; // Lauf / Wettkampf / locker etc. zählen voll
+      }
+    }
+
     const STORAGE_ENTRIES_KEY = "project230_entries_v1";
     const STORAGE_SETTINGS_KEY = "project230_settings_v1";
 
@@ -1157,6 +1295,8 @@
     // HERO-Elemente
     const heroLevelNumberEl = document.getElementById("heroLevelNumber");
     const heroLevelTaglineEl = document.getElementById("heroLevelTagline");
+    const heroRankMainEl = document.getElementById("heroRankMain");
+    const heroStarsEl = document.getElementById("heroStars");
     const heroProgressFillEl = document.getElementById("heroProgressFill");
     const heroXPTextEl = document.getElementById("heroXPText");
     const heroNextLevelTextEl = document.getElementById("heroNextLevelText");
@@ -1166,7 +1306,6 @@
     const heroMiniFluidsEl = document.getElementById("heroMiniFluids");
     const heroScoreValueEl = document.getElementById("heroScoreValue");
     const heroScoreChipEl = document.getElementById("heroScoreChip");
-    const heroRankPillEl = document.getElementById("heroRankPill");
     const heroSummaryBodyEl = document.getElementById("heroSummaryBody");
     const heroSummaryTagsEl = document.getElementById("heroSummaryTags");
 
@@ -1175,6 +1314,14 @@
     const heroBarFluidsEl = document.getElementById("heroBarFluids");
     const heroBarWeightEl = document.getElementById("heroBarWeight");
     const heroBarLoadEl = document.getElementById("heroBarLoad");
+
+    const storyModeBtn = document.getElementById("storyModeBtn");
+
+    // Story-Ansicht toggeln
+    storyModeBtn.addEventListener("click", () => {
+      const isStory = document.body.classList.toggle("story-mode");
+      storyModeBtn.textContent = isStory ? "Story-Ansicht beenden" : "Story-Ansicht";
+    });
 
     // --- Settings UI ---
     function initSettingsUI() {
@@ -1266,11 +1413,6 @@
       raceSummaryEl.innerHTML = blocks;
     }
 
-    function formatDateShort(dateString) {
-      const d = new Date(dateString + "T00:00:00");
-      return d.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" });
-    }
-
     // --- Level / XP-Berechnung ---
     function computeDailyXP(entry, settings) {
       const targetKm = settings.targetKm || 90;
@@ -1279,23 +1421,23 @@
 
       let xp = 0;
 
-      const dist = parseNumber(entry.distanceKm);
+      const distEq = getEquivalentDistance(entry);
       const dur = parseNumber(entry.durationMin);
       const rpe = parseNumber(entry.rpe);
       const sleep = parseNumber(entry.sleepHours);
       const fluids = parseNumber(entry.fluidsLiters);
       const wb = parseNumber(entry.wellbeing);
-      const isTraining = dist != null && dist > 0 && dur != null && dur > 0;
+      const isTraining = distEq != null && distEq > 0 && dur != null && dur > 0;
 
       if (isTraining) {
         xp += 10;
       } else {
-        xp += 3; // Restday zählt auch
+        xp += 3; // Ruhetag gibt auch XP
       }
 
-      if (dist != null && dist > 0 && targetKm > 0) {
+      if (distEq != null && distEq > 0 && targetKm > 0) {
         const targetDailyKm = targetKm / 7;
-        const ratio = dist / targetDailyKm;
+        const ratio = distEq / targetDailyKm;
         if (ratio >= 0.8 && ratio <= 1.5) {
           xp += 10;
         } else if (ratio > 0.3) {
@@ -1328,7 +1470,7 @@
       if (entry.nightRun) {
         xp += 8;
       }
-      if (entry.trainingType === "Langer Lauf" && dist != null && dist >= 25) {
+      if (entry.trainingType === "Langer Lauf" && distEq != null && distEq >= 25) {
         xp += 8;
       }
 
@@ -1521,7 +1663,7 @@
       const thirtyDaysAgo = new Date(today.getTime() - 30 * 24*60*60*1000);
       const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().substring(0,10);
 
-      let sumKm = 0;
+      let sumKmEq = 0;
       let sumSleep = 0;
       let sumFluids = 0;
       let countSleep = 0;
@@ -1536,14 +1678,24 @@
       let last7WellbeingCount = 0;
       let painCountLast7 = 0;
 
+      const last7DatesMap = {};
+
       for (const e of sorted) {
         if (!e.date) continue;
         const d = new Date(e.date + "T00:00:00");
         const dateStr = e.date;
 
+        const dur = parseNumber(e.durationMin);
+        const rpeVal = parseNumber(e.rpe);
+        const distEq = getEquivalentDistance(e);
+
         if (d >= sevenDaysAgo && d <= today) {
-          const dist = parseNumber(e.distanceKm);
-          if (dist != null) sumKm += dist;
+          if (!last7DatesMap[dateStr]) last7DatesMap[dateStr] = { hasTraining: false };
+          if ((distEq != null && distEq > 0) || (dur != null && dur > 0)) {
+            last7DatesMap[dateStr].hasTraining = true;
+          }
+
+          if (distEq != null) sumKmEq += distEq;
 
           const sleep = parseNumber(e.sleepHours);
           if (sleep != null) { sumSleep += sleep; countSleep++; }
@@ -1557,8 +1709,6 @@
           if (e.hasPain === true) painCountLast7++;
         }
 
-        const dur = parseNumber(e.durationMin);
-        const rpeVal = parseNumber(e.rpe);
         let trimp = 0;
         if (dur != null && rpeVal != null) {
           trimp = dur * rpeVal;
@@ -1577,6 +1727,14 @@
             }
           }
         }
+      }
+
+      const dateKeys = Object.keys(last7DatesMap);
+      let restDays = 0;
+      let trainingDays = 0;
+      for (const k of dateKeys) {
+        if (last7DatesMap[k].hasTraining) trainingDays++;
+        else restDays++;
       }
 
       const avgSleep = countSleep > 0 ? (sumSleep / countSleep) : null;
@@ -1623,13 +1781,13 @@
 
       const targetKm = settings.targetKm || 90;
 
-      if (targetKm > 0 && sumKm > 0) {
-        const ratio = sumKm / targetKm;
+      if (targetKm > 0 && sumKmEq > 0) {
+        const ratio = sumKmEq / targetKm;
         if (ratio >= 0.8 && ratio <= 1.1) kmScore = 90;
         else if (ratio >= 0.6 && ratio <= 1.3) kmScore = 75;
         else if (ratio >= 0.4 && ratio <= 1.6) kmScore = 55;
         else kmScore = 35;
-      } else if (sumKm > 0) {
+      } else if (sumKmEq > 0) {
         kmScore = 70;
       }
 
@@ -1670,6 +1828,15 @@
         else loadScore = 35;
       }
 
+      // Ruhetage berücksichtigen: 0 oder sehr viele drücken Load-Score
+      if (dateKeys.length > 0) {
+        if (restDays === 0) {
+          loadScore = Math.min(loadScore, 65);
+        } else if (restDays >= 4) {
+          loadScore = Math.min(loadScore, 55);
+        }
+      }
+
       const overallScore = Math.round(
         kmScore * 0.4 +
         sleepScore * 0.25 +
@@ -1705,9 +1872,9 @@
 
       summaryHtml += `
         <div class="summary-card">
-          <div class="summary-label">Wochenkilometer (letzte 7 Tage)</div>
-          <div class="summary-value">${sumKm.toFixed(1)} km</div>
-          ${buildTag(sumKm, targetKm, "km/Woche", "higher-better")}
+          <div class="summary-label">Wochenkilometer (letzte 7 Tage, eq.)</div>
+          <div class="summary-value">${sumKmEq.toFixed(1)} km</div>
+          ${buildTag(sumKmEq, targetKm, "km/Woche (eq.)", "higher-better")}
         </div>
       `;
 
@@ -1754,6 +1921,31 @@
         </div>
       `;
 
+      const restInfo = dateKeys.length > 0
+        ? `Trainings-/Log-Tage: ${trainingDays}, Ruhetage (mit Log): ${restDays}`
+        : "Noch keine volle Woche getrackt.";
+
+      summaryHtml += `
+        <div class="summary-card">
+          <div class="summary-label">Ruhetage (letzte 7 Tage)</div>
+          <div class="summary-value">${restDays} Tage</div>
+          <div class="${
+            restDays === 0 ? "tag-warn" :
+            restDays <= 3 ? "tag-ok" :
+            "tag-warn"
+          }">
+            ${
+              restDays === 0
+                ? "Keine Ruhetage – zumindest 1 vollständiger Restday pro Woche ist sinnvoll."
+                : restDays <= 3
+                ? "Guter Mix aus Belastung und Ruhe."
+                : "Relativ viele Ruhetage – Trainingsreiz und Struktur im Blick behalten."
+            }
+          </div>
+          <div class="tag-ok">${restInfo}</div>
+        </div>
+      `;
+
       statsSummaryEl.innerHTML = summaryHtml;
 
       // Coach-Fazit
@@ -1761,7 +1953,7 @@
         const hints = [];
 
         if (kmScore < 60) hints.push("Trainingsumfang langsam, aber stetig steigern (max. ~10 % mehr Wochen-km als in der Vorwoche).");
-        else if (kmScore >= 80) hints.push("Training: Wochenkilometer liegen gut im Zielbereich – Konstanz ist entscheidend.");
+        else if (kmScore >= 80) hints.push("Training: Wochenkilometer (Laufäquivalent) liegen gut im Zielbereich – Konstanz ist entscheidend.");
 
         if (sleepScore < 60) hints.push("Schlaf: 1–2 Abende bewusst früher ins Bett, vor allem nach langen oder intensiven Einheiten.");
         else if (sleepScore >= 80) hints.push("Schlaf: Erholung sieht stark aus – sehr gute Grundlage.");
@@ -1775,6 +1967,12 @@
 
         if (loadScore < 60 && trimp7 > 0) {
           hints.push("Belastung: nicht zu viele harte Tage nacheinander – maximal 2 sehr intensive Tage in 3 Tagen.");
+        }
+
+        if (restDays === 0) {
+          hints.push("Mindestens 1 echter Ruhetag pro Woche einplanen, damit die TorTour-Form nicht auf Kosten der Regeneration entsteht.");
+        } else if (restDays >= 4) {
+          hints.push("Viele Ruhetage – prüfen, ob Umfang, Motivation oder Erholungskonzept angepasst werden sollten.");
         }
 
         if (avgWellbeing != null && avgWellbeing <= 2.5) {
@@ -1816,29 +2014,30 @@
       entriesTableBody.innerHTML = rowsHtml;
 
       updateCoaching(
-        { sumKm, targetKm, trimp7, trimp3, avgSleep, avgFluids, avgWellbeing, painCountLast7 },
+        { sumKmEq, targetKm, trimp7, trimp3, avgSleep, avgFluids, avgWellbeing, painCountLast7, restDays },
         { kmScore, sleepScore, fluidsScore, weightScore, loadScore, overallScore }
       );
 
       updateHero(
         { totalXP, progress, levelPercent },
-        { sumKm, avgSleep, avgFluids },
+        { sumKmEq, avgSleep, avgFluids },
         { kmScore, sleepScore, fluidsScore, weightScore, loadScore, overallScore },
-        { kmLevel, sleepLevel, fluidsLevel, weightLevel, loadLevel, avgWellbeing, painCountLast7 }
+        { kmLevel, sleepLevel, fluidsLevel, weightLevel, loadLevel, avgWellbeing, painCountLast7, restDays }
       );
     }
 
     // --- Coaching: Tages- & Wochenempfehlung ---
     function updateCoaching(metrics, scores) {
       const {
-        sumKm = 0,
+        sumKmEq = 0,
         targetKm = 90,
         trimp7 = 0,
         trimp3 = 0,
         avgSleep = null,
         avgFluids = null,
         avgWellbeing = null,
-        painCountLast7 = 0
+        painCountLast7 = 0,
+        restDays = 0
       } = metrics;
 
       const {
@@ -1866,7 +2065,7 @@
         else if (avgWellbeing <= 2.5) wellbeingFlag = "niedrig";
       }
 
-      const kmRatio = targetKm > 0 ? sumKm / targetKm : 0;
+      const kmRatio = targetKm > 0 ? sumKmEq / targetKm : 0;
       let trainingState = "unter";
       if (kmRatio >= 0.8 && kmRatio <= 1.1) trainingState = "imPlan";
       else if (kmRatio > 1.1) trainingState = "drüber";
@@ -1887,7 +2086,7 @@
       } else if (trainingState === "unter") {
         dailyTitle = "Morgen: Aufbau-Tag";
         dailyText =
-          "Deine Wochenkilometer liegen aktuell unter dem Zielbereich. " +
+          "Deine Wochenkilometer (Laufäquivalent) liegen aktuell unter dem Zielbereich. " +
           "Wenn du dich gut fühlst: 10–14 km lockerer Dauerlauf (RPE 4–5). Fokus auf Struktur, nicht auf Heldentaten.";
       } else if (trainingState === "drüber") {
         dailyTitle = "Morgen: Umfang halten, Intensität runter";
@@ -1899,6 +2098,12 @@
         dailyText =
           "Belastung, Schlaf & Hydration sehen solide aus. " +
           "Empfehlung: 10–12 km, davon 4–6 km etwas zügiger (RPE 6), Rest locker.";
+      }
+
+      if (restDays === 0) {
+        dailyText += "<br><br><strong>Zusatz:</strong> Mindestens 1 echter Ruhetag in der Woche einplanen.";
+      } else if (restDays >= 4) {
+        dailyText += "<br><br><strong>Zusatz:</strong> Viele Ruhetage – ggf. einen Tag bewusst als längere Einheit nutzen.";
       }
 
       if (!entries || entries.length < 3) {
@@ -1925,9 +2130,9 @@
 
       if (kmRatio < 0.6) {
         weeklyText = `
-          Deine letzte Woche lag klar unter deinem Zielumfang (~${(kmRatio*100).toFixed(0)} % vom Ziel).<br>
+          Deine letzte Woche lag klar unter deinem Zielumfang (~${(kmRatio*100).toFixed(0)} % vom Ziel, Laufäquivalent).<br>
           <strong>Empfohlener Fokus:</strong><br>
-          • Ziel: ca. ${(targetKm * 0.7).toFixed(0)}–${(targetKm * 0.85).toFixed(0)} km<br>
+          • Ziel: ca. ${(targetKm * 0.7).toFixed(0)}–${(targetKm * 0.85).toFixed(0)} km (eq.)<br>
           • 3–4 lockere Läufe (RPE 3–5) à 8–12 km<br>
           • 1 langer Lauf um 22–26 km<br>
           • Keine harten Intervalle – zuerst Routine stabil aufbauen.<br>
@@ -1936,7 +2141,7 @@
         weeklyText = `
           Deine letzte Woche liegt in einem sinnvollen Bereich.<br>
           <strong>Empfohlener Wochenplan:</strong><br>
-          • Ziel: ca. ${targetKm.toFixed(0)} km<br>
+          • Ziel: ca. ${targetKm.toFixed(0)} km (eq.)<br>
           • 3 lockere Läufe à 10–12 km (RPE 3–5)<br>
           • 1 Qualitätseinheit (z.B. 6×3 Min zügig, RPE 6–7)<br>
           • 1 langer Lauf: 26–34 km<br>
@@ -1945,7 +2150,7 @@
         weeklyText = `
           Du warst letzte Woche eher am oberen Ende (~${(kmRatio*100).toFixed(0)} % vom Zielumfang).<br>
           <strong>Empfohlener Fokus:</strong><br>
-          • Ziel: ${(targetKm*0.8).toFixed(0)}–${(targetKm*0.9).toFixed(0)} km<br>
+          • Ziel: ${(targetKm*0.8).toFixed(0)}–${(targetKm*0.9).toFixed(0)} km (eq.)<br>
           • 3 lockere Läufe à 8–12 km<br>
           • 1 mittellanger Lauf: 22–28 km<br>
           • Qualität sehr dosiert (max. 1 kurze Tempoeinheit).<br>
@@ -1959,6 +2164,12 @@
         `;
       }
 
+      if (restDays === 0) {
+        weeklyText += "<br><strong>Ruhetage:</strong> Mindestens 1 Tag komplett frei halten.";
+      } else if (restDays >= 4) {
+        weeklyText += "<br><strong>Ruhetage:</strong> Viele Pausentage – prüfen, ob Umfang zur Zielsetzung passt.";
+      }
+
       if (painCountLast7 >= 3) {
         weeklyText += "<br><strong>Zusatz:</strong> Mehrere Tage mit Schmerzen – eine Deload-Woche (50–60 % Umfang, keine High-Intensity) ist sinnvoll.";
       }
@@ -1967,10 +2178,10 @@
       weeklyCoachTextEl.innerHTML = weeklyText;
     }
 
-    // --- HERO: Level / Rank / Bars ---
+    // --- HERO: Level / Rank / Sterne / Bars ---
     function updateHero(levelData, miniData, scoreData, labelData) {
       const { totalXP = 0, progress = { level: 1, xpIntoLevel: 0, xpPerLevel: 50 }, levelPercent = 0 } = levelData;
-      const { sumKm = null, avgSleep = null, avgFluids = null } = miniData;
+      const { sumKmEq = null, avgSleep = null, avgFluids = null } = miniData;
       const {
         kmScore = 50,
         sleepScore = 50,
@@ -1981,7 +2192,7 @@
       } = scoreData;
       const {
         kmLevel, sleepLevel, fluidsLevel, weightLevel, loadLevel,
-        avgWellbeing = null, painCountLast7 = 0
+        avgWellbeing = null, painCountLast7 = 0, restDays = 0
       } = labelData;
 
       heroLevelNumberEl.textContent = progress.level || 1;
@@ -2010,42 +2221,87 @@
       heroStatusTextEl.textContent = statusLine;
 
       heroMiniSleepEl.textContent = avgSleep != null ? avgSleep.toFixed(1) : "–";
-      heroMiniKmEl.textContent = sumKm != null ? sumKm.toFixed(1) : "–";
+      heroMiniKmEl.textContent = sumKmEq != null ? sumKmEq.toFixed(1) : "–";
       heroMiniFluidsEl.textContent = avgFluids != null ? avgFluids.toFixed(1) : "–";
 
       if (!overallScore || !entries || entries.length === 0) {
         heroScoreValueEl.textContent = "–";
-        heroRankPillEl.textContent = "RANK –";
-        heroScoreChipEl.innerHTML = `<span class="hero-rank-pill" id="heroRankPill">RANK –</span><span>Status: noch offen</span>`;
+        heroScoreChipEl.innerHTML = `<span class="hero-rank-pill" id="heroRankPill">RANG –</span><span>Status: noch offen</span>`;
         heroSummaryBodyEl.textContent = "Sobald die erste Woche gefüllt ist, erscheint hier eine kompakte Bewertung der letzten 7 Tage.";
+
         heroBarTrainingEl.style.height = "0%";
         heroBarSleepEl.style.height = "0%";
         heroBarFluidsEl.style.height = "0%";
         heroBarWeightEl.style.height = "0%";
         heroBarLoadEl.style.height = "0%";
         heroSummaryTagsEl.innerHTML = "";
+
+        heroRankMainEl.textContent = "RANG –";
+        if (heroStarsEl) {
+          heroStarsEl.querySelectorAll(".hero-star").forEach(star => {
+            star.className = "hero-star";
+          });
+        }
         return;
       }
 
       heroScoreValueEl.textContent = overallScore;
 
-      // Rank-System (S/A/B/C/D)
+      // Rank-System D–S+
       let rank = "D";
-      if (overallScore >= 90) rank = "S";
-      else if (overallScore >= 80) rank = "A";
-      else if (overallScore >= 70) rank = "B";
-      else if (overallScore >= 55) rank = "C";
+      let rankLabel = "Fragile-Prep";
+      let starStage = 1; // 1: Bronze, 2: Silber, 3: Gold, 4: Rot, 5: Lila
 
-      let rankLabel = "";
-      if (rank === "S") rankLabel = "Elite-Prep";
-      else if (rank === "A") rankLabel = "Strong-Prep";
-      else if (rank === "B") rankLabel = "Solid-Prep";
-      else if (rank === "C") rankLabel = "Build-Up";
-      else rankLabel = "Fragile-Prep";
+      if (overallScore >= 95) {
+        rank = "S+";
+        rankLabel = "TorTour-Ready+";
+        starStage = 5;
+      } else if (overallScore >= 85) {
+        rank = "S";
+        rankLabel = "Elite-Prep";
+        starStage = 5;
+      } else if (overallScore >= 70) {
+        rank = "A";
+        rankLabel = "Strong-Prep";
+        starStage = 4;
+      } else if (overallScore >= 55) {
+        rank = "B";
+        rankLabel = "Solid-Prep";
+        starStage = 3;
+      } else if (overallScore >= 40) {
+        rank = "C";
+        rankLabel = "Build-Up";
+        starStage = 2;
+      } else {
+        rank = "D";
+        rankLabel = "Fragile-Prep";
+        starStage = 1;
+      }
 
       heroScoreChipEl.innerHTML =
-        `<span class="hero-rank-pill" id="heroRankPill">RANK ${rank}</span>` +
+        `<span class="hero-rank-pill" id="heroRankPill">RANG ${rank}</span>` +
         `<span>Status: ${rankLabel}</span>`;
+
+      heroRankMainEl.textContent = `RANG ${rank}`;
+
+      // Sterne färben
+      if (heroStarsEl) {
+        const stars = heroStarsEl.querySelectorAll(".hero-star");
+        const colorClass =
+          starStage === 1 ? "bronze" :
+          starStage === 2 ? "silver" :
+          starStage === 3 ? "gold" :
+          starStage === 4 ? "red" :
+          "purple";
+        const activeCount = starStage; // 1–5
+
+        stars.forEach((star, index) => {
+          star.className = "hero-star"; // reset
+          if (index < activeCount) {
+            star.classList.add("active", colorClass);
+          }
+        });
+      }
 
       let shortText = "";
       if (overallScore >= 85) shortText = "Sehr gute Grundlage – Training, Schlaf und Belastungssteuerung wirken stimmig.";
@@ -2080,6 +2336,8 @@
       if (painCountLast7 >= 3) tags.push("Mehrere Tage mit Schmerzen");
       if ((avgSleep ?? 0) < 6) tags.push("Schlafdefizit möglich");
       if ((avgFluids ?? 0) < 2) tags.push("Hydration ausbaufähig");
+      if (restDays === 0) tags.push("Keine Ruhetage · Risiko");
+      if (restDays >= 4) tags.push("Viele Ruhetage · Belastung prüfen");
       if (!tags.length) tags.push("Keine akuten Red-Flags");
 
       heroSummaryTagsEl.innerHTML = tags.map(t => `<span>${t}</span>`).join("");
