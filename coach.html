@@ -28,8 +28,7 @@
       margin: 0;
       padding: 0;
       background:
-        radial-gradient(circle at top, #1d283a 0, #020617 55%),
-        radial-gradient(circle at bottom, #020617 0, #000 65%);
+        radial-gradient(circle at top, #020617 0, #000 60%);
       color: var(--text);
     }
 
@@ -98,12 +97,12 @@
       color: var(--accent-strong);
     }
 
-    /* --- HERO / INSTAGRAM-BEREICH --- */
+    /* --- HERO / INSTAGRAM-BEREICH (minimal neon) --- */
 
     .hero {
       margin-bottom: 24px;
       display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(0, 2fr);
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 2fr);
       gap: 16px;
     }
 
@@ -118,49 +117,39 @@
       border-radius: 20px;
       padding: 18px 18px 20px;
       background:
-        radial-gradient(circle at 0% 0%, rgba(34,197,94,0.18), transparent 55%),
-        radial-gradient(circle at 80% 0%, rgba(56,189,248,0.18), transparent 55%),
-        #020617;
+        linear-gradient(145deg, rgba(15,23,42,1), rgba(15,23,42,0.96));
       box-shadow:
-        0 0 0 2px rgba(15,23,42,1),
-        0 0 0 1px rgba(51,65,85,0.8),
-        0 28px 48px rgba(15,23,42,0.95);
+        0 0 0 1px rgba(15,23,42,1),
+        0 18px 40px rgba(0,0,0,0.95);
       border: 1px solid rgba(51,65,85,0.9);
       overflow: hidden;
       isolation: isolate;
     }
 
     .hero-card::before {
-      /* Pixel-Grid */
+      /* dezente Neonlinie */
       content: "";
       position: absolute;
-      inset: 12px;
-      border-radius: 12px;
-      background-image:
-        linear-gradient(rgba(148,163,184,0.18) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(148,163,184,0.18) 1px, transparent 1px);
-      background-size: 18px 18px;
-      opacity: 0.4;
-      mix-blend-mode: soft-light;
+      inset: 0;
+      border-radius: 20px;
+      border: 1px solid rgba(34,197,94,0.25);
+      opacity: 0.8;
+      mix-blend-mode: screen;
       pointer-events: none;
     }
 
     .hero-card::after {
-      /* atmender Glow */
+      /* minimaler Glow-Punkt */
       content: "";
       position: absolute;
-      inset: -40px;
-      background: radial-gradient(circle, rgba(34,197,94,0.25) 0, transparent 55%);
-      opacity: 0.4;
+      width: 160px;
+      height: 160px;
+      right: -60px;
+      top: -60px;
+      background: radial-gradient(circle, rgba(34,197,94,0.5), transparent 60%);
+      opacity: 0.45;
       mix-blend-mode: screen;
       pointer-events: none;
-      animation: heroBreath 6s ease-in-out infinite;
-    }
-
-    @keyframes heroBreath {
-      0% { opacity: 0.25; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(1.03); }
-      100% { opacity: 0.25; transform: scale(1); }
     }
 
     .hero-content {
@@ -212,25 +201,6 @@
       color: var(--text-muted);
     }
 
-    .hero-subrow {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-top: 2px;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    .hero-subrow span {
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.5);
-      background: rgba(15,23,42,0.9);
-    }
-
     .hero-progress {
       margin-top: 8px;
     }
@@ -239,8 +209,8 @@
       width: 100%;
       height: 12px;
       border-radius: 999px;
-      background: linear-gradient(90deg, #020617, #020617);
-      border: 1px solid rgba(148,163,184,0.8);
+      background: #020617;
+      border: 1px solid rgba(31,41,55,0.9);
       overflow: hidden;
       position: relative;
     }
@@ -249,12 +219,12 @@
       height: 100%;
       border-radius: 999px;
       background:
-        linear-gradient(90deg, #22c55e, #bef264);
+        linear-gradient(90deg, #22c55e, #bbf7d0);
       width: 0%;
-      transition: width 0.5s ease-out;
+      transition: width 0.4s ease-out;
       box-shadow:
         0 0 18px rgba(34,197,94,0.85),
-        0 0 26px rgba(190,242,100,0.7);
+        0 0 26px rgba(190,242,100,0.6);
     }
 
     .hero-progress-meta {
@@ -276,7 +246,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
     .status-chip {
@@ -288,7 +258,7 @@
       gap: 6px;
       border: 1px solid rgba(148,163,184,0.6);
       color: var(--text-muted);
-      background: rgba(15,23,42,0.9);
+      background: rgba(15,23,42,0.95);
     }
 
     .status-dot {
@@ -310,8 +280,8 @@
     .hero-mini-card {
       border-radius: 10px;
       padding: 6px 8px;
-      background: rgba(15,23,42,0.95);
-      border: 1px solid rgba(30,64,175,0.7);
+      background: rgba(15,23,42,0.96);
+      border: 1px solid rgba(31,41,55,0.9);
     }
 
     .hero-mini-label {
@@ -348,19 +318,20 @@
       border-radius: 20px;
       padding: 14px 14px 16px;
       background:
-        radial-gradient(circle at 0% 0%, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+        linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
       box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(30,64,175,0.9);
+      border: 1px solid rgba(37,99,235,0.7);
       overflow: hidden;
     }
 
     .hero-summary-card::before {
       content: "";
       position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(37,99,235,0.2), transparent 60%);
-      mix-blend-mode: soft-light;
-      opacity: 0.4;
+      inset: 1px;
+      border-radius: 18px;
+      border: 1px solid rgba(37,99,235,0.35);
+      opacity: 0.8;
+      pointer-events: none;
     }
 
     .hero-summary-inner {
@@ -392,6 +363,7 @@
       display: inline-flex;
       gap: 6px;
       align-items: center;
+      background: rgba(15,23,42,0.96);
     }
 
     .hero-rank-pill {
@@ -400,7 +372,7 @@
       padding: 2px 8px;
       border-radius: 999px;
       border: 1px solid rgba(250,250,250,0.4);
-      background: rgba(15,23,42,0.95);
+      background: #020617;
     }
 
     .hero-score-chip span {
@@ -780,10 +752,6 @@
             </div>
             <div class="hero-tagline" id="heroLevelTagline">Vorbereitung wird geladen …</div>
           </div>
-          <div class="hero-subrow">
-            <span>CLASS: ULTRARUNNER</span>
-            <span>QUEST: 230 KM</span>
-          </div>
 
           <div class="hero-progress">
             <div class="progress-bar-hero">
@@ -951,6 +919,8 @@
               <option value="Locker">Lockerer Lauf</option>
               <option value="Kraft">Kraft / Stabi</option>
               <option value="Cross">Cross / Alternativ</option>
+              <option value="Indoor-Rad">Indoor-Rad</option>
+              <option value="Fitnessboxen">Fitnessboxen</option>
               <option value="Wettkampf">Wettkampf / Test</option>
             </select>
           </div>
