@@ -7,8 +7,6 @@
   <style>
     :root {
       --bg: #020617;
-      --bg-grad-1: #020617;
-      --bg-grad-2: #0f172a;
       --card: #020617;
       --accent: #22c55e;
       --accent-soft: rgba(34, 197, 94, 0.08);
@@ -100,7 +98,7 @@
       color: var(--accent-strong);
     }
 
-    /* HERO / SHAREABLE AREA */
+    /* --- HERO / INSTAGRAM-BEREICH --- */
 
     .hero {
       margin-bottom: 24px;
@@ -117,48 +115,52 @@
 
     .hero-card {
       position: relative;
-      border-radius: 18px;
-      padding: 16px 16px 18px;
+      border-radius: 20px;
+      padding: 18px 18px 20px;
       background:
-        linear-gradient(135deg, rgba(34,197,94,0.06), rgba(56,189,248,0.04)),
-        radial-gradient(circle at top, rgba(56,189,248,0.25), transparent 55%),
+        radial-gradient(circle at 0% 0%, rgba(34,197,94,0.18), transparent 55%),
+        radial-gradient(circle at 80% 0%, rgba(56,189,248,0.18), transparent 55%),
         #020617;
       box-shadow:
         0 0 0 2px rgba(15,23,42,1),
-        var(--shadow-soft);
+        0 0 0 1px rgba(51,65,85,0.8),
+        0 28px 48px rgba(15,23,42,0.95);
       border: 1px solid rgba(51,65,85,0.9);
       overflow: hidden;
       isolation: isolate;
     }
 
     .hero-card::before {
-      /* „Pixel“-Rahmen-Effekt */
+      /* Pixel-Grid */
       content: "";
       position: absolute;
-      inset: 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(148,163,184,0.3);
-      box-shadow:
-        0 0 0 1px rgba(15,23,42,0.9),
-        inset 0 0 0 1px rgba(15,23,42,0.9);
-      opacity: 0.9;
+      inset: 12px;
+      border-radius: 12px;
+      background-image:
+        linear-gradient(rgba(148,163,184,0.18) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148,163,184,0.18) 1px, transparent 1px);
+      background-size: 18px 18px;
+      opacity: 0.4;
+      mix-blend-mode: soft-light;
       pointer-events: none;
     }
 
     .hero-card::after {
-      /* leichter Pixel-Glow oben rechts */
+      /* atmender Glow */
       content: "";
       position: absolute;
-      width: 120px;
-      height: 120px;
-      right: -40px;
-      top: -40px;
-      background:
-        conic-gradient(from 180deg, rgba(34,197,94,0.4), transparent 35%, transparent 65%, rgba(56,189,248,0.45));
-      opacity: 0.55;
-      filter: blur(4px);
-      pointer-events: none;
+      inset: -40px;
+      background: radial-gradient(circle, rgba(34,197,94,0.25) 0, transparent 55%);
+      opacity: 0.4;
       mix-blend-mode: screen;
+      pointer-events: none;
+      animation: heroBreath 6s ease-in-out infinite;
+    }
+
+    @keyframes heroBreath {
+      0% { opacity: 0.25; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.03); }
+      100% { opacity: 0.25; transform: scale(1); }
     }
 
     .hero-content {
@@ -172,7 +174,7 @@
     .hero-label {
       font-size: 0.78rem;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.18em;
       color: var(--text-muted);
     }
 
@@ -184,17 +186,25 @@
     }
 
     .hero-level-number {
-      font-size: 2.6rem;
+      font-size: 2.8rem;
       font-weight: 900;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
 
-    .hero-level-number span {
-      font-size: 1.2rem;
-      letter-spacing: 0.16em;
-      margin-right: 4px;
+    .hero-level-number span.label {
+      font-size: 0.9rem;
+      letter-spacing: 0.24em;
+      margin-right: 6px;
       color: var(--text-muted);
+    }
+
+    .hero-level-number span.value {
+      color: var(--accent-strong);
+      text-shadow:
+        0 0 12px rgba(34,197,94,0.7),
+        0 0 24px rgba(22,163,74,0.85);
     }
 
     .hero-tagline {
@@ -202,29 +212,49 @@
       color: var(--text-muted);
     }
 
+    .hero-subrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 2px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .hero-subrow span {
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.9);
+    }
+
     .hero-progress {
-      margin-top: 6px;
+      margin-top: 8px;
     }
 
     .progress-bar-hero {
       width: 100%;
-      height: 10px;
+      height: 12px;
       border-radius: 999px;
       background: linear-gradient(90deg, #020617, #020617);
       border: 1px solid rgba(148,163,184,0.8);
       overflow: hidden;
+      position: relative;
     }
 
     .progress-fill-hero {
       height: 100%;
       border-radius: 999px;
       background:
-        linear-gradient(90deg, #22c55e, #4ade80);
+        linear-gradient(90deg, #22c55e, #bef264);
       width: 0%;
-      transition: width 0.4s ease-out;
+      transition: width 0.5s ease-out;
       box-shadow:
-        0 0 16px rgba(34,197,94,0.85),
-        0 0 24px rgba(22,163,74,0.8);
+        0 0 18px rgba(34,197,94,0.85),
+        0 0 26px rgba(190,242,100,0.7);
     }
 
     .hero-progress-meta {
@@ -234,6 +264,7 @@
       margin-top: 6px;
       font-size: 0.8rem;
       color: var(--text-muted);
+      font-family: "JetBrains Mono", ui-monospace;
     }
 
     .hero-progress-meta strong {
@@ -268,18 +299,6 @@
       box-shadow: 0 0 6px rgba(34,197,94,0.9);
     }
 
-    .hero-badge {
-      font-size: 0.78rem;
-      margin-top: 8px;
-      color: var(--text-muted);
-    }
-
-    .hero-badge span {
-      color: var(--accent-strong);
-      font-weight: 600;
-    }
-
-    /* Mini-Kacheln neben dem Level (für Screenshots) */
     .hero-mini-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -311,16 +330,42 @@
       color: var(--text-muted);
     }
 
-    /* Rechts im Hero: Gesamt-Status 7 Tage kompakt (Screenshot-tauglich) */
+    .hero-badge {
+      font-size: 0.78rem;
+      margin-top: 8px;
+      color: var(--text-muted);
+    }
+
+    .hero-badge span {
+      color: var(--accent-strong);
+      font-weight: 600;
+    }
+
+    /* Rechts im Hero: kompakter 7-Tage-Level-Score (Rank) */
 
     .hero-summary-card {
       position: relative;
-      border-radius: 18px;
+      border-radius: 20px;
       padding: 14px 14px 16px;
       background:
-        linear-gradient(135deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+        radial-gradient(circle at 0% 0%, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
       box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(30,64,175,0.8);
+      border: 1px solid rgba(30,64,175,0.9);
+      overflow: hidden;
+    }
+
+    .hero-summary-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(37,99,235,0.2), transparent 60%);
+      mix-blend-mode: soft-light;
+      opacity: 0.4;
+    }
+
+    .hero-summary-inner {
+      position: relative;
+      z-index: 1;
     }
 
     .hero-summary-title {
@@ -333,16 +378,29 @@
     }
 
     .hero-score-value {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-weight: 800;
+      font-family: "JetBrains Mono", ui-monospace;
     }
 
     .hero-score-chip {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       padding: 3px 9px;
       border-radius: 999px;
       border: 1px solid rgba(148,163,184,0.5);
       color: var(--text-muted);
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .hero-rank-pill {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(250,250,250,0.4);
+      background: rgba(15,23,42,0.95);
     }
 
     .hero-score-chip span {
@@ -352,7 +410,7 @@
     .hero-summary-body {
       font-size: 0.8rem;
       color: var(--text-muted);
-      margin-top: 4px;
+      margin-top: 6px;
     }
 
     .hero-summary-bars {
@@ -412,7 +470,7 @@
       border: 1px solid rgba(51,65,85,0.7);
     }
 
-    /* RESTLICHES LAYOUT */
+    /* --- RESTLICHES LAYOUT --- */
 
     .grid {
       display: grid;
@@ -580,11 +638,6 @@
       font-weight: 600;
     }
 
-    .summary-value-big {
-      font-size: 1.6rem;
-      font-weight: 800;
-    }
-
     .tag-ok {
       border-radius: 999px;
       padding: 2px 8px;
@@ -694,44 +747,6 @@
       white-space: nowrap;
     }
 
-    .ampel-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 6px;
-    }
-
-    .chart-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-top: 8px;
-    }
-
-    .chart-card {
-      background: #020617;
-      border-radius: 10px;
-      padding: 10px;
-      border: 1px solid rgba(30,64,175,0.5);
-    }
-
-    .chart-card-title {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    canvas {
-      width: 100%;
-      height: 180px;
-    }
-
-    .coach-text {
-      font-size: 0.8rem;
-      line-height: 1.4;
-      margin-top: 4px;
-    }
-
     #importJsonInput {
       display: none;
     }
@@ -754,16 +769,20 @@
       </div>
     </header>
 
-    <!-- SHAREBAR / HERO-BEREICH FÜR SCREENSHOTS -->
+    <!-- HERO-BEREICH / SHARE-CARD -->
     <section class="hero">
       <div class="hero-card">
         <div class="hero-content">
-          <div class="hero-label">Level & Fortschritt</div>
+          <div class="hero-label">Project 230 · Level</div>
           <div class="hero-title-row">
             <div class="hero-level-number">
-              <span>LVL</span><span id="heroLevelNumber">–</span>
+              <span class="label">LVL</span><span class="value" id="heroLevelNumber">–</span>
             </div>
-            <div class="hero-tagline" id="heroLevelTagline">Project 230 Progress</div>
+            <div class="hero-tagline" id="heroLevelTagline">Vorbereitung wird geladen …</div>
+          </div>
+          <div class="hero-subrow">
+            <span>CLASS: ULTRARUNNER</span>
+            <span>QUEST: 230 KM</span>
           </div>
 
           <div class="hero-progress">
@@ -808,52 +827,55 @@
       </div>
 
       <div class="hero-summary-card">
-        <div class="hero-summary-title">
-          <div>Letzte 7 Tage</div>
-          <div class="hero-score-value" id="heroScoreValue">–</div>
-        </div>
-        <div class="hero-score-chip" id="heroScoreChip">
-          Gesamtstatus: <span>–</span>
-        </div>
-        <div class="hero-summary-body" id="heroSummaryBody">
-          Auswertung folgt, sobald ausreichend Daten vorhanden sind.
-        </div>
+        <div class="hero-summary-inner">
+          <div class="hero-summary-title">
+            <div>Letzte 7 Tage</div>
+            <div class="hero-score-value" id="heroScoreValue">–</div>
+          </div>
+          <div class="hero-score-chip" id="heroScoreChip">
+            <span class="hero-rank-pill" id="heroRankPill">RANK –</span>
+            <span>Status: –</span>
+          </div>
+          <div class="hero-summary-body" id="heroSummaryBody">
+            Auswertung folgt, sobald ausreichend Daten vorhanden sind.
+          </div>
 
-        <div class="hero-summary-bars">
-          <div class="hero-bar-col">
-            <div class="hero-bar">
-              <div class="hero-bar-fill" id="heroBarTraining"></div>
+          <div class="hero-summary-bars">
+            <div class="hero-bar-col">
+              <div class="hero-bar">
+                <div class="hero-bar-fill" id="heroBarTraining"></div>
+              </div>
+              <div>Train.</div>
             </div>
-            <div>Training</div>
-          </div>
-          <div class="hero-bar-col">
-            <div class="hero-bar">
-              <div class="hero-bar-fill" id="heroBarSleep"></div>
+            <div class="hero-bar-col">
+              <div class="hero-bar">
+                <div class="hero-bar-fill" id="heroBarSleep"></div>
+              </div>
+              <div>Schlaf</div>
             </div>
-            <div>Schlaf</div>
-          </div>
-          <div class="hero-bar-col">
-            <div class="hero-bar">
-              <div class="hero-bar-fill" id="heroBarFluids"></div>
+            <div class="hero-bar-col">
+              <div class="hero-bar">
+                <div class="hero-bar-fill" id="heroBarFluids"></div>
+              </div>
+              <div>Flüss.</div>
             </div>
-            <div>Flüssigk.</div>
-          </div>
-          <div class="hero-bar-col">
-            <div class="hero-bar">
-              <div class="hero-bar-fill" id="heroBarWeight"></div>
+            <div class="hero-bar-col">
+              <div class="hero-bar">
+                <div class="hero-bar-fill" id="heroBarWeight"></div>
+              </div>
+              <div>Gew.</div>
             </div>
-            <div>Gewicht</div>
-          </div>
-          <div class="hero-bar-col">
-            <div class="hero-bar">
-              <div class="hero-bar-fill" id="heroBarLoad"></div>
+            <div class="hero-bar-col">
+              <div class="hero-bar">
+                <div class="hero-bar-fill" id="heroBarLoad"></div>
+              </div>
+              <div>Load</div>
             </div>
-            <div>Belastung</div>
           </div>
-        </div>
 
-        <div class="hero-summary-tags" id="heroSummaryTags">
-          <!-- kleine Tags per JS -->
+          <div class="hero-summary-tags" id="heroSummaryTags">
+            <!-- Tags per JS -->
+          </div>
         </div>
       </div>
     </section>
@@ -1017,7 +1039,7 @@
       </section>
     </div>
 
-    <!-- Auswertung 7 Tage + weitere Details -->
+    <!-- Auswertung 7 Tage -->
     <section class="card">
       <h2>Auswertung letzte 7 Tage <span>Training · Schlaf · Flüssigkeit · Details</span></h2>
 
@@ -1049,29 +1071,6 @@
       <p class="hint">
         Berechnung basiert auf Wochenkilometern, Belastung (TRIMP), Schlaf, Flüssigkeit, Wohlbefinden & Beschwerden.
       </p>
-    </section>
-
-    <!-- Visualisierung -->
-    <section class="card" style="margin-top:20px;">
-      <h2>Visualisierung <span>Trends & Belastung</span></h2>
-      <div class="chart-grid">
-        <div class="chart-card">
-          <div class="chart-card-title">Wochenkilometer vs. Ziel</div>
-          <canvas id="weeklyKmChart"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-card-title">Belastung (TRIMP, 7-Tage-Summe)</div>
-          <canvas id="trimpChart"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-card-title">Schlaf & Flüssigkeit (letzte 14 Tage)</div>
-          <canvas id="sleepHydrationChart"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-card-title">Gewicht über die Zeit</div>
-          <canvas id="weightChart"></canvas>
-        </div>
-      </div>
     </section>
 
     <!-- Rohdaten -->
@@ -1107,8 +1106,6 @@
       </div>
     </section>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
     // --- Helper ---
@@ -1187,7 +1184,7 @@
     const weeklyCoachTitleEl = document.getElementById("weeklyCoachTitle");
     const weeklyCoachTextEl = document.getElementById("weeklyCoachText");
 
-    // HERO-Elemente (für Instagram / Screenshots)
+    // HERO-Elemente
     const heroLevelNumberEl = document.getElementById("heroLevelNumber");
     const heroLevelTaglineEl = document.getElementById("heroLevelTagline");
     const heroProgressFillEl = document.getElementById("heroProgressFill");
@@ -1199,6 +1196,7 @@
     const heroMiniFluidsEl = document.getElementById("heroMiniFluids");
     const heroScoreValueEl = document.getElementById("heroScoreValue");
     const heroScoreChipEl = document.getElementById("heroScoreChip");
+    const heroRankPillEl = document.getElementById("heroRankPill");
     const heroSummaryBodyEl = document.getElementById("heroSummaryBody");
     const heroSummaryTagsEl = document.getElementById("heroSummaryTags");
 
@@ -1207,11 +1205,6 @@
     const heroBarFluidsEl = document.getElementById("heroBarFluids");
     const heroBarWeightEl = document.getElementById("heroBarWeight");
     const heroBarLoadEl = document.getElementById("heroBarLoad");
-
-    let weeklyKmChart = null;
-    let trimpChart = null;
-    let sleepHydrationChart = null;
-    let weightChart = null;
 
     // --- Settings UI ---
     function initSettingsUI() {
@@ -1301,15 +1294,6 @@
       `;
 
       raceSummaryEl.innerHTML = blocks;
-    }
-
-    function getMonday(dateString) {
-      const d = new Date(dateString + "T00:00:00");
-      const day = d.getDay(); // 0=So,1=Mo
-      const diff = (day === 0 ? -6 : 1 - day);
-      d.setDate(d.getDate() + diff);
-      d.setHours(0,0,0,0);
-      return d;
     }
 
     function formatDateShort(dateString) {
@@ -1539,7 +1523,7 @@
       reader.readAsText(file);
     }
 
-    // --- Stats, Score, Charts & Coaching ---
+    // --- Stats, Score & Coaching ---
     function updateStats() {
       statsSummaryEl.innerHTML = "";
       if (coachFeedbackEl) coachFeedbackEl.textContent = "";
@@ -1553,7 +1537,6 @@
           </div>
         `;
         entriesTableBody.innerHTML = "";
-        updateCharts({});
         updateCoaching({}, {});
         updateHero({}, {}, {}, {});
         return;
@@ -1565,7 +1548,8 @@
       today.setHours(0,0,0,0);
       const sevenDaysAgo = new Date(today.getTime() - 6 * 24*60*60*1000);
       const threeDaysAgo = new Date(today.getTime() - 2 * 24*60*60*1000);
-      const fourteenDaysAgo = new Date(today.getTime() - 13 * 24*60*60*1000);
+      const thirtyDaysAgo = new Date(today.getTime() - 30 * 24*60*60*1000);
+      const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().substring(0,10);
 
       let sumKm = 0;
       let sumSleep = 0;
@@ -1576,18 +1560,8 @@
       let trimp7 = 0;
       let trimp3 = 0;
 
-      const thirtyDaysAgo = new Date(today.getTime() - 30 * 24*60*60*1000);
-      const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().substring(0,10);
-
       let latestWeight = null;
       let weight30days = null;
-
-      const weeklyKmMap = {};
-      const dailyTrimpMap = {};
-      const sleepMap = {};
-      const fluidsMap = {};
-      const weightSeries = [];
-
       let last7WellbeingSum = 0;
       let last7WellbeingCount = 0;
       let painCountLast7 = 0;
@@ -1632,25 +1606,6 @@
               weight30days = { date: e.date, weight: w };
             }
           }
-          weightSeries.push({ date: e.date, weight: w });
-        }
-
-        const distForWeekly = parseNumber(e.distanceKm);
-        if (distForWeekly != null && distForWeekly > 0) {
-          const monday = getMonday(e.date);
-          const mondayStr = monday.toISOString().substring(0,10);
-          if (!weeklyKmMap[mondayStr]) weeklyKmMap[mondayStr] = 0;
-          weeklyKmMap[mondayStr] += distForWeekly;
-        }
-
-        if (!dailyTrimpMap[dateStr]) dailyTrimpMap[dateStr] = 0;
-        dailyTrimpMap[dateStr] += trimp;
-
-        if (d >= fourteenDaysAgo && d <= today) {
-          const s = parseNumber(e.sleepHours);
-          const f = parseNumber(e.fluidsLiters);
-          if (s != null) sleepMap[dateStr] = s;
-          if (f != null) fluidsMap[dateStr] = f;
         }
       }
 
@@ -1778,7 +1733,6 @@
 
       let summaryHtml = "";
 
-      // Die restlichen Detailkarten wie bisher
       summaryHtml += `
         <div class="summary-card">
           <div class="summary-label">Wochenkilometer (letzte 7 Tage)</div>
@@ -1891,186 +1845,17 @@
       }
       entriesTableBody.innerHTML = rowsHtml;
 
-      updateCharts({ weeklyKmMap, dailyTrimpMap, sleepMap, fluidsMap, weightSeries, targetKm });
       updateCoaching(
         { sumKm, targetKm, trimp7, trimp3, avgSleep, avgFluids, avgWellbeing, painCountLast7 },
         { kmScore, sleepScore, fluidsScore, weightScore, loadScore, overallScore }
       );
 
-      // HERO-Update für Screenshots/Sharing
       updateHero(
         { totalXP, progress, levelPercent },
         { sumKm, avgSleep, avgFluids },
         { kmScore, sleepScore, fluidsScore, weightScore, loadScore, overallScore },
         { kmLevel, sleepLevel, fluidsLevel, weightLevel, loadLevel, avgWellbeing, painCountLast7 }
       );
-    }
-
-    // --- Charts ---
-    function updateCharts(data) {
-      const ctxWeekly = document.getElementById("weeklyKmChart");
-      const ctxTrimp = document.getElementById("trimpChart");
-      const ctxSleepHydration = document.getElementById("sleepHydrationChart");
-      const ctxWeight = document.getElementById("weightChart");
-
-      const weeklyKmMap = data.weeklyKmMap || {};
-      const dailyTrimpMap = data.dailyTrimpMap || {};
-      const sleepMap = data.sleepMap || {};
-      const fluidsMap = data.fluidsMap || {};
-      const weightSeries = data.weightSeries || [];
-      const targetKm = data.targetKm;
-
-      const weekKeys = Object.keys(weeklyKmMap).sort();
-      const weekLabels = weekKeys.map(k => "KW ab " + formatDateShort(k));
-      const weekValues = weekKeys.map(k => weeklyKmMap[k]);
-      const targetLine = targetKm ? weekKeys.map(() => targetKm) : null;
-
-      if (weeklyKmChart) weeklyKmChart.destroy();
-      weeklyKmChart = new Chart(ctxWeekly, {
-        type: "bar",
-        data: {
-          labels: weekLabels,
-          datasets: [
-            {
-              label: "Wochenkilometer",
-              data: weekValues
-            }
-          ].concat(targetLine ? [{
-            type: "line",
-            label: "Ziel-Wochenkilometer",
-            data: targetLine,
-            borderWidth: 1,
-            borderDash: [4, 4],
-            pointRadius: 0
-          }] : [])
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { ticks: { autoSkip: true, maxTicksLimit: 6 } },
-            y: { beginAtZero: true }
-          }
-        }
-      });
-
-      const trimpDates = Object.keys(dailyTrimpMap).sort();
-      const trimpLabels = trimpDates.map(d => formatDateShort(d));
-      const trimpValues = [];
-      for (let i = 0; i < trimpDates.length; i++) {
-        const d = new Date(trimpDates[i] + "T00:00:00");
-        const windowStart = new Date(d.getTime() - 6 * 24*60*60*1000);
-        let sum = 0;
-        for (let j = 0; j <= i; j++) {
-          const dj = new Date(trimpDates[j] + "T00:00:00");
-          if (dj >= windowStart && dj <= d) {
-            sum += dailyTrimpMap[trimpDates[j]];
-          }
-        }
-        trimpValues.push(sum);
-      }
-
-      if (trimpChart) trimpChart.destroy();
-      trimpChart = new Chart(ctxTrimp, {
-        type: "line",
-        data: {
-          labels: trimpLabels,
-          datasets: [
-            {
-              label: "TRIMP (7-Tage-Summe)",
-              data: trimpValues,
-              borderWidth: 1,
-              tension: 0.3,
-              pointRadius: 0
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { ticks: { autoSkip: true, maxTicksLimit: 6 } },
-            y: { beginAtZero: true }
-          }
-        }
-      });
-
-      const allDatesSet = new Set([...Object.keys(sleepMap), ...Object.keys(fluidsMap)]);
-      const allDates = Array.from(allDatesSet).sort();
-      const shLabels = allDates.map(d => formatDateShort(d));
-      const sleepValues = allDates.map(d => sleepMap[d] != null ? sleepMap[d] : null);
-      const fluidsValues = allDates.map(d => fluidsMap[d] != null ? fluidsMap[d] : null);
-
-      if (sleepHydrationChart) sleepHydrationChart.destroy();
-      sleepHydrationChart = new Chart(ctxSleepHydration, {
-        type: "line",
-        data: {
-          labels: shLabels,
-          datasets: [
-            {
-              label: "Schlaf (h)",
-              data: sleepValues,
-              borderWidth: 1,
-              tension: 0.3,
-              pointRadius: 2,
-              yAxisID: "y"
-            },
-            {
-              label: "Flüssigkeit (L)",
-              data: fluidsValues,
-              borderWidth: 1,
-              tension: 0.3,
-              pointRadius: 2,
-              yAxisID: "y1"
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { ticks: { autoSkip: true, maxTicksLimit: 7 } },
-            y: {
-              position: "left",
-              beginAtZero: true
-            },
-            y1: {
-              position: "right",
-              beginAtZero: true,
-              grid: { drawOnChartArea: false }
-            }
-          }
-        }
-      });
-
-      const sortedWeight = [...weightSeries].sort((a, b) => a.date.localeCompare(b.date));
-      const weightLabels = sortedWeight.map(w => formatDateShort(w.date));
-      const weightValues = sortedWeight.map(w => w.weight);
-
-      if (weightChart) weightChart.destroy();
-      weightChart = new Chart(ctxWeight, {
-        type: "line",
-        data: {
-          labels: weightLabels,
-          datasets: [
-            {
-              label: "Gewicht (kg)",
-              data: weightValues,
-              borderWidth: 1,
-              tension: 0.3,
-              pointRadius: 2
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { ticks: { autoSkip: true, maxTicksLimit: 6 } },
-            y: { beginAtZero: false }
-          }
-        }
-      });
     }
 
     // --- Coaching: Tages- & Wochenempfehlung ---
@@ -2212,7 +1997,7 @@
       weeklyCoachTextEl.innerHTML = weeklyText;
     }
 
-    // --- HERO: Instagram-/Screenshot-Bereich updaten ---
+    // --- HERO: Level / Rank / Bars ---
     function updateHero(levelData, miniData, scoreData, labelData) {
       const { totalXP = 0, progress = { level: 1, xpIntoLevel: 0, xpPerLevel: 50 }, levelPercent = 0 } = levelData;
       const { sumKm = null, avgSleep = null, avgFluids = null } = miniData;
@@ -2229,7 +2014,6 @@
         avgWellbeing = null, painCountLast7 = 0
       } = labelData;
 
-      // Level / XP
       heroLevelNumberEl.textContent = progress.level || 1;
       heroProgressFillEl.style.width = `${levelPercent.toFixed(1)}%`;
       heroXPTextEl.textContent = `XP: ${totalXP}`;
@@ -2241,7 +2025,6 @@
         heroLevelTaglineEl.textContent = "Project 230 · Aufbauphase";
       }
 
-      // kleiner Status-Text
       let statusLine = "";
       if (!overallScore || !entries || entries.length === 0) {
         statusLine = "Noch zu wenige Daten – einfach weiter loggen.";
@@ -2256,15 +2039,14 @@
       }
       heroStatusTextEl.textContent = statusLine;
 
-      // Mini-Kacheln
       heroMiniSleepEl.textContent = avgSleep != null ? avgSleep.toFixed(1) : "–";
       heroMiniKmEl.textContent = sumKm != null ? sumKm.toFixed(1) : "–";
       heroMiniFluidsEl.textContent = avgFluids != null ? avgFluids.toFixed(1) : "–";
 
-      // Score & Body
       if (!overallScore || !entries || entries.length === 0) {
         heroScoreValueEl.textContent = "–";
-        heroScoreChipEl.innerHTML = 'Gesamtstatus: <span>noch offen</span>';
+        heroRankPillEl.textContent = "RANK –";
+        heroScoreChipEl.innerHTML = `<span class="hero-rank-pill" id="heroRankPill">RANK –</span><span>Status: noch offen</span>`;
         heroSummaryBodyEl.textContent = "Sobald die erste Woche gefüllt ist, erscheint hier eine kompakte Bewertung der letzten 7 Tage.";
         heroBarTrainingEl.style.height = "0%";
         heroBarSleepEl.style.height = "0%";
@@ -2276,12 +2058,24 @@
       }
 
       heroScoreValueEl.textContent = overallScore;
-      let chipLabel = "";
-      if (overallScore >= 85) chipLabel = "stabil";
-      else if (overallScore >= 70) chipLabel = "gut";
-      else if (overallScore >= 55) chipLabel = "ausbaufähig";
-      else chipLabel = "kritisch";
-      heroScoreChipEl.innerHTML = `Gesamtstatus: <span>${chipLabel}</span>`;
+
+      // Rank-System (S/A/B/C/D)
+      let rank = "D";
+      if (overallScore >= 90) rank = "S";
+      else if (overallScore >= 80) rank = "A";
+      else if (overallScore >= 70) rank = "B";
+      else if (overallScore >= 55) rank = "C";
+
+      let rankLabel = "";
+      if (rank === "S") rankLabel = "Elite-Prep";
+      else if (rank === "A") rankLabel = "Strong-Prep";
+      else if (rank === "B") rankLabel = "Solid-Prep";
+      else if (rank === "C") rankLabel = "Build-Up";
+      else rankLabel = "Fragile-Prep";
+
+      heroScoreChipEl.innerHTML =
+        `<span class="hero-rank-pill" id="heroRankPill">RANK ${rank}</span>` +
+        `<span>Status: ${rankLabel}</span>`;
 
       let shortText = "";
       if (overallScore >= 85) shortText = "Sehr gute Grundlage – Training, Schlaf und Belastungssteuerung wirken stimmig.";
