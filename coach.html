@@ -38,7 +38,6 @@
     }
 
     /* STORY-MODE: nur Hero sichtbar, perfekt für Screenshot / Story */
-
     body.story-mode {
       background: radial-gradient(circle at top, #020617 0, #000 80%);
     }
@@ -153,8 +152,7 @@
       position: relative;
       border-radius: 16px;
       padding: 18px 18px 20px;
-      background:
-        linear-gradient(145deg, #020617, #020617);
+      background: linear-gradient(145deg, #020617, #020617);
       box-shadow:
         0 0 0 1px rgba(15,23,42,1),
         0 22px 42px rgba(0,0,0,0.95);
@@ -191,20 +189,6 @@
         0 0 18px rgba(14,165,233,0.7);
       opacity: 0.9;
     }
-
-    /* Pixel-Ecken */
-    .pixel-corner {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: transparent;
-      box-shadow: 0 0 0 2px rgba(148,163,184,0.7);
-    }
-
-    .pixel-corner-tl { top: 10px; left: 10px; }
-    .pixel-corner-tr { top: 10px; right: 10px; }
-    .pixel-corner-bl { bottom: 10px; left: 10px; }
-    .pixel-corner-br { bottom: 10px; right: 10px; }
 
     .hero-content {
       position: relative;
@@ -256,48 +240,6 @@
       color: var(--text-muted);
     }
 
-    .hero-rank-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 4px;
-      font-size: 0.8rem;
-    }
-
-    .hero-rank-label {
-      padding: 2px 8px;
-      border-radius: 2px;
-      border: 1px solid rgba(148,163,184,0.7);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--text-muted);
-      background: #020617;
-    }
-
-    .hero-stars {
-      display: flex;
-      gap: 2px;
-      font-size: 0.9rem;
-    }
-
-    .hero-star {
-      opacity: 0.15;
-      filter: grayscale(1);
-      transition: opacity 0.2s ease-out, transform 0.2s ease-out;
-    }
-
-    .hero-star.active {
-      opacity: 1;
-      filter: none;
-      transform: translateY(-1px);
-    }
-
-    .hero-star.bronze { color: #b45309; }
-    .hero-star.silver { color: #e5e7eb; }
-    .hero-star.gold { color: #facc15; }
-    .hero-star.red { color: #f97316; }
-    .hero-star.purple { color: #a855f7; }
-
     .hero-progress {
       margin-top: 10px;
     }
@@ -339,6 +281,48 @@
     .hero-progress-meta strong {
       color: var(--accent-strong);
       font-size: 0.84rem;
+    }
+
+    .hero-stars {
+      margin-top: 8px;
+      font-size: 1.8rem;
+      letter-spacing: 6px;
+    }
+
+    .hero-star {
+      opacity: 0.2;
+      transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+      filter: drop-shadow(0 0 4px rgba(15,23,42,0.8));
+    }
+
+    .hero-star.active {
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
+    .hero-star.bronze.active {
+      color: #b45309;
+      text-shadow: 0 0 8px rgba(180,83,9,0.8);
+    }
+
+    .hero-star.silver.active {
+      color: #e5e7eb;
+      text-shadow: 0 0 8px rgba(148,163,184,0.8);
+    }
+
+    .hero-star.gold.active {
+      color: #fbbf24;
+      text-shadow: 0 0 10px rgba(251,191,36,0.9);
+    }
+
+    .hero-star.red.active {
+      color: #f97373;
+      text-shadow: 0 0 10px rgba(248,113,113,0.9);
+    }
+
+    .hero-star.purple.active {
+      color: #a855f7;
+      text-shadow: 0 0 10px rgba(168,85,247,0.9);
     }
 
     .hero-status-tags {
@@ -846,12 +830,6 @@
     <!-- HERO-BEREICH / SHARE-CARD -->
     <section class="hero keep-in-story">
       <div class="hero-card">
-        <!-- Pixel-Ecken -->
-        <div class="pixel-corner pixel-corner-tl"></div>
-        <div class="pixel-corner pixel-corner-tr"></div>
-        <div class="pixel-corner pixel-corner-bl"></div>
-        <div class="pixel-corner pixel-corner-br"></div>
-
         <div class="hero-content">
           <div class="hero-label">Project 230 · Level</div>
           <div class="hero-title-row">
@@ -859,17 +837,6 @@
               <span class="label">LVL</span><span class="value" id="heroLevelNumber">–</span>
             </div>
             <div class="hero-tagline" id="heroLevelTagline">Vorbereitung wird geladen …</div>
-          </div>
-
-          <div class="hero-rank-row">
-            <span class="hero-rank-label" id="heroRankMain">RANG –</span>
-            <div class="hero-stars" id="heroStars">
-              <span class="hero-star">★</span>
-              <span class="hero-star">★</span>
-              <span class="hero-star">★</span>
-              <span class="hero-star">★</span>
-              <span class="hero-star">★</span>
-            </div>
           </div>
 
           <div class="hero-progress">
@@ -880,6 +847,14 @@
               <span id="heroXPText">XP: –</span>
               <span id="heroNextLevelText">bis nächstes Level</span>
             </div>
+          </div>
+
+          <div class="hero-stars" id="heroStars">
+            <span class="hero-star bronze">★</span>
+            <span class="hero-star silver">★</span>
+            <span class="hero-star gold">★</span>
+            <span class="hero-star red">★</span>
+            <span class="hero-star purple">★</span>
           </div>
 
           <div class="hero-status-tags">
@@ -896,9 +871,9 @@
               <div class="hero-mini-pill">h / Tag</div>
             </div>
             <div class="hero-mini-card">
-              <div class="hero-mini-label">Wochen-km (eq., 7T)</div>
+              <div class="hero-mini-label">Wochen-km (7T)</div>
               <div class="hero-mini-value" id="heroMiniKm">–</div>
-              <div class="hero-mini-pill">km (Laufäquivalent)</div>
+              <div class="hero-mini-pill">Lauf-Äquiv.</div>
             </div>
             <div class="hero-mini-card">
               <div class="hero-mini-label">Hydration (7T)</div>
@@ -1138,6 +1113,7 @@
 
       <p class="hint">
         Ziel: stabile Wochenstruktur, gute Regeneration und kontinuierlicher Aufbau Richtung Level&nbsp;100 (TorTour-Ready).
+        Rad-km werden als Lauf-Äquivalente geringer gewichtet.
       </p>
       <div id="coachFeedback" class="hint"></div>
     </section>
@@ -1158,7 +1134,7 @@
         </div>
       </div>
       <p class="hint">
-        Berechnung basiert auf Wochenkilometern (Laufäquivalent), Belastung (TRIMP), Schlaf, Flüssigkeit, Wohlbefinden, Ruhetagen & Beschwerden.
+        Berechnung basiert auf Wochenkilometern (Lauf-Äquivalente), Belastung (TRIMP), Schlaf, Flüssigkeit, Wohlbefinden & Beschwerden.
       </p>
     </section>
 
@@ -1221,25 +1197,6 @@
       }
     }
 
-    // Distanz in Laufäquivalent umrechnen (Rad weniger wert etc.)
-    function getEquivalentDistance(entry) {
-      const dist = parseNumber(entry.distanceKm);
-      if (!dist || dist <= 0) return 0;
-      const type = entry.trainingType || "";
-
-      switch (type) {
-        case "Indoor-Rad":
-          return dist * 0.4; // Rad zählt schwächer
-        case "Cross":
-          return dist * 0.7; // Cross/Alternativ etwas reduziert
-        case "Kraft":
-        case "Fitnessboxen":
-          return 0; // keine km-Relevanz
-        default:
-          return dist; // Lauf / Wettkampf / locker etc. zählen voll
-      }
-    }
-
     const STORAGE_ENTRIES_KEY = "project230_entries_v1";
     const STORAGE_SETTINGS_KEY = "project230_settings_v1";
 
@@ -1275,7 +1232,7 @@
 
     const saveSettingsBtn = document.getElementById("saveSettingsBtn");
     const fillTodayBtn = document.getElementById("fillTodayBtn");
-    const addEntryBtn = document.getElementById("addEntryBtn");
+    the addEntryBtn = document.getElementById("addEntryBtn");
     const clearDataLink = document.getElementById("clearDataLink");
 
     const exportJsonBtn = document.getElementById("exportJsonBtn");
@@ -1295,8 +1252,6 @@
     // HERO-Elemente
     const heroLevelNumberEl = document.getElementById("heroLevelNumber");
     const heroLevelTaglineEl = document.getElementById("heroLevelTagline");
-    const heroRankMainEl = document.getElementById("heroRankMain");
-    const heroStarsEl = document.getElementById("heroStars");
     const heroProgressFillEl = document.getElementById("heroProgressFill");
     const heroXPTextEl = document.getElementById("heroXPText");
     const heroNextLevelTextEl = document.getElementById("heroNextLevelText");
@@ -1306,6 +1261,7 @@
     const heroMiniFluidsEl = document.getElementById("heroMiniFluids");
     const heroScoreValueEl = document.getElementById("heroScoreValue");
     const heroScoreChipEl = document.getElementById("heroScoreChip");
+    const heroRankPillEl = document.getElementById("heroRankPill");
     const heroSummaryBodyEl = document.getElementById("heroSummaryBody");
     const heroSummaryTagsEl = document.getElementById("heroSummaryTags");
 
@@ -1316,6 +1272,8 @@
     const heroBarLoadEl = document.getElementById("heroBarLoad");
 
     const storyModeBtn = document.getElementById("storyModeBtn");
+    const heroStarsContainer = document.getElementById("heroStars");
+    const heroStars = heroStarsContainer ? heroStarsContainer.querySelectorAll(".hero-star") : [];
 
     // Story-Ansicht toggeln
     storyModeBtn.addEventListener("click", () => {
@@ -1421,23 +1379,34 @@
 
       let xp = 0;
 
-      const distEq = getEquivalentDistance(entry);
+      const dist = parseNumber(entry.distanceKm);
       const dur = parseNumber(entry.durationMin);
       const rpe = parseNumber(entry.rpe);
       const sleep = parseNumber(entry.sleepHours);
       const fluids = parseNumber(entry.fluidsLiters);
       const wb = parseNumber(entry.wellbeing);
-      const isTraining = distEq != null && distEq > 0 && dur != null && dur > 0;
+      const tType = entry.trainingType || "";
+      const isTraining = dist != null && dist > 0 && dur != null && dur > 0;
+
+      // Lauf-Äquivalente (Rad weniger wert)
+      let effectiveKm = dist != null ? dist : 0;
+      if (tType === "Indoor-Rad") effectiveKm = effectiveKm * 0.6;
+      else if (tType === "Cross") effectiveKm = effectiveKm * 0.8;
 
       if (isTraining) {
         xp += 10;
       } else {
-        xp += 3; // Ruhetag gibt auch XP
+        // Ruhetag: wichtig, aber nicht übermäßig belohnen
+        if (sleep != null && sleep >= targetSleep * 0.9 && fluids != null && fluids >= targetFluids * 0.9) {
+          xp += 5; // guter Recovery-Day
+        } else {
+          xp += 3; // normaler Ruhetag
+        }
       }
 
-      if (distEq != null && distEq > 0 && targetKm > 0) {
+      if (effectiveKm > 0 && targetKm > 0) {
         const targetDailyKm = targetKm / 7;
-        const ratio = distEq / targetDailyKm;
+        const ratio = effectiveKm / targetDailyKm;
         if (ratio >= 0.8 && ratio <= 1.5) {
           xp += 10;
         } else if (ratio > 0.3) {
@@ -1470,7 +1439,7 @@
       if (entry.nightRun) {
         xp += 8;
       }
-      if (entry.trainingType === "Langer Lauf" && distEq != null && distEq >= 25) {
+      if (entry.trainingType === "Langer Lauf" && dist != null && dist >= 25) {
         xp += 8;
       }
 
@@ -1663,7 +1632,7 @@
       const thirtyDaysAgo = new Date(today.getTime() - 30 * 24*60*60*1000);
       const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().substring(0,10);
 
-      let sumKmEq = 0;
+      let sumKm = 0;
       let sumSleep = 0;
       let sumFluids = 0;
       let countSleep = 0;
@@ -1678,24 +1647,23 @@
       let last7WellbeingCount = 0;
       let painCountLast7 = 0;
 
-      const last7DatesMap = {};
-
       for (const e of sorted) {
         if (!e.date) continue;
         const d = new Date(e.date + "T00:00:00");
-        const dateStr = e.date;
 
-        const dur = parseNumber(e.durationMin);
-        const rpeVal = parseNumber(e.rpe);
-        const distEq = getEquivalentDistance(e);
+        const dist = parseNumber(e.distanceKm);
+        const tType = e.trainingType || "";
+
+        // Lauf-Äquivalente
+        let effectiveKm = 0;
+        if (dist != null) {
+          effectiveKm = dist;
+          if (tType === "Indoor-Rad") effectiveKm *= 0.6;
+          else if (tType === "Cross") effectiveKm *= 0.8;
+        }
 
         if (d >= sevenDaysAgo && d <= today) {
-          if (!last7DatesMap[dateStr]) last7DatesMap[dateStr] = { hasTraining: false };
-          if ((distEq != null && distEq > 0) || (dur != null && dur > 0)) {
-            last7DatesMap[dateStr].hasTraining = true;
-          }
-
-          if (distEq != null) sumKmEq += distEq;
+          if (effectiveKm > 0) sumKm += effectiveKm;
 
           const sleep = parseNumber(e.sleepHours);
           if (sleep != null) { sumSleep += sleep; countSleep++; }
@@ -1709,6 +1677,8 @@
           if (e.hasPain === true) painCountLast7++;
         }
 
+        const dur = parseNumber(e.durationMin);
+        const rpeVal = parseNumber(e.rpe);
         let trimp = 0;
         if (dur != null && rpeVal != null) {
           trimp = dur * rpeVal;
@@ -1727,14 +1697,6 @@
             }
           }
         }
-      }
-
-      const dateKeys = Object.keys(last7DatesMap);
-      let restDays = 0;
-      let trainingDays = 0;
-      for (const k of dateKeys) {
-        if (last7DatesMap[k].hasTraining) trainingDays++;
-        else restDays++;
       }
 
       const avgSleep = countSleep > 0 ? (sumSleep / countSleep) : null;
@@ -1781,13 +1743,13 @@
 
       const targetKm = settings.targetKm || 90;
 
-      if (targetKm > 0 && sumKmEq > 0) {
-        const ratio = sumKmEq / targetKm;
+      if (targetKm > 0 && sumKm > 0) {
+        const ratio = sumKm / targetKm;
         if (ratio >= 0.8 && ratio <= 1.1) kmScore = 90;
         else if (ratio >= 0.6 && ratio <= 1.3) kmScore = 75;
         else if (ratio >= 0.4 && ratio <= 1.6) kmScore = 55;
         else kmScore = 35;
-      } else if (sumKmEq > 0) {
+      } else if (sumKm > 0) {
         kmScore = 70;
       }
 
@@ -1828,15 +1790,6 @@
         else loadScore = 35;
       }
 
-      // Ruhetage berücksichtigen: 0 oder sehr viele drücken Load-Score
-      if (dateKeys.length > 0) {
-        if (restDays === 0) {
-          loadScore = Math.min(loadScore, 65);
-        } else if (restDays >= 4) {
-          loadScore = Math.min(loadScore, 55);
-        }
-      }
-
       const overallScore = Math.round(
         kmScore * 0.4 +
         sleepScore * 0.25 +
@@ -1846,21 +1799,21 @@
       );
 
       let overallText = "";
-      if (overallScore >= 85) {
+      if (overallScore >= 90) {
         overallText = "Sehr gut im Plan – Vorbereitung wirkt stabil und durchdacht.";
-      } else if (overallScore >= 70) {
+      } else if (overallScore >= 75) {
         overallText = "Gut unterwegs – ein paar Stellschrauben (Schlaf/Struktur) verbessern die Stabilität weiter.";
-      } else if (overallScore >= 55) {
+      } else if (overallScore >= 60) {
         overallText = "Solide Basis, aber noch nicht richtig stabil. Fokus auf Routine, Recovery & klare Wochenstruktur.";
       } else {
         overallText = "Achtung: Vorbereitung wirkt wackelig. Umfang, Schlaf & Hydration bewusst prüfen und ggf. anpassen.";
       }
 
-      const kmLevel = levelFromScore(kmScore);
-      const sleepLevel = levelFromScore(sleepScore);
-      const fluidsLevel = levelFromScore(fluidsScore);
-      const weightLevel = levelFromScore(weightScore);
-      const loadLevel = levelFromScore(loadScore);
+      let kmLevel = levelFromScore(kmScore);
+      let sleepLevel = levelFromScore(sleepScore);
+      let fluidsLevel = levelFromScore(fluidsScore);
+      let weightLevel = levelFromScore(weightScore);
+      let loadLevel = levelFromScore(loadScore);
 
       const totalXP = computeTotalXP(sorted, settings);
       const progress = getLevelFromXP(totalXP);
@@ -1872,9 +1825,9 @@
 
       summaryHtml += `
         <div class="summary-card">
-          <div class="summary-label">Wochenkilometer (letzte 7 Tage, eq.)</div>
-          <div class="summary-value">${sumKmEq.toFixed(1)} km</div>
-          ${buildTag(sumKmEq, targetKm, "km/Woche (eq.)", "higher-better")}
+          <div class="summary-label">Wochenkilometer (letzte 7 Tage)</div>
+          <div class="summary-value">${sumKm.toFixed(1)} km Äquiv.</div>
+          ${buildTag(sumKm, targetKm, "km/Woche", "higher-better")}
         </div>
       `;
 
@@ -1921,31 +1874,6 @@
         </div>
       `;
 
-      const restInfo = dateKeys.length > 0
-        ? `Trainings-/Log-Tage: ${trainingDays}, Ruhetage (mit Log): ${restDays}`
-        : "Noch keine volle Woche getrackt.";
-
-      summaryHtml += `
-        <div class="summary-card">
-          <div class="summary-label">Ruhetage (letzte 7 Tage)</div>
-          <div class="summary-value">${restDays} Tage</div>
-          <div class="${
-            restDays === 0 ? "tag-warn" :
-            restDays <= 3 ? "tag-ok" :
-            "tag-warn"
-          }">
-            ${
-              restDays === 0
-                ? "Keine Ruhetage – zumindest 1 vollständiger Restday pro Woche ist sinnvoll."
-                : restDays <= 3
-                ? "Guter Mix aus Belastung und Ruhe."
-                : "Relativ viele Ruhetage – Trainingsreiz und Struktur im Blick behalten."
-            }
-          </div>
-          <div class="tag-ok">${restInfo}</div>
-        </div>
-      `;
-
       statsSummaryEl.innerHTML = summaryHtml;
 
       // Coach-Fazit
@@ -1953,7 +1881,7 @@
         const hints = [];
 
         if (kmScore < 60) hints.push("Trainingsumfang langsam, aber stetig steigern (max. ~10 % mehr Wochen-km als in der Vorwoche).");
-        else if (kmScore >= 80) hints.push("Training: Wochenkilometer (Laufäquivalent) liegen gut im Zielbereich – Konstanz ist entscheidend.");
+        else if (kmScore >= 80) hints.push("Training: Wochenkilometer (Lauf-Äquivalente) liegen gut im Zielbereich – Konstanz ist entscheidend.");
 
         if (sleepScore < 60) hints.push("Schlaf: 1–2 Abende bewusst früher ins Bett, vor allem nach langen oder intensiven Einheiten.");
         else if (sleepScore >= 80) hints.push("Schlaf: Erholung sieht stark aus – sehr gute Grundlage.");
@@ -1967,12 +1895,6 @@
 
         if (loadScore < 60 && trimp7 > 0) {
           hints.push("Belastung: nicht zu viele harte Tage nacheinander – maximal 2 sehr intensive Tage in 3 Tagen.");
-        }
-
-        if (restDays === 0) {
-          hints.push("Mindestens 1 echter Ruhetag pro Woche einplanen, damit die TorTour-Form nicht auf Kosten der Regeneration entsteht.");
-        } else if (restDays >= 4) {
-          hints.push("Viele Ruhetage – prüfen, ob Umfang, Motivation oder Erholungskonzept angepasst werden sollten.");
         }
 
         if (avgWellbeing != null && avgWellbeing <= 2.5) {
@@ -2014,30 +1936,29 @@
       entriesTableBody.innerHTML = rowsHtml;
 
       updateCoaching(
-        { sumKmEq, targetKm, trimp7, trimp3, avgSleep, avgFluids, avgWellbeing, painCountLast7, restDays },
+        { sumKm, targetKm, trimp7, trimp3, avgSleep, avgFluids, avgWellbeing, painCountLast7 },
         { kmScore, sleepScore, fluidsScore, weightScore, loadScore, overallScore }
       );
 
       updateHero(
         { totalXP, progress, levelPercent },
-        { sumKmEq, avgSleep, avgFluids },
+        { sumKm, avgSleep, avgFluids },
         { kmScore, sleepScore, fluidsScore, weightScore, loadScore, overallScore },
-        { kmLevel, sleepLevel, fluidsLevel, weightLevel, loadLevel, avgWellbeing, painCountLast7, restDays }
+        { kmLevel, sleepLevel, fluidsLevel, weightLevel, loadLevel, avgWellbeing, painCountLast7 }
       );
     }
 
     // --- Coaching: Tages- & Wochenempfehlung ---
     function updateCoaching(metrics, scores) {
       const {
-        sumKmEq = 0,
+        sumKm = 0,
         targetKm = 90,
         trimp7 = 0,
         trimp3 = 0,
         avgSleep = null,
         avgFluids = null,
         avgWellbeing = null,
-        painCountLast7 = 0,
-        restDays = 0
+        painCountLast7 = 0
       } = metrics;
 
       const {
@@ -2065,7 +1986,7 @@
         else if (avgWellbeing <= 2.5) wellbeingFlag = "niedrig";
       }
 
-      const kmRatio = targetKm > 0 ? sumKmEq / targetKm : 0;
+      const kmRatio = targetKm > 0 ? sumKm / targetKm : 0;
       let trainingState = "unter";
       if (kmRatio >= 0.8 && kmRatio <= 1.1) trainingState = "imPlan";
       else if (kmRatio > 1.1) trainingState = "drüber";
@@ -2086,7 +2007,7 @@
       } else if (trainingState === "unter") {
         dailyTitle = "Morgen: Aufbau-Tag";
         dailyText =
-          "Deine Wochenkilometer (Laufäquivalent) liegen aktuell unter dem Zielbereich. " +
+          "Deine Wochenkilometer (Lauf-Äquivalente) liegen aktuell unter dem Zielbereich. " +
           "Wenn du dich gut fühlst: 10–14 km lockerer Dauerlauf (RPE 4–5). Fokus auf Struktur, nicht auf Heldentaten.";
       } else if (trainingState === "drüber") {
         dailyTitle = "Morgen: Umfang halten, Intensität runter";
@@ -2098,12 +2019,6 @@
         dailyText =
           "Belastung, Schlaf & Hydration sehen solide aus. " +
           "Empfehlung: 10–12 km, davon 4–6 km etwas zügiger (RPE 6), Rest locker.";
-      }
-
-      if (restDays === 0) {
-        dailyText += "<br><br><strong>Zusatz:</strong> Mindestens 1 echter Ruhetag in der Woche einplanen.";
-      } else if (restDays >= 4) {
-        dailyText += "<br><br><strong>Zusatz:</strong> Viele Ruhetage – ggf. einen Tag bewusst als längere Einheit nutzen.";
       }
 
       if (!entries || entries.length < 3) {
@@ -2130,9 +2045,9 @@
 
       if (kmRatio < 0.6) {
         weeklyText = `
-          Deine letzte Woche lag klar unter deinem Zielumfang (~${(kmRatio*100).toFixed(0)} % vom Ziel, Laufäquivalent).<br>
+          Deine letzte Woche lag klar unter deinem Zielumfang (~${(kmRatio*100).toFixed(0)} % vom Ziel).<br>
           <strong>Empfohlener Fokus:</strong><br>
-          • Ziel: ca. ${(targetKm * 0.7).toFixed(0)}–${(targetKm * 0.85).toFixed(0)} km (eq.)<br>
+          • Ziel: ca. ${(targetKm * 0.7).toFixed(0)}–${(targetKm * 0.85).toFixed(0)} km (Äquiv.)<br>
           • 3–4 lockere Läufe (RPE 3–5) à 8–12 km<br>
           • 1 langer Lauf um 22–26 km<br>
           • Keine harten Intervalle – zuerst Routine stabil aufbauen.<br>
@@ -2141,7 +2056,7 @@
         weeklyText = `
           Deine letzte Woche liegt in einem sinnvollen Bereich.<br>
           <strong>Empfohlener Wochenplan:</strong><br>
-          • Ziel: ca. ${targetKm.toFixed(0)} km (eq.)<br>
+          • Ziel: ca. ${targetKm.toFixed(0)} km (Äquiv.)<br>
           • 3 lockere Läufe à 10–12 km (RPE 3–5)<br>
           • 1 Qualitätseinheit (z.B. 6×3 Min zügig, RPE 6–7)<br>
           • 1 langer Lauf: 26–34 km<br>
@@ -2150,7 +2065,7 @@
         weeklyText = `
           Du warst letzte Woche eher am oberen Ende (~${(kmRatio*100).toFixed(0)} % vom Zielumfang).<br>
           <strong>Empfohlener Fokus:</strong><br>
-          • Ziel: ${(targetKm*0.8).toFixed(0)}–${(targetKm*0.9).toFixed(0)} km (eq.)<br>
+          • Ziel: ${(targetKm*0.8).toFixed(0)}–${(targetKm*0.9).toFixed(0)} km (Äquiv.)<br>
           • 3 lockere Läufe à 8–12 km<br>
           • 1 mittellanger Lauf: 22–28 km<br>
           • Qualität sehr dosiert (max. 1 kurze Tempoeinheit).<br>
@@ -2164,12 +2079,6 @@
         `;
       }
 
-      if (restDays === 0) {
-        weeklyText += "<br><strong>Ruhetage:</strong> Mindestens 1 Tag komplett frei halten.";
-      } else if (restDays >= 4) {
-        weeklyText += "<br><strong>Ruhetage:</strong> Viele Pausentage – prüfen, ob Umfang zur Zielsetzung passt.";
-      }
-
       if (painCountLast7 >= 3) {
         weeklyText += "<br><strong>Zusatz:</strong> Mehrere Tage mit Schmerzen – eine Deload-Woche (50–60 % Umfang, keine High-Intensity) ist sinnvoll.";
       }
@@ -2178,10 +2087,25 @@
       weeklyCoachTextEl.innerHTML = weeklyText;
     }
 
-    // --- HERO: Level / Rank / Sterne / Bars ---
+    // Sterne je nach Score
+    function updateHeroStars(overallScore) {
+      let activeStars = 0;
+      if (overallScore != null) {
+        if (overallScore >= 95) activeStars = 5;      // S+
+        else if (overallScore >= 88) activeStars = 4; // S
+        else if (overallScore >= 80) activeStars = 3; // A
+        else if (overallScore >= 70) activeStars = 2; // B
+        else if (overallScore >= 55) activeStars = 1; // C
+      }
+      heroStars.forEach((star, idx) => {
+        star.classList.toggle("active", idx < activeStars);
+      });
+    }
+
+    // --- HERO: Level / Rank / Bars ---
     function updateHero(levelData, miniData, scoreData, labelData) {
       const { totalXP = 0, progress = { level: 1, xpIntoLevel: 0, xpPerLevel: 50 }, levelPercent = 0 } = levelData;
-      const { sumKmEq = null, avgSleep = null, avgFluids = null } = miniData;
+      const { sumKm = null, avgSleep = null, avgFluids = null } = miniData;
       const {
         kmScore = 50,
         sleepScore = 50,
@@ -2192,7 +2116,7 @@
       } = scoreData;
       const {
         kmLevel, sleepLevel, fluidsLevel, weightLevel, loadLevel,
-        avgWellbeing = null, painCountLast7 = 0, restDays = 0
+        avgWellbeing = null, painCountLast7 = 0
       } = labelData;
 
       heroLevelNumberEl.textContent = progress.level || 1;
@@ -2209,11 +2133,11 @@
       let statusLine = "";
       if (!overallScore || !entries || entries.length === 0) {
         statusLine = "Noch zu wenige Daten – einfach weiter loggen.";
-      } else if (overallScore >= 85) {
+      } else if (overallScore >= 90) {
         statusLine = "Sehr stabiler Vorbereitungsstand.";
-      } else if (overallScore >= 70) {
+      } else if (overallScore >= 75) {
         statusLine = "Gute Basis, punktuell optimierbar.";
-      } else if (overallScore >= 55) {
+      } else if (overallScore >= 60) {
         statusLine = "Solide Grundlage, aber noch ausbaufähig.";
       } else {
         statusLine = "Aufbau noch wackelig – Struktur & Recovery nachschärfen.";
@@ -2221,94 +2145,55 @@
       heroStatusTextEl.textContent = statusLine;
 
       heroMiniSleepEl.textContent = avgSleep != null ? avgSleep.toFixed(1) : "–";
-      heroMiniKmEl.textContent = sumKmEq != null ? sumKmEq.toFixed(1) : "–";
+      heroMiniKmEl.textContent = sumKm != null ? sumKm.toFixed(1) : "–";
       heroMiniFluidsEl.textContent = avgFluids != null ? avgFluids.toFixed(1) : "–";
 
       if (!overallScore || !entries || entries.length === 0) {
         heroScoreValueEl.textContent = "–";
+        heroRankPillEl.textContent = "RANG –";
         heroScoreChipEl.innerHTML = `<span class="hero-rank-pill" id="heroRankPill">RANG –</span><span>Status: noch offen</span>`;
         heroSummaryBodyEl.textContent = "Sobald die erste Woche gefüllt ist, erscheint hier eine kompakte Bewertung der letzten 7 Tage.";
-
         heroBarTrainingEl.style.height = "0%";
         heroBarSleepEl.style.height = "0%";
         heroBarFluidsEl.style.height = "0%";
         heroBarWeightEl.style.height = "0%";
         heroBarLoadEl.style.height = "0%";
         heroSummaryTagsEl.innerHTML = "";
-
-        heroRankMainEl.textContent = "RANG –";
-        if (heroStarsEl) {
-          heroStarsEl.querySelectorAll(".hero-star").forEach(star => {
-            star.className = "hero-star";
-          });
-        }
+        updateHeroStars(null);
         return;
       }
 
       heroScoreValueEl.textContent = overallScore;
 
-      // Rank-System D–S+
+      // RANG D bis S+ (ab Score 95 S+)
       let rank = "D";
-      let rankLabel = "Fragile-Prep";
-      let starStage = 1; // 1: Bronze, 2: Silber, 3: Gold, 4: Rot, 5: Lila
+      if (overallScore >= 95) rank = "S+";
+      else if (overallScore >= 88) rank = "S";
+      else if (overallScore >= 80) rank = "A";
+      else if (overallScore >= 72) rank = "B";
+      else if (overallScore >= 60) rank = "C";
 
-      if (overallScore >= 95) {
-        rank = "S+";
-        rankLabel = "TorTour-Ready+";
-        starStage = 5;
-      } else if (overallScore >= 85) {
-        rank = "S";
-        rankLabel = "Elite-Prep";
-        starStage = 5;
-      } else if (overallScore >= 70) {
-        rank = "A";
-        rankLabel = "Strong-Prep";
-        starStage = 4;
-      } else if (overallScore >= 55) {
-        rank = "B";
-        rankLabel = "Solid-Prep";
-        starStage = 3;
-      } else if (overallScore >= 40) {
-        rank = "C";
-        rankLabel = "Build-Up";
-        starStage = 2;
-      } else {
-        rank = "D";
-        rankLabel = "Fragile-Prep";
-        starStage = 1;
-      }
+      let rankLabel = "";
+      if (rank === "S+") rankLabel = "TorTour-Mode";
+      else if (rank === "S") rankLabel = "Elite-Prep";
+      else if (rank === "A") rankLabel = "Strong-Prep";
+      else if (rank === "B") rankLabel = "Solid-Prep";
+      else if (rank === "C") rankLabel = "Build-Up";
+      else rankLabel = "Fragile-Prep";
 
       heroScoreChipEl.innerHTML =
         `<span class="hero-rank-pill" id="heroRankPill">RANG ${rank}</span>` +
         `<span>Status: ${rankLabel}</span>`;
 
-      heroRankMainEl.textContent = `RANG ${rank}`;
-
-      // Sterne färben
-      if (heroStarsEl) {
-        const stars = heroStarsEl.querySelectorAll(".hero-star");
-        const colorClass =
-          starStage === 1 ? "bronze" :
-          starStage === 2 ? "silver" :
-          starStage === 3 ? "gold" :
-          starStage === 4 ? "red" :
-          "purple";
-        const activeCount = starStage; // 1–5
-
-        stars.forEach((star, index) => {
-          star.className = "hero-star"; // reset
-          if (index < activeCount) {
-            star.classList.add("active", colorClass);
-          }
-        });
-      }
-
       let shortText = "";
-      if (overallScore >= 85) shortText = "Sehr gute Grundlage – Training, Schlaf und Belastungssteuerung wirken stimmig.";
-      else if (overallScore >= 70) shortText = "Gute Vorbereitung – wenige Stellschrauben (v.a. Schlaf & Struktur) bringen zusätzliche Stabilität.";
-      else if (overallScore >= 55) shortText = "Solider Start, aber noch nicht wirklich stabil. Fokus auf Routine und Erholung lohnt sich.";
+      if (overallScore >= 90) shortText = "Sehr gute Grundlage – Training, Schlaf und Belastungssteuerung wirken stimmig.";
+      else if (overallScore >= 75) shortText = "Gute Vorbereitung – wenige Stellschrauben (v.a. Schlaf & Struktur) bringen zusätzliche Stabilität.";
+      else if (overallScore >= 60) shortText = "Solider Start, aber noch nicht wirklich stabil. Fokus auf Routine und Erholung lohnt sich.";
       else shortText = "Aktuell eher wackelige Basis – Umfang, Schlaf und Flüssigkeitszufuhr im Blick behalten.";
       heroSummaryBodyEl.textContent = shortText;
+
+      // Sterne aktualisieren
+      updateHeroStars(overallScore);
 
       function scoreToBarHeight(score) {
         if (score >= 85) return 90;
@@ -2336,8 +2221,6 @@
       if (painCountLast7 >= 3) tags.push("Mehrere Tage mit Schmerzen");
       if ((avgSleep ?? 0) < 6) tags.push("Schlafdefizit möglich");
       if ((avgFluids ?? 0) < 2) tags.push("Hydration ausbaufähig");
-      if (restDays === 0) tags.push("Keine Ruhetage · Risiko");
-      if (restDays >= 4) tags.push("Viele Ruhetage · Belastung prüfen");
       if (!tags.length) tags.push("Keine akuten Red-Flags");
 
       heroSummaryTagsEl.innerHTML = tags.map(t => `<span>${t}</span>`).join("");
@@ -2423,5 +2306,4 @@
   </script>
 </body>
 </html>
-
 
