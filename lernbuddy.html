@@ -7,509 +7,522 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
 
   <style>
-    :root {
-      --bg: #eef1f6;
-      --surface: #ffffff;
-      --surface-soft: #f9fafb;
-      --text-main: #0f172a;
-      --text-soft: #6b7280;
-      --border: #e5e7eb;
-      --border-soft: #e1e5ee;
-      --radius-lg: 18px;
-      --radius-full: 999px;
-      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.08);
+    :root{
+      /* Brutalist core (wie Landing) */
+      --bg: #f6f4ef;
+      --ink: #111111;
+      --muted: #333333;
+      --line: #111111;
 
-      --accent: #2563eb;
-      --accent-soft: #dbeafe;
-      --accent-strong: #1d4ed8;
+      /* Accents */
+      --hi: #ff3b30;
+      --hi2:#0057ff;
+      --hi3:#00c853;
+      --paper:#fffdf8;
+
+      /* Layout */
+      --max: 1120px;
+      --pad: 18px;
+      --gap: 14px;
+      --bw: 2px;
+      --shadowInk: rgba(17,17,17,.95);
+      --shadow: 8px 8px 0 var(--shadowInk);
+      --shadow2: 6px 6px 0 var(--shadowInk);
+
+      --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
 
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--ink);
       background:
-        radial-gradient(circle at top left, #e0ecff 0, transparent 45%),
-        radial-gradient(circle at bottom right, #fee2e2 0, transparent 40%),
+        linear-gradient(0deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
+        linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px) 0 0/ 22px 22px,
         var(--bg);
-      color: var(--text-main);
-      line-height: 1.5;
-      padding: 24px 16px;
+      line-height: 1.65;
+      padding: 18px var(--pad) 40px;
     }
 
-    .page {
+    a{ color: inherit; }
+
+    /* Page shell */
+    .page{
       width: 100%;
-      max-width: 1100px;
+      max-width: var(--max);
       margin: 0 auto;
-      background: var(--surface);
-      border-radius: 26px;
-      border: 1px solid var(--border-soft);
-      box-shadow: var(--shadow-soft);
-      padding: 20px 22px 24px;
+      background: var(--paper);
+      border: var(--bw) solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 16px;
       position: relative;
       overflow: hidden;
     }
 
-    .page::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.08) 0, transparent 50%),
-        radial-gradient(circle at 100% 20%, rgba(244, 114, 182, 0.06) 0, transparent 50%),
-        radial-gradient(circle at 0% 100%, rgba(45, 212, 191, 0.06) 0, transparent 55%);
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    @media (max-width: 768px) {
-      body {
-        padding: 0;
-        background: var(--bg);
-      }
-      .page {
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-        max-width: 100%;
-        padding: 14px 12px 18px;
-        box-shadow: none;
+    @media (max-width: 768px){
+      body{ padding: 12px; }
+      .page{
+        padding: 12px;
+        box-shadow: var(--shadow2);
       }
     }
 
     /* Header */
-
-    header {
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+    header{
+      padding-bottom: 12px;
+      border-bottom: var(--bw) solid var(--line);
       margin-bottom: 14px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
       gap: 12px;
       flex-wrap: wrap;
     }
 
-    .header-main {
-      max-width: 560px;
-    }
+    .header-main{ max-width: 720px; }
 
-    .header-source {
-      font-size: 0.8rem;
-      color: var(--text-soft);
-      font-style: italic;
+    .header-source{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
       text-align: right;
-    }
-
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .header-source {
-        text-align: left;
-      }
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: var(--radius-full);
-      background: rgba(15, 23, 42, 0.04);
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      font-size: 11px;
+      line-height: 1.7;
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      padding: 10px 12px;
       text-transform: uppercase;
-      letter-spacing: 0.13em;
-      color: #4b5563;
-      margin-bottom: 8px;
+      letter-spacing: .06em;
     }
 
-    .hero-tag-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #22c55e, #10b981);
-      box-shadow: 0 0 8px rgba(16, 185, 129, 0.9);
+    @media (max-width: 768px){
+      .header-source{ text-align:left; }
     }
 
-    header h1 {
-      margin: 0 0 4px;
-      font-size: clamp(22px, 2.5vw, 26px);
-      font-weight: 600;
-      letter-spacing: -0.01em;
+    .hero-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing:.10em;
+      padding: 8px 10px;
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      margin-bottom: 10px;
+    }
+    .hero-tag-dot{
+      width:10px;height:10px;
+      background: var(--hi3);
+      border: var(--bw) solid var(--line);
+      box-shadow: 3px 3px 0 var(--shadowInk);
     }
 
-    header p {
-      margin: 0;
-      font-size: 0.92rem;
-      color: var(--text-soft);
+    header h1{
+      margin: 0 0 6px;
+      font-size: clamp(22px, 2.8vw, 34px);
+      line-height:1.05;
+      letter-spacing:-0.02em;
+      font-weight: 900;
+      text-transform: uppercase;
     }
 
-    main { margin-top: 4px; }
-
-    .section {
-      background: var(--surface-soft);
-      border-radius: var(--radius-lg);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-      padding: 16px 16px 16px;
-      margin-bottom: 16px;
-      border: 1px solid var(--border);
+    header p{
+      margin:0;
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 72ch;
     }
 
-    @media (max-width: 768px) {
-      .section {
-        padding: 12px 10px 13px;
-        margin-bottom: 12px;
-        border-radius: 14px;
-        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
-      }
+    main{ margin-top: 6px; }
+
+    /* Sections = Panels im Brutal-Look */
+    .section{
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow2);
+      padding: 14px;
+      margin-bottom: 14px;
+      position:relative;
+      overflow:hidden;
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.035) 1px, transparent 1px) 0 0/ 16px 16px,
+        var(--paper);
+    }
+    .section::before{
+      content:"";
+      position:absolute;
+      right:-18px;
+      top:-18px;
+      width:62px;height:62px;
+      background: var(--hi);
+      border: var(--bw) solid var(--line);
+      transform: rotate(12deg);
+      opacity:.85;
+      pointer-events:none;
     }
 
-    .section h2 {
-      margin-top: 0;
-      font-size: 1.05rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #e2e8f0;
-      margin-bottom: 8px;
+    .section h2{
+      margin:0 0 10px;
+      font-size: 16px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding-bottom: 8px;
+      border-bottom: var(--bw) dashed var(--line);
     }
 
-    .step-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 26px;
-      height: 26px;
-      border-radius: var(--radius-full);
-      background: var(--accent);
-      color: white;
-      font-size: 0.85rem;
-      font-weight: 600;
+    .section-subtitle{
+      margin: 0 0 10px;
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
     }
 
-    @media (max-width: 768px) {
-      .step-badge {
-        width: 24px;
-        height: 24px;
-        font-size: 0.8rem;
-      }
+    /* Step badge */
+    .step-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width: 28px;
+      height: 28px;
+      padding: 0 8px;
+      border: var(--bw) solid var(--line);
+      background: var(--hi2);
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 4px 4px 0 var(--shadowInk);
     }
 
-    .section-subtitle {
-      font-size: 0.9rem;
-      color: var(--text-soft);
-      margin-bottom: 8px;
-    }
-
-    .grid {
-      display: grid;
+    /* Layout grids */
+    .grid{
+      display:grid;
       grid-template-columns: 2fr 1.1fr;
-      gap: 16px;
-      margin-bottom: 16px;
+      gap: var(--gap);
+      margin-bottom: 14px;
+    }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 900px) {
-      .grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-    }
-
-    .field-group { margin-bottom: 12px; }
-
-    .field-group label {
-      display: block;
-      font-size: 0.92rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: var(--text-main);
-    }
-
-    .field-group small {
-      display: block;
-      font-size: 0.8rem;
-      color: var(--text-soft);
-      margin-bottom: 4px;
-    }
-
-    input[type="text"],
-    textarea {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 1px solid var(--border-soft);
-      font-size: 0.95rem;
-      font-family: inherit;
-      resize: vertical;
-      min-height: 36px;
-      background: #f8fafc;
-      color: var(--text-main);
-    }
-
-    textarea { min-height: 70px; }
-
-    input[type="text"]:focus,
-    textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.18);
-      background: #ffffff;
-    }
-
-    .tag {
-      display: inline-block;
-      background: var(--accent-soft);
-      color: var(--accent-strong);
-      border-radius: var(--radius-full);
-      padding: 3px 10px;
-      font-size: 0.78rem;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    .checkbox-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .checkbox-list li {
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-      padding: 8px 10px;
-      border-radius: 10px;
-      background: #f8fafc;
-      border: 1px solid #e5e7eb;
-    }
-
-    .checkbox-list label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .checkbox-list input[type="checkbox"] { margin: 0; }
-
-    #scratch-frame-wrapper {
-      width: 100%;
-      height: 460px;
-      margin-top: 10px;
-      background: #eff4ff;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      border: 1px solid #cbd5f5;
-    }
-
-    #scratch-frame-wrapper p {
-      padding: 10px;
-      text-align: center;
-      font-size: 0.92rem;
-      color: var(--text-soft);
-    }
-
-    @media (max-width: 900px) { #scratch-frame-wrapper { height: 320px; } }
-    @media (max-width: 600px) { #scratch-frame-wrapper { height: 260px; } }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-      align-items: center;
-    }
-
-    @media (max-width: 600px) {
-      .actions {
-        flex-direction: column;
-        align-items: stretch;
-      }
-    }
-
-    button {
-      border: none;
-      border-radius: var(--radius-full);
-      padding: 8px 16px;
-      font-size: 0.95rem;
-      cursor: pointer;
-      font-family: inherit;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition:
-        background 0.12s ease,
-        box-shadow 0.12s ease,
-        transform 0.12s ease,
-        border-color 0.12s ease;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      color: white;
-      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.4);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 16px 30px rgba(37, 99, 235, 0.45);
-    }
-
-    .btn-secondary {
-      background: #ffffff;
-      color: var(--text-main);
-      border: 1px solid var(--border-soft);
-    }
-
-    .btn-secondary:hover {
-      background: #f9fafb;
-      transform: translateY(-1px);
-      box-shadow: 0 8px 18px rgba(148, 163, 184, 0.4);
-    }
-
-    .status {
-      font-size: 0.85rem;
-      color: #16a34a;
-      margin-top: 4px;
-      min-height: 1.2em;
-    }
-
-    .small-note {
-      font-size: 0.8rem;
-      color: var(--text-soft);
-    }
-
-    .inline-grid {
-      display: grid;
+    .inline-grid{
+      display:grid;
       grid-template-columns: 2fr 1fr 1fr;
       gap: 12px;
     }
-
-    @media (max-width: 900px) {
-      .inline-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
+    @media (max-width: 900px){
+      .inline-grid{ grid-template-columns: 1fr; }
     }
 
-    .field-group .radio-group label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 8px;
-      border-radius: 10px;
-      background: #f8fafc;
-      border: 1px solid #e5e7eb;
+    .field-group{ margin-bottom: 12px; }
+    .field-group label{
+      display:block;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing:.01em;
       margin-bottom: 4px;
-      cursor: pointer;
+      text-transform: uppercase;
+    }
+    .field-group small{
+      display:block;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      line-height: 1.7;
     }
 
-    .field-group .radio-group input[type="radio"] { margin: 0; }
+    /* Inputs */
+    input[type="text"],
+    textarea{
+      width:100%;
+      padding: 10px 10px;
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      font-size: 14px;
+      font-family: var(--sans);
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      outline: none;
+      resize: vertical;
+      min-height: 40px;
+    }
+    textarea{ min-height: 84px; }
 
-    /* Intro-Overlay */
-
-    #intro-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
+    input[type="text"]:focus,
+    textarea:focus{
+      outline: 3px solid var(--hi2);
+      outline-offset: 3px;
     }
 
-    #intro-overlay.hidden { display: none; }
-
-    #intro-modal {
-      background: #ffffff;
-      max-width: 560px;
-      width: 90%;
-      border-radius: 18px;
-      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.55);
-      padding: 18px 20px 16px;
-      border: 1px solid var(--border-soft);
+    /* Tag labels */
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 8px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: 3px 3px 0 var(--shadowInk);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .tag::before{
+      content:"";
+      width:10px;height:10px;
+      border: var(--bw) solid var(--line);
+      background: var(--hi3);
+      box-shadow: 2px 2px 0 var(--shadowInk);
     }
 
-    #intro-modal h2 {
-      margin: 0 0 8px;
-      font-size: 1.25rem;
-      letter-spacing: -0.01em;
+    /* Checkbox list */
+    .checkbox-list{
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .checkbox-list li{
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      padding: 10px;
+    }
+    .checkbox-list label{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .checkbox-list input[type="checkbox"]{
+      margin-top: 2px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--hi2);
     }
 
-    #intro-modal p {
-      margin: 4px 0;
-      font-size: 0.95rem;
-      line-height: 1.45;
-      color: var(--text-soft);
+    /* Radio group (dein bestehender Markup bleibt) */
+    .field-group .radio-group label{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding: 10px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      margin-bottom: 10px;
+      cursor:pointer;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .field-group .radio-group input[type="radio"]{
+      margin-top: 2px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--hi2);
     }
 
-    #intro-modal ul {
-      margin: 8px 0 4px 20px;
-      padding: 0;
-      font-size: 0.95rem;
-      color: var(--text-soft);
-    }
-
-    #intro-modal li { margin-bottom: 4px; }
-
-    #intro-modal-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
+    /* Scratch frame wrapper */
+    #scratch-frame-wrapper{
+      width:100%;
+      height: 460px;
       margin-top: 10px;
+      border: var(--bw) solid var(--line);
+      background:#fff;
+      box-shadow: var(--shadow2);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+    #scratch-frame-wrapper p{
+      padding: 10px;
+      text-align:center;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin:0;
+    }
+    @media (max-width: 900px){ #scratch-frame-wrapper{ height: 320px; } }
+    @media (max-width: 600px){ #scratch-frame-wrapper{ height: 260px; } }
+
+    /* Actions + Buttons im Brutal-Look */
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 10px;
+      align-items:center;
+      padding-top: 10px;
+      border-top: var(--bw) dashed var(--line);
+    }
+    @media (max-width: 600px){
+      .actions{ flex-direction: column; align-items: stretch; }
+    }
+
+    button{
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 10px 12px;
+      cursor:pointer;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing:.08em;
+      box-shadow: 4px 4px 0 var(--shadowInk);
+      transition: transform .12s ease, filter .12s ease;
+    }
+    button:hover{ transform: translate(-2px,-2px); filter: brightness(1.02); }
+    button:focus-visible{
+      outline: 3px solid var(--hi2);
+      outline-offset: 3px;
+    }
+
+    .btn-primary{
+      background: var(--hi);
+      color: var(--paper);
+    }
+    .btn-secondary{
+      background:#fff;
+      color: var(--ink);
+    }
+
+    .small-note{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .status{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--hi3);
+      min-height: 1.2em;
+    }
+
+    /* Intro Overlay im gleichen Stil */
+    #intro-overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index: 1000;
+      padding: 18px;
+    }
+    #intro-overlay.hidden{ display:none; }
+
+    #intro-modal{
+      width: min(860px, calc(100vw - 36px));
+      border: var(--bw) solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+
+    #intro-modal h2{
+      margin: 0 0 10px;
+      font-size: 18px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      padding-bottom: 8px;
+      border-bottom: var(--bw) dashed var(--line);
+    }
+
+    #intro-modal p{
+      margin: 8px 0;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    #intro-modal ul{
+      margin: 8px 0 8px 22px;
+      padding:0;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    #intro-modal li{ margin-bottom: 6px; }
+
+    #intro-modal-footer{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-top: 12px;
       flex-wrap: wrap;
+      padding-top: 10px;
+      border-top: var(--bw) dashed var(--line);
     }
 
-    #intro-modal-footer label {
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: var(--text-soft);
+    #intro-modal-footer label{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing:.06em;
     }
 
-    @media print {
-      body {
-        background: white;
+    #intro-modal-footer input[type="checkbox"]{
+      width: 18px;
+      height: 18px;
+      accent-color: var(--hi2);
+    }
+
+    /* Print */
+    @media print{
+      body{
+        background: #fff;
         padding: 0;
       }
-      .page {
-        box-shadow: none;
-        border-radius: 0;
-        border: none;
+      .page{
+        box-shadow:none;
+        border: 0;
         padding: 0 12px 12px;
       }
-      header {
-        background: white;
-        color: black;
-        border-bottom: 1px solid #ccc;
-        box-shadow: none;
+      .section{
+        box-shadow:none;
       }
-      .hero-tag {
-        border: 1px solid #ccc;
-        background: #f9fafb;
+      .actions button{ display:none; }
+      #status-msg{ display:none; }
+      #intro-overlay{ display:none !important; }
+      input[type="text"], textarea{
+        box-shadow:none;
       }
-      .section {
-        box-shadow: none;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-      }
-      .actions button { display: none; }
-      #status-msg { display: none; }
-      #scratch-frame-wrapper { border: 1px solid #ccc; }
-      #intro-overlay { display: none !important; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      button{ transition:none; }
+      button:hover{ transform:none; }
     }
   </style>
 </head>
@@ -639,7 +652,7 @@
           <label for="scratch-url">Link zu deinem Scratch-Projekt</label>
           <small>Beispiel: https://scratch.mit.edu/projects/123456789</small>
           <input type="text" id="scratch-url" placeholder="Scratch-Link hier einfügen">
-          <div class="actions" style="margin-top:6px;">
+          <div class="actions" style="margin-top:10px;">
             <button type="button" class="btn-secondary" id="open-editor-btn">Scratch-Editor in neuem Tab öffnen</button>
             <span class="small-note">Hier im Fenster siehst du später die Vorschau. Den Code bearbeitest du im Editor im anderen Tab.</span>
           </div>
@@ -682,36 +695,11 @@
         <p class="section-subtitle">Hake an, was du schon gut gemacht hast.</p>
 
         <ul class="checkbox-list">
-          <li>
-            <label>
-              <input type="checkbox" id="check-tested">
-              <span>Ich teste mein Projekt immer wieder.</span>
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="checkbox" id="check-errors">
-              <span>Ich lese Probleme und Fehlermeldungen und versuche sie zu verstehen.</span>
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="checkbox" id="check-steps">
-              <span>Ich ändere nur kleine Dinge auf einmal.</span>
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="checkbox" id="check-help">
-              <span>Ich hole mir Hilfe, wenn ich feststecke.</span>
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="checkbox" id="check-focus">
-              <span>Ich bleibe bei meiner Aufgabe und springe nicht dauernd hin und her.</span>
-            </label>
-          </li>
+          <li><label><input type="checkbox" id="check-tested"><span>Ich teste mein Projekt immer wieder.</span></label></li>
+          <li><label><input type="checkbox" id="check-errors"><span>Ich lese Probleme und Fehlermeldungen und versuche sie zu verstehen.</span></label></li>
+          <li><label><input type="checkbox" id="check-steps"><span>Ich ändere nur kleine Dinge auf einmal.</span></label></li>
+          <li><label><input type="checkbox" id="check-help"><span>Ich hole mir Hilfe, wenn ich feststecke.</span></label></li>
+          <li><label><input type="checkbox" id="check-focus"><span>Ich bleibe bei meiner Aufgabe und springe nicht dauernd hin und her.</span></label></li>
         </ul>
       </section>
     </div>
@@ -724,26 +712,15 @@
       </h2>
       <p class="section-subtitle">Zum Schluss schaust du kurz auf dein Ziel und deine Arbeit.</p>
 
-      <div class="field-group">
-        <span class="tag">Rückblick</span>
-      </div>
+      <div class="field-group"><span class="tag">Rückblick</span></div>
 
       <div class="field-group">
         <label>Habe ich mein WAS-Ziel geschafft?</label>
         <small>Wie gut passt dein Ergebnis zu deinem Ziel von oben?</small>
         <div class="radio-group">
-          <label>
-            <input type="radio" name="goal-what-result" value="nein">
-            <span>Nein, noch nicht.</span>
-          </label>
-          <label>
-            <input type="radio" name="goal-what-result" value="teilweise">
-            <span>So halb.</span>
-          </label>
-          <label>
-            <input type="radio" name="goal-what-result" value="ja">
-            <span>Ja, das passt.</span>
-          </label>
+          <label><input type="radio" name="goal-what-result" value="nein"><span>Nein, noch nicht.</span></label>
+          <label><input type="radio" name="goal-what-result" value="teilweise"><span>So halb.</span></label>
+          <label><input type="radio" name="goal-what-result" value="ja"><span>Ja, das passt.</span></label>
         </div>
       </div>
 
@@ -751,18 +728,9 @@
         <label>Habe ich mein WIE-Ziel benutzt?</label>
         <small>Hast du die Sachen genutzt, die du üben wolltest?</small>
         <div class="radio-group">
-          <label>
-            <input type="radio" name="goal-how-result" value="nein">
-            <span>Nein.</span>
-          </label>
-          <label>
-            <input type="radio" name="goal-how-result" value="teilweise">
-            <span>Ein bisschen.</span>
-          </label>
-          <label>
-            <input type="radio" name="goal-how-result" value="ja">
-            <span>Ja, auf jeden Fall.</span>
-          </label>
+          <label><input type="radio" name="goal-how-result" value="nein"><span>Nein.</span></label>
+          <label><input type="radio" name="goal-how-result" value="teilweise"><span>Ein bisschen.</span></label>
+          <label><input type="radio" name="goal-how-result" value="ja"><span>Ja, auf jeden Fall.</span></label>
         </div>
       </div>
 
@@ -811,7 +779,7 @@
     const el = document.getElementById("status-msg");
     if (!el) return;
     el.textContent = message;
-    el.style.color = isError ? "#d32f2f" : "#16a34a";
+    el.style.color = isError ? "#ff3b30" : "#00c853";
 
     if (statusTimeoutId) clearTimeout(statusTimeoutId);
     statusTimeoutId = setTimeout(() => { el.textContent = ""; }, 4000);
@@ -1014,14 +982,10 @@
     });
 
     const goalWhatRadios = document.querySelectorAll("input[name='goal-what-result']");
-    goalWhatRadios.forEach(r => {
-      r.addEventListener("change", () => saveData(false));
-    });
+    goalWhatRadios.forEach(r => r.addEventListener("change", () => saveData(false)));
 
     const goalHowRadios = document.querySelectorAll("input[name='goal-how-result']");
-    goalHowRadios.forEach(r => {
-      r.addEventListener("change", () => saveData(false));
-    });
+    goalHowRadios.forEach(r => r.addEventListener("change", () => saveData(false)));
   }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -1041,3 +1005,4 @@
 </script>
 </body>
 </html>
+
