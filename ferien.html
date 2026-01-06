@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ferien-Countdown (Niedersachsen) & Vorfallzähler</title>
+  <style>
+    :root{
+      --bg1:#f6f9ff;
+      --bg2:#eef6f3;
+      --card:#ffffffcc;
+      --stroke:#e6eef7;
+      --text:#0f172a;
+      --muted:#475569;
+      --accent:#2563eb;
+      --accent2:#16a34a;
+      --shadow: 0 14px 40px rgba(15,23,42,.12);
+      --radius: 18px;
+
+      /* Panel */
+      --panelBg:#0b1220;
+      --panelStroke:#1f2a44;
+      --panelText:#e5e7eb;
+      --panelNeon:#a3ff4f;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(37,99,235,.14), transparent 55%),
+        radial-gradient(900px 600px at 85% 20%, rgba(22,163,74,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+    }
+
+    header{
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: 26px 18px 10px;
+    }
+    h1{
+      margin:0 0 8px;
+      font-size: clamp(22px, 2.6vw, 30px);
+      letter-spacing:.2px;
+      font-weight: 800;
+    }
+    .sub{
+      margin:0;
+      color:var(--muted);
+      line-height:1.45;
+      font-size: 14px;
+    }
+
+    main{
+      max-width:1020px;
+      margin:0 auto;
+      padding: 14px 18px 36px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .card{
+      grid-column: span 6;
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(800px 180px at 20% 0%, rgba(37,99,235,.10), transparent 60%),
+        radial-gradient(700px 180px at 85% 15%, rgba(22,163,74,.10), transparent 60%);
+      pointer-events:none;
+      opacity:.9;
+    }
+
+    @media (max-width: 880px){
+      .card{ grid-column: span 12; }
+    }
+
+    .rowTop{
+      position:relative;
+      z-index:1;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
+
+    h2{
+      margin:0;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing:.2px;
+    }
+
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.75);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .kpi{
+      position:relative;
+      z-index:1;
+      display:flex;
+      gap:10px;
+      align-items: baseline;
+      margin: 8px 0 2px;
+    }
+    .big{
+      font-size: clamp(28px, 4.2vw, 48px);
+      font-weight: 900;
+      letter-spacing: .2px;
+    }
+    .unit{
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .tiles{
+      position:relative;
+      z-index:1;
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .tile{
+      min-width: 108px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid var(--stroke);
+    }
+    .tile .n{
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+    .tile .l{
+      margin-top: 3px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .meta{
+      position:relative;
+      z-index:1;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      align-items:center;
+    }
+
+    .mono{ font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; }
+
+    /* ===== Vorfall-Panel ===== */
+    .wide{ grid-column: span 12; }
+
+    .incidentWrap{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      position: relative;
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+    }
+    .incidentWrap::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(900px 220px at 20% 0%, rgba(22,163,74,.10), transparent 60%);
+      pointer-events:none;
+    }
+
+    .incidentHeader{
+      position:relative;
+      z-index:1;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
+    .incidentHeader h2{
+      font-size: 16px;
+      margin:0;
+    }
+    .hint{
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .panel{
+      position:relative;
+      z-index:1;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(11,18,32,.98), rgba(11,18,32,.92));
+      border: 1px solid var(--panelStroke);
+      padding: 18px 16px 16px;
+      overflow:hidden;
+    }
+    .panel::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,.06) 0px,
+          rgba(255,255,255,.06) 1px,
+          transparent 2px,
+          transparent 8px
+        );
+      opacity:.22;
+      pointer-events:none;
+    }
+
+    .panelTopline{
+      position:relative;
+      z-index:1;
+      color: var(--panelText);
+      text-transform: uppercase;
+      letter-spacing: 1.6px;
+      font-weight: 900;
+      font-size: clamp(16px, 2.0vw, 20px);
+      margin: 0 0 10px;
+      font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    }
+
+    .panelNumber{
+      position:relative;
+      z-index:1;
+      margin: 0;
+      line-height: .95;
+      font-weight: 1000;
+      letter-spacing: .8px;
+      font-size: clamp(72px, 10.5vw, 130px);
+      color: var(--panelNeon);
+      text-shadow: 0 0 26px rgba(163,255,79,.18);
+      font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    }
+
+    .panelDesc{
+      position:relative;
+      z-index:1;
+      margin: 10px 0 0;
+      color: rgba(229,231,235,.92);
+      font-weight: 800;
+      font-size: clamp(15px, 1.8vw, 20px);
+    }
+
+    .panelMeta{
+      position:relative;
+      z-index:1;
+      margin-top: 10px;
+      display:flex;
+      gap: 10px 14px;
+      flex-wrap:wrap;
+      align-items:center;
+      color: rgba(229,231,235,.72);
+      font-size: 13px;
+    }
+
+    .btnRow{
+      position:relative;
+      z-index:1;
+      margin-top: 14px;
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    button{
+      appearance:none;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.86);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-weight: 800;
+      cursor:pointer;
+      transition: transform .05s ease, background .15s ease, border-color .15s ease;
+    }
+    button:hover{
+      background: rgba(255,255,255,.96);
+      border-color: #dbe7f5;
+    }
+    button:active{ transform: translateY(1px); }
+
+    .primary{
+      border-color: rgba(37,99,235,.25);
+      background: rgba(37,99,235,.08);
+    }
+    .primary:hover{
+      background: rgba(37,99,235,.12);
+      border-color: rgba(37,99,235,.32);
+    }
+
+    .danger{
+      border-color: rgba(255,107,107,.35);
+      background: rgba(255,107,107,.10);
+    }
+    .danger:hover{
+      background: rgba(255,107,107,.14);
+      border-color: rgba(255,107,107,.44);
+    }
+
+    footer{
+      max-width:1020px;
+      margin:0 auto;
+      padding: 0 18px 26px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Ferien-Countdown (Niedersachsen) & Vorfallzähler</h1>
+    <p class="sub">
+      Die Countdowns laufen bis zum letzten Schultag vor den Ferien (Zielzeit: 13:10 Uhr).
+      Der Vorfallzähler wird nur in diesem Browser gespeichert.
+    </p>
+  </header>
+
+  <main>
+    <section class="grid">
+      <!-- Osterferien -->
+      <article class="card" id="card-ostern">
+        <div class="rowTop">
+          <h2>Osterferien (NI)</h2>
+          <span class="badge mono" id="ostern-range">—</span>
+        </div>
+
+        <div class="kpi">
+          <div class="big mono" id="ostern-days">—</div>
+          <div class="unit">Tage bis letzter Schultag</div>
+        </div>
+
+        <div class="tiles" aria-label="Countdown bis letzter Schultag vor den Osterferien">
+          <div class="tile"><div class="n mono" id="ostern-d">—</div><div class="l">Tage</div></div>
+          <div class="tile"><div class="n mono" id="ostern-h">—</div><div class="l">Stunden</div></div>
+          <div class="tile"><div class="n mono" id="ostern-m">—</div><div class="l">Minuten</div></div>
+          <div class="tile"><div class="n mono" id="ostern-s">—</div><div class="l">Sekunden</div></div>
+        </div>
+
+        <div class="meta">
+          <span id="ostern-status">—</span>
+          <span class="mono" id="ostern-target">—</span>
+        </div>
+      </article>
+
+      <!-- Zeugnisferien / Winterferien -->
+      <article class="card" id="card-zeugnis">
+        <div class="rowTop">
+          <h2>Zeugnisferien / Winterferien (NI)</h2>
+          <span class="badge mono" id="winter-range">—</span>
+        </div>
+
+        <div class="kpi">
+          <div class="big mono" id="winter-days">—</div>
+          <div class="unit">Tage bis letzter Schultag</div>
+        </div>
+
+        <div class="tiles" aria-label="Countdown bis letzter Schultag vor den Zeugnisferien">
+          <div class="tile"><div class="n mono" id="winter-d">—</div><div class="l">Tage</div></div>
+          <div class="tile"><div class="n mono" id="winter-h">—</div><div class="l">Stunden</div></div>
+          <div class="tile"><div class="n mono" id="winter-m">—</div><div class="l">Minuten</div></div>
+          <div class="tile"><div class="n mono" id="winter-s">—</div><div class="l">Sekunden</div></div>
+        </div>
+
+        <div class="meta">
+          <span id="winter-status">—</span>
+          <span class="mono" id="winter-target">—</span>
+        </div>
+      </article>
+
+      <!-- Vorfallzähler -->
+      <article class="incidentWrap wide" id="card-incident">
+        <div class="incidentHeader">
+          <h2>Vorfallzähler</h2>
+          <div class="hint mono">Reset setzt das Datum auf heute</div>
+        </div>
+
+        <div class="panel" role="region" aria-label="Tage seit letztem Vorfall">
+          <p class="panelTopline">Tage ohne Polizeivorfall</p>
+          <p class="panelNumber" id="incident-days">—</p>
+          <p class="panelDesc">Tage seit dem letzten Vorfall mit Polizei</p>
+
+          <div class="panelMeta">
+            <span class="mono" id="incident-date">Letztes Datum: —</span>
+          </div>
+        </div>
+
+        <div class="btnRow">
+          <button class="danger" id="incident-reset" type="button">Reset (Vorfall heute)</button>
+          <button class="primary" id="incident-set-yesterday" type="button">Setze auf „gestern“</button>
+          <span class="hint mono">Speicherung: nur dieser Browser</span>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    Tipp: Wenn du weitere Jahre ergänzen willst, erweitere im Script einfach die Tabelle <span class="mono">FERIENTERMINE_NI</span>.
+  </footer>
+
+  <script>
+    // =========================
+    // Einstellungen
+    // =========================
+    // Countdown läuft bis zu dieser Uhrzeit am letzten Schultag vor Ferienbeginn
+    const LAST_SCHOOLDAY_TARGET_HOUR = 13;
+    const LAST_SCHOOLDAY_TARGET_MIN  = 10;
+
+    // =========================
+    // Ferien-Daten (Niedersachsen) - Start/Ende der Ferien
+    // =========================
+    // Format: ISO-Strings (YYYY-MM-DD). Enddatum ist inkl. letzter Ferientag.
+    const FERIENTERMINE_NI = [
+      { year: 2025, winter: ["2025-02-03","2025-02-04"], ostern: ["2025-04-07","2025-04-19"] },
+      { year: 2026, winter: ["2026-02-02","2026-02-03"], ostern: ["2026-03-23","2026-04-07"] },
+      { year: 2027, winter: ["2027-02-01","2027-02-02"], ostern: ["2027-03-22","2027-04-03"] },
+      { year: 2028, winter: ["2028-01-31","2028-02-01"], ostern: ["2028-04-10","2028-04-22"] },
+      { year: 2029, winter: ["2029-02-01","2029-02-02"], ostern: ["2029-03-19","2029-04-03"] },
+      { year: 2030, winter: ["2030-01-31","2030-02-01"], ostern: ["2030-04-08","2030-04-23"] }
+    ];
+
+    // ========= Helpers =========
+    function pad2(n){ return String(n).padStart(2, "0"); }
+
+    function formatDE(isoDate){
+      const [y,m,d] = isoDate.split("-").map(Number);
+      return `${pad2(d)}.${pad2(m)}.${y}`;
+    }
+
+    function startOfDay(date){
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0,0,0,0);
+    }
+
+    function endOfDay(date){
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23,59,59,999);
+    }
+
+    function parseISOToLocalDate(iso){
+      const [y,m,d] = iso.split("-").map(Number);
+      return new Date(y, m-1, d, 0,0,0,0);
+    }
+
+    function dateToISO(date){
+      return `${date.getFullYear()}-${pad2(date.getMonth()+1)}-${pad2(date.getDate())}`;
+    }
+
+    function lastSchoolDayBefore(holidayStartDate){
+      // Basis: Tag vor Ferienstart
+      const d = new Date(holidayStartDate.getFullYear(), holidayStartDate.getMonth(), holidayStartDate.getDate(), 0,0,0,0);
+      d.setDate(d.getDate() - 1);
+
+      // Wenn Sa/So: auf Freitag zurück
+      while (d.getDay() === 0 || d.getDay() === 6){
+        d.setDate(d.getDate() - 1);
+      }
+
+      // Ziel-Uhrzeit am letzten Schultag
+      d.setHours(LAST_SCHOOLDAY_TARGET_HOUR, LAST_SCHOOLDAY_TARGET_MIN, 0, 0);
+      return d;
+    }
+
+    function pickNextHoliday(kind, now){
+      const today = startOfDay(now);
+
+      for(const row of FERIENTERMINE_NI){
+        const [startISO, endISO] = row[kind];
+        const start = parseISOToLocalDate(startISO);
+        const end = endOfDay(parseISOToLocalDate(endISO));
+
+        if (today <= end){
+          const lastSchoolTarget = lastSchoolDayBefore(start);
+
+          let status = "Countdown läuft";
+          if (today >= startOfDay(start) && today <= end){
+            status = "Ferien laufen gerade";
+          } else if (now > lastSchoolTarget && now < start) {
+            status = "Letzter Schultag ist bereits vorbei";
+          }
+
+          return { startISO, endISO, startDate: start, endDate: end, lastSchoolTarget, status };
+        }
+      }
+      return null;
+    }
+
+    function diffParts(targetDateTime, now){
+      let ms = targetDateTime.getTime() - now.getTime();
+      if (ms < 0) ms = 0;
+
+      const s = Math.floor(ms / 1000);
+      const days = Math.floor(s / 86400);
+      const hours = Math.floor((s % 86400) / 3600);
+      const mins = Math.floor((s % 3600) / 60);
+      const secs = s % 60;
+
+      return { days, hours, mins, secs };
+    }
+
+    function renderCountdown(kind, ids){
+      const now = new Date();
+      const picked = pickNextHoliday(kind, now);
+
+      if(!picked){
+        document.getElementById(ids.range).textContent = "keine Daten";
+        document.getElementById(ids.status).textContent = "Kein Ferientermin in der Tabelle gefunden.";
+        return;
+      }
+
+      const { startISO, endISO, lastSchoolTarget, status } = picked;
+      const lastSchoolISO = dateToISO(lastSchoolTarget);
+
+      document.getElementById(ids.range).textContent = `${formatDE(startISO)} – ${formatDE(endISO)}`;
+      document.getElementById(ids.status).textContent = status;
+      document.getElementById(ids.target).textContent =
+        `Letzter Schultag: ${formatDE(lastSchoolISO)} ${pad2(LAST_SCHOOLDAY_TARGET_HOUR)}:${pad2(LAST_SCHOOLDAY_TARGET_MIN)}`;
+
+      const parts = diffParts(lastSchoolTarget, now);
+
+      document.getElementById(ids.bigDays).textContent = String(parts.days);
+      document.getElementById(ids.d).textContent = String(parts.days);
+      document.getElementById(ids.h).textContent = pad2(parts.hours);
+      document.getElementById(ids.m).textContent = pad2(parts.mins);
+      document.getElementById(ids.s).textContent = pad2(parts.secs);
+    }
+
+    // ========= Vorfallzähler =========
+    const INCIDENT_KEY = "last_police_incident_date_iso";
+
+    function getIncidentISO(){
+      const v = localStorage.getItem(INCIDENT_KEY);
+      if (v && /^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+
+      const iso = dateToISO(new Date());
+      localStorage.setItem(INCIDENT_KEY, iso);
+      return iso;
+    }
+
+    function setIncidentISO(iso){
+      localStorage.setItem(INCIDENT_KEY, iso);
+      renderIncident();
+    }
+
+    function daysSince(iso){
+      const last = parseISOToLocalDate(iso);
+      const today = startOfDay(new Date());
+      const diff = today.getTime() - startOfDay(last).getTime();
+      return Math.max(0, Math.floor(diff / (1000*60*60*24)));
+    }
+
+    function renderIncident(){
+      const iso = getIncidentISO();
+      const n = daysSince(iso);
+
+      document.getElementById("incident-days").textContent = String(n);
+      document.getElementById("incident-date").textContent = `Letztes Datum: ${formatDE(iso)}`;
+    }
+
+    // ========= Tick =========
+    function tick(){
+      renderCountdown("ostern", {
+        range: "ostern-range",
+        status: "ostern-status",
+        target: "ostern-target",
+        bigDays: "ostern-days",
+        d: "ostern-d", h: "ostern-h", m: "ostern-m", s: "ostern-s"
+      });
+
+      renderCountdown("winter", {
+        range: "winter-range",
+        status: "winter-status",
+        target: "winter-target",
+        bigDays: "winter-days",
+        d: "winter-d", h: "winter-h", m: "winter-m", s: "winter-s"
+      });
+
+      renderIncident();
+    }
+
+    document.getElementById("incident-reset").addEventListener("click", () => {
+      setIncidentISO(dateToISO(new Date()));
+    });
+
+    document.getElementById("incident-set-yesterday").addEventListener("click", () => {
+      const d = new Date();
+      d.setDate(d.getDate() - 1);
+      setIncidentISO(dateToISO(d));
+    });
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
