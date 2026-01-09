@@ -6,22 +6,28 @@
   <title>Ferien-Countdown (Niedersachsen) & Vorfallzähler</title>
   <style>
     :root{
-      --bg1:#f6f9ff;
-      --bg2:#eef6f3;
+      --bg1:#f7fbff;
+      --bg2:#f2fbf6;
+
       --card:#ffffffcc;
-      --stroke:#e6eef7;
+      --stroke:#e7eef7;
       --text:#0f172a;
-      --muted:#475569;
+      --muted:#526173;
+
       --accent:#2563eb;
       --accent2:#16a34a;
-      --shadow: 0 14px 40px rgba(15,23,42,.12);
+
+      --shadow: 0 14px 34px rgba(15,23,42,.10);
       --radius: 18px;
 
-      /* Panel */
       --panelBg:#0b1220;
       --panelStroke:#1f2a44;
       --panelText:#e5e7eb;
       --panelNeon:#a3ff4f;
+
+      --softGlow:
+        radial-gradient(900px 260px at 18% 0%, rgba(37,99,235,.12), transparent 60%),
+        radial-gradient(850px 260px at 88% 10%, rgba(22,163,74,.10), transparent 62%);
     }
 
     *{ box-sizing:border-box; }
@@ -30,32 +36,33 @@
       font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       color:var(--text);
       background:
-        radial-gradient(1200px 600px at 15% 10%, rgba(37,99,235,.14), transparent 55%),
-        radial-gradient(900px 600px at 85% 20%, rgba(22,163,74,.12), transparent 55%),
+        radial-gradient(1200px 600px at 12% 10%, rgba(37,99,235,.12), transparent 55%),
+        radial-gradient(900px 600px at 86% 18%, rgba(22,163,74,.10), transparent 55%),
         linear-gradient(180deg, var(--bg1), var(--bg2));
       min-height:100vh;
     }
 
     header{
-      max-width: 1020px;
+      max-width: 1040px;
       margin: 0 auto;
       padding: 26px 18px 10px;
     }
     h1{
       margin:0 0 8px;
-      font-size: clamp(22px, 2.6vw, 30px);
+      font-size: clamp(22px, 2.6vw, 32px);
       letter-spacing:.2px;
-      font-weight: 800;
+      font-weight: 900;
     }
     .sub{
       margin:0;
       color:var(--muted);
-      line-height:1.45;
+      line-height:1.55;
       font-size: 14px;
+      max-width: 78ch;
     }
 
     main{
-      max-width:1020px;
+      max-width:1040px;
       margin:0 auto;
       padding: 14px 18px 36px;
     }
@@ -81,11 +88,9 @@
       content:"";
       position:absolute;
       inset:-2px;
-      background:
-        radial-gradient(800px 180px at 20% 0%, rgba(37,99,235,.10), transparent 60%),
-        radial-gradient(700px 180px at 85% 15%, rgba(22,163,74,.10), transparent 60%);
+      background: var(--softGlow);
       pointer-events:none;
-      opacity:.9;
+      opacity:.95;
     }
 
     @media (max-width: 880px){
@@ -106,7 +111,7 @@
     h2{
       margin:0;
       font-size: 16px;
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing:.2px;
     }
 
@@ -117,10 +122,10 @@
       padding: 7px 10px;
       border-radius: 999px;
       border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.75);
+      background: rgba(255,255,255,.78);
       color: var(--muted);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .kpi{
@@ -132,14 +137,14 @@
       margin: 8px 0 2px;
     }
     .big{
-      font-size: clamp(28px, 4.2vw, 48px);
-      font-weight: 900;
+      font-size: clamp(30px, 4.2vw, 52px);
+      font-weight: 1000;
       letter-spacing: .2px;
     }
     .unit{
       color: var(--muted);
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .tiles{
@@ -151,22 +156,23 @@
       margin-top: 10px;
     }
     .tile{
-      min-width: 108px;
+      min-width: 120px;
       padding: 10px 12px;
       border-radius: 14px;
-      background: rgba(255,255,255,.82);
+      background: rgba(255,255,255,.84);
       border: 1px solid var(--stroke);
     }
     .tile .n{
       font-size: 22px;
-      font-weight: 900;
+      font-weight: 1000;
       line-height: 1.1;
     }
     .tile .l{
-      margin-top: 3px;
+      margin-top: 4px;
       font-size: 12px;
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 800;
+      letter-spacing: .2px;
     }
 
     .meta{
@@ -183,7 +189,6 @@
 
     .mono{ font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; }
 
-    /* ===== Vorfall-Panel ===== */
     .wide{ grid-column: span 12; }
 
     .incidentWrap{
@@ -221,7 +226,7 @@
     .hint{
       color: var(--muted);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .panel{
@@ -279,7 +284,7 @@
       z-index:1;
       margin: 10px 0 0;
       color: rgba(229,231,235,.92);
-      font-weight: 800;
+      font-weight: 900;
       font-size: clamp(15px, 1.8vw, 20px);
     }
 
@@ -308,16 +313,16 @@
     button{
       appearance:none;
       border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.86);
+      background: rgba(255,255,255,.90);
       color: var(--text);
       border-radius: 12px;
       padding: 10px 12px;
-      font-weight: 800;
+      font-weight: 900;
       cursor:pointer;
       transition: transform .05s ease, background .15s ease, border-color .15s ease;
     }
     button:hover{
-      background: rgba(255,255,255,.96);
+      background: rgba(255,255,255,.98);
       border-color: #dbe7f5;
     }
     button:active{ transform: translateY(1px); }
@@ -341,23 +346,19 @@
     }
 
     footer{
-      max-width:1020px;
+      max-width:1040px;
       margin:0 auto;
       padding: 0 18px 26px;
       color: var(--muted);
       font-size: 12px;
-      line-height: 1.45;
+      line-height: 1.55;
     }
   </style>
 </head>
 
 <body>
   <header>
-    <h1>Ferien-Countdown (Niedersachsen) & Vorfallzähler</h1>
-    <p class="sub">
-      Die Countdowns laufen bis zum letzten Schultag vor den Ferien (Zielzeit: 13:10 Uhr).
-      Der Vorfallzähler wird nur in diesem Browser gespeichert.
-    </p>
+    <h1>HSK Ferien-Countdown</h1>
   </header>
 
   <main>
@@ -374,11 +375,14 @@
           <div class="unit">Tage bis letzter Schultag</div>
         </div>
 
-        <div class="tiles" aria-label="Countdown bis letzter Schultag vor den Osterferien">
+        <div class="tiles" aria-label="Countdown & Aufteilung bis letzter Schultag vor den Osterferien">
           <div class="tile"><div class="n mono" id="ostern-d">—</div><div class="l">Tage</div></div>
           <div class="tile"><div class="n mono" id="ostern-h">—</div><div class="l">Stunden</div></div>
           <div class="tile"><div class="n mono" id="ostern-m">—</div><div class="l">Minuten</div></div>
           <div class="tile"><div class="n mono" id="ostern-s">—</div><div class="l">Sekunden</div></div>
+
+          <div class="tile"><div class="n mono" id="ostern-free">—</div><div class="l">davon WE/Feiertage</div></div>
+          <div class="tile"><div class="n mono" id="ostern-school">—</div><div class="l">davon Schultage</div></div>
         </div>
 
         <div class="meta">
@@ -399,11 +403,14 @@
           <div class="unit">Tage bis letzter Schultag</div>
         </div>
 
-        <div class="tiles" aria-label="Countdown bis letzter Schultag vor den Zeugnisferien">
+        <div class="tiles" aria-label="Countdown & Aufteilung bis letzter Schultag vor den Zeugnisferien">
           <div class="tile"><div class="n mono" id="winter-d">—</div><div class="l">Tage</div></div>
           <div class="tile"><div class="n mono" id="winter-h">—</div><div class="l">Stunden</div></div>
           <div class="tile"><div class="n mono" id="winter-m">—</div><div class="l">Minuten</div></div>
           <div class="tile"><div class="n mono" id="winter-s">—</div><div class="l">Sekunden</div></div>
+
+          <div class="tile"><div class="n mono" id="winter-free">—</div><div class="l">davon WE/Feiertage</div></div>
+          <div class="tile"><div class="n mono" id="winter-school">—</div><div class="l">davon Schultage</div></div>
         </div>
 
         <div class="meta">
@@ -446,9 +453,9 @@
     // =========================
     // Einstellungen
     // =========================
-    // Countdown läuft bis zu dieser Uhrzeit am letzten Schultag vor Ferienbeginn
-    const LAST_SCHOOLDAY_TARGET_HOUR = 13;
-    const LAST_SCHOOLDAY_TARGET_MIN  = 10;
+    // Motivation: Tag springt um 06:00
+    const LAST_SCHOOLDAY_TARGET_HOUR = 6;
+    const LAST_SCHOOLDAY_TARGET_MIN  = 0;
 
     // =========================
     // Ferien-Daten (Niedersachsen) - Start/Ende der Ferien
@@ -488,17 +495,20 @@
       return `${date.getFullYear()}-${pad2(date.getMonth()+1)}-${pad2(date.getDate())}`;
     }
 
+    function addDays(date, n){
+      const d = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0,0,0,0);
+      d.setDate(d.getDate() + n);
+      return d;
+    }
+
     function lastSchoolDayBefore(holidayStartDate){
-      // Basis: Tag vor Ferienstart
       const d = new Date(holidayStartDate.getFullYear(), holidayStartDate.getMonth(), holidayStartDate.getDate(), 0,0,0,0);
       d.setDate(d.getDate() - 1);
 
-      // Wenn Sa/So: auf Freitag zurück
       while (d.getDay() === 0 || d.getDay() === 6){
         d.setDate(d.getDate() - 1);
       }
 
-      // Ziel-Uhrzeit am letzten Schultag
       d.setHours(LAST_SCHOOLDAY_TARGET_HOUR, LAST_SCHOOLDAY_TARGET_MIN, 0, 0);
       return d;
     }
@@ -540,6 +550,86 @@
       return { days, hours, mins, secs };
     }
 
+    // =========================
+    // Feiertage (Niedersachsen)
+    // =========================
+    function easterSunday(year){
+      const a = year % 19;
+      const b = Math.floor(year / 100);
+      const c = year % 100;
+      const d = Math.floor(b / 4);
+      const e = b % 4;
+      const f = Math.floor((b + 8) / 25);
+      const g = Math.floor((b - f + 1) / 3);
+      const h = (19*a + b - d - g + 15) % 30;
+      const i = Math.floor(c / 4);
+      const k = c % 4;
+      const l = (32 + 2*e + 2*i - h - k) % 7;
+      const m = Math.floor((a + 11*h + 22*l) / 451);
+      const month = Math.floor((h + l - 7*m + 114) / 31);
+      const day = ((h + l - 7*m + 114) % 31) + 1;
+      return new Date(year, month - 1, day, 0,0,0,0);
+    }
+
+    function niedersachsenHolidaysISO(year){
+      const set = new Set();
+
+      set.add(`${year}-01-01`); // Neujahr
+      set.add(`${year}-05-01`); // Tag der Arbeit
+      set.add(`${year}-10-03`); // Tag der Deutschen Einheit
+      set.add(`${year}-10-31`); // Reformationstag (NI)
+      set.add(`${year}-12-25`); // 1. Weihnachtstag
+      set.add(`${year}-12-26`); // 2. Weihnachtstag
+
+      const easter = easterSunday(year);
+      const iso = (d) => dateToISO(d);
+
+      set.add(iso(addDays(easter, -2))); // Karfreitag
+      set.add(iso(addDays(easter,  1))); // Ostermontag
+      set.add(iso(addDays(easter, 39))); // Christi Himmelfahrt
+      set.add(iso(addDays(easter, 50))); // Pfingstmontag
+
+      return set;
+    }
+
+    function isWeekend(date){
+      const dow = date.getDay();
+      return dow === 0 || dow === 6;
+    }
+
+    function effectiveDayStart(now){
+      // Tag-Logik springt um 06:00
+      const d = startOfDay(now);
+      if (
+        now.getHours() < LAST_SCHOOLDAY_TARGET_HOUR ||
+        (now.getHours() === LAST_SCHOOLDAY_TARGET_HOUR && now.getMinutes() < LAST_SCHOOLDAY_TARGET_MIN)
+      ){
+        d.setDate(d.getDate() - 1);
+      }
+      return d;
+    }
+
+    // Zählt "volle verbleibende Tage": angebrochener Tag ist abgezogen.
+    // Intervall: (baseDay + 1) ... (targetDay - 1)
+    function breakdownFreeDaysFull(baseDayStart, targetDayStart){
+      const dayDiff = Math.max(0, Math.round((targetDayStart.getTime() - baseDayStart.getTime()) / 86400000));
+      const fullDays = Math.max(0, dayDiff - 1);
+
+      let free = 0;
+      let school = 0;
+
+      for(let i = 1; i <= fullDays; i++){
+        const d = addDays(baseDayStart, i);
+        const holidaySet = niedersachsenHolidaysISO(d.getFullYear());
+        const iso = dateToISO(d);
+
+        const isFree = isWeekend(d) || holidaySet.has(iso);
+        if (isFree) free++;
+        else school++;
+      }
+      return { fullDays, free, school };
+    }
+
     function renderCountdown(kind, ids){
       const now = new Date();
       const picked = pickNextHoliday(kind, now);
@@ -558,13 +648,24 @@
       document.getElementById(ids.target).textContent =
         `Letzter Schultag: ${formatDE(lastSchoolISO)} ${pad2(LAST_SCHOOLDAY_TARGET_HOUR)}:${pad2(LAST_SCHOOLDAY_TARGET_MIN)}`;
 
+      // Countdown (h/m/s) bis zur Zielzeit bleibt "real-time"
       const parts = diffParts(lastSchoolTarget, now);
 
-      document.getElementById(ids.bigDays).textContent = String(parts.days);
-      document.getElementById(ids.d).textContent = String(parts.days);
+      // "Tage" = volle verbleibende Tage (angeb. Tag abgezogen) mit 06:00-Umsprung
+      const baseDay = effectiveDayStart(now);
+      const targetDay = startOfDay(lastSchoolTarget);
+
+      const split = breakdownFreeDaysFull(baseDay, targetDay);
+
+      document.getElementById(ids.bigDays).textContent = String(split.fullDays);
+
+      document.getElementById(ids.d).textContent = String(split.fullDays);
       document.getElementById(ids.h).textContent = pad2(parts.hours);
       document.getElementById(ids.m).textContent = pad2(parts.mins);
       document.getElementById(ids.s).textContent = pad2(parts.secs);
+
+      document.getElementById(ids.free).textContent = String(split.free);
+      document.getElementById(ids.school).textContent = String(split.school);
     }
 
     // ========= Vorfallzähler =========
@@ -588,7 +689,7 @@
       const last = parseISOToLocalDate(iso);
       const today = startOfDay(new Date());
       const diff = today.getTime() - startOfDay(last).getTime();
-      return Math.max(0, Math.floor(diff / (1000*60*60*24)));
+      return Math.max(0, Math.floor(diff / 86400000));
     }
 
     function renderIncident(){
@@ -606,7 +707,8 @@
         status: "ostern-status",
         target: "ostern-target",
         bigDays: "ostern-days",
-        d: "ostern-d", h: "ostern-h", m: "ostern-m", s: "ostern-s"
+        d: "ostern-d", h: "ostern-h", m: "ostern-m", s: "ostern-s",
+        free: "ostern-free", school: "ostern-school"
       });
 
       renderCountdown("winter", {
@@ -614,7 +716,8 @@
         status: "winter-status",
         target: "winter-target",
         bigDays: "winter-days",
-        d: "winter-d", h: "winter-h", m: "winter-m", s: "winter-s"
+        d: "winter-d", h: "winter-h", m: "winter-m", s: "winter-s",
+        free: "winter-free", school: "winter-school"
       });
 
       renderIncident();
