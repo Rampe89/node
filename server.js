@@ -109,6 +109,9 @@ const server = http.createServer((req, res) => {
         } else if (req.url === '/ferien.html') {
             // -ferien Seite ausliefern
             serveFile('ferien.html', res);
+        } else if (req.url === '/office.html') {
+            // -ferien Seite ausliefern
+            serveFile('office.html', res);
          } else {
             // 404-Seite
             res.statusCode = 404;
