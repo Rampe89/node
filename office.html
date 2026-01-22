@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LibreOffice Writer – Klick-Anleitung (Klasse 8): Lebenslauf & Bewerbung</title>
+  <style>
+    :root{
+      --bg:#f6f8fc;
+      --card:#ffffff;
+      --text:#1b2430;
+      --muted:#5b6b7c;
+      --accent:#2f6fed;
+      --accent2:#16a34a;
+      --line:#dbe3ef;
+      --shadow: 0 8px 24px rgba(12, 28, 54, .08);
+      --warn:#b45309;
+      --warnbg:#fff7ed;
+      --ok:#166534;
+      --okbg:#ecfdf5;
+      --info:#1d4ed8;
+      --infobg:#eff6ff;
+      --bad:#b91c1c;
+      --badbg:#fef2f2;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color:var(--text);
+      line-height:1.45;
+    }
+    header{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 26px 16px 10px;
+    }
+    h1{margin:0 0 6px;font-size: 26px;}
+    header p{margin:0;color:var(--muted)}
+    main{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 12px 16px 60px;
+    }
+    .card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .topbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .progress{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      color:var(--muted);
+      font-size: 14px;
+    }
+    .progress strong{color:var(--text)}
+    .btnrow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    button{
+      appearance:none;
+      border:1px solid var(--line);
+      background:#fff;
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-size: 14px;
+    }
+    button.primary{
+      background: var(--accent);
+      color:#fff;
+      border-color: var(--accent);
+    }
+    button:disabled{
+      opacity:.5;
+      cursor:not-allowed;
+    }
+    .pill{
+      display:inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size: 12px;
+      background: #fff;
+    }
+    .step{
+      display:none;
+      margin-top: 12px;
+    }
+    .step.active{display:block}
+    h2{
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+    h3{
+      margin: 14px 0 6px;
+      font-size: 15px;
+    }
+    ul,ol{margin: 6px 0 0 18px}
+    li{margin: 6px 0}
+    .callout{
+      border:1px solid var(--line);
+      border-left-width: 5px;
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin: 12px 0 0;
+      background:#fff;
+    }
+    .callout.info{border-left-color:var(--info);background:var(--infobg)}
+    .callout.ok{border-left-color:var(--accent2);background:var(--okbg)}
+    .callout.warn{border-left-color:var(--warn);background:var(--warnbg)}
+    .callout.bad{border-left-color:var(--bad);background:var(--badbg)}
+    .kbd{
+      padding:2px 6px;
+      border:1px solid #cfd9ea;
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      background: #fff;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 0.95em;
+    }
+    code{
+      background:#f1f5ff;
+      border:1px solid #dbe6ff;
+      padding: 1px 6px;
+      border-radius: 8px;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 0.95em;
+    }
+    .mini{
+      color:var(--muted);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    .check{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding: 10px 12px;
+      border:1px dashed #cfd9ea;
+      border-radius: 14px;
+      background:#fbfdff;
+      margin-top: 10px;
+    }
+    .check input{margin-top: 3px}
+    .two{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (min-width: 860px){
+      .two{grid-template-columns: 1fr 1fr}
+    }
+    .panel{
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background:#fff;
+    }
+    .footerhint{
+      color:var(--muted);
+      font-size: 13px;
+      margin-top: 14px;
+    }
+    .smalltag{
+      display:inline-block;
+      margin-right:8px;
+      margin-top:6px;
+      padding: 4px 10px;
+      border-radius: 10px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--muted);
+      font-size: 12px;
+    }
+    .bar{
+      height: 10px;
+      background:#e8eef8;
+      border-radius: 999px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      min-width: 240px;
+    }
+    .bar > div{
+      height:100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width .2s ease;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>LibreOffice Writer – Klick-Anleitung (Klasse 8)</h1>
+  <p>Lebenslauf & Bewerbung. Du klickst dich Schritt für Schritt durch. Erst wenn du „Erledigt“ anklickst, geht es weiter.</p>
+  <div style="margin-top:10px">
+    <span class="smalltag">Dauer: 2–4 Std.</span>
+    <span class="smalltag">Ergebnis: 2 ODT + 2 PDF</span>
+    <span class="smalltag">Datenschutz: echte Daten dürfen ersetzt werden</span>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="topbar">
+      <div class="progress">
+        <span class="pill" id="partPill">Teil</span>
+        <span>Schritt <strong id="stepNum">1</strong> von <strong id="stepTotal">1</strong></span>
+      </div>
+      <div class="bar" aria-label="Fortschritt">
+        <div id="barFill"></div>
+      </div>
+      <div class="btnrow">
+        <button id="btnPrev" type="button">Zurück</button>
+        <button id="btnDone" class="primary" type="button">Erledigt → Weiter</button>
+        <button id="btnReset" type="button" title="Zurück zum Anfang">Neu starten</button>
+      </div>
+    </div>
+
+    <!-- STEP CONTENTS -->
+
+    <div class="step active" data-part="Start" data-title="Start: Was du am Ende abgibst">
+      <h2>Start: Was du am Ende abgibst</h2>
+      <ul>
+        <li><strong>Lebenslauf</strong>: <code>Nachname_Vorname_Lebenslauf.odt</code> und <code>.pdf</code></li>
+        <li><strong>Bewerbung</strong>: <code>Nachname_Vorname_Bewerbung.odt</code> und <code>.pdf</code></li>
+      </ul>
+      <div class="callout info">
+        Tipp: Du darfst Adresse/Telefon durch Beispieldaten ersetzen (z. B. „Musterstraße 1“, „01234/56789“).
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Ich weiß, welche 4 Dateien ich am Ende abgebe.</div></div>
+    </div>
+
+    <div class="step" data-part="Warm-up" data-title="Writer öffnen & Warm-up speichern">
+      <h2>Writer öffnen & Warm-up speichern</h2>
+      <ol>
+        <li>Öffne <strong>LibreOffice Writer</strong>.</li>
+        <li>Klicke: <strong>Datei → Neu → Textdokument</strong>.</li>
+        <li>Speichere sofort: <strong>Datei → Speichern unter…</strong></li>
+        <li>Dateiname: <code>Warmup_Nachname_Vorname.odt</code></li>
+      </ol>
+      <div class="callout ok">
+        Regel: Speichere früh und oft. Shortcut: <span class="kbd">Strg</span>+<span class="kbd">S</span>.
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Ich habe das Warm-up-Dokument erstellt und gespeichert.</div></div>
+    </div>
+
+    <div class="step" data-part="Warm-up" data-title="Warm-up: Text formatieren (kurz)">
+      <h2>Warm-up: Text formatieren (kurz)</h2>
+      <ol>
+        <li>Schreibe: <em>Das ist mein Testdokument.</em></li>
+        <li>Markiere den Satz und stelle ein:
+          <ul>
+            <li>Schriftgröße: <strong>12</strong></li>
+            <li>Fett an/aus</li>
+            <li>Kursiv an/aus</li>
+          </ul>
+        </li>
+        <li>Schreibe darunter drei Zeilen und probiere:
+          <ul>
+            <li>linksbündig / zentriert / rechtsbündig</li>
+            <li>Aufzählung und Nummerierung</li>
+          </ul>
+        </li>
+      </ol>
+      <div class="callout warn">
+        Nicht mit vielen Leerzeichen „schieben“. Das sieht später schief aus.
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Ich kann Text markieren und grundlegende Formatierung ändern.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil A – Lebenslauf" data-title="Lebenslauf: neue Datei anlegen & speichern">
+      <h2>Teil A – Lebenslauf: neue Datei anlegen & speichern</h2>
+      <ol>
+        <li>Neues Dokument: <strong>Datei → Neu → Textdokument</strong>.</li>
+        <li>Speichere sofort als: <code>Nachname_Vorname_Lebenslauf.odt</code></li>
+      </ol>
+      <div class="check"><input type="checkbox" /> <div>Ich habe die Lebenslauf-Datei korrekt gespeichert.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil A – Lebenslauf" data-title="Lebenslauf: Seite einrichten (A4, Ränder)">
+      <h2>Lebenslauf: Seite einrichten (A4, Ränder)</h2>
+      <ol>
+        <li>Klicke: <strong>Format → Seite…</strong></li>
+        <li>Stelle ein:
+          <ul>
+            <li>Format: <strong>A4</strong></li>
+            <li>Ausrichtung: <strong>Hochformat</strong></li>
+            <li>Ränder (wenn keine Vorgabe): oben 2,5 cm / unten 2,5 cm / links 2,5 cm / rechts 2,5 cm</li>
+          </ul>
+        </li>
+        <li>Klicke auf <strong>OK</strong>.</li>
+      </ol>
+      <div class="check"><input type="checkbox" /> <div>Meine Seite ist auf A4 mit passenden Rändern eingestellt.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil A – Lebenslauf" data-title="Lebenslauf: Standardschrift & Zeilenabstand">
+      <h2>Lebenslauf: Standardschrift & Zeilenabstand</h2>
+      <ol>
+        <li>Klicke einmal in das leere Dokument (nichts markieren).</li>
+        <li>Stelle eine gut lesbare Standardschrift ein:
+          <ul>
+            <li>Schriftgröße: <strong>11 oder 12</strong></li>
+            <li>Eine Schriftart (z. B. Liberation Sans/Serif)</li>
+          </ul>
+        </li>
+        <li>Zeilenabstand: <strong>1,0 bis 1,15</strong> (Lebenslauf eher kompakt).</li>
+      </ol>
+      <div class="callout info">
+        Wenn du unsicher bist: 11 pt und 1,15 ist fast immer okay.
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Mein Lebenslauf hat eine einheitliche Standardschrift und passenden Zeilenabstand.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil A – Lebenslauf" data-title="Lebenslauf: Überschrift & Kontaktdaten">
+      <h2>Lebenslauf: Überschrift & Kontaktdaten</h2>
+      <ol>
+        <li>Schreibe oben: <strong>Lebenslauf</strong>.</li>
+        <li>Formatiere „Lebenslauf“:
+          <ul>
+            <li>größer (z. B. 16–20) und ggf. fett</li>
+            <li>oder nutze <strong>Formatvorlage: Überschrift 1</strong></li>
+          </ul>
+        </li>
+        <li>Eine Zeile darunter deine Kontaktdaten (Beispiel):
+          <ul>
+            <li>Vorname Nachname</li>
+            <li>Musterstraße 1</li>
+            <li>12345 Musterstadt</li>
+            <li>max@beispiel.de</li>
+          </ul>
+        </li>
+      </ol>
+      <div class="callout warn">
+        Datenschutz: Echte Adresse/Telefon darfst du ersetzen.
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Ich habe Überschrift und Kontaktdaten eingefügt.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil A – Lebenslauf" data-title="Lebenslauf: Bereiche als Überschriften anlegen">
+      <h2>Lebenslauf: Bereiche als Überschriften anlegen</h2>
+      <p>Jetzt kommen die „Blöcke“. Jeder Block bekommt eine klare Überschrift.</p>
+      <ol>
+        <li>Schreibe nacheinander diese Überschriften (jeweils in eine neue Zeile):
+          <ul>
+            <li><strong>Schulbildung</strong></li>
+            <li><strong>Praktika</strong> (falls du keins hast: später „keine“ oder weglassen)</li>
+            <li><strong>Kenntnisse</strong></li>
+            <li><strong>Interessen</strong></li>
+          </ul>
+        </li>
+        <li>Formatiere alle Überschriften gleich:
+          <ul>
+            <li>Option A: Formatvorlage <strong>Überschrift 2</strong></li>
+            <li>Option B: 13–14 pt + fett</li>
+          </ul>
+        </li>
+      </ol>
+      <div class="callout info">
+        Wichtig: Einheitlich. Nicht jede Überschrift anders.
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Ich habe die Bereiche angelegt und einheitlich formatiert.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil A – Lebenslauf" data-title="Lebenslauf: Ausrichten mit TAB (ohne Leerzeichen)">
+      <h2>Lebenslauf: Ausrichten mit TAB (ohne Leerzeichen)</h2>
+      <div class="two">
+        <div class="panel">
+          <h3>So geht’s (Tabulator-Methode)</h3>
+          <ol>
+            <li>Aktiviere das Lineal: <strong>Ansicht → Lineal</strong> (Häkchen an).</li>
+            <li>Klicke ins Lineal bei ca. <strong>4 cm</strong>, um einen Tabstopp zu setzen (falls nötig).</li>
+            <li>Unter <strong>Schulbildung</strong> schreibe Zeilen so:
+              <ul>
+                <li><code>08/2020 – heute</code> <span class="kbd">Tab</span> <code>Hauptschule …</code></li>
+                <li><code>08/2016 – 07/2020</code> <span class="kbd">Tab</span> <code>Grundschule …</code></li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+        <div class="panel">
+          <h3>Wichtig</h3>
+          <ul>
+            <li>Keine 20 Leerzeichen benutzen.</li>
+            <li>Immer: <strong>Zeitraum</strong> – dann <span class="kbd">Tab</span> – dann <strong>Inhalt</strong></li>
+            <li>Wenn etwas verrutscht: Tabstopp überprüfen, nicht „rumdrücken“.</li>
+          </ul>
+          <div class="callout ok">
+            Das ist eine echte Profi-Technik: sauber, stabil, sieht sofort besser aus.
+          </div>
+        </div>
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Ich habe Schulbildung mit Tabulator (oder sauberer Ausrichtung) eingetragen.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil A – Lebenslauf" data-title="Lebenslauf: Praktika, Kenntnisse, Interessen ausfüllen">
+      <h2>Lebenslauf: Praktika, Kenntnisse, Interessen ausfüllen</h2>
+      <ol>
+        <li><strong>Praktika</strong> (falls vorhanden): Zeitraum <span class="kbd">Tab</span> Ort/Arbeit (1–2 Zeilen).</li>
+        <li><strong>Kenntnisse</strong>:
+          <ul>
+            <li>Sprachen: Deutsch, Englisch …</li>
+            <li>Computer: Writer, Präsentationen, Recherche …</li>
+          </ul>
+        </li>
+        <li><strong>Interessen</strong>:
+          <ul>
+            <li>Hobbys, die gut wirken (Sport, Verein, Musik, Technik, Ehrenamt).</li>
+          </ul>
+        </li>
+      </ol>
+      <div class="callout warn">
+        Nicht übertreiben: Lieber ehrlich und konkret als „ich kann alles“.
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Ich habe die restlichen Bereiche sinnvoll ausgefüllt.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil A – Lebenslauf" data-title="Lebenslauf: Ort, Datum, Name (unten)">
+      <h2>Lebenslauf: Ort, Datum, Name (unten)</h2>
+      <ol>
+        <li>Ganz unten im Dokument: neue Zeile.</li>
+        <li>Schreibe: <code>Ort, 22.01.2026</code> (oder heutiges Datum).</li>
+        <li>Darunter (oder daneben): deinen Namen.</li>
+      </ol>
+      <div class="callout info">
+        Wenn du unten nicht genug Platz hast: nicht 20× Enter oben löschen, sondern „Abstand nach Absatz“ prüfen.
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Ort/Datum/Name sind unten eingefügt.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil A – Lebenslauf" data-title="Lebenslauf: Rechtschreibung prüfen">
+      <h2>Lebenslauf: Rechtschreibung prüfen</h2>
+      <ol>
+        <li>Klicke: <strong>Extras → Rechtschreibung…</strong></li>
+        <li>Arbeite alle Vorschläge durch.</li>
+        <li>Achte besonders auf:
+          <ul>
+            <li>Firmen-/Ortsnamen (die können ok sein)</li>
+            <li>Datumsschreibweise</li>
+          </ul>
+        </li>
+      </ol>
+      <div class="check"><input type="checkbox" /> <div>Ich habe die Rechtschreibung geprüft und verbessert.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil B – Bewerbung" data-title="Bewerbung: neue Datei anlegen & speichern">
+      <h2>Teil B – Bewerbung: neue Datei anlegen & speichern</h2>
+      <ol>
+        <li>Neues Dokument: <strong>Datei → Neu → Textdokument</strong>.</li>
+        <li>Speichern als: <code>Nachname_Vorname_Bewerbung.odt</code></li>
+      </ol>
+      <div class="check"><input type="checkbox" /> <div>Ich habe die Bewerbungs-Datei korrekt gespeichert.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil B – Bewerbung" data-title="Bewerbung: Absender (oben links)">
+      <h2>Bewerbung: Absender (oben links)</h2>
+      <ol>
+        <li>Schreibe deinen Absender (oder Beispiel):
+          <ul>
+            <li>Vorname Nachname</li>
+            <li>Musterstraße 1</li>
+            <li>12345 Musterstadt</li>
+            <li>max@beispiel.de</li>
+          </ul>
+        </li>
+      </ol>
+      <div class="check"><input type="checkbox" /> <div>Absender steht oben links.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil B – Bewerbung" data-title="Bewerbung: Empfänger (unter Absender)">
+      <h2>Bewerbung: Empfänger (unter Absender)</h2>
+      <ol>
+        <li>Lass 1–2 Zeilen Abstand (oder nutze Absatzabstand).</li>
+        <li>Schreibe den Empfänger:
+          <ul>
+            <li>Firma</li>
+            <li>z. B. „Frau Müller“ (wenn bekannt)</li>
+            <li>Straße Hausnummer</li>
+            <li>PLZ Ort</li>
+          </ul>
+        </li>
+      </ol>
+      <div class="callout info">
+        Wenn du keine Ansprechperson kennst, ist das okay. Dann nur „Firma“ ohne Namen.
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Empfängerblock ist eingefügt.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil B – Bewerbung" data-title="Bewerbung: Datum rechtsbündig">
+      <h2>Bewerbung: Datum rechtsbündig</h2>
+      <ol>
+        <li>Eine neue Zeile nach dem Empfängerblock.</li>
+        <li>Klicke <strong>rechtsbündig</strong> (Ausrichtung) oder drücke <span class="kbd">Strg</span>+<span class="kbd">R</span>.</li>
+        <li>Schreibe das Datum: <code>22.01.2026</code> (oder heutiges Datum).</li>
+        <li>Stelle danach wieder auf <strong>linksbündig</strong>.</li>
+      </ol>
+      <div class="check"><input type="checkbox" /> <div>Datum ist rechtsbündig eingefügt und ich bin wieder linksbündig.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil B – Bewerbung" data-title="Bewerbung: Betreff (fett)">
+      <h2>Bewerbung: Betreff (fett)</h2>
+      <ol>
+        <li>Neue Zeile unter dem Datum.</li>
+        <li>Schreibe einen Betreff und mache ihn <strong>fett</strong>.</li>
+        <li>Beispiele:
+          <ul>
+            <li><strong>Bewerbung um ein Praktikum als Verkäufer (01.03.–15.03.2026)</strong></li>
+            <li><strong>Bewerbung um ein Schulpraktikum im Bereich IT (…)</strong></li>
+          </ul>
+        </li>
+      </ol>
+      <div class="check"><input type="checkbox" /> <div>Betreff ist passend und fett.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil B – Bewerbung" data-title="Bewerbung: Anrede">
+      <h2>Bewerbung: Anrede</h2>
+      <ol>
+        <li>Neue Zeile nach dem Betreff.</li>
+        <li>Wähle eine passende Anrede:
+          <ul>
+            <li>„Sehr geehrte Frau Müller,“</li>
+            <li>„Sehr geehrter Herr Müller,“</li>
+            <li>Wenn kein Name bekannt: „Sehr geehrte Damen und Herren,“</li>
+          </ul>
+        </li>
+      </ol>
+      <div class="callout warn">
+        Nach der Anrede kommt ein Komma, dann neue Zeile (kein Ausrufezeichen).
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Anrede ist korrekt geschrieben.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil B – Bewerbung" data-title="Bewerbung: Absatz 1 (Einstieg)">
+      <h2>Bewerbung: Absatz 1 (Einstieg)</h2>
+      <ol>
+        <li>Schreibe 2–3 Sätze:
+          <ul>
+            <li>Wofür bewirbst du dich (Praktikum/Ausbildung)?</li>
+            <li>Zeitraum?</li>
+            <li>Warum diese Firma?</li>
+          </ul>
+        </li>
+      </ol>
+      <div class="callout info">
+        Beispielsatz: „hiermit bewerbe ich mich um ein Praktikum als … in Ihrem Unternehmen im Zeitraum …“
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Absatz 1 ist geschrieben (Einstieg ist klar).</div></div>
+    </div>
+
+    <div class="step" data-part="Teil B – Bewerbung" data-title="Bewerbung: Absatz 2 (Stärken)">
+      <h2>Bewerbung: Absatz 2 (Stärken)</h2>
+      <ol>
+        <li>Neue Zeile (neuer Absatz).</li>
+        <li>Nenne 2–3 Stärken, die zur Stelle passen (z. B. zuverlässig, freundlich, teamfähig).</li>
+        <li>Erkläre kurz, warum das wichtig ist.</li>
+      </ol>
+      <div class="callout ok">
+        Besser als „ich bin gut“: „Ich arbeite sorgfältig und halte Absprachen ein.“
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Absatz 2 ist geschrieben (Stärken passen zur Stelle).</div></div>
+    </div>
+
+    <div class="step" data-part="Teil B – Bewerbung" data-title="Bewerbung: Absatz 3 (Beispiele/Erfahrung)">
+      <h2>Bewerbung: Absatz 3 (Beispiele/Erfahrung)</h2>
+      <ol>
+        <li>Neue Zeile (neuer Absatz).</li>
+        <li>Gib 1–2 Beispiele:
+          <ul>
+            <li>Schule: Projekte, AG, Aufgaben (z. B. Technik, Präsentationen, Teamarbeit)</li>
+            <li>Privat: Verein, Ehrenamt, Helfen, Verantwortungsaufgaben</li>
+          </ul>
+        </li>
+      </ol>
+      <div class="check"><input type="checkbox" /> <div>Absatz 3 enthält konkrete Beispiele.</div></div>
+    </div>
+
+    <div class="step" data-part="Teil B – Bewerbung" data-title="Bewerbung: Absatz 4 (Schluss)">
+      <h2>Bewerbung: Absatz 4 (Schluss)</h2>
+      <ol>
+        <li>Neue Zeile (neuer Absatz).</li>
+        <li>Schreibe 1–2 Sätze:
+          <ul>
+            <li>„Ich freue mich über die Möglichkeit, mich persönlich vorzustellen.“</li>
+            <li>„Für Rückfragen stehe ich gern zur Verfügung.“</li>
+          </ul>
+        </li>
+      </ol>
+      <div class="check"><input type="checkbox" /> <div>Absatz 4 ist geschrieben (freundlicher Schluss).</div></div>
+    </div>
+
+    <div class="step" data-part="Teil B – Bewerbung" data-title="Bewerbung: Grußformel, Unterschrift, Anlagen">
+      <h2>Bewerbung: Grußformel, Unterschrift, Anlagen</h2>
+      <ol>
+        <li>Neue Zeile.</li>
+        <li>Schreibe: <strong>Mit freundlichen Grüßen</strong></li>
+        <li>Lass 3–4 Zeilen Platz (für Unterschrift).</li>
+        <li>Schreibe deinen Namen.</li>
+        <li>Darunter: <strong>Anlagen:</strong> Lebenslauf</li>
+      </ol>
+      <div class="check"><input type="checkbox" /> <div>Grußformel, Name und Anlagen sind vorhanden.</div></div>
+    </div>
+
+    <div class="step" data-part="Finale" data-title="Beide Dokumente: Rechtschreibung & letzte Kontrolle">
+      <h2>Beide Dokumente: Rechtschreibung & letzte Kontrolle</h2>
+      <ol>
+        <li>Öffne zuerst den Lebenslauf, dann die Bewerbung.</li>
+        <li>Jeweils: <strong>Extras → Rechtschreibung…</strong> durchgehen.</li>
+        <li>Kontrolliere:
+          <ul>
+            <li>einheitliche Schrift</li>
+            <li>keine wilden Abstände</li>
+            <li>saubere Ausrichtung</li>
+          </ul>
+        </li>
+      </ol>
+      <div class="callout warn">
+        Wenn Text „rutscht“: niemals mit Leerzeichen reparieren. Tabstopp/Tabelle prüfen.
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Ich habe beide Dokumente geprüft und verbessert.</div></div>
+    </div>
+
+    <div class="step" data-part="Finale" data-title="PDF exportieren (Lebenslauf & Bewerbung)">
+      <h2>PDF exportieren (Lebenslauf & Bewerbung)</h2>
+      <ol>
+        <li>Öffne den Lebenslauf.</li>
+        <li>Klicke: <strong>Datei → Exportieren als → Exportieren als PDF…</strong></li>
+        <li>Speichere als: <code>Nachname_Vorname_Lebenslauf.pdf</code></li>
+        <li>Wiederhole das für die Bewerbung:
+          <code>Nachname_Vorname_Bewerbung.pdf</code>
+        </li>
+      </ol>
+      <div class="callout ok">
+        Jetzt hast du vier Dateien: 2× ODT und 2× PDF.
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Ich habe beide PDFs erstellt und korrekt benannt.</div></div>
+    </div>
+
+    <div class="step" data-part="Abgabe" data-title="Abgabe: Dateien sortieren & abgeben">
+      <h2>Abgabe: Dateien sortieren & abgeben</h2>
+      <ol>
+        <li>Lege einen Ordner an: <code>Nachname_Vorname_Bewerbung</code></li>
+        <li>Lege hinein:
+          <ul>
+            <li><code>Nachname_Vorname_Lebenslauf.odt</code></li>
+            <li><code>Nachname_Vorname_Lebenslauf.pdf</code></li>
+            <li><code>Nachname_Vorname_Bewerbung.odt</code></li>
+            <li><code>Nachname_Vorname_Bewerbung.pdf</code></li>
+          </ul>
+        </li>
+        <li>Gib den Ordner ab (oder ZIP, wenn gefordert).</li>
+      </ol>
+      <div class="callout info">
+        Fertig. Wenn du Zeit hast: Lies die Bewerbung einmal laut vor. Klingt sie höflich und klar?
+      </div>
+      <div class="check"><input type="checkbox" /> <div>Ich habe alle Dateien gesammelt und bin abgabebereit.</div></div>
+      <p class="footerhint">Du kannst mit „Zurück“ jederzeit prüfen. Mit „Neu starten“ beginnt alles von vorn.</p>
+    </div>
+
+  </section>
+</main>
+
+<script>
+  (function(){
+    const steps = Array.from(document.querySelectorAll('.step'));
+    const stepNum = document.getElementById('stepNum');
+    const stepTotal = document.getElementById('stepTotal');
+    const partPill = document.getElementById('partPill');
+    const barFill = document.getElementById('barFill');
+
+    const btnPrev = document.getElementById('btnPrev');
+    const btnDone = document.getElementById('btnDone');
+    const btnReset = document.getElementById('btnReset');
+
+    let idx = 0;
+
+    function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+
+    function render(){
+      idx = clamp(idx, 0, steps.length - 1);
+      steps.forEach((s,i)=>s.classList.toggle('active', i === idx));
+      stepNum.textContent = String(idx + 1);
+      stepTotal.textContent = String(steps.length);
+
+      const part = steps[idx].getAttribute('data-part') || 'Teil';
+      partPill.textContent = part;
+
+      btnPrev.disabled = (idx === 0);
+      btnDone.textContent = (idx === steps.length - 1) ? "Fertig" : "Erledigt → Weiter";
+
+      const pct = ((idx) / (steps.length - 1)) * 100;
+      barFill.style.width = pct + "%";
+
+      // scroll into view so it feels like "next page"
+      steps[idx].scrollIntoView({behavior:"smooth", block:"start"});
+    }
+
+    function next(){
+      idx += 1;
+      render();
+    }
+    function prev(){
+      idx -= 1;
+      render();
+    }
+    function reset(){
+      idx = 0;
+      render();
+    }
+
+    btnDone.addEventListener('click', next);
+    btnPrev.addEventListener('click', prev);
+    btnReset.addEventListener('click', reset);
+
+    // Keyboard support: arrows for navigation, Enter for next
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'ArrowRight' || e.key === 'Enter') next();
+      if(e.key === 'ArrowLeft') prev();
+    });
+
+    render();
+  })();
+</script>
+
+</body>
+</html>
