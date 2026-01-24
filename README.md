@@ -7,12 +7,13 @@ Das **CyberDefense Lab** bietet praxisnahe Einblicke in zentrale IT-Sicherheitsk
 - **Phishing-Quiz:** Lernen, gefälschte E-Mails zu identifizieren und sich vor Phishing zu schützen.
 - **Brute-Force-Simulator:** Demonstriert, wie schwache Passwörter durch Brute-Force-Angriffe kompromittiert werden können.
 - **Social-Engineering-Simulation:** Praktische Szenarien, um Angriffe durch Täuschung zu erkennen und abzuwehren.
-- **Hashing und Rainbow Tables:** Wie Passwörter geschützt und durch Salting sicherer gemacht werden.
-- **Gobuster-Simulation:** Suchen und Aufdecken von Schwachstellen in versteckten Verzeichnissen.
-- **Updates und Patches:** Die Bedeutung regelmäßiger Sicherheitsupdates.
 - **Passwortsicherheit:** Erstellung sicherer Passwörter und Analyse von Passwortmanagern.
-- **Hashhing Lab**: Das Hashing-Lab bietet die Möglichkeit, Passwörter zu entschlüsseln und den Schutz durch Salt zu erproben.
-- **geheime Eastereggs:** Kontaktformualar, Cookies, verstecke Directories
+- **Updates und Patches:** Die Bedeutung regelmäßiger Sicherheitsupdates.
+- **Gobuster-Simulation:** Suchen und Aufdecken von Schwachstellen in versteckten Verzeichnissen.
+- **SQL-Injection:** Auswirkungen manipulierter Eingaben in einer Datenbank und wie eine sichere Abfrage diese Wirkung stoppt.
+- **Hashing Lab**: Das Hashing-Lab bietet die Möglichkeit, Passwörter zu entschlüsseln und den Schutz durch Salt zu erproben.
+- **Cookies**: Auslesen von Cookie-Inhalten mit Standard-Browser-Tools
+- **geheime Eastereggs:** Kontaktformular, verstecke Directories
 
 ## Voraussetzungen
 Um das Lab lokal auszuführen oder zu hosten, benötigst du:
@@ -28,18 +29,15 @@ Um das Lab lokal auszuführen oder zu hosten, benötigst du:
 
 ### 1. Repository klonen
 1. Öffne das Terminal oder eine Git-Bash.
-2. Führe folgenden Befehl aus, um das Repository zu klonen:
-git clone https://github.com/Rampe89/node.git
-3. Navigiere ins Projektverzeichnis:
-cd node
+2. Führe folgenden Befehl aus, um das Repository zu klonen: `git clone https://github.com/RBerghorn/Cyberdefenselab.git`
+3. Navigiere ins Projektverzeichnis: `cd Cyberdefenselab`
 
 ### 2. Abhängigkeiten installieren
 1. Stelle sicher, dass Node.js und npm installiert sind.
-2. Installiere die benötigten Pakete:
-npm install
+2. Installiere die benötigten Pakete: `npm install`
+
 ### 3. Lokalen Server starten
-1. Starte den Server mit:
-node server.js
+1. Starte den Server mit: `node server.js`
 2. Öffne deinen Browser und rufe `http://localhost:3000` auf.
 
 ---
@@ -70,7 +68,6 @@ Render generiert eine öffentliche URL, über die das Lab zugänglich ist.
 - Jede Lab-Aufgabe ist mit einer Flag verknüpft, die korrekt eingegeben werden muss.
 - Erfolgreich abgeschlossene Aufgaben schalten **Achievements** frei, die im Hauptmenü angezeigt werden.
 
-
 ---
 
 ## Feedback und Beiträge
@@ -81,7 +78,4 @@ Fragen oder Verbesserungsvorschläge? Erstelle gerne ein Issue oder einen Pull-R
 ## Haftungsauschluss & Lizenz
 Das CyberDefense Lab wurde sorgfältig entwickelt, um ein sicheres Lernumfeld zu bieten. Dennoch wird keine Haftung für Schäden übernommen, die durch die unsachgemäße Nutzung des Labs oder der erlernten Techniken entstehen könnten. Die Nutzung des Labs erfolgt auf eigene Verantwortung.
 Dieses Projekt steht unter der MIT-Lizenz.
-
-
-
 
