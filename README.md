@@ -29,7 +29,7 @@ Um das Lab lokal auszuführen oder zu hosten, benötigst du:
 ### 1. Repository klonen
 1. Öffne das Terminal oder eine Git-Bash.
 2. Führe folgenden Befehl aus, um das Repository zu klonen:
-git clone https://github.com/Rampe89/cyberdefenselab.git
+git clone https://github.com/Rampe89/Cyberdefenselab.git
 3. Navigiere ins Projektverzeichnis:
 cd node
 
