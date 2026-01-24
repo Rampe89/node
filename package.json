@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js"
   },
-  "author": "RBerghorn",
+  "author": "Rampe89",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^25.0.10"
