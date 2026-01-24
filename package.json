@@ -1,11 +1,14 @@
 {
-  "name": "node-app",
+  "name": "Cyberdefenselab",
   "version": "1.0.0",
-  "description": "Eine einfache Node.js-App für Render",
+  "description": "13 Capture-the-Flag Challenges für die Schule",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "author": "Rampe89",
-  "license": "MIT"
+  "author": "RBerghorn",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^25.0.10"
+  }
 }
