@@ -1,12 +1,17 @@
-# Automated Testing with Playwright
+# Automated Testing mit Playwright
+Playwright wird für integrierte End-to-End-Tests (E2E) verwendet. Damit soll erreicht werden, dass bei Änderungen alles weiterhin wie erwartet funktioniert.
 
-Playwright is used for integrated end-to-end (E2E) testing. We want to make sure that everything is still working as expected when we introduce changes.
+Dies ist nur ein erster Aufschlag, möglicherweise sind die "Kosten" zu groß:
 
-This is only a first try and might not be worth it:
-- Tests need to be run frequently, ideally in an automated way after every commit
-- Tests need to be adapted when making changes to the functionality
-- Tests should cover most of the website
-- Tests can be quite complex when trying to solve puzzles or challenges with animated elements
+- Tests müssen häufig durchgeführt werden, idealerweise automatisiert nach jedem Commit ("Continuous Integration"/CI).
+- Tests müssen angepasst werden, wenn Änderungen an der Funktionalität vorgenommen werden.
+- Tests sollten den größten Teil der Website abdecken ("Coverage").
+- Tests sind aufwendig zu erstellen, wenn es darum geht, Rätsel mit dynamischen oder animierten Elementen zu lösen.
+
+
+## Installation & Lokale Verwendung
+
+[Anleitung (EN)](https://playwright.dev/docs/intro) auf playwright.dev
 
 ## Status
 
