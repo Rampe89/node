@@ -7,15 +7,16 @@
   <style>
     :root{
       --bg1:#f7fbff;
-      --bg2:#f2fbf6;
+      --bg2:#f3fff7;
 
-      --card:#ffffffcc;
+      --card:#ffffffd8;
       --stroke:#e7eef7;
       --text:#0f172a;
       --muted:#526173;
 
       --accent:#2563eb;
       --accent2:#16a34a;
+      --accent3:#f59e0b;
 
       --shadow: 0 14px 34px rgba(15,23,42,.10);
       --radius: 18px;
@@ -40,6 +41,22 @@
         radial-gradient(900px 600px at 86% 18%, rgba(22,163,74,.10), transparent 55%),
         linear-gradient(180deg, var(--bg1), var(--bg2));
       min-height:100vh;
+      position: relative;
+      overflow-x:hidden;
+    }
+
+    /* Subtiles Pixel-Pattern (hell) */
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      opacity:.35;
+      background-image:
+        linear-gradient(to right, rgba(15,23,42,.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15,23,42,.06) 1px, transparent 1px);
+      background-size: 18px 18px;
+      mask-image: radial-gradient(900px 420px at 50% 0%, black 35%, transparent 75%);
     }
 
     header{
@@ -51,7 +68,10 @@
       margin:0 0 8px;
       font-size: clamp(22px, 2.6vw, 32px);
       letter-spacing:.2px;
-      font-weight: 900;
+      font-weight: 1000;
+      display:flex;
+      gap:10px;
+      align-items:center;
     }
     .sub{
       margin:0;
@@ -111,8 +131,11 @@
     h2{
       margin:0;
       font-size: 16px;
-      font-weight: 900;
+      font-weight: 1000;
       letter-spacing:.2px;
+      display:flex;
+      gap:10px;
+      align-items:center;
     }
 
     .badge{
@@ -122,10 +145,10 @@
       padding: 7px 10px;
       border-radius: 999px;
       border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.78);
+      background: rgba(255,255,255,.85);
       color: var(--muted);
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .kpi{
@@ -138,13 +161,13 @@
     }
     .big{
       font-size: clamp(30px, 4.2vw, 52px);
-      font-weight: 1000;
+      font-weight: 1100;
       letter-spacing: .2px;
     }
     .unit{
       color: var(--muted);
       font-size: 14px;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .tiles{
@@ -159,19 +182,23 @@
       min-width: 120px;
       padding: 10px 12px;
       border-radius: 14px;
-      background: rgba(255,255,255,.84);
+      background: rgba(255,255,255,.90);
       border: 1px solid var(--stroke);
+      box-shadow: 0 10px 18px rgba(15,23,42,.06);
     }
     .tile .n{
       font-size: 22px;
-      font-weight: 1000;
+      font-weight: 1100;
       line-height: 1.1;
+      display:flex;
+      gap:8px;
+      align-items:center;
     }
     .tile .l{
       margin-top: 4px;
       font-size: 12px;
       color: var(--muted);
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing: .2px;
     }
 
@@ -205,7 +232,9 @@
       content:"";
       position:absolute;
       inset:-2px;
-      background: radial-gradient(900px 220px at 20% 0%, rgba(22,163,74,.10), transparent 60%);
+      background:
+        radial-gradient(900px 220px at 20% 0%, rgba(245,158,11,.12), transparent 60%),
+        radial-gradient(850px 240px at 80% 10%, rgba(22,163,74,.10), transparent 62%);
       pointer-events:none;
     }
 
@@ -226,7 +255,7 @@
     .hint{
       color: var(--muted);
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .panel{
@@ -260,10 +289,13 @@
       color: var(--panelText);
       text-transform: uppercase;
       letter-spacing: 1.6px;
-      font-weight: 900;
+      font-weight: 1000;
       font-size: clamp(16px, 2.0vw, 20px);
       margin: 0 0 10px;
       font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      display:flex;
+      gap:10px;
+      align-items:center;
     }
 
     .panelNumber{
@@ -271,7 +303,7 @@
       z-index:1;
       margin: 0;
       line-height: .95;
-      font-weight: 1000;
+      font-weight: 1100;
       letter-spacing: .8px;
       font-size: clamp(72px, 10.5vw, 130px);
       color: var(--panelNeon);
@@ -284,7 +316,7 @@
       z-index:1;
       margin: 10px 0 0;
       color: rgba(229,231,235,.92);
-      font-weight: 900;
+      font-weight: 1000;
       font-size: clamp(15px, 1.8vw, 20px);
     }
 
@@ -300,6 +332,18 @@
       font-size: 13px;
     }
 
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color: rgba(229,231,235,.86);
+      font-weight: 900;
+    }
+
     .btnRow{
       position:relative;
       z-index:1;
@@ -313,35 +357,36 @@
     button{
       appearance:none;
       border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.90);
+      background: rgba(255,255,255,.94);
       color: var(--text);
       border-radius: 12px;
       padding: 10px 12px;
-      font-weight: 900;
+      font-weight: 1000;
       cursor:pointer;
-      transition: transform .05s ease, background .15s ease, border-color .15s ease;
+      transition: transform .05s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+      box-shadow: 0 10px 16px rgba(15,23,42,.06);
     }
     button:hover{
-      background: rgba(255,255,255,.98);
+      background: rgba(255,255,255,.99);
       border-color: #dbe7f5;
     }
     button:active{ transform: translateY(1px); }
 
     .primary{
       border-color: rgba(37,99,235,.25);
-      background: rgba(37,99,235,.08);
+      background: rgba(37,99,235,.10);
     }
     .primary:hover{
-      background: rgba(37,99,235,.12);
+      background: rgba(37,99,235,.14);
       border-color: rgba(37,99,235,.32);
     }
 
     .danger{
       border-color: rgba(255,107,107,.35);
-      background: rgba(255,107,107,.10);
+      background: rgba(255,107,107,.12);
     }
     .danger:hover{
-      background: rgba(255,107,107,.14);
+      background: rgba(255,107,107,.16);
       border-color: rgba(255,107,107,.44);
     }
 
@@ -353,12 +398,73 @@
       font-size: 12px;
       line-height: 1.55;
     }
+
+    /* Pixel-Icons (inline SVG via data-uri) */
+    .px{
+      width:18px; height:18px;
+      display:inline-block;
+      image-rendering: pixelated;
+      background-size: 18px 18px;
+      background-repeat:no-repeat;
+      filter: drop-shadow(0 6px 10px rgba(15,23,42,.12));
+      flex: 0 0 auto;
+    }
+    .px.sun{
+      background-image:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" shape-rendering="crispEdges">\
+<rect width="18" height="18" fill="none"/>\
+<rect x="7" y="1" width="4" height="2" fill="%23f59e0b"/>\
+<rect x="7" y="15" width="4" height="2" fill="%23f59e0b"/>\
+<rect x="1" y="7" width="2" height="4" fill="%23f59e0b"/>\
+<rect x="15" y="7" width="2" height="4" fill="%23f59e0b"/>\
+<rect x="5" y="5" width="8" height="8" fill="%23fbbf24"/>\
+<rect x="6" y="6" width="6" height="6" fill="%23f59e0b"/>\
+</svg>');
+    }
+    .px.egg{
+      background-image:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" shape-rendering="crispEdges">\
+<rect width="18" height="18" fill="none"/>\
+<rect x="7" y="2" width="4" height="2" fill="%232563eb"/>\
+<rect x="6" y="4" width="6" height="2" fill="%232563eb"/>\
+<rect x="5" y="6" width="8" height="2" fill="%233b82f6"/>\
+<rect x="5" y="8" width="8" height="4" fill="%2360a5fa"/>\
+<rect x="6" y="12" width="6" height="2" fill="%2393c5fd"/>\
+<rect x="7" y="14" width="4" height="2" fill="%23bfdbfe"/>\
+</svg>');
+    }
+    .px.badge{
+      background-image:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" shape-rendering="crispEdges">\
+<rect width="18" height="18" fill="none"/>\
+<rect x="6" y="1" width="6" height="2" fill="%23a3ff4f"/>\
+<rect x="4" y="3" width="10" height="2" fill="%2385ff2d"/>\
+<rect x="3" y="5" width="12" height="8" fill="%23a3ff4f"/>\
+<rect x="4" y="13" width="10" height="2" fill="%2385ff2d"/>\
+<rect x="6" y="15" width="6" height="2" fill="%23a3ff4f"/>\
+<rect x="8" y="6" width="2" height="6" fill="%230b1220"/>\
+<rect x="6" y="8" width="6" height="2" fill="%230b1220"/>\
+</svg>');
+    }
+    .px.trophy{
+      background-image:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" shape-rendering="crispEdges">\
+<rect width="18" height="18" fill="none"/>\
+<rect x="6" y="2" width="6" height="2" fill="%23fbbf24"/>\
+<rect x="5" y="4" width="8" height="4" fill="%23f59e0b"/>\
+<rect x="6" y="8" width="6" height="2" fill="%23fbbf24"/>\
+<rect x="7" y="10" width="4" height="3" fill="%23f59e0b"/>\
+<rect x="6" y="13" width="6" height="2" fill="%23fbbf24"/>\
+<rect x="5" y="15" width="8" height="2" fill="%23f59e0b"/>\
+</svg>');
+    }
   </style>
 </head>
 
 <body>
   <header>
-    <h1>HSK Ferien-Countdown</h1>
+    <h1><span class="px badge" aria-hidden="true"></span> HSK Ferien-Countdown</h1>
+    <p class="sub">Countdown bis zum <b>letzten Schultag</b> vor den Ferien (Tag “springt” um <span class="mono">06:00</span>). Plus: Vorfallzähler inkl. Highscore.</p>
   </header>
 
   <main>
@@ -366,7 +472,7 @@
       <!-- Osterferien -->
       <article class="card" id="card-ostern">
         <div class="rowTop">
-          <h2>Osterferien (NI)</h2>
+          <h2><span class="px egg" aria-hidden="true"></span> Osterferien (NI)</h2>
           <span class="badge mono" id="ostern-range">—</span>
         </div>
 
@@ -391,48 +497,50 @@
         </div>
       </article>
 
-      <!-- Zeugnisferien / Winterferien -->
-      <article class="card" id="card-zeugnis">
+      <!-- Sommerferien -->
+      <article class="card" id="card-sommer">
         <div class="rowTop">
-          <h2>Zeugnisferien / Winterferien (NI)</h2>
-          <span class="badge mono" id="winter-range">—</span>
+          <h2><span class="px sun" aria-hidden="true"></span> Sommerferien (NI)</h2>
+          <span class="badge mono" id="sommer-range">—</span>
         </div>
 
         <div class="kpi">
-          <div class="big mono" id="winter-days">—</div>
+          <div class="big mono" id="sommer-days">—</div>
           <div class="unit">Tage bis letzter Schultag</div>
         </div>
 
-        <div class="tiles" aria-label="Countdown & Aufteilung bis letzter Schultag vor den Zeugnisferien">
-          <div class="tile"><div class="n mono" id="winter-d">—</div><div class="l">Tage</div></div>
-          <div class="tile"><div class="n mono" id="winter-h">—</div><div class="l">Stunden</div></div>
-          <div class="tile"><div class="n mono" id="winter-m">—</div><div class="l">Minuten</div></div>
-          <div class="tile"><div class="n mono" id="winter-s">—</div><div class="l">Sekunden</div></div>
+        <div class="tiles" aria-label="Countdown & Aufteilung bis letzter Schultag vor den Sommerferien">
+          <div class="tile"><div class="n mono" id="sommer-d">—</div><div class="l">Tage</div></div>
+          <div class="tile"><div class="n mono" id="sommer-h">—</div><div class="l">Stunden</div></div>
+          <div class="tile"><div class="n mono" id="sommer-m">—</div><div class="l">Minuten</div></div>
+          <div class="tile"><div class="n mono" id="sommer-s">—</div><div class="l">Sekunden</div></div>
 
-          <div class="tile"><div class="n mono" id="winter-free">—</div><div class="l">davon WE/Feiertage</div></div>
-          <div class="tile"><div class="n mono" id="winter-school">—</div><div class="l">davon Schultage</div></div>
+          <div class="tile"><div class="n mono" id="sommer-free">—</div><div class="l">davon WE/Feiertage</div></div>
+          <div class="tile"><div class="n mono" id="sommer-school">—</div><div class="l">davon Schultage</div></div>
         </div>
 
         <div class="meta">
-          <span id="winter-status">—</span>
-          <span class="mono" id="winter-target">—</span>
+          <span id="sommer-status">—</span>
+          <span class="mono" id="sommer-target">—</span>
         </div>
       </article>
 
       <!-- Vorfallzähler -->
       <article class="incidentWrap wide" id="card-incident">
         <div class="incidentHeader">
-          <h2>Vorfallzähler</h2>
+          <h2><span class="px badge" aria-hidden="true"></span> Vorfallzähler</h2>
           <div class="hint mono">Reset setzt das Datum auf heute</div>
         </div>
 
         <div class="panel" role="region" aria-label="Tage seit letztem Vorfall">
-          <p class="panelTopline">Tage ohne Polizeivorfall</p>
+          <p class="panelTopline"><span class="px badge" aria-hidden="true"></span> Tage ohne Polizeivorfall</p>
           <p class="panelNumber" id="incident-days">—</p>
           <p class="panelDesc">Tage seit dem letzten Vorfall mit Polizei</p>
 
           <div class="panelMeta">
-            <span class="mono" id="incident-date">Letztes Datum: —</span>
+            <span class="pill mono" id="incident-date">Letztes Datum: —</span>
+            <span class="pill mono" id="incident-highscore"><span class="px trophy" aria-hidden="true"></span> Highscore: —</span>
+            <span class="pill mono" id="incident-highscore-date">Bestmarke am: —</span>
           </div>
         </div>
 
@@ -461,13 +569,14 @@
     // Ferien-Daten (Niedersachsen) - Start/Ende der Ferien
     // =========================
     // Format: ISO-Strings (YYYY-MM-DD). Enddatum ist inkl. letzter Ferientag.
+    // Enthält: Ostern + Sommer (bis 2030)
     const FERIENTERMINE_NI = [
-      { year: 2025, winter: ["2025-02-03","2025-02-04"], ostern: ["2025-04-07","2025-04-19"] },
-      { year: 2026, winter: ["2026-02-02","2026-02-03"], ostern: ["2026-03-23","2026-04-07"] },
-      { year: 2027, winter: ["2027-02-01","2027-02-02"], ostern: ["2027-03-22","2027-04-03"] },
-      { year: 2028, winter: ["2028-01-31","2028-02-01"], ostern: ["2028-04-10","2028-04-22"] },
-      { year: 2029, winter: ["2029-02-01","2029-02-02"], ostern: ["2029-03-19","2029-04-03"] },
-      { year: 2030, winter: ["2030-01-31","2030-02-01"], ostern: ["2030-04-08","2030-04-23"] }
+      { year: 2025, ostern: ["2025-04-07","2025-04-19"], sommer: ["2025-07-03","2025-08-13"] },
+      { year: 2026, ostern: ["2026-03-23","2026-04-07"], sommer: ["2026-07-02","2026-08-12"] },
+      { year: 2027, ostern: ["2027-03-22","2027-04-03"], sommer: ["2027-07-08","2027-08-18"] },
+      { year: 2028, ostern: ["2028-04-10","2028-04-22"], sommer: ["2028-07-20","2028-08-30"] },
+      { year: 2029, ostern: ["2029-03-19","2029-04-03"], sommer: ["2029-07-19","2029-08-29"] },
+      { year: 2030, ostern: ["2030-04-08","2030-04-23"], sommer: ["2030-07-11","2030-08-21"] }
     ];
 
     // ========= Helpers =========
@@ -551,7 +660,7 @@
     }
 
     // =========================
-    // Feiertage (Niedersachsen)
+    // Feiertage (Niedersachsen) - Basis (bundesweit + NI)
     // =========================
     function easterSunday(year){
       const a = year % 19;
@@ -670,6 +779,8 @@
 
     // ========= Vorfallzähler =========
     const INCIDENT_KEY = "last_police_incident_date_iso";
+    const INCIDENT_HS_KEY = "incident_highscore_days";
+    const INCIDENT_HS_DATE_KEY = "incident_highscore_date_iso";
 
     function getIncidentISO(){
       const v = localStorage.getItem(INCIDENT_KEY);
@@ -692,12 +803,42 @@
       return Math.max(0, Math.floor(diff / 86400000));
     }
 
+    function getHighscore(){
+      const v = localStorage.getItem(INCIDENT_HS_KEY);
+      const n = v ? Number(v) : 0;
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function setHighscore(n){
+      localStorage.setItem(INCIDENT_HS_KEY, String(n));
+      localStorage.setItem(INCIDENT_HS_DATE_KEY, dateToISO(new Date()));
+    }
+
+    function getHighscoreDateISO(){
+      const v = localStorage.getItem(INCIDENT_HS_DATE_KEY);
+      if (v && /^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+      return null;
+    }
+
     function renderIncident(){
       const iso = getIncidentISO();
       const n = daysSince(iso);
 
+      // Highscore updaten
+      const hs = getHighscore();
+      if (n > hs){
+        setHighscore(n);
+      }
+
+      const hsNow = getHighscore();
+      const hsDate = getHighscoreDateISO();
+
       document.getElementById("incident-days").textContent = String(n);
       document.getElementById("incident-date").textContent = `Letztes Datum: ${formatDE(iso)}`;
+      document.getElementById("incident-highscore").innerHTML =
+        `<span class="px trophy" aria-hidden="true"></span> Highscore: ${hsNow} Tage`;
+      document.getElementById("incident-highscore-date").textContent =
+        `Bestmarke am: ${hsDate ? formatDE(hsDate) : "—"}`;
     }
 
     // ========= Tick =========
@@ -711,13 +852,13 @@
         free: "ostern-free", school: "ostern-school"
       });
 
-      renderCountdown("winter", {
-        range: "winter-range",
-        status: "winter-status",
-        target: "winter-target",
-        bigDays: "winter-days",
-        d: "winter-d", h: "winter-h", m: "winter-m", s: "winter-s",
-        free: "winter-free", school: "winter-school"
+      renderCountdown("sommer", {
+        range: "sommer-range",
+        status: "sommer-status",
+        target: "sommer-target",
+        bigDays: "sommer-days",
+        d: "sommer-d", h: "sommer-h", m: "sommer-m", s: "sommer-s",
+        free: "sommer-free", school: "sommer-school"
       });
 
       renderIncident();
